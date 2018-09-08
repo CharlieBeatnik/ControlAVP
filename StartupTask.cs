@@ -28,7 +28,7 @@ namespace ComControl
         {
             _Deferral = taskInstance.GetDeferral();
 
-            SerialTest();
+            await SerialTest();
 
             var webserver = new WebServer();
 
@@ -38,23 +38,18 @@ namespace ComControl
             });
         }
 
-        private async void SerialTest()
+        private async Task SerialTest()
         {
-            string aqs = SerialDevice.GetDeviceSelector();
-            var dis = await DeviceInformation.FindAllAsync(aqs);
+            var hdmiSwitch1 = new AtenVS0801H("AK05UVF8A");
+            await hdmiSwitch1.Initialise();
 
-            var serialPort = await SerialDevice.FromIdAsync(dis[1].Id);
-            serialPort.BaudRate = 19200;
-            serialPort.StopBits = SerialStopBitCount.One;
-            serialPort.DataBits = 8;
-            serialPort.Parity = SerialParity.None;
+            while (true)
+            {
+                await hdmiSwitch1.WriteString("sw+");
+                Thread.Sleep(1000);
+            }
 
-            // Configure serial settings
-            var dataWriteObject = new DataWriter(serialPort.OutputStream);
-            dataWriteObject.WriteString("sw+\r");
 
-            // Launch an async task to complete the write operation
-            await dataWriteObject.StoreAsync();
         }
     }
 }
