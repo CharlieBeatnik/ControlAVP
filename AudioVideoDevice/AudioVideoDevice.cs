@@ -20,14 +20,9 @@ namespace ComControl
         protected SerialDevice _serialPort;
         protected string _partialId;
 
-        protected abstract string _sendLineEnding
-        {
-            get;
-        }
+        protected abstract string _sendLineEnding { get; }
 
         public string Id { get; private set; }
-
-        public bool IsOpen { get; private set; }
 
         public AudioVideoDevice(string partialId)
         {
@@ -37,55 +32,39 @@ namespace ComControl
             }
 
             _partialId = partialId;
-            IsOpen = false;
-        }
 
-        private async Task<DeviceInformationCollection> GetAvailableDevices()
-        {
-            string aqs = SerialDevice.GetDeviceSelector();
-            return await DeviceInformation.FindAllAsync(aqs);
-        }
-
-        private void ValidateDeviceIsOpen()
-        {
-            if(!IsOpen)
-            {
-                throw new Exception("Device is not open, OpenDevice() must be called first.");
-            }
-        }
-
-        public async Task Open()
-        {
-            //Get list of devices
-            var devices = await GetAvailableDevices();
+            //Find device ID
+            var devices = Task.Run(async () => await GetAvailableDevices()).Result;
             Id = devices.Single(s => s.Id.Contains(_partialId)).Id;
 
             //Create serial port
-            _serialPort = await SerialDevice.FromIdAsync(Id);
+            _serialPort = Task.Run(async () => await SerialDevice.FromIdAsync(Id)).Result;
             SetSerialParameters();
 
             //Create data writer
             _dataWriter = new DataWriter(_serialPort.OutputStream);
 
             //Create data reader
-            _dataReader = new DataReader(_serialPort.InputStream);
-            _dataReader.InputStreamOptions = InputStreamOptions.Partial;
+            _dataReader = new DataReader(_serialPort.InputStream)
+            {
+                InputStreamOptions = InputStreamOptions.Partial
+            };
+        }
 
-            IsOpen = true;
+        public static async Task<DeviceInformationCollection> GetAvailableDevices()
+        {
+            string aqs = SerialDevice.GetDeviceSelector();
+            return await DeviceInformation.FindAllAsync(aqs);
         }
 
         public async Task WriteString(string str)
         {
-            ValidateDeviceIsOpen();
-
             _dataWriter.WriteString(str + _sendLineEnding);
             await _dataWriter.StoreAsync();
         }
 
         public async Task<string> ReadString()
         {
-            ValidateDeviceIsOpen();
-
             var bytesRead = await _dataReader.LoadAsync(_readBufferLength);
             if (bytesRead > 0)
             {
@@ -99,8 +78,6 @@ namespace ComControl
 
         public async Task<string> WriteStringReadString(string str)
         {
-            ValidateDeviceIsOpen();
-
             await WriteString(str);
             return await ReadString();
         }

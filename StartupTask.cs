@@ -42,7 +42,6 @@ namespace ComControl
         private async Task SerialTest()
         {
             var hdmiSwitch1 = new AtenVS0801H("AK05UVF8A");
-            await hdmiSwitch1.Open();
 
             while (true)
             {
