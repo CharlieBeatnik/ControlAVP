@@ -13,6 +13,7 @@ using System.Threading;
 using Windows.Storage.Streams;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 // The Background Application template is documented at http://go.microsoft.com/fwlink/?LinkID=533884&clcid=0x409
 
@@ -41,15 +42,14 @@ namespace ComControl
         private async Task SerialTest()
         {
             var hdmiSwitch1 = new AtenVS0801H("AK05UVF8A");
-            await hdmiSwitch1.Initialise();
+            await hdmiSwitch1.Open();
 
             while (true)
             {
-                await hdmiSwitch1.WriteString("sw+");
+                string response = await hdmiSwitch1.WriteStringReadString("sw+");
+                Debug.WriteLine(response);
                 Thread.Sleep(1000);
             }
-
-
         }
     }
 }
