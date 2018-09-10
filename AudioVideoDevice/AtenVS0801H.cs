@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +10,10 @@ namespace ComControl
 {
     internal class AtenVS0801H : AudioVideoDevice
     {
+        private const int _lowestHdmiInputIdx = 1;
+        private const int _highestHdmiInputIdx = 8;
+        private const int _numHdmiInputs = 8;
+
         protected override string _sendLineEnding
         {
             get { return "\r"; }
@@ -16,17 +21,41 @@ namespace ComControl
 
         public AtenVS0801H(string portId) : base(portId)
         {
-
         }
 
         protected override void SetSerialParameters()
         {
-            _serialPort.WriteTimeout = TimeSpan.FromMilliseconds(1000);
-            _serialPort.ReadTimeout = TimeSpan.FromMilliseconds(1000);
+            _serialPort.WriteTimeout = TimeSpan.FromMilliseconds(250);
+            _serialPort.ReadTimeout = TimeSpan.FromMilliseconds(250); //Time that a partial data read will wait
             _serialPort.BaudRate = 19200;
             _serialPort.StopBits = SerialStopBitCount.One;
             _serialPort.DataBits = 8;
             _serialPort.Parity = SerialParity.None;
+        }
+
+        private bool Success(string response)
+        {
+            return response.Contains("Command OK");
+        }
+
+        public bool NextInput()
+        {
+            var result = WriteWithResponse("sw+");
+            return Success(result);
+        }
+
+        public bool PreviousInput()
+        {
+            var result = WriteWithResponse("sw-");
+            return Success(result);
+        }
+
+        public bool SwitchInput(int input)
+        {
+            Debug.Assert(input >= _lowestHdmiInputIdx && input <= _highestHdmiInputIdx);
+
+            var result = WriteWithResponse($"sw i{input:00}");
+            return Success(result);
         }
     }
 }

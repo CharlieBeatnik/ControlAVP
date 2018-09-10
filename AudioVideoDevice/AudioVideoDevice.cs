@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -15,7 +16,8 @@ namespace ComControl
         private DataWriter _dataWriter;
         private DataReader _dataReader;
 
-        private const uint _readBufferLength = 1024;
+        private const uint _readBufferLengthBytes = 1024;
+        private readonly TimeSpan _zeroByteReadTimeout = TimeSpan.FromMilliseconds(2000);
 
         protected SerialDevice _serialPort;
         protected string _partialId;
@@ -39,7 +41,6 @@ namespace ComControl
 
             //Create serial port
             _serialPort = Task.Run(async () => await SerialDevice.FromIdAsync(Id)).Result;
-            SetSerialParameters();
 
             //Create data writer
             _dataWriter = new DataWriter(_serialPort.OutputStream);
@@ -47,8 +48,11 @@ namespace ComControl
             //Create data reader
             _dataReader = new DataReader(_serialPort.InputStream)
             {
-                InputStreamOptions = InputStreamOptions.Partial
+                //Used to allow reading of > 0 bytes within serialPort.ReadTimeout
+                InputStreamOptions = InputStreamOptions.Partial 
             };
+
+            SetSerialParameters();
         }
 
         public static async Task<DeviceInformationCollection> GetAvailableDevices()
@@ -57,29 +61,49 @@ namespace ComControl
             return await DeviceInformation.FindAllAsync(aqs);
         }
 
-        public async Task WriteString(string str)
+        public async Task WriteAsync(string write)
         {
-            _dataWriter.WriteString(str + _sendLineEnding);
+            _dataWriter.WriteString(write + _sendLineEnding);
             await _dataWriter.StoreAsync();
         }
 
-        public async Task<string> ReadString()
+        public void Write(string write)
         {
-            var bytesRead = await _dataReader.LoadAsync(_readBufferLength);
-            if (bytesRead > 0)
+            Task.Run(async () => await WriteAsync(write));
+        }
+
+        public async Task<string> ReadAsync()
+        {
+            var cts = new CancellationTokenSource(_zeroByteReadTimeout);
+
+            try
             {
+                var bytesRead = await _dataReader.LoadAsync(_readBufferLengthBytes).AsTask(cts.Token);
+                Debug.Assert(bytesRead > 0);
                 return _dataReader.ReadString(bytesRead);
             }
-            else
+            catch (TaskCanceledException)
             {
+                //Exception is thrown in the event of a zero byte read timeout
                 return string.Empty;
             }
         }
 
-        public async Task<string> WriteStringReadString(string str)
+        public string Read()
         {
-            await WriteString(str);
-            return await ReadString();
+            return Task.Run(async () => await ReadAsync()).Result;
+        }
+
+
+        public async Task<string> WriteWithResponseAsync(string write)
+        {
+            await WriteAsync(write);
+            return await ReadAsync();
+        }
+
+        public string WriteWithResponse(string write)
+        {
+            return Task.Run(async () => await WriteWithResponseAsync(write)).Result;
         }
 
         protected abstract void SetSerialParameters();

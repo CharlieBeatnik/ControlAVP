@@ -29,7 +29,7 @@ namespace ComControl
         {
             _Deferral = taskInstance.GetDeferral();
 
-            await SerialTest();
+            SerialTest();
 
             var webserver = new WebServer();
 
@@ -39,15 +39,20 @@ namespace ComControl
             });
         }
 
-        private async Task SerialTest()
+        private void SerialTest()
         {
             var hdmiSwitch1 = new AtenVS0801H("AK05UVF8A");
 
+            bool result;
+
             while (true)
             {
-                string response = await hdmiSwitch1.WriteStringReadString("sw+");
-                Debug.WriteLine(response);
-                Thread.Sleep(1000);
+                for (int i = 1; i <= 8; i++)
+                {
+                    result = hdmiSwitch1.SwitchInput(i);
+                    Debug.WriteLine(result);
+                    Thread.Sleep(500);
+                }
             }
         }
     }
