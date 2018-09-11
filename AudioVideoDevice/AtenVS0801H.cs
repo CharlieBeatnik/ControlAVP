@@ -21,16 +21,10 @@ namespace ComControl
 
         public AtenVS0801H(string portId) : base(portId)
         {
-        }
-
-        protected override void SetSerialParameters()
-        {
-            _serialPort.WriteTimeout = TimeSpan.FromMilliseconds(250);
-            _serialPort.ReadTimeout = TimeSpan.FromMilliseconds(250); //Time that a partial data read will wait
-            _serialPort.BaudRate = 19200;
-            _serialPort.StopBits = SerialStopBitCount.One;
-            _serialPort.DataBits = 8;
-            _serialPort.Parity = SerialParity.None;
+            BaudRate = 19200;
+            StopBits = SerialStopBitCount.One;
+            DataBits = 8;
+            Parity = SerialParity.None;
         }
 
         private bool Success(string response)
