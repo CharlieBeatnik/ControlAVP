@@ -43,6 +43,8 @@ namespace ComControl
         {
             var hdmiSwitch1 = new AtenVS0801H("AK05UVF8A");
 
+            var state = hdmiSwitch1.GetState();
+
             bool result;
 
             while (true)
