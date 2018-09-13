@@ -120,7 +120,7 @@ namespace ComControl
             return Success(result);
         }
 
-        public bool SetStateInput(int inputPort)
+        public bool SetInput(int inputPort)
         {
             Debug.Assert(inputPort >= _lowestHdmiInputIdx && inputPort <= _highestHdmiInputIdx);
 
@@ -128,14 +128,14 @@ namespace ComControl
             return Success(result);
         }
 
-        public bool SetStateOutput(bool enable)
+        public bool SetOutput(bool enable)
         {
             var write = string.Format("sw {0}", enable ? "on" : "off");
             var result = WriteWithResponse(write);
             return Success(result);
         }
 
-        public bool SetStateMode(SwitchMode mode, int inputPort = _lowestHdmiInputIdx)
+        public bool SetMode(SwitchMode mode, int inputPort = _lowestHdmiInputIdx)
         {
             string result = string.Empty;
 
@@ -156,7 +156,7 @@ namespace ComControl
             return Success(result);
         }
 
-        public bool SetStateGoTo(bool enable)
+        public bool SetGoTo(bool enable)
         {
             var write = string.Format("swmode goto {0}", enable ? "on" : "off");
             var result = WriteWithResponse(write);
