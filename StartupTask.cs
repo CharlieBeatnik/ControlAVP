@@ -43,7 +43,28 @@ namespace ComControl
         {
             var hdmiSwitch1 = new AtenVS0801H("AK05UVF8A");
 
+            hdmiSwitch1.SetStateGoTo(true);
             var state = hdmiSwitch1.GetState();
+
+            hdmiSwitch1.SetStateGoTo(false);
+            state = hdmiSwitch1.GetState();
+
+            hdmiSwitch1.SetStateOutput(true);
+            state = hdmiSwitch1.GetState();
+
+            hdmiSwitch1.SetStateOutput(false);
+            state = hdmiSwitch1.GetState();
+
+            hdmiSwitch1.SetStateMode(AtenVS0801H.SwitchMode.Auto, 1);
+            state = hdmiSwitch1.GetState();
+
+            hdmiSwitch1.SetStateMode(AtenVS0801H.SwitchMode.Default);
+            state = hdmiSwitch1.GetState();
+
+            hdmiSwitch1.SetStateMode(AtenVS0801H.SwitchMode.Next);
+            state = hdmiSwitch1.GetState();
+
+
 
             bool result;
 
@@ -51,7 +72,7 @@ namespace ComControl
             {
                 for (int i = 1; i <= 8; i++)
                 {
-                    result = hdmiSwitch1.SwitchInput(i);
+                    result = hdmiSwitch1.SetStateInput(i);
                     Debug.WriteLine(result);
                     Thread.Sleep(500);
                 }
