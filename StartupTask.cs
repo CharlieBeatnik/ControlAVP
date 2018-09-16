@@ -41,18 +41,19 @@ namespace ComControl
 
         private void SerialTest()
         {
-            var hdmiSwitch1 = new AtenVS0801H("AK05UVF8A");
+            //var hdmiSwitch1 = new AtenVS0801H("AK05UVF8A");
             
 
-            while (true)
-            {
-                for (int i = 1; i <= 8; i++)
-                {
-                    var result = hdmiSwitch1.SetInput(i);
-                    Debug.WriteLine(result);
-                    Thread.Sleep(500);
-                }
-            }
+            //while (true)
+            //{
+            //    var values = Enum.GetValues(typeof(AtenVS0801H.InputPort)).Cast<AtenVS0801H.InputPort>();
+            //    foreach (var inputPort in values)
+            //    {
+            //        var result = hdmiSwitch1.SetInput(inputPort);
+            //        Debug.WriteLine(result);
+            //        Thread.Sleep(500);
+            //    }
+            //}
         }
     }
 }

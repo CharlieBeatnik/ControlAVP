@@ -1,17 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Windows.Devices.Enumeration;
 using Windows.Devices.SerialCommunication;
 using Windows.Storage.Streams;
 
-namespace ComControl
+namespace AudioVideo
 {
-    internal abstract class AudioVideoDevice
+    public abstract class AudioVideoDevice
     {
         private DataWriter _dataWriter;
         private DataReader _dataReader;
@@ -48,6 +46,7 @@ namespace ComControl
 
             //Create serial port
             SerialPort = Task.Run(async () => await SerialDevice.FromIdAsync(Id)).Result;
+            Debug.Assert(SerialPort != null);
             SetSerialParameters();
 
             //Create data writer

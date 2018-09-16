@@ -3,26 +3,22 @@
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProjectGuid>{8ECA6053-B9F0-4AB6-A529-4019EC25F530}</ProjectGuid>
-    <OutputType>winmdobj</OutputType>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F0E77897-C77C-4A5D-89CC-166834E375A7}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ComControl</RootNamespace>
-    <AssemblyName>ComControl</AssemblyName>
+    <RootNamespace>AudioVideoDevice</RootNamespace>
+    <AssemblyName>AudioVideoDevice</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion>10.0.17134.0</TargetPlatformVersion>
+    <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.17134.0</TargetPlatformVersion>
     <TargetPlatformMinVersion>10.0.17134.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
-    <EnableDotNetNativeCompatibleProfile>true</EnableDotNetNativeCompatibleProfile>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <AllowCrossPlatformRetargeting>false</AllowCrossPlatformRetargeting>
-    <PackageCertificateKeyFile>ComControl_TemporaryKey.pfx</PackageCertificateKeyFile>
-    <AppxPackage>true</AppxPackage>
-    <ContainsStartupTask>true</ContainsStartupTask>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
+    <PlatformTarget>ARM</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\ARM\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
@@ -31,10 +27,9 @@
     <PlatformTarget>ARM</PlatformTarget>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
-    <Prefer32Bit>true</Prefer32Bit>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM'">
+    <PlatformTarget>ARM</PlatformTarget>
     <OutputPath>bin\ARM\Release\</OutputPath>
     <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
     <Optimize>true</Optimize>
@@ -43,58 +38,23 @@
     <PlatformTarget>ARM</PlatformTarget>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
-    <Prefer32Bit>true</Prefer32Bit>
-    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="StartupTask.cs" />
+    <Compile Include="AtenVS0801H.cs" />
+    <Compile Include="AudioVideoDevice.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WebServer.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <AppxManifest Include="Package.appxmanifest">
-      <SubType>Designer</SubType>
-    </AppxManifest>
-    <None Include="ComControl_TemporaryKey.pfx" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Properties\Default.rd.xml" />
-    <Content Include="Assets\LockScreenLogo.scale-200.png">
-      <InProject>false</InProject>
-    </Content>
-    <Content Include="Assets\SplashScreen.scale-200.png">
-      <InProject>false</InProject>
-    </Content>
-    <Content Include="Assets\Square150x150Logo.scale-200.png">
-      <InProject>false</InProject>
-    </Content>
-    <Content Include="Assets\Square44x44Logo.scale-200.png">
-      <InProject>false</InProject>
-    </Content>
-    <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png">
-      <InProject>false</InProject>
-    </Content>
-    <Content Include="Assets\StoreLogo.png">
-      <InProject>false</InProject>
-    </Content>
-    <Content Include="Assets\Wide310x150Logo.scale-200.png">
-      <InProject>false</InProject>
-    </Content>
+    <EmbeddedResource Include="Properties\AudioVideoDevice.rd.xml" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.1.7</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="AudioVideoDevice\" />
-  </ItemGroup>
-  <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '15.0' ">
-    <VisualStudioVersion>15.0</VisualStudioVersion>
+  <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
+    <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

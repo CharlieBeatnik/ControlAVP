@@ -32,7 +32,7 @@
   <Capabilities>
     <Capability Name="internetClient" />
     <Capability Name="internetClientServer" />
-	<DeviceCapability Name="serialcommunication">
+	  <DeviceCapability Name="serialcommunication">
       <Device Id="any">
         <Function Type="name:serialPort" />
       </Device>
