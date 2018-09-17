@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Windows.Devices.SerialCommunication;
 
-namespace AudioVideo
+namespace AudioVideoDevice
 {
-    public class AtenVS0801H : AudioVideoDevice
+    public class AtenVS0801H : AudioVideoSerialDevice
     {
         public enum SwitchMode
         {
@@ -127,10 +127,10 @@ namespace AudioVideo
                 //Input 
                 match = Regex.Match(lines[1], @"^Input: port([0-9]+)$");
                 Debug.Assert(match.Success);
-                int inputPort;
-                var inputParse = int.TryParse(match.Groups[1].Value, out inputPort);
+                var inputParseSuccess = int.TryParse(match.Groups[1].Value, out int inputPort);
+                Debug.Assert(inputParseSuccess);
                 state.InputPort = (InputPort)inputPort;
-                Debug.Assert(inputParse);
+                Debug.Assert((state.InputPort >= InputPort.Port1) && (state.InputPort <= InputPort.Port8));
 
                 //Output
                 match = Regex.Match(lines[2], @"^Output: ([A-Z]+)$");

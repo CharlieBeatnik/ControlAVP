@@ -1,18 +1,21 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+
 <Package
   xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
   xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
   xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
-  IgnorableNamespaces="uap mp">
+  xmlns:iot="http://schemas.microsoft.com/appx/manifest/iot/windows10"
+  IgnorableNamespaces="uap mp iot">
 
-  <Identity Name="ea27e73e-56e1-4b92-95ad-8cf8bccd7a66"
-            Publisher="CN=andy"
-            Version="1.0.0.0" />
+  <Identity
+    Name="ComControl-uwp"
+    Publisher="CN=andy"
+    Version="1.0.0.0" />
 
-  <mp:PhoneIdentity PhoneProductId="ea27e73e-56e1-4b92-95ad-8cf8bccd7a66" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+  <mp:PhoneIdentity PhoneProductId="78a47e1f-47ff-4dd5-9a66-a8ae3d2d136e" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
-    <DisplayName>Tests</DisplayName>
+    <DisplayName>ComControl</DisplayName>
     <PublisherDisplayName>andy</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
@@ -22,23 +25,31 @@
   </Dependencies>
 
   <Resources>
-    <Resource Language="x-generate" />
+    <Resource Language="x-generate"/>
   </Resources>
+
   <Applications>
-    <Application Id="vstest.executionengine.universal.App"
-        Executable="$targetnametoken$.exe"
-        EntryPoint="Tests.App">
+    <Application Id="App">
       <uap:VisualElements
-        DisplayName="Tests"
+        DisplayName="ComControl"
         Square150x150Logo="Assets\Square150x150Logo.png"
         Square44x44Logo="Assets\Square44x44Logo.png"
-        Description="Tests"
-        BackgroundColor="transparent">
+        Description="ComControl"
+        BackgroundColor="transparent"
+        AppListEntry="none">
         <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png"/>
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
       </uap:VisualElements>
+      <Extensions>
+        <Extension Category="windows.backgroundTasks" EntryPoint="ComControl.StartupTask">
+          <BackgroundTasks>
+            <iot:Task Type="startup" />
+          </BackgroundTasks>
+        </Extension>
+      </Extensions>
     </Application>
   </Applications>
+
   <Capabilities>
     <Capability Name="internetClientServer" />
     <Capability Name="internetClient" />

@@ -7,9 +7,9 @@ using Windows.Devices.Enumeration;
 using Windows.Devices.SerialCommunication;
 using Windows.Storage.Streams;
 
-namespace AudioVideo
+namespace AudioVideoDevice
 {
-    public abstract class AudioVideoDevice
+    public abstract class AudioVideoSerialDevice
     {
         private DataWriter _dataWriter;
         private DataReader _dataReader;
@@ -31,7 +31,7 @@ namespace AudioVideo
 
         public string Id { get; private set; }
 
-        public AudioVideoDevice(string partialId)
+        public AudioVideoSerialDevice(string partialId)
         {
             if (string.IsNullOrEmpty(partialId))
             {
