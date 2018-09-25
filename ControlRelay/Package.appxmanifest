@@ -8,14 +8,14 @@
   IgnorableNamespaces="uap mp iot">
 
   <Identity
-    Name="ComControl-uwp"
+    Name="ControlRelay-uwp"
     Publisher="CN=andy"
     Version="1.0.0.0" />
 
   <mp:PhoneIdentity PhoneProductId="78a47e1f-47ff-4dd5-9a66-a8ae3d2d136e" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
-    <DisplayName>ComControl</DisplayName>
+    <DisplayName>ControlRelay</DisplayName>
     <PublisherDisplayName>andy</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
@@ -31,17 +31,17 @@
   <Applications>
     <Application Id="App">
       <uap:VisualElements
-        DisplayName="ComControl"
+        DisplayName="ControlRelay"
         Square150x150Logo="Assets\Square150x150Logo.png"
         Square44x44Logo="Assets\Square44x44Logo.png"
-        Description="ComControl"
+        Description="ControlRelay"
         BackgroundColor="transparent"
         AppListEntry="none">
         <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png"/>
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
       </uap:VisualElements>
       <Extensions>
-        <Extension Category="windows.backgroundTasks" EntryPoint="ComControl.StartupTask">
+        <Extension Category="windows.backgroundTasks" EntryPoint="ControlRelay.StartupTask">
           <BackgroundTasks>
             <iot:Task Type="startup" />
           </BackgroundTasks>

@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AudioVideoDevice", "AudioVi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{CDB5CA00-2F4A-45D6-9600-EED4429D60A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ComControl", "ComControl\ComControl.csproj", "{E98566E4-CAC9-4460-9BAF-105D172124A4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControlRelay", "ControlRelay\ControlRelay.csproj", "{E98566E4-CAC9-4460-9BAF-105D172124A4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
