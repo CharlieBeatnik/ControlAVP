@@ -104,6 +104,7 @@
       <SubType>Designer</SubType>
     </AppxManifest>
     <None Include="ControlRelay_TemporaryKey.pfx" />
+    <Content Include="settings.json" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Properties\Default.rd.xml" />
