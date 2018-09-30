@@ -1,6 +1,7 @@
 ﻿using Renci.SshNet;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
 
@@ -16,6 +17,8 @@ namespace PduDevice
         private bool _connectionValid = false;
         private Object _lock = new Object();
 
+        private string _terminalPrompt = String.Empty;
+
         public bool Connected
         {
             get
@@ -28,7 +31,7 @@ namespace PduDevice
             }
         }
 
-        public bool Connect(string host, int port, string username, string password)
+        public bool Connect(string host, int port, string username, string password, string terminalPrompt)
         {
             lock (_lock)
             {
@@ -39,6 +42,7 @@ namespace PduDevice
 
                 try
                 {
+                    _terminalPrompt = terminalPrompt;
                     _authMethod = new PasswordAuthenticationMethod(username, password);
                     _connectionInfo = new ConnectionInfo(host, port, username, _authMethod);
                     _sshClient = new SshClient(_connectionInfo);
@@ -48,14 +52,12 @@ namespace PduDevice
                     _shellStream = _sshClient.CreateShellStream("xterm", 80, 24, 800, 600, 1024);
 
                     // This will pull the initial login prompt off the stream
-                    _shellStream.Expect(new Regex(@"apc>"));
+                    _shellStream.Expect(new Regex(_terminalPrompt));
 
                     _connectionValid = true;
                 }
-                catch (Exception exp)
+                catch (Exception)
                 {
-                    Console.Error.WriteLine(exp.Message);
-
                     if (_shellStream != null)
                     {
                         _shellStream.Close();
@@ -111,7 +113,8 @@ namespace PduDevice
                     _shellStream.Write(command);
                     _shellStream.WriteLine("");
 
-                    string streamOutput = _shellStream.Expect(new Regex(@"apc>"));
+                    string streamOutput = _shellStream.Expect(new Regex(_terminalPrompt));
+                    Debug.Assert(!string.IsNullOrEmpty(streamOutput));
 
                     using (StringReader sr = new StringReader(streamOutput))
                     {
