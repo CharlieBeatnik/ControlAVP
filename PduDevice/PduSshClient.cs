@@ -15,7 +15,7 @@ namespace PduDevice
         private ShellStream _shellStream;
 
         private bool _connectionValid = false;
-        private Object _lock = new Object();
+        private readonly Object _lock = new Object();
 
         private string _terminalPrompt = String.Empty;
 

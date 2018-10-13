@@ -6,6 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using System.IO;
+using Newtonsoft.Json.Linq;
+using System.Dynamic;
+using Newtonsoft.Json.Converters;
 
 namespace ControlRelay
 {
@@ -13,16 +17,24 @@ namespace ControlRelay
     {
         private DeviceClient _deviceClient;
         private List<AtenVS0801H> _hdmiSwitches = new List<AtenVS0801H>();
-        private readonly string _connectionString = "HostName=andydennocoIoTHub.azure-devices.net;DeviceId=gamesroom;SharedAccessKey=k29/EhJNaqnNTmWWk3p3jja30h5gMRSGRaHeSn6e2zo=";
+
+        private dynamic _settings;
+        private readonly string _settingsFile = "settings.json";
 
         public CloudInterface()
         {
-            _hdmiSwitches.Add(new AtenVS0801H("AK05UVF8A"));
+            using (StreamReader r = new StreamReader(_settingsFile))
+            {
+                string json = r.ReadToEnd();
+                _settings = JsonConvert.DeserializeObject<ExpandoObject>(json, new ExpandoObjectConverter());
+            }
+
+            _hdmiSwitches.Add(new AtenVS0801H(_settings.AtenVS0801H[0].SerialID));
 
             // Connect to the IoT hub using the MQTT protocol
-            _deviceClient = DeviceClient.CreateFromConnectionString(_connectionString, TransportType.Mqtt);
+            _deviceClient = DeviceClient.CreateFromConnectionString(_settings.Azure.IoTHub.ConnectionString, TransportType.Mqtt);
 
-            // Create a handlers for the direct method calls
+            // Create handlers for the direct method calls
             _deviceClient.SetMethodHandlerAsync("HDMISwitchGoToNextInput", HDMISwitchGoToNextInput, null).Wait();
             _deviceClient.SetMethodHandlerAsync("HDMISwitchGoToPreviousInput", HDMISwitchGoToPreviousInput, null).Wait();
         }

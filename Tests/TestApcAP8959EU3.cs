@@ -5,38 +5,31 @@ using Newtonsoft.Json;
 using System.IO;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Converters;
+using System.Dynamic;
 
 namespace Tests
 {
     [TestClass]
     public class TestApcAP8959EU3
     {
-        private class Settings
-        {
-            public string Host { get; set; }
-            public int Port { get; set; }
-            public string Username { get; set; }
-            public string Password { get; set; }
-        }
-
-        private Settings _settings;
-        private string _settingsFile = "settings.json";
-        private string _settingsSectionName = "ApcAP8959EU3";
+        private dynamic _settings;
+        private readonly string _settingsFile = "settings.json";
 
         public TestApcAP8959EU3()
         {
             using (StreamReader r = new StreamReader(_settingsFile))
             {
                 string json = r.ReadToEnd();
-                JObject parsed = JObject.Parse(json);
-                _settings = JsonConvert.DeserializeObject<Settings>(parsed[_settingsSectionName].ToString());
+                dynamic parsed = JsonConvert.DeserializeObject<ExpandoObject>(json, new ExpandoObjectConverter());
+                _settings = parsed.ApcAP8959EU3;
             }
         }
 
         private ApcAP8959EU3 GetDevice()
         {
             var sshClient = new PduSshClient();
-            sshClient.Connect(_settings.Host, _settings.Port, _settings.Username, _settings.Password, ApcAP8959EU3.TerminalPrompt);
+            sshClient.Connect(_settings.Host, int.Parse(_settings.Port), _settings.Username, _settings.Password, ApcAP8959EU3.TerminalPrompt);
             return new ApcAP8959EU3(sshClient);
         }
 
@@ -52,7 +45,7 @@ namespace Tests
         public void GivenInvalidHost_WhenSshClientConnects_ResultIsFalse()
         {
             var sshClient = new PduSshClient();
-            var result = sshClient.Connect("0.0.0.0", _settings.Port, _settings.Username, _settings.Password, ApcAP8959EU3.TerminalPrompt);
+            var result = sshClient.Connect("0.0.0.0", int.Parse(_settings.Port), _settings.Username, _settings.Password, ApcAP8959EU3.TerminalPrompt);
             Assert.IsFalse(result);
         }
 
@@ -68,7 +61,7 @@ namespace Tests
         public void GivenInvalidUsername_WhenSshClientConnects_ResultIsFalse()
         {
             var sshClient = new PduSshClient();
-            var result = sshClient.Connect(_settings.Host, _settings.Port, "", _settings.Password, ApcAP8959EU3.TerminalPrompt);
+            var result = sshClient.Connect(_settings.Host, int.Parse(_settings.Port), "", _settings.Password, ApcAP8959EU3.TerminalPrompt);
             Assert.IsFalse(result);
         }
 
@@ -76,7 +69,7 @@ namespace Tests
         public void GivenInvalidPassword_WhenSshClientConnects_ResultIsFalse()
         {
             var sshClient = new PduSshClient();
-            var result = sshClient.Connect(_settings.Host, _settings.Port, _settings.Username, "", ApcAP8959EU3.TerminalPrompt);
+            var result = sshClient.Connect(_settings.Host, int.Parse(_settings.Port), _settings.Username, "", ApcAP8959EU3.TerminalPrompt);
             Assert.IsFalse(result);
         }
     }
