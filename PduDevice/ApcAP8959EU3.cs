@@ -25,6 +25,8 @@ namespace PduDevice
 
         private PduSshClient _pduSshClient;
 
+        public static readonly string TerminalPrompt = "apc>";
+
         public ApcAP8959EU3(PduSshClient pduSshClient)
         {
             _pduSshClient = pduSshClient;

@@ -13,14 +13,13 @@ namespace Tests
     {
         private class Settings
         {
-            public string Host;
-            public int Port;
-            public string Username;
-            public string Password;
+            public string Host { get; set; }
+            public int Port { get; set; }
+            public string Username { get; set; }
+            public string Password { get; set; }
         }
 
         private Settings _settings;
-        private string _terminalPrompt = "apc>";
         private string _settingsFile = "settings.json";
         private string _settingsSectionName = "ApcAP8959EU3";
 
@@ -37,7 +36,7 @@ namespace Tests
         private ApcAP8959EU3 GetDevice()
         {
             var sshClient = new PduSshClient();
-            sshClient.Connect(_settings.Host, _settings.Port, _settings.Username, _settings.Password, _terminalPrompt);
+            sshClient.Connect(_settings.Host, _settings.Port, _settings.Username, _settings.Password, ApcAP8959EU3.TerminalPrompt);
             return new ApcAP8959EU3(sshClient);
         }
 
@@ -53,7 +52,7 @@ namespace Tests
         public void GivenInvalidHost_WhenSshClientConnects_ResultIsFalse()
         {
             var sshClient = new PduSshClient();
-            var result = sshClient.Connect("0.0.0.0", _settings.Port, _settings.Username, _settings.Password, _terminalPrompt);
+            var result = sshClient.Connect("0.0.0.0", _settings.Port, _settings.Username, _settings.Password, ApcAP8959EU3.TerminalPrompt);
             Assert.IsFalse(result);
         }
 
@@ -61,7 +60,7 @@ namespace Tests
         public void GivenInvalidPort_WhenSshClientConnects_ResultIsFalse()
         {
             var sshClient = new PduSshClient();
-            var result = sshClient.Connect(_settings.Host, 0, _settings.Username, _settings.Password, _terminalPrompt);
+            var result = sshClient.Connect(_settings.Host, 0, _settings.Username, _settings.Password, ApcAP8959EU3.TerminalPrompt);
             Assert.IsFalse(result);
         }
 
@@ -69,7 +68,7 @@ namespace Tests
         public void GivenInvalidUsername_WhenSshClientConnects_ResultIsFalse()
         {
             var sshClient = new PduSshClient();
-            var result = sshClient.Connect(_settings.Host, _settings.Port, "", _settings.Password, _terminalPrompt);
+            var result = sshClient.Connect(_settings.Host, _settings.Port, "", _settings.Password, ApcAP8959EU3.TerminalPrompt);
             Assert.IsFalse(result);
         }
 
@@ -77,7 +76,7 @@ namespace Tests
         public void GivenInvalidPassword_WhenSshClientConnects_ResultIsFalse()
         {
             var sshClient = new PduSshClient();
-            var result = sshClient.Connect(_settings.Host, _settings.Port, _settings.Username, "", _terminalPrompt);
+            var result = sshClient.Connect(_settings.Host, _settings.Port, _settings.Username, "", ApcAP8959EU3.TerminalPrompt);
             Assert.IsFalse(result);
         }
     }
