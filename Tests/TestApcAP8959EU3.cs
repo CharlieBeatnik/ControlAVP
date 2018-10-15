@@ -28,9 +28,7 @@ namespace Tests
 
         private ApcAP8959EU3 GetDevice()
         {
-            var sshClient = new PduSshClient();
-            sshClient.Connect(_settings.Host, int.Parse(_settings.Port), _settings.Username, _settings.Password, ApcAP8959EU3.TerminalPrompt);
-            return new ApcAP8959EU3(sshClient);
+            return new ApcAP8959EU3(_settings.Host, int.Parse(_settings.Port), _settings.Username, _settings.Password);
         }
 
         [TestMethod]

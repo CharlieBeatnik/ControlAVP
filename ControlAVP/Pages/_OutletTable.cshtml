@@ -1,0 +1,46 @@
+﻿@using PduDevice
+@model IndexModel.OutletTableViewModel
+
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th width="38px"></th>
+            <th>Name</th>
+            <th width="100px" >Power</th>
+            <th>Control</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var outlet in Model.Outlets.OrderBy(o => o.Name).Where(o => !o.Name.Contains("Outlet")))
+        {
+            string relativePath = string.Format("images/outlets/{0}.png", outlet.Name);
+            string imagePath = System.IO.Path.Combine(Model.WebRootPath, @"images\outlets", outlet.Name + ".png");
+
+            <tr class="@(@outlet.State == Outlet.PowerState.On ? "success" : "")">
+                <td style="padding: 4px;">
+                    @if (System.IO.File.Exists(imagePath))
+                    {
+                        <img src="@relativePath" class="img-responsive" />
+                    }
+                    else
+                    {
+                        <img src="images/outlets/empty.png" class="img-responsive" />
+                    }
+                </td>
+                <td>@outlet.Name</td>
+                <td>@(outlet.Watts)W (@(outlet.Amps)A)</td>
+                <td>
+                    @switch (outlet.State)
+                    {
+                        case Outlet.PowerState.On:
+                            <button data-outlet="@outlet.Id" data-currentpowerstate="@outlet.State" class="btn btn-danger btn-xs btn-click-action btn-block">Turn Off</button>
+                            break;
+                        case Outlet.PowerState.Off:
+                            <button data-outlet="@outlet.Id" data-currentpowerstate="@outlet.State" class="btn btn-success btn-xs btn-click-action btn-block">Turn On</button>
+                            break;
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

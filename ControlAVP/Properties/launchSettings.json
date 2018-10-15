@@ -1,0 +1,30 @@
+{
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:61341",
+      "sslPort": 0
+    }
+  },
+  "profiles": {
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "launchUrl": "http://localhost:61341/",
+      "environmentVariables": {
+        "KEYVAULT_ENDPOINT": "https://andydennocokeyvault.vault.azure.net/",
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "ControlAVP": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "KEYVAULT_ENDPOINT": "https://andydennocokeyvault.vault.azure.net/",
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "http://localhost:61342/"
+    }
+  }
+}

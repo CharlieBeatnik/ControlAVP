@@ -1,4 +1,5 @@
 ﻿using AudioVideoDevice;
+using PduDevice;
 using Microsoft.Azure.Devices.Client;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,7 @@ namespace ControlRelay
     {
         private DeviceClient _deviceClient;
         private List<AtenVS0801H> _hdmiSwitches = new List<AtenVS0801H>();
+        private ApcAP8959EU3 _pdu;
 
         private dynamic _settings;
         private readonly string _settingsFile = "settings.json";
@@ -31,12 +33,15 @@ namespace ControlRelay
 
             _hdmiSwitches.Add(new AtenVS0801H(_settings.AtenVS0801H[0].SerialID));
 
+            _pdu = new ApcAP8959EU3(_settings.ApcAP8959EU3.Host, int.Parse(_settings.ApcAP8959EU3.Port), _settings.ApcAP8959EU3.Username, _settings.ApcAP8959EU3.Password);
+
             // Connect to the IoT hub using the MQTT protocol
             _deviceClient = DeviceClient.CreateFromConnectionString(_settings.Azure.IoTHub.ConnectionString, TransportType.Mqtt);
 
             // Create handlers for the direct method calls
             _deviceClient.SetMethodHandlerAsync("HDMISwitchGoToNextInput", HDMISwitchGoToNextInput, null).Wait();
             _deviceClient.SetMethodHandlerAsync("HDMISwitchGoToPreviousInput", HDMISwitchGoToPreviousInput, null).Wait();
+            _deviceClient.SetMethodHandlerAsync("GetPDUState", GetPDUState, null).Wait();
         }
 
 
@@ -56,6 +61,16 @@ namespace ControlRelay
             var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
             bool success = _hdmiSwitches[payload._hdmiSwitchId].GoToPreviousInput();
             return Task.FromResult(GetMethodResponse(methodRequest, success));
+        }
+
+        private Task<MethodResponse> GetPDUState(MethodRequest methodRequest, object userContext)
+        {
+            var payloadDefintion = new { };
+
+            string json = JsonConvert.SerializeObject(_pdu.GetOutlets());
+
+            var response = new MethodResponse(Encoding.UTF8.GetBytes(json), 200);
+            return Task.FromResult(response);
         }
 
         private MethodResponse GetMethodResponse(MethodRequest methodRequest, bool success)

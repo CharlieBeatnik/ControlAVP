@@ -7,29 +7,29 @@ namespace PduDevice
 {
     public class ApcAP8959EU3
     {
-        public class Outlet
-        {
-            public enum PowerState
-            {
-                On,
-                Off
-            }
-
-            public int Id { get; set; }
-            public string Name { get; set; }
-            public PowerState State { get; set; }
-            public bool Pending { get; set; }
-            public float Watts { get; set; }
-            public float Amps { get; set; }
-        }
-
         private PduSshClient _pduSshClient;
+        private string _host;
+        private int _port;
+        private string _username;
+        private string _password;
 
         public static readonly string TerminalPrompt = "apc>";
 
-        public ApcAP8959EU3(PduSshClient pduSshClient)
+        public ApcAP8959EU3(string host, int port, string username, string password)
         {
-            _pduSshClient = pduSshClient;
+            _pduSshClient = new PduSshClient();
+
+            _host = host;
+            _port = port;
+            _username = username;
+            _password = password;
+
+            Connect();
+        }
+
+        public void Connect()
+        {
+            _pduSshClient.Connect(_host, _port, _username, _password, ApcAP8959EU3.TerminalPrompt);
         }
 
         public IEnumerable<Outlet> GetOutletsWaitForPending()
@@ -88,6 +88,12 @@ namespace PduDevice
             int id;
             string name;
             string tail;
+
+            if(!_pduSshClient.Connected)
+            {
+                Connect();
+            }
+            Debug.Assert(_pduSshClient.Connected);
 
             var olStatusAll = _pduSshClient.ExecuteCommand("olStatus all");
             var olReadingAllPower = _pduSshClient.ExecuteCommand("olReading all power");

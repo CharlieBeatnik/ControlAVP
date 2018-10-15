@@ -1,0 +1,44 @@
+﻿@page
+@using PduDevice
+@model IndexModel
+@{
+    ViewData["Title"] = "ControlAVP";
+}
+
+@Html.AntiForgeryToken()
+
+<div id="outletTable">
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+<script type="text/javascript" language="JavaScript">
+    $(document).ready(function () {
+        $.ajax({
+            type: "GET",
+            url: "/Index?handler=OutletTable"
+        }).done(function (response) {
+            $("#outletTable").html(response);
+            $('.btn-click-action').on('click', btnClassClick);
+        });
+
+        var btnClassClick = function () {
+            var parameters = { id: $(this).data('outlet'), currentPowerState: $(this).data('currentpowerstate') };
+
+            //Disable the button and add a spinner
+            $(this).prop('disabled', true);
+            var currentHtml = $(this).html();
+            $(this).html("<i class='fa fa-spinner fa-spin'></i>" /*+ currentHtml*/); 
+
+            $.ajax({
+                type: "GET",
+                url: "/Index?handler=ToggleOutletState",
+                data: parameters,
+            }).done(function (partialViewResult) {
+                $("#outletTable").html(partialViewResult);
+                $('.btn-click-action').on('click', btnClassClick);
+            });
+        }
+    });
+</script>
+}

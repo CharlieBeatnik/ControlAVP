@@ -146,6 +146,14 @@
       <Project>{9455bd3f-9c23-42cb-a23e-78ebd074dce5}</Project>
       <Name>AudioVideoDevice</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PduDeviceTypes\PduDeviceTypes.csproj">
+      <Project>{d410d4f6-1fda-4414-abf6-2c4f61470b34}</Project>
+      <Name>PduDeviceTypes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PduDevice\PduDevice.csproj">
+      <Project>{c6169642-bbf7-4b47-aaad-228b730f290e}</Project>
+      <Name>PduDevice</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '15.0' ">
     <VisualStudioVersion>15.0</VisualStudioVersion>

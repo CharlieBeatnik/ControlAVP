@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2046
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Devices", "Devices", "{8A7396A5-A549-41E7-845A-A5DEEF61977F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PduDeviceTypes", "PduDeviceTypes\PduDeviceTypes.csproj", "{404B2672-8802-4AE0-9421-DCC0D1008712}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ControlAVP", "ControlAVP\ControlAVP.csproj", "{B1CA7FD3-4776-44D2-9603-046CA98D5282}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{404B2672-8802-4AE0-9421-DCC0D1008712}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{404B2672-8802-4AE0-9421-DCC0D1008712}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{404B2672-8802-4AE0-9421-DCC0D1008712}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{404B2672-8802-4AE0-9421-DCC0D1008712}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1CA7FD3-4776-44D2-9603-046CA98D5282}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1CA7FD3-4776-44D2-9603-046CA98D5282}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1CA7FD3-4776-44D2-9603-046CA98D5282}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1CA7FD3-4776-44D2-9603-046CA98D5282}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{404B2672-8802-4AE0-9421-DCC0D1008712} = {8A7396A5-A549-41E7-845A-A5DEEF61977F}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F4D2450E-295A-46B8-A09C-A6DEB6B25757}
+	EndGlobalSection
+EndGlobal
