@@ -35,5 +35,59 @@ namespace AVPCloudToDevice
                 return null;
             }
         }
+
+        public IEnumerable<Outlet> GetOutletsWaitForPending()
+        {
+            try
+            {
+                var payload = new
+                {
+                };
+
+                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "PDUGetOutletsWaitForPending", payload);
+                string json = response.GetPayloadAsJson();
+                return JsonConvert.DeserializeObject<List<Outlet>>(json);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public bool TurnOutletOn(int outletId)
+        {
+            try
+            {
+                var payload = new
+                {
+                    outletId
+                };
+
+                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "PDUTurnOutletOn", payload);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public bool TurnOutletOff(int outletId)
+        {
+            try
+            {
+                var payload = new
+                {
+                    outletId
+                };
+
+                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "PDUTurnOutletOff", payload);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }

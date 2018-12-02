@@ -6,6 +6,7 @@ using NUnit.Framework;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
+using PduDevice.ApcAP8959EU3Types;
 
 namespace Tests
 {
@@ -39,6 +40,30 @@ namespace Tests
         {
             var outlets = _device.GetOutlets();
             Assert.IsTrue(outlets.Count() == 24);
+        }
+
+        [Test]
+        public void GivenOutlet5IsOff_WhenTurnOutlet5On_ThenOutlet5IsOn()
+        {
+            int outletId = 5;
+
+            //Given
+            Assert.IsTrue(_device.TurnOutletOff(outletId));
+            var outlets = _device.GetOutlets();
+            Assert.IsTrue(outlets  != null);
+            var outlet = outlets.First(o => o.Id == outletId);
+            Assert.IsTrue(outlet != null);
+            Assert.IsTrue(outlet.State == Outlet.PowerState.Off);
+
+            //When
+            Assert.IsTrue(_device.TurnOutletOn(outletId));
+
+            //Then
+            outlets = _device.GetOutletsWaitForPending();
+            Assert.IsTrue(outlets != null);
+            outlet = outlets.First(o => o.Id == outletId);
+            Assert.IsTrue(outlet != null);
+            Assert.IsTrue(outlet.State == Outlet.PowerState.On);
         }
     }
 }

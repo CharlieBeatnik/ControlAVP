@@ -47,6 +47,9 @@ namespace ControlRelay
             _deviceClient.SetMethodHandlerAsync("HDMISwitchSetInput", HDMISwitchSetInput, null).Wait();
 
             _deviceClient.SetMethodHandlerAsync("PDUGetOutlets", PDUGetOutlets, null).Wait();
+            _deviceClient.SetMethodHandlerAsync("PDUGetOutletsWaitForPending", PDUGetOutletsWaitForPending, null).Wait();
+            _deviceClient.SetMethodHandlerAsync("PDUTurnOutletOn", PDUTurnOutletOn, null).Wait();
+            _deviceClient.SetMethodHandlerAsync("PDUTurnOutletOff", PDUTurnOutletOff, null).Wait();
         }
 
 
@@ -114,6 +117,50 @@ namespace ControlRelay
             {
                 return Task.FromResult(GetMethodResponse(methodRequest, false));
             }
+        }
+
+        private Task<MethodResponse> PDUGetOutletsWaitForPending(MethodRequest methodRequest, object userContext)
+        {
+            var result = _pdu.GetOutletsWaitForPending();
+
+            if (result != null)
+            {
+                string json = JsonConvert.SerializeObject(result);
+                var response = new MethodResponse(Encoding.UTF8.GetBytes(json), (int)HttpStatusCode.OK);
+                return Task.FromResult(response);
+            }
+            else
+            {
+                return Task.FromResult(GetMethodResponse(methodRequest, false));
+            }
+        }
+
+        private Task<MethodResponse> PDUTurnOutletOn(MethodRequest methodRequest, object userContext)
+        {
+            var payloadDefintion = new
+            {
+                outletId = -1
+            };
+
+            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
+            _pdu.TurnOutletOn(payload.outletId);
+            //ANDREWDENN_TODO: No way of determining outlet change succeded or failed
+            bool success = true;
+            return Task.FromResult(GetMethodResponse(methodRequest, success));
+        }
+
+        private Task<MethodResponse> PDUTurnOutletOff(MethodRequest methodRequest, object userContext)
+        {
+            var payloadDefintion = new
+            {
+                outletId = -1
+            };
+
+            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
+            _pdu.TurnOutletOff(payload.outletId);
+            //ANDREWDENN_TODO: No way of determining outlet change succeded or failed
+            bool success = true;
+            return Task.FromResult(GetMethodResponse(methodRequest, success));
         }
 
         private MethodResponse GetMethodResponse(MethodRequest methodRequest, bool success)

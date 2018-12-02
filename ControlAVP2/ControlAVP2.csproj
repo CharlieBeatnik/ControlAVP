@@ -17,6 +17,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AudioVideoDeviceTypes\AudioVideoDeviceTypes.csproj" />
+    <ProjectReference Include="..\AVPCloudToDevice\AVPCloudToDevice.csproj" />
     <ProjectReference Include="..\PduDeviceTypes\PduDeviceTypes.csproj" />
   </ItemGroup>
 
