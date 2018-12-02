@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
+using PduDevice.ApcAP8959EU3Types;
 
 namespace PduDevice
 {
@@ -157,7 +158,14 @@ namespace PduDevice
                 }
             }
 
-            return output.Values;
+            if(output.Values.Count > 0)
+            {
+                return output.Values;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         private bool ParseCommonLine(string line, out int id, out string name, out string tail)

@@ -3,43 +3,12 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Windows.Devices.SerialCommunication;
+using AudioVideoDevice.AtenVS0801HTypes;
 
 namespace AudioVideoDevice
 {
     public class AtenVS0801H : AudioVideoSerialDevice
     {
-        public enum SwitchMode
-        {
-            Default,
-            Next,
-            Auto
-        };
-
-        public enum InputPort
-        {
-            Port1 = 1,
-            Port2 = 2,
-            Port3 = 3,
-            Port4 = 4,
-            Port5 = 5,
-            Port6 = 6,
-            Port7 = 7,
-            Port8 = 8
-        }
-
-        public class State
-        {
-            public InputPort InputPort { get; set;  }
-
-            public bool Output { get; set;  }
-
-            public SwitchMode Mode { get; set;  }
-
-            public bool GoTo { get; set;  }
-
-            public Version Firmware { get; set; } 
-        }
-
         protected override string _sendLineEnding
         {
             get { return "\r"; }
@@ -161,7 +130,7 @@ namespace AudioVideoDevice
                 int major = int.Parse(match.Groups[1].Value);
                 int minor = int.Parse(match.Groups[2].Value);
                 int build = int.Parse(match.Groups[3].Value);
-                state.Firmware = new Version(major, minor, build);
+                state.Firmware = new Version(major, minor, build, 0);
 
                 return state;
             }

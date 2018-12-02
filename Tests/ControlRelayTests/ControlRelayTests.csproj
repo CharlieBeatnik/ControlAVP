@@ -16,7 +16,7 @@
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <PackageCertificateKeyFile>Tests_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <PackageCertificateKeyFile>ControlRelayTests_TemporaryKey.pfx</PackageCertificateKeyFile>
     <UnitTestPlatformVersion Condition="'$(UnitTestPlatformVersion)' == ''">$(VisualStudioVersion)</UnitTestPlatformVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
@@ -114,7 +114,7 @@
       <SubType>Designer</SubType>
     </AppxManifest>
     <Content Include="settings.json" />
-    <None Include="Tests_TemporaryKey.pfx" />
+    <None Include="ControlRelayTests_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Properties\UnitTestApp.rd.xml" />
@@ -141,15 +141,19 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AudioVideoDevice\AudioVideoDevice.csproj">
+    <ProjectReference Include="..\..\AudioVideoDeviceTypes\AudioVideoDeviceTypes.csproj">
+      <Project>{24410605-41ce-489c-abd9-fa72221ee1fd}</Project>
+      <Name>AudioVideoDeviceTypes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\AudioVideoDevice\AudioVideoDevice.csproj">
       <Project>{9455bd3f-9c23-42cb-a23e-78ebd074dce5}</Project>
       <Name>AudioVideoDevice</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PduDeviceTypes\PduDeviceTypes.csproj">
+    <ProjectReference Include="..\..\PduDeviceTypes\PduDeviceTypes.csproj">
       <Project>{d410d4f6-1fda-4414-abf6-2c4f61470b34}</Project>
       <Name>PduDeviceTypes</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PduDevice\PduDevice.csproj">
+    <ProjectReference Include="..\..\PduDevice\PduDevice.csproj">
       <Project>{c6169642-bbf7-4b47-aaad-228b730f290e}</Project>
       <Name>PduDevice</Name>
     </ProjectReference>

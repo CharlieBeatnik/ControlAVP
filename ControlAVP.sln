@@ -9,6 +9,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PduDeviceTypes", "PduDevice
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ControlAVP", "ControlAVP\ControlAVP.csproj", "{B1CA7FD3-4776-44D2-9603-046CA98D5282}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ControlAVP2", "ControlAVP2\ControlAVP2.csproj", "{E1CEBC02-FE52-4A65-8021-E70E95B68740}"
+	ProjectSection(ProjectDependencies) = postProject
+		{404B2672-8802-4AE0-9421-DCC0D1008712} = {404B2672-8802-4AE0-9421-DCC0D1008712}
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AVPCloudToDevice", "AVPCloudToDevice\AVPCloudToDevice.csproj", "{10741912-0536-4728-A8F1-D52471F7C3A4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AVPCloudToDeviceTests", "Tests\AVPCloudToDeviceTests\AVPCloudToDeviceTests.csproj", "{8865C5CD-FDE1-4871-895E-2EDE1EF7ECBB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AudioVideoDeviceTypes", "AudioVideoDeviceTypes\AudioVideoDeviceTypes.csproj", "{B9473198-2966-4426-B32E-303C125BF169}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,12 +34,29 @@ Global
 		{B1CA7FD3-4776-44D2-9603-046CA98D5282}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B1CA7FD3-4776-44D2-9603-046CA98D5282}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B1CA7FD3-4776-44D2-9603-046CA98D5282}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1CEBC02-FE52-4A65-8021-E70E95B68740}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1CEBC02-FE52-4A65-8021-E70E95B68740}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1CEBC02-FE52-4A65-8021-E70E95B68740}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1CEBC02-FE52-4A65-8021-E70E95B68740}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10741912-0536-4728-A8F1-D52471F7C3A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10741912-0536-4728-A8F1-D52471F7C3A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10741912-0536-4728-A8F1-D52471F7C3A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10741912-0536-4728-A8F1-D52471F7C3A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8865C5CD-FDE1-4871-895E-2EDE1EF7ECBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8865C5CD-FDE1-4871-895E-2EDE1EF7ECBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8865C5CD-FDE1-4871-895E-2EDE1EF7ECBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8865C5CD-FDE1-4871-895E-2EDE1EF7ECBB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9473198-2966-4426-B32E-303C125BF169}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9473198-2966-4426-B32E-303C125BF169}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9473198-2966-4426-B32E-303C125BF169}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9473198-2966-4426-B32E-303C125BF169}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{404B2672-8802-4AE0-9421-DCC0D1008712} = {8A7396A5-A549-41E7-845A-A5DEEF61977F}
+		{B9473198-2966-4426-B32E-303C125BF169} = {8A7396A5-A549-41E7-845A-A5DEEF61977F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F4D2450E-295A-46B8-A09C-A6DEB6B25757}

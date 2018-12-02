@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Azure.Devices;
+using PduDevice.ApcAP8959EU3Types;
 
 namespace ControlAVP.Pages
 {
@@ -113,13 +114,13 @@ namespace ControlAVP.Pages
             methodInvocation.SetPayloadJson(payloadString);
 
             // Invoke the direct method asynchronously and get the response from the device.
-            var response = Task.Run(async () => await InvokeDeviceMethodAsync(_serviceClient, _deviceId, methodInvocation)).Result;
+            //var response = Task.Run(async () => await InvokeDeviceMethodAsync(_serviceClient, _deviceId, methodInvocation)).Result;
 
-            if (response != null)
-            {
-                string json = response.GetPayloadAsJson();
-                return JsonConvert.DeserializeObject<List<Outlet>>(json);
-            }
+            //if (response != null)
+            //{
+            //    string json = response.GetPayloadAsJson();
+            //    return JsonConvert.DeserializeObject<List<Outlet>>(json);
+            //}
 
             return null;
         }

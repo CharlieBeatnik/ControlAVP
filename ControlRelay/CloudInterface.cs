@@ -1,5 +1,6 @@
 ﻿using AudioVideoDevice;
 using PduDevice;
+using AudioVideoDevice.AtenVS0801HTypes;
 using Microsoft.Azure.Devices.Client;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ using System.IO;
 using Newtonsoft.Json.Linq;
 using System.Dynamic;
 using Newtonsoft.Json.Converters;
+using System.Net;
 
 namespace ControlRelay
 {
@@ -41,7 +43,10 @@ namespace ControlRelay
             // Create handlers for the direct method calls
             _deviceClient.SetMethodHandlerAsync("HDMISwitchGoToNextInput", HDMISwitchGoToNextInput, null).Wait();
             _deviceClient.SetMethodHandlerAsync("HDMISwitchGoToPreviousInput", HDMISwitchGoToPreviousInput, null).Wait();
-            _deviceClient.SetMethodHandlerAsync("GetPDUState", GetPDUState, null).Wait();
+            _deviceClient.SetMethodHandlerAsync("HDMISwitchGetState", HDMISwitchGetState, null).Wait();
+            _deviceClient.SetMethodHandlerAsync("HDMISwitchSetInput", HDMISwitchSetInput, null).Wait();
+
+            _deviceClient.SetMethodHandlerAsync("PDUGetOutlets", PDUGetOutlets, null).Wait();
         }
 
 
@@ -63,14 +68,52 @@ namespace ControlRelay
             return Task.FromResult(GetMethodResponse(methodRequest, success));
         }
 
-        private Task<MethodResponse> GetPDUState(MethodRequest methodRequest, object userContext)
+        private Task<MethodResponse> HDMISwitchGetState(MethodRequest methodRequest, object userContext)
         {
-            var payloadDefintion = new { };
+            var payloadDefintion = new { _hdmiSwitchId = -1 };
 
-            string json = JsonConvert.SerializeObject(_pdu.GetOutlets());
+            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
 
-            var response = new MethodResponse(Encoding.UTF8.GetBytes(json), 200);
-            return Task.FromResult(response);
+            var result = _hdmiSwitches[payload._hdmiSwitchId].GetState();
+            if(result != null)
+            {
+                string json = JsonConvert.SerializeObject(result);
+                var response = new MethodResponse(Encoding.UTF8.GetBytes(json), (int)HttpStatusCode.OK);
+                return Task.FromResult(response);
+            }
+            else
+            {
+                return Task.FromResult(GetMethodResponse(methodRequest, false));
+            }
+        }
+
+        private Task<MethodResponse> HDMISwitchSetInput(MethodRequest methodRequest, object userContext)
+        {
+            var payloadDefintion = new
+            {
+                _hdmiSwitchId = -1,
+                inputPort = InputPort.Port1
+            };
+
+            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
+            bool success = _hdmiSwitches[payload._hdmiSwitchId].SetInput(payload.inputPort);
+            return Task.FromResult(GetMethodResponse(methodRequest, success));
+        }
+
+        private Task<MethodResponse> PDUGetOutlets(MethodRequest methodRequest, object userContext)
+        {
+            var result = _pdu.GetOutlets();
+            
+            if (result != null)
+            {
+                string json = JsonConvert.SerializeObject(result);
+                var response = new MethodResponse(Encoding.UTF8.GetBytes(json), (int)HttpStatusCode.OK);
+                return Task.FromResult(response);
+            }
+            else
+            {
+                return Task.FromResult(GetMethodResponse(methodRequest, false));
+            }
         }
 
         private MethodResponse GetMethodResponse(MethodRequest methodRequest, bool success)
@@ -79,13 +122,13 @@ namespace ControlRelay
             {
                 // Acknowlege the direct method call with a 200 success message
                 string result = "{\"result\":\"Executed direct method: " + methodRequest.Name + "\"}";
-                return new MethodResponse(Encoding.UTF8.GetBytes(result), 200);
+                return new MethodResponse(Encoding.UTF8.GetBytes(result), (int)HttpStatusCode.OK);
             }
             else
             {
                 // Acknowlege the direct method call with a 400 error message
                 string result = "{\"result\":\"Invalid parameter\"}";
-                return new MethodResponse(Encoding.UTF8.GetBytes(result), 400);
+                return new MethodResponse(Encoding.UTF8.GetBytes(result), (int)HttpStatusCode.BadRequest);
             }
         }
     }

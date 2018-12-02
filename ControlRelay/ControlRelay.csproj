@@ -21,6 +21,13 @@
     <PackageCertificateKeyFile>ControlRelay_TemporaryKey.pfx</PackageCertificateKeyFile>
     <AppxPackage>true</AppxPackage>
     <ContainsStartupTask>true</ContainsStartupTask>
+    <GenerateAppInstallerFile>True</GenerateAppInstallerFile>
+    <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
+    <AppxBundle>Always</AppxBundle>
+    <AppxBundlePlatforms>arm</AppxBundlePlatforms>
+    <AppInstallerUri>http://test</AppInstallerUri>
+    <AppInstallerUpdateFrequency>1</AppInstallerUpdateFrequency>
+    <AppInstallerCheckForUpdateFrequency>OnApplicationRun</AppInstallerCheckForUpdateFrequency>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>
@@ -142,6 +149,10 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AudioVideoDeviceTypes\AudioVideoDeviceTypes.csproj">
+      <Project>{24410605-41ce-489c-abd9-fa72221ee1fd}</Project>
+      <Name>AudioVideoDeviceTypes</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AudioVideoDevice\AudioVideoDevice.csproj">
       <Project>{9455bd3f-9c23-42cb-a23e-78ebd074dce5}</Project>
       <Name>AudioVideoDevice</Name>

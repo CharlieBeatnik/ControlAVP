@@ -116,6 +116,12 @@
       <Version>6.1.9</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AudioVideoDeviceTypes\AudioVideoDeviceTypes.csproj">
+      <Project>{24410605-41ce-489c-abd9-fa72221ee1fd}</Project>
+      <Name>AudioVideoDeviceTypes</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
