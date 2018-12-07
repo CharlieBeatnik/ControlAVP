@@ -39,6 +39,7 @@ namespace Tests
         public void GivenDevice_WhenGetOutlets_ThenOutletCountIs24()
         {
             var outlets = _device.GetOutlets();
+            if (outlets == null) Assert.Fail();
             Assert.IsTrue(outlets.Count() == 24);
         }
 
@@ -50,9 +51,10 @@ namespace Tests
             //Given
             Assert.IsTrue(_device.TurnOutletOff(outletId));
             var outlets = _device.GetOutlets();
-            Assert.IsTrue(outlets  != null);
+            if (outlets == null) Assert.Fail();
+
             var outlet = outlets.First(o => o.Id == outletId);
-            Assert.IsTrue(outlet != null);
+            if (outlet == null) Assert.Fail();
             Assert.IsTrue(outlet.State == Outlet.PowerState.Off);
 
             //When
@@ -60,9 +62,9 @@ namespace Tests
 
             //Then
             outlets = _device.GetOutletsWaitForPending();
-            Assert.IsTrue(outlets != null);
+            if (outlets == null) Assert.Fail();
             outlet = outlets.First(o => o.Id == outletId);
-            Assert.IsTrue(outlet != null);
+            if (outlet == null) Assert.Fail();
             Assert.IsTrue(outlet.State == Outlet.PowerState.On);
         }
     }
