@@ -12,7 +12,7 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-<script type="text/javascript" language="JavaScript">
+    <script type="text/javascript" language="JavaScript">
     $(document).ready(function () {
         $.ajax({
             type: "GET",
@@ -28,7 +28,7 @@
             //Disable the button and add a spinner
             $(this).prop('disabled', true);
             var currentHtml = $(this).html();
-            $(this).html("<i class='fa fa-spinner fa-spin'></i>" /*+ currentHtml*/); 
+            $(this).html("<i class='fa fa-spinner fa-spin'></i>" /*+ currentHtml*/);
 
             $.ajax({
                 type: "GET",
@@ -40,5 +40,5 @@
             });
         }
     });
-</script>
+    </script>
 }

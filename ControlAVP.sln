@@ -7,9 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Devices", "Devices", "{8A73
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PduDeviceTypes", "PduDeviceTypes\PduDeviceTypes.csproj", "{404B2672-8802-4AE0-9421-DCC0D1008712}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ControlAVP", "ControlAVP\ControlAVP.csproj", "{B1CA7FD3-4776-44D2-9603-046CA98D5282}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ControlAVP2", "ControlAVP2\ControlAVP2.csproj", "{E1CEBC02-FE52-4A65-8021-E70E95B68740}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ControlAVP", "ControlAVP\ControlAVP.csproj", "{E1CEBC02-FE52-4A65-8021-E70E95B68740}"
 	ProjectSection(ProjectDependencies) = postProject
 		{404B2672-8802-4AE0-9421-DCC0D1008712} = {404B2672-8802-4AE0-9421-DCC0D1008712}
 	EndProjectSection
