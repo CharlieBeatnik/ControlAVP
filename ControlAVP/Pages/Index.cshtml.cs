@@ -36,8 +36,8 @@ namespace ControlAVP.Pages
             _configuration = configuration;
             _environment = environment;
 
-            string _connectionString = _configuration.GetValue<string>("ControlAVPIoTHubConnectionString");
-            string _deviceId = _configuration.GetValue<string>("ControlAVPIoTHubDeviceId");
+            _connectionString = _configuration.GetValue<string>("ControlAVPIoTHubConnectionString");
+            _deviceId = _configuration.GetValue<string>("ControlAVPIoTHubDeviceId");
 
             _serviceClient = ServiceClient.CreateFromConnectionString(_connectionString);
             _pdu = new ApcAP8959EU3(_serviceClient, _deviceId);
