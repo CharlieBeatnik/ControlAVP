@@ -13,6 +13,7 @@ using Newtonsoft.Json.Linq;
 using System.Dynamic;
 using Newtonsoft.Json.Converters;
 using System.Net;
+using NLog;
 
 namespace ControlRelay
 {
@@ -25,8 +26,12 @@ namespace ControlRelay
         private dynamic _settings;
         private readonly string _settingsFile = "settings.json";
 
+        private static Logger _logger = LogManager.GetCurrentClassLogger();
+
         public CloudInterface()
         {
+            _logger.Debug("");
+
             using (StreamReader r = new StreamReader(_settingsFile))
             {
                 string json = r.ReadToEnd();
@@ -40,6 +45,9 @@ namespace ControlRelay
             // Connect to the IoT hub using the MQTT protocol
             _deviceClient = DeviceClient.CreateFromConnectionString(_settings.Azure.IoTHub.ConnectionString, TransportType.Mqtt);
 
+            _deviceClient.SetConnectionStatusChangesHandler(DeviceClientConnectionStatusChanged);
+            _deviceClient.SetMethodHandlerAsync("Close", DeviceClientClose, null).Wait();
+
             // Create handlers for the direct method calls
             _deviceClient.SetMethodHandlerAsync("HDMISwitchGoToNextInput", HDMISwitchGoToNextInput, null).Wait();
             _deviceClient.SetMethodHandlerAsync("HDMISwitchGoToPreviousInput", HDMISwitchGoToPreviousInput, null).Wait();
@@ -52,9 +60,27 @@ namespace ControlRelay
             _deviceClient.SetMethodHandlerAsync("PDUTurnOutletOff", PDUTurnOutletOff, null).Wait();
         }
 
+        ~CloudInterface()
+        {
+            _logger.Debug("");
+        }
+
+        private void DeviceClientConnectionStatusChanged(ConnectionStatus status, ConnectionStatusChangeReason reason)
+        {
+            _logger.Debug($"Status: {status.ToString()}, Reason: {reason.ToString()}");
+        }
+
+        private Task<MethodResponse> DeviceClientClose(MethodRequest methodRequest, object userContext)
+        {
+            _logger.Debug("");
+            _deviceClient.CloseAsync();
+            return Task.FromResult(GetMethodResponse(methodRequest, true));
+        }
 
         private Task<MethodResponse> HDMISwitchGoToNextInput(MethodRequest methodRequest, object userContext)
         {
+            _logger.Debug("");
+
             var payloadDefintion = new { _hdmiSwitchId = -1 };
 
             var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
@@ -64,6 +90,8 @@ namespace ControlRelay
 
         private Task<MethodResponse> HDMISwitchGoToPreviousInput(MethodRequest methodRequest, object userContext)
         {
+            _logger.Debug("");
+
             var payloadDefintion = new { _hdmiSwitchId = -1 };
 
             var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
@@ -73,6 +101,8 @@ namespace ControlRelay
 
         private Task<MethodResponse> HDMISwitchGetState(MethodRequest methodRequest, object userContext)
         {
+            _logger.Debug("");
+
             var payloadDefintion = new { _hdmiSwitchId = -1 };
 
             var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
@@ -92,6 +122,8 @@ namespace ControlRelay
 
         private Task<MethodResponse> HDMISwitchSetInput(MethodRequest methodRequest, object userContext)
         {
+            _logger.Debug("");
+
             var payloadDefintion = new
             {
                 _hdmiSwitchId = -1,
@@ -105,6 +137,8 @@ namespace ControlRelay
 
         private Task<MethodResponse> PDUGetOutlets(MethodRequest methodRequest, object userContext)
         {
+            _logger.Debug("");
+
             var result = _pdu.GetOutlets();
             
             if (result != null)
@@ -121,6 +155,8 @@ namespace ControlRelay
 
         private Task<MethodResponse> PDUGetOutletsWaitForPending(MethodRequest methodRequest, object userContext)
         {
+            _logger.Debug("");
+
             var result = _pdu.GetOutletsWaitForPending();
 
             if (result != null)
@@ -137,6 +173,8 @@ namespace ControlRelay
 
         private Task<MethodResponse> PDUTurnOutletOn(MethodRequest methodRequest, object userContext)
         {
+            _logger.Debug("");
+
             var payloadDefintion = new
             {
                 outletId = -1
@@ -151,6 +189,8 @@ namespace ControlRelay
 
         private Task<MethodResponse> PDUTurnOutletOff(MethodRequest methodRequest, object userContext)
         {
+            _logger.Debug("");
+
             var payloadDefintion = new
             {
                 outletId = -1
