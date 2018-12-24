@@ -44,7 +44,6 @@ namespace ControlAVP
             .AddAzureAd(options => Configuration.Bind("AzureAd", options))
             .AddCookie(options => options.Cookie.SameSite = SameSiteMode.None);
 
-
             services.AddMvc(options =>
             {
                 var policy = new AuthorizationPolicyBuilder()
@@ -52,7 +51,11 @@ namespace ControlAVP
                     .Build();
                 options.Filters.Add(new AuthorizeFilter(policy));
             })
-            .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+            .AddRazorPagesOptions(options =>
+            {
+                options.Conventions.AllowAnonymousToFolder("/Account");
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

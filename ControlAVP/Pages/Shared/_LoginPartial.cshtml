@@ -1,14 +1,22 @@
-
 @if (User.Identity.IsAuthenticated)
 {
     <ul class="nav navbar-nav navbar-right">
-        <li class="navbar-text">Hello @User.Identity.Name!</li>
-        <li><a asp-area="AzureAD" asp-controller="Account" asp-action="SignOut">Sign out</a></li>
+        @{
+            string identityName = @User.Identity.Name;
+            var nameClaim = User.Claims.FirstOrDefault(x => x.Type == "name");
+
+            if(nameClaim != null)
+            {
+                identityName = nameClaim.Value;
+            }
+        }
+        <li class="navbar-text">Hello @identityName</li>
+        <li><a asp-area="" asp-controller="Account" asp-action="SignOut">Sign Out</a></li>
     </ul>
 }
 else
 {
     <ul class="nav navbar-nav navbar-right">
-        <li><a asp-area="AzureAD" asp-controller="Account" asp-action="SignIn">Sign in</a></li>
+        <li><a asp-area="" asp-controller="Account" asp-action="SignOn">Sign In</a></li>
     </ul>
 }
