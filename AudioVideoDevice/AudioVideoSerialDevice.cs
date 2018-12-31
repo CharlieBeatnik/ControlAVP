@@ -16,18 +16,21 @@ namespace AudioVideoDevice
         private string _partialId;
 
         protected uint ReadBufferLengthBytes { get; set; } = 1024;
-        protected TimeSpan ZeroByteReadTimeout { get; set; } = TimeSpan.FromMilliseconds(750);
+        protected TimeSpan ZeroByteReadTimeout { get; set; } = TimeSpan.FromMilliseconds(500);
         protected TimeSpan WriteTimeout { get; set; } = TimeSpan.FromMilliseconds(250);
         protected TimeSpan ReadTimeout { get; set; } = TimeSpan.FromMilliseconds(250);
-        protected uint BaudRate { get; set; } = 19200;
-        protected SerialStopBitCount StopBits { get; set; } = SerialStopBitCount.One;
-        protected ushort DataBits { get; set; } = 8;
-        protected SerialParity Parity { get; set; } = SerialParity.None;
+
+        protected abstract uint BaudRate { get; }
+        protected abstract SerialStopBitCount StopBits { get; }
+        protected abstract ushort DataBits { get; }
+        protected abstract SerialParity Parity { get; }
 
         protected SerialDevice SerialPort { get; set; }
 
-
-        protected abstract string _sendLineEnding { get; }
+        protected delegate string ProcessString(string input);
+        protected ProcessString PreWrite { get; set; } = (x) => { return x; };
+        protected ProcessString PostRead { get; set; } = (x) => { return x; };
+    
 
         public string Id { get; private set; }
 
@@ -76,26 +79,39 @@ namespace AudioVideoDevice
             return await DeviceInformation.FindAllAsync(aqs);
         }
 
-        protected async Task WriteAsync(string write)
-        {
-            _dataWriter.WriteString(write + _sendLineEnding);
-            await _dataWriter.StoreAsync();
-        }
-
         protected void Write(string write)
         {
-            Task.Run(async () => await WriteAsync(write));
+            var processedWriteString = PreWrite(write);
+            _dataWriter.WriteString(processedWriteString);
+
+            var storeAsyncTask = _dataWriter.StoreAsync().AsTask();
+            storeAsyncTask.Wait();
+
+            var bytesWritten = storeAsyncTask.Result;
+            Debug.Assert(bytesWritten == processedWriteString.Length);
+            Debug.Assert(storeAsyncTask.IsCompleted == true);
+            Debug.Assert(storeAsyncTask.IsCompletedSuccessfully == true);
+            Debug.Assert(storeAsyncTask.Status == TaskStatus.RanToCompletion);
         }
 
-        protected async Task<string> ReadAsync()
+        protected string Read()
         {
             var cts = new CancellationTokenSource(ZeroByteReadTimeout);
-
             try
             {
-                var bytesRead = await _dataReader.LoadAsync(ReadBufferLengthBytes).AsTask(cts.Token);
+                var loadAsyncTask = _dataReader.LoadAsync(ReadBufferLengthBytes).AsTask(cts.Token);
+                loadAsyncTask.Wait();
+
+                var bytesRead = loadAsyncTask.Result;
                 Debug.Assert(bytesRead > 0);
-                return _dataReader.ReadString(bytesRead);
+                Debug.Assert(loadAsyncTask.IsCompleted == true);
+                Debug.Assert(loadAsyncTask.IsCompletedSuccessfully == true);
+                Debug.Assert(loadAsyncTask.Status == TaskStatus.RanToCompletion);
+
+                var readString = _dataReader.ReadString(bytesRead);
+                var processedReadString = PostRead(readString);
+
+                return processedReadString;
             }
             catch (TaskCanceledException)
             {
@@ -104,20 +120,10 @@ namespace AudioVideoDevice
             }
         }
 
-        protected string Read()
-        {
-            return Task.Run(async () => await ReadAsync()).Result;
-        }
-
-        protected async Task<string> WriteWithResponseAsync(string write)
-        {
-            await WriteAsync(write);
-            return await ReadAsync();
-        }
-
         protected string WriteWithResponse(string write)
         {
-            return Task.Run(async () => await WriteWithResponseAsync(write)).Result;
+            Write(write);
+            return Read();
         }
     }
 }

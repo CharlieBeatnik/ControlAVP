@@ -9,17 +9,17 @@ namespace AudioVideoDevice
 {
     public class AtenVS0801H : AudioVideoSerialDevice
     {
-        protected override string _sendLineEnding
-        {
-            get { return "\r"; }
-        }
+        protected override uint BaudRate { get; } = 19200;
+        protected override SerialStopBitCount StopBits { get; } = SerialStopBitCount.One;
+        protected override ushort DataBits { get; } = 8;
+        protected override SerialParity Parity { get; } = SerialParity.None;
 
         public AtenVS0801H(string portId) : base(portId)
         {
-            BaudRate = 19200;
-            StopBits = SerialStopBitCount.One;
-            DataBits = 8;
-            Parity = SerialParity.None;
+            PreWrite = (x) =>
+            {
+                return x + "\r";
+            };
         }
 
         private bool Success(string response)

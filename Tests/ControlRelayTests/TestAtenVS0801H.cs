@@ -1,6 +1,10 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using AudioVideoDevice;
 using AudioVideoDevice.AtenVS0801HTypes;
+using System.IO;
+using Newtonsoft.Json;
+using System.Dynamic;
+using Newtonsoft.Json.Converters;
 
 namespace Tests
 {
@@ -8,12 +12,20 @@ namespace Tests
     public class TestAtenVS0801H
     {
         private static AtenVS0801H _device = null;
+        private dynamic _settings;
+        private readonly string _settingsFile = "settings.json";
 
         public TestAtenVS0801H()
         {
+            using (StreamReader r = new StreamReader(_settingsFile))
+            {
+                string json = r.ReadToEnd();
+                _settings = JsonConvert.DeserializeObject<ExpandoObject>(json, new ExpandoObjectConverter());
+            }
+
             if (_device == null)
             {
-                _device = new AtenVS0801H("AK05UVF8A");
+                _device = new AtenVS0801H(_settings.AtenVS0801H[0].SerialID);
             }
         }
 
