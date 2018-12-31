@@ -14,6 +14,8 @@ using System.Dynamic;
 using Newtonsoft.Json.Converters;
 using System.Net;
 using NLog;
+using System.ComponentModel;
+using System.Diagnostics;
 
 namespace ControlRelay
 {
@@ -22,6 +24,7 @@ namespace ControlRelay
         private DeviceClient _deviceClient;
         private List<AtenVS0801H> _hdmiSwitches = new List<AtenVS0801H>();
         private ApcAP8959EU3 _pdu;
+        private ExtronDSC301HD _scaler;
 
         private dynamic _settings;
         private readonly string _settingsFile = "settings.json";
@@ -35,15 +38,25 @@ namespace ControlRelay
             using (StreamReader r = new StreamReader(_settingsFile))
             {
                 string json = r.ReadToEnd();
-                _settings = JsonConvert.DeserializeObject<ExpandoObject>(json, new ExpandoObjectConverter());
+
+                _settings = JsonConvert.DeserializeObject(json);
             }
 
-            _hdmiSwitches.Add(new AtenVS0801H(_settings.AtenVS0801H[0].SerialID));
+            string atenSerialId = _settings.AtenVS0801H[0].SerialID.ToString();
+            _hdmiSwitches.Add(new AtenVS0801H(atenSerialId));
 
-            _pdu = new ApcAP8959EU3(_settings.ApcAP8959EU3.Host, int.Parse(_settings.ApcAP8959EU3.Port), _settings.ApcAP8959EU3.Username, _settings.ApcAP8959EU3.Password);
+            string apcHost = _settings.ApcAP8959EU3.Host;
+            int apcPort = int.Parse(_settings.ApcAP8959EU3.Port.ToString());
+            string apcUsername = _settings.ApcAP8959EU3.Username;
+            string apcPassword = _settings.ApcAP8959EU3.Password;
+            _pdu = new ApcAP8959EU3(apcHost, apcPort, apcUsername, apcPassword);
+
+            string extronSerialId = _settings.ExtronDSC301HD.SerialID;
+            _scaler = new ExtronDSC301HD(extronSerialId);
 
             // Connect to the IoT hub using the MQTT protocol
-            _deviceClient = DeviceClient.CreateFromConnectionString(_settings.Azure.IoTHub.ConnectionString, TransportType.Mqtt);
+            string azureIoTHubConnectionString = _settings.Azure.IoTHub.ConnectionString;
+            _deviceClient = DeviceClient.CreateFromConnectionString(azureIoTHubConnectionString, TransportType.Mqtt);
 
             _deviceClient.SetConnectionStatusChangesHandler(DeviceClientConnectionStatusChanged);
             _deviceClient.SetMethodHandlerAsync("Close", DeviceClientClose, null).Wait();

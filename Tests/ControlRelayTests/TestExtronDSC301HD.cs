@@ -30,7 +30,7 @@ namespace Tests
 
             if (_device == null)
             {
-                _device = new ExtronDSC301HD(_settings.ExtronDSC301HD[0].SerialID);
+                _device = new ExtronDSC301HD(_settings.ExtronDSC301HD.SerialID);
             }
         }
 
