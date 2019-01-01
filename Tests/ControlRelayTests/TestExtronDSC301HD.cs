@@ -40,5 +40,12 @@ namespace Tests
             var firmware = _device.GetFirmware();
             Assert.IsNotNull(firmware);
         }
+
+        [TestMethod]
+        public void GivenDevice_WhenGetFirmware_ThenFirmwareIs1_25_1()
+        {
+            var firmware = _device.GetFirmware();
+            Assert.AreEqual(new Version(1,25,1,0), firmware);
+        }
     }
 }
