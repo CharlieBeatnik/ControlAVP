@@ -10,6 +10,7 @@ using System.IO;
 using System.Dynamic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Linq;
 
 namespace Tests
 {
@@ -17,20 +18,20 @@ namespace Tests
     public class TestExtronDSC301HD
     {
         private static ExtronDSC301HD _device = null;
-        private dynamic _settings;
         private readonly string _settingsFile = "settings.json";
 
         public TestExtronDSC301HD()
         {
+            dynamic settings;
             using (StreamReader r = new StreamReader(_settingsFile))
             {
                 string json = r.ReadToEnd();
-                _settings = JsonConvert.DeserializeObject<ExpandoObject>(json, new ExpandoObjectConverter());
+                settings = JObject.Parse(json);
             }
 
             if (_device == null)
             {
-                _device = new ExtronDSC301HD(_settings.ExtronDSC301HD.SerialID);
+                _device = new ExtronDSC301HD((string)settings.SelectToken("ExtronDSC301HD.SerialID"));
             }
         }
 

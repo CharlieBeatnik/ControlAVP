@@ -31,6 +31,7 @@ namespace ControlRelay
 
         private static Logger _logger = LogManager.GetCurrentClassLogger();
 
+
         public CloudInterface()
         {
             _logger.Debug("");
@@ -39,24 +40,21 @@ namespace ControlRelay
             {
                 string json = r.ReadToEnd();
 
-                _settings = JsonConvert.DeserializeObject(json);
+                _settings = JObject.Parse(json);
             }
 
-            string atenSerialId = _settings.AtenVS0801H[0].SerialID.ToString();
-            _hdmiSwitches.Add(new AtenVS0801H(atenSerialId));
+            _hdmiSwitches.Add(new AtenVS0801H((string)_settings.SelectToken("AtenVS0801H[0].SerialID")));
 
-            string apcHost = _settings.ApcAP8959EU3.Host;
-            int apcPort = int.Parse(_settings.ApcAP8959EU3.Port.ToString());
-            string apcUsername = _settings.ApcAP8959EU3.Username;
-            string apcPassword = _settings.ApcAP8959EU3.Password;
-            _pdu = new ApcAP8959EU3(apcHost, apcPort, apcUsername, apcPassword);
+            _pdu = new ApcAP8959EU3(
+                (string)_settings.SelectToken("ApcAP8959EU3.Host"),
+                int.Parse((string)_settings.SelectToken("ApcAP8959EU3.Port")),
+                (string)_settings.SelectToken("ApcAP8959EU3.Username"),
+                (string)_settings.SelectToken("ApcAP8959EU3.Password"));
 
-            string extronSerialId = _settings.ExtronDSC301HD.SerialID;
-            _scaler = new ExtronDSC301HD(extronSerialId);
+            _scaler = new ExtronDSC301HD((string)_settings.SelectToken("ExtronDSC301HD.SerialID"));
 
             // Connect to the IoT hub using the MQTT protocol
-            string azureIoTHubConnectionString = _settings.Azure.IoTHub.ConnectionString;
-            _deviceClient = DeviceClient.CreateFromConnectionString(azureIoTHubConnectionString, TransportType.Mqtt);
+            _deviceClient = DeviceClient.CreateFromConnectionString((string)_settings.SelectToken("Azure.IoTHub.ConnectionString"), TransportType.Mqtt);
 
             _deviceClient.SetConnectionStatusChangesHandler(DeviceClientConnectionStatusChanged);
             _deviceClient.SetMethodHandlerAsync("Close", DeviceClientClose, null).Wait();
