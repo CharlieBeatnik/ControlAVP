@@ -119,13 +119,13 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\SSH.NET\src\Renci.SshNet.NETCore\Renci.SshNet.NETCore.csproj">
-      <Project>{be569f15-bd5c-467c-b92c-4e91c78c327f}</Project>
-      <Name>Renci.SshNet.NETCore</Name>
-    </ProjectReference>
     <ProjectReference Include="..\PduDeviceTypes\PduDeviceTypes.csproj">
       <Project>{d410d4f6-1fda-4414-abf6-2c4f61470b34}</Project>
       <Name>PduDeviceTypes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SSH.NET\src\Renci.SshNet.NETCore\Renci.SshNet.NETCore.csproj">
+      <Project>{d006ea14-4740-4b9d-bc8b-c1e909eeaed1}</Project>
+      <Name>Renci.SshNet.NETCore</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

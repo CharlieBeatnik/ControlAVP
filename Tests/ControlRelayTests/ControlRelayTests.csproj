@@ -160,6 +160,10 @@
       <Project>{c6169642-bbf7-4b47-aaad-228b730f290e}</Project>
       <Name>PduDevice</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\SSH.NET\src\Renci.SshNet.NETCore\Renci.SshNet.NETCore.csproj">
+      <Project>{d006ea14-4740-4b9d-bc8b-c1e909eeaed1}</Project>
+      <Name>Renci.SshNet.NETCore</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
