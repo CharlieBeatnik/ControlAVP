@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Windows.ApplicationModel.Background;
 using NLog;
 using System.IO;
+using NLog.Config;
+using NLog.Targets;
 
 //using Windows.UI.Core;
 //using Windows.ApplicationModel.Core;
@@ -23,8 +25,8 @@ namespace ControlRelay
         public StartupTask()
         {
             Windows.Storage.StorageFolder localFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
-            var config = new NLog.Config.LoggingConfiguration();
-            var logfile = new NLog.Targets.FileTarget("logfile")
+            var config = new LoggingConfiguration();
+            var logfile = new FileTarget("logfile")
             {
                     FileName = Path.Combine(localFolder.Path, "log.txt"),
                     Layout = "${longdate}|${level:uppercase=true}|${callsite:className=True:fileName=False:includeSourcePath=False:methodName=True}|${message}"
@@ -46,7 +48,6 @@ namespace ControlRelay
 
         ~StartupTask()
         {
-            _logger.Debug("");
         }
     }
 }
