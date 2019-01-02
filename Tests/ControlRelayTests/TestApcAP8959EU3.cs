@@ -49,7 +49,7 @@ namespace Tests
         [TestMethod]
         public void GivenInvalidHost_WhenSshClientConnects_ResultIsFalse()
         {
-            var sshClient = new PduSshClient();
+            var sshClient = new SshDevice();
             var result = sshClient.Connect("0.0.0.0", _port, _username, _password, ApcAP8959EU3.TerminalPrompt);
             Assert.IsFalse(result);
         }
@@ -57,7 +57,7 @@ namespace Tests
         [TestMethod]
         public void GivenInvalidPort_WhenSshClientConnects_ResultIsFalse()
         {
-            var sshClient = new PduSshClient();
+            var sshClient = new SshDevice();
             var result = sshClient.Connect(_host, 0, _username, _password, ApcAP8959EU3.TerminalPrompt);
             Assert.IsFalse(result);
         }
@@ -65,7 +65,7 @@ namespace Tests
         [TestMethod]
         public void GivenInvalidUsername_WhenSshClientConnects_ResultIsFalse()
         {
-            var sshClient = new PduSshClient();
+            var sshClient = new SshDevice();
             var result = sshClient.Connect(_host, _port, "", _password, ApcAP8959EU3.TerminalPrompt);
             Assert.IsFalse(result);
         }
@@ -73,7 +73,7 @@ namespace Tests
         [TestMethod]
         public void GivenInvalidPassword_WhenSshClientConnects_ResultIsFalse()
         {
-            var sshClient = new PduSshClient();
+            var sshClient = new SshDevice();
             var result = sshClient.Connect(_host, _port, _username, "", ApcAP8959EU3.TerminalPrompt);
             Assert.IsFalse(result);
         }

@@ -8,7 +8,7 @@ namespace ControllableDevice
 {
     public class ApcAP8959EU3
     {
-        private PduSshClient _pduSshClient;
+        private SshDevice _pduSshClient;
         private string _host;
         private int _port;
         private string _username;
@@ -18,7 +18,7 @@ namespace ControllableDevice
 
         public ApcAP8959EU3(string host, int port, string username, string password)
         {
-            _pduSshClient = new PduSshClient();
+            _pduSshClient = new SshDevice();
 
             _host = host;
             _port = port;

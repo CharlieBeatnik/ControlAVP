@@ -120,11 +120,11 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="AudioVideoSerialDevice.cs" />
+    <Compile Include="Rs232Device.cs" />
     <Compile Include="Devices\ApcAP8959EU3.cs" />
     <Compile Include="Devices\AtenVS0801H.cs" />
     <Compile Include="Devices\ExtronDSC301HD.cs" />
-    <Compile Include="PduSshClient.cs" />
+    <Compile Include="SshDevice.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\ControllableDevice.rd.xml" />
   </ItemGroup>

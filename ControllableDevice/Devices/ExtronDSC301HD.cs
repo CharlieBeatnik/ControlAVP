@@ -10,7 +10,7 @@ using System.Diagnostics;
 
 namespace ControllableDevice
 {
-    public class ExtronDSC301HD : AudioVideoSerialDevice
+    public class ExtronDSC301HD : Rs232Device
     {
         protected override uint BaudRate { get; } = 9600;
         protected override SerialStopBitCount StopBits { get; } = SerialStopBitCount.One;

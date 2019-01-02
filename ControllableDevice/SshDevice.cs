@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace ControllableDevice
 {
-    public class PduSshClient : IDisposable
+    public class SshDevice : IDisposable
     {
         private PasswordAuthenticationMethod _authMethod;
         private ConnectionInfo _connectionInfo;

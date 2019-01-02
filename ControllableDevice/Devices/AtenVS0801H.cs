@@ -7,7 +7,7 @@ using ControllableDeviceTypes.AtenVS0801HTypes;
 
 namespace ControllableDevice
 {
-    public class AtenVS0801H : AudioVideoSerialDevice
+    public class AtenVS0801H : Rs232Device
     {
         protected override uint BaudRate { get; } = 19200;
         protected override SerialStopBitCount StopBits { get; } = SerialStopBitCount.One;

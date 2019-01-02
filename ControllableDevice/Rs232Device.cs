@@ -9,7 +9,7 @@ using Windows.Storage.Streams;
 
 namespace ControllableDevice
 {
-    public abstract class AudioVideoSerialDevice
+    public abstract class Rs232Device
     {
         private DataWriter _dataWriter;
         private DataReader _dataReader;
@@ -34,7 +34,7 @@ namespace ControllableDevice
 
         public string Id { get; private set; }
 
-        public AudioVideoSerialDevice(string partialId)
+        public Rs232Device(string partialId)
         {
             if (string.IsNullOrEmpty(partialId))
             {
