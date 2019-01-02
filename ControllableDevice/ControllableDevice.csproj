@@ -126,6 +126,7 @@
     <Compile Include="Devices\ExtronDSC301HD.cs" />
     <Compile Include="SshDevice.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WakeOnLan.cs" />
     <EmbeddedResource Include="Properties\ControllableDevice.rd.xml" />
   </ItemGroup>
   <ItemGroup>

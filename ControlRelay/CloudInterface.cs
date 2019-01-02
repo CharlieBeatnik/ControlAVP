@@ -75,6 +75,8 @@ namespace ControlRelay
             _deviceClient.SetMethodHandlerAsync("PDUGetOutletsWaitForPending", PDUGetOutletsWaitForPending, null).Wait();
             _deviceClient.SetMethodHandlerAsync("PDUTurnOutletOn", PDUTurnOutletOn, null).Wait();
             _deviceClient.SetMethodHandlerAsync("PDUTurnOutletOff", PDUTurnOutletOff, null).Wait();
+
+            _deviceClient.SetMethodHandlerAsync("TVOn", TVOn, null).Wait();
         }
 
         private void DeviceClientConnectionStatusChanged(ConnectionStatus status, ConnectionStatusChangeReason reason)
@@ -218,6 +220,17 @@ namespace ControlRelay
             var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
             _pdu.TurnOutletOff(payload.outletId);
             //ANDREWDENN_TODO: No way of determining outlet change succeded or failed
+            bool success = true;
+            return Task.FromResult(GetMethodResponse(methodRequest, success));
+        }
+
+        private Task<MethodResponse> TVOn(MethodRequest methodRequest, object userContext)
+        {
+            _logger.Debug("");
+
+            WakeOnLan.WakeUp("142D278C0761");
+
+            //ANDREWDENN_TODO: Need to determine a way of confirming TV is on
             bool success = true;
             return Task.FromResult(GetMethodResponse(methodRequest, success));
         }
