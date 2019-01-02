@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
 
-namespace PduDevice
+namespace ControllableDevice
 {
     public class PduSshClient : IDisposable
     {

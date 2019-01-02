@@ -6,10 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Newtonsoft.Json;
-using PduDevice;
 using Microsoft.Azure.Devices;
 using Microsoft.Extensions.Configuration;
-using PduDevice.ApcAP8959EU3Types;
+using ControllableDeviceTypes.ApcAP8959EU3Types;
 using Microsoft.AspNetCore.Hosting;
 using AVPCloudToDevice;
 

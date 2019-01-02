@@ -2,9 +2,9 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
-using PduDevice.ApcAP8959EU3Types;
+using ControllableDeviceTypes.ApcAP8959EU3Types;
 
-namespace PduDevice
+namespace ControllableDevice
 {
     public class ApcAP8959EU3
     {

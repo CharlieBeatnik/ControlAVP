@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PduDevice
+namespace ControllableDeviceTypes
 {
     namespace ApcAP8959EU3Types
     {

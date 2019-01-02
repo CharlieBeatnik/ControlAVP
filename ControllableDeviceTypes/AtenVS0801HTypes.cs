@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AudioVideoDevice
+namespace ControllableDeviceTypes
 {
     namespace AtenVS0801HTypes
     {

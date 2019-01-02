@@ -3,9 +3,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Windows.Devices.SerialCommunication;
-using AudioVideoDevice.AtenVS0801HTypes;
+using ControllableDeviceTypes.AtenVS0801HTypes;
 
-namespace AudioVideoDevice
+namespace ControllableDevice
 {
     public class AtenVS0801H : AudioVideoSerialDevice
     {

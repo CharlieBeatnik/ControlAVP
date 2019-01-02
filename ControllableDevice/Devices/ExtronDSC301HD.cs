@@ -8,7 +8,7 @@ using System.Threading;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
 
-namespace AudioVideoDevice
+namespace ControllableDevice
 {
     public class ExtronDSC301HD : AudioVideoSerialDevice
     {

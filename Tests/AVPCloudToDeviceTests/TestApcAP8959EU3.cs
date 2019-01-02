@@ -6,7 +6,7 @@ using NUnit.Framework;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
-using PduDevice.ApcAP8959EU3Types;
+using ControllableDeviceTypes.ApcAP8959EU3Types;
 
 namespace Tests
 {

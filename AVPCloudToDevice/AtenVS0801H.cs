@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Net;
-using AudioVideoDevice.AtenVS0801HTypes;
+using ControllableDeviceTypes.AtenVS0801HTypes;
 
 
 namespace AVPCloudToDevice

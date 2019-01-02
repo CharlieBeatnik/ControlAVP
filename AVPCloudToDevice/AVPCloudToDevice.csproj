@@ -19,8 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AudioVideoDeviceTypes\AudioVideoDeviceTypes.csproj" />
-    <ProjectReference Include="..\PduDeviceTypes\PduDeviceTypes.csproj" />
+    <ProjectReference Include="..\ControllableDeviceTypes\ControllableDeviceTypes.csproj" />
   </ItemGroup>
 
 </Project>

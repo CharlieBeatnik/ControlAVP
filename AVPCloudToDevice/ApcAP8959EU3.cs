@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using PduDevice.ApcAP8959EU3Types;
+using ControllableDeviceTypes.ApcAP8959EU3Types;
 
 namespace AVPCloudToDevice
 {

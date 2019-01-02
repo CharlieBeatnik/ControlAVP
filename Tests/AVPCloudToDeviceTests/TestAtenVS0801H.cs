@@ -6,7 +6,7 @@ using NUnit.Framework;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
-using AudioVideoDevice.AtenVS0801HTypes;
+using ControllableDeviceTypes.AtenVS0801HTypes;
 
 namespace Tests
 {
