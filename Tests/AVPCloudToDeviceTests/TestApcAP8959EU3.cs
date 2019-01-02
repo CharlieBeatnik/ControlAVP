@@ -44,13 +44,14 @@ namespace Tests
         }
 
         [Test]
+        [Ignore("Risk of physical component wear, ignore by default.")]
         public void GivenOutlet5IsOff_WhenTurnOutlet5On_ThenOutlet5IsOn()
         {
             int outletId = 5;
 
             //Given
             Assert.IsTrue(_device.TurnOutletOff(outletId));
-            var outlets = _device.GetOutlets();
+            var outlets = _device.GetOutletsWaitForPending();
             if (outlets == null) Assert.Fail();
 
             var outlet = outlets.First(o => o.Id == outletId);
