@@ -3,18 +3,13 @@ using ControllableDeviceTypes.AtenVS0801HTypes;
 using Microsoft.Azure.Devices.Client;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-//using Newtonsoft.Json;
+using Newtonsoft.Json;
 using System.IO;
-//using Newtonsoft.Json.Linq;
-using System.Dynamic;
-using Newtonsoft.Json.Converters;
 using System.Net;
 using NLog;
-using System.ComponentModel;
-using System.Diagnostics;
+using Newtonsoft.Json.Linq;
 
 namespace ControlRelay
 {
@@ -39,8 +34,8 @@ namespace ControlRelay
             {
                 string json = r.ReadToEnd();
 
-                //_settings = JObject.Parse(json);
-                _settings = JsonConvert.DeserializeObject<ExpandoObject>(json, new ExpandoObjectConverter());
+                _settings = JObject.Parse(json);
+                //_settings = JsonConvert.DeserializeObject<ExpandoObject>(json, new ExpandoObjectConverter());
                 //_settings = JsonConvert.DeserializeObject(json);
             }
 

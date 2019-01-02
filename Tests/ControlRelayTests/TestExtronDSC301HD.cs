@@ -1,15 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ControllableDevice;
 using System.IO;
-using System.Dynamic;
-//using Newtonsoft.Json;
-//using Newtonsoft.Json.Converters;
-//using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Linq;
 
 namespace Tests
 {

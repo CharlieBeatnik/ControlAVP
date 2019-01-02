@@ -2,10 +2,8 @@
 using ControllableDevice;
 using ControllableDeviceTypes.AtenVS0801HTypes;
 using System.IO;
-//using Newtonsoft.Json;
-using System.Dynamic;
-//using Newtonsoft.Json.Converters;
-//using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Tests
 {
