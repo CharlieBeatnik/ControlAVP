@@ -35,8 +35,6 @@ namespace ControlRelay
                 string json = r.ReadToEnd();
 
                 _settings = JObject.Parse(json);
-                //_settings = JsonConvert.DeserializeObject<ExpandoObject>(json, new ExpandoObjectConverter());
-                //_settings = JsonConvert.DeserializeObject(json);
             }
 
             _hdmiSwitches.Add(new AtenVS0801H((string)_settings.SelectToken("AtenVS0801H[0].SerialID")));
