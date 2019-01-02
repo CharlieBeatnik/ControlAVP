@@ -47,6 +47,18 @@ namespace ControlRelay
 
             _scaler = new ExtronDSC301HD((string)_settings.SelectToken("ExtronDSC301HD.SerialID"));
 
+            CreateDeviceClient();
+        }
+
+        ~CloudInterface()
+        {
+            _logger.Debug("");
+        }
+
+        private void CreateDeviceClient()
+        {
+            _logger.Debug("");
+
             // Connect to the IoT hub using the MQTT protocol
             _deviceClient = DeviceClient.CreateFromConnectionString((string)_settings.SelectToken("Azure.IoTHub.ConnectionString"), TransportType.Mqtt);
 
@@ -65,20 +77,22 @@ namespace ControlRelay
             _deviceClient.SetMethodHandlerAsync("PDUTurnOutletOff", PDUTurnOutletOff, null).Wait();
         }
 
-        ~CloudInterface()
-        {
-            _logger.Debug("");
-        }
-
         private void DeviceClientConnectionStatusChanged(ConnectionStatus status, ConnectionStatusChangeReason reason)
         {
             _logger.Debug($"Status: {status.ToString()}, Reason: {reason.ToString()}");
+
+            if(status == ConnectionStatus.Disconnected)
+            {
+                ResetConnection();
+            }
         }
 
         private Task<MethodResponse> DeviceClientClose(MethodRequest methodRequest, object userContext)
         {
             _logger.Debug("");
-            _deviceClient.CloseAsync();
+            //_deviceClient.CloseAsync();
+
+            ResetConnection();
             return Task.FromResult(GetMethodResponse(methodRequest, true));
         }
 
@@ -113,7 +127,7 @@ namespace ControlRelay
             var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
 
             var result = _hdmiSwitches[payload._hdmiSwitchId].GetState();
-            if(result != null)
+            if (result != null)
             {
                 string json = JsonConvert.SerializeObject(result);
                 var response = new MethodResponse(Encoding.UTF8.GetBytes(json), (int)HttpStatusCode.OK);
@@ -145,7 +159,7 @@ namespace ControlRelay
             _logger.Debug("");
 
             var result = _pdu.GetOutlets();
-            
+
             if (result != null)
             {
                 string json = JsonConvert.SerializeObject(result);
@@ -222,6 +236,20 @@ namespace ControlRelay
                 string result = "{\"result\":\"Invalid parameter\"}";
                 return new MethodResponse(Encoding.UTF8.GetBytes(result), (int)HttpStatusCode.BadRequest);
             }
+        }
+
+        private void ResetConnection()
+        {
+            _logger.Debug("");
+
+            // Attempt to close any existing connections before creating a new one
+            if (_deviceClient != null)
+            {
+                _deviceClient.CloseAsync().Wait();
+            }
+
+            // Create new connection
+            CreateDeviceClient();
         }
     }
 }
