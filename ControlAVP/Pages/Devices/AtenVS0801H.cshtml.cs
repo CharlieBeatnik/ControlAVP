@@ -8,10 +8,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Azure.Devices;
 using Microsoft.Extensions.Configuration;
 using AVPCloudToDevice;
+using ControllableDeviceTypes.AtenVS0801HTypes;
 
 namespace ControlAVP.Pages.Devices
 {
-    public class ExtronDSC301HDModel : PageModel
+    public class AtenVS0801HModel : PageModel
     {
         private readonly IConfiguration _configuration;
         private readonly IHostingEnvironment _environment;
@@ -19,11 +20,13 @@ namespace ControlAVP.Pages.Devices
         private string _connectionString;
         private string _deviceId;
         private ServiceClient _serviceClient;
-        private ExtronDSC301HD _device;
 
-        public Version Firmware { get; private set; }
+        private const uint _numHdmiSwitches = 2;
+        private List<AtenVS0801H> _devices = new List<AtenVS0801H>();
 
-        public ExtronDSC301HDModel(IConfiguration configuration, IHostingEnvironment environment)
+        public List<State> States { get; private set; } = new List<State>();
+
+        public AtenVS0801HModel(IConfiguration configuration, IHostingEnvironment environment)
         {
             _configuration = configuration;
             _environment = environment;
@@ -32,18 +35,16 @@ namespace ControlAVP.Pages.Devices
             _deviceId = _configuration.GetValue<string>("ControlAVPIoTHubDeviceId");
 
             _serviceClient = ServiceClient.CreateFromConnectionString(_connectionString);
-            _device = new ExtronDSC301HD(_serviceClient, _deviceId);
+
+            for(uint deviceIdx = 0; deviceIdx < _numHdmiSwitches; ++deviceIdx)
+            {
+                _devices.Add(new AtenVS0801H(_serviceClient, _deviceId, deviceIdx));
+            }
         }
 
         public void OnGet()
         {
-            Firmware = _device.GetFirmware();
-        }
-
-        public IActionResult OnPostGetFirmware()
-        {
-            Firmware = _device.GetFirmware();
-            return RedirectToPage();
+            States.Add(_devices[0].GetState());
         }
     }
 }

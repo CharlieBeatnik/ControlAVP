@@ -1,0 +1,24 @@
+﻿@page
+@model ControlAVP.Pages.Devices.AtenVS0801HModel
+@using ControllableDeviceTypes.AtenVS0801HTypes;
+
+@{
+    ViewData["Title"] = "Aten VS0801H";
+}
+<h3>@ViewData["Title"]</h3>
+
+@for (uint i = 0; i < Model.States.Count; ++i)
+{
+<div class="panel panel-default">
+    <div class="panel-heading">Device #@(i + 1)</div>
+    <div class="panel-body">
+        <p>Firmware <span class="label label-primary">@Model.States[0].Firmware</span></p>
+    </div>
+
+    <form method="post">
+        @*<div>
+                <button type="submit" asp-page-handler="TurnOn" class="btn btn-success btn-md">Turn TV On</button>
+            </div>*@
+    </form>
+</div>
+}

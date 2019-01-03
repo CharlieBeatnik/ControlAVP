@@ -13,9 +13,9 @@ namespace AVPCloudToDevice
     {
         private ServiceClient _serviceClient;
         private string _deviceId;
-        private int _hdmiSwitchId;
+        private uint _hdmiSwitchId;
 
-        public AtenVS0801H(ServiceClient serviceClient, string deviceId, int hdmiSwitchId)
+        public AtenVS0801H(ServiceClient serviceClient, string deviceId, uint hdmiSwitchId)
         {
             _serviceClient = serviceClient;
             _deviceId = deviceId;

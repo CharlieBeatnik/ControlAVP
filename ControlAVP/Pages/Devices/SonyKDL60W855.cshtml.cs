@@ -19,7 +19,7 @@ namespace ControlAVP.Pages.Devices
         private string _connectionString;
         private string _deviceId;
         private ServiceClient _serviceClient;
-        private SonyKDL60W855 _tv;
+        private SonyKDL60W855 _device;
 
         public SonyKDL60W855Model(IConfiguration configuration, IHostingEnvironment environment)
         {
@@ -30,7 +30,7 @@ namespace ControlAVP.Pages.Devices
             _deviceId = _configuration.GetValue<string>("ControlAVPIoTHubDeviceId");
 
             _serviceClient = ServiceClient.CreateFromConnectionString(_connectionString);
-            _tv = new SonyKDL60W855(_serviceClient, _deviceId);
+            _device = new SonyKDL60W855(_serviceClient, _deviceId);
         }
 
         public void OnGet()
@@ -40,7 +40,7 @@ namespace ControlAVP.Pages.Devices
 
         public IActionResult OnPostTurnOn()
         {
-            _tv.TurnOn();
+            _device.TurnOn();
             return RedirectToPage();
         }
     }
