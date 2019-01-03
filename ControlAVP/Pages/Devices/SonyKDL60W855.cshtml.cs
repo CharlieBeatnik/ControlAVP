@@ -11,7 +11,7 @@ using AVPCloudToDevice;
 
 namespace ControlAVP.Pages.Devices
 {
-    public class SonyKDL60W855BBUModel : PageModel
+    public class SonyKDL60W855Model : PageModel
     {
         private readonly IConfiguration _configuration;
         private readonly IHostingEnvironment _environment;
@@ -21,7 +21,7 @@ namespace ControlAVP.Pages.Devices
         private ServiceClient _serviceClient;
         private SonyKDL60W855 _tv;
 
-        public SonyKDL60W855BBUModel(IConfiguration configuration, IHostingEnvironment environment)
+        public SonyKDL60W855Model(IConfiguration configuration, IHostingEnvironment environment)
         {
             _configuration = configuration;
             _environment = environment;

@@ -1,0 +1,12 @@
+﻿@page
+@model ControlAVP.Pages.Devices.SonyKDL60W855Model
+@{
+    ViewData["Title"] = "Sony KDL60W855";
+}
+<h3>@ViewData["Title"]</h3>
+
+<form method="post">
+    <div>
+        <button type="submit" asp-page-handler="TurnOn" class="btn btn-success btn-md">Turn TV On</button>
+    </div>
+</form>

@@ -1,18 +1,22 @@
 @if (User.Identity.IsAuthenticated)
 {
-    <ul class="nav navbar-nav navbar-right">
-        @{
-            string identityName = @User.Identity.Name;
-            var nameClaim = User.Claims.FirstOrDefault(x => x.Type == "name");
+<ul class="nav navbar-nav navbar-right">
+    @{
+        string identityName = @User.Identity.Name;
+        var nameClaim = User.Claims.FirstOrDefault(x => x.Type == "name");
 
-            if(nameClaim != null)
-            {
-                identityName = nameClaim.Value;
-            }
+        if (nameClaim != null)
+        {
+            identityName = nameClaim.Value;
         }
-        <li class="navbar-text">Hello @identityName</li>
-        <li><a asp-area="" asp-controller="Account" asp-action="SignOut">Sign Out</a></li>
-    </ul>
+    }
+    <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">@identityName <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="SignOut">Sign Out</a></li>
+        </ul>
+    </li>
+</ul>
 }
 else
 {
