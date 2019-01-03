@@ -102,6 +102,7 @@
     <Compile Include="TestApcAP8959EU3.cs" />
     <Compile Include="TestAtenVS0801H.cs" />
     <Compile Include="TestExtronDSC301HD.cs" />
+    <Compile Include="TestSonyKDL60W855.cs" />
     <Compile Include="UnitTestApp.xaml.cs">
       <DependentUpon>UnitTestApp.xaml</DependentUpon>
     </Compile>
