@@ -104,7 +104,11 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="CloudInterface.cs" />
+    <Compile Include="DeviceCloudInterfaceManager.cs" />
+    <Compile Include="DeviceCloudInterface\ApcAP8959EU3CloudInterface.cs" />
+    <Compile Include="DeviceCloudInterface\AtenVS0801HCloudInterface.cs" />
+    <Compile Include="DeviceCloudInterface\DeviceCloudInterface.cs" />
+    <Compile Include="DeviceCloudInterface\ExtronDSC301HDCloudInterface.cs" />
     <Compile Include="StartupTask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -113,7 +117,6 @@
       <SubType>Designer</SubType>
     </AppxManifest>
     <None Include="ControlRelay_TemporaryKey.pfx" />
-    <Content Include="settings.json" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Properties\Default.rd.xml" />
@@ -137,6 +140,9 @@
     </Content>
     <Content Include="Assets\Wide310x150Logo.scale-200.png">
       <InProject>false</InProject>
+    </Content>
+    <Content Include="settings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
@@ -164,6 +170,7 @@
       <Name>Renci.SshNet.NETCore</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '15.0' ">
     <VisualStudioVersion>15.0</VisualStudioVersion>
   </PropertyGroup>

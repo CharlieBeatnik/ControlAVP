@@ -19,7 +19,7 @@ namespace ControlRelay
     {
         private static BackgroundTaskDeferral _Deferral = null;
 
-        private CloudInterface _cloudInterface;
+        private DeviceCloudInterfaceManager _deviceCloudInterfaceManager;
         private Logger _logger;
 
         public StartupTask()
@@ -42,7 +42,7 @@ namespace ControlRelay
 
             await Windows.System.Threading.ThreadPool.RunAsync(workItem =>
             {
-                _cloudInterface = new CloudInterface();
+                _deviceCloudInterfaceManager = new DeviceCloudInterfaceManager("settings.json");
             });
         }
 

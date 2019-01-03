@@ -116,7 +116,10 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <Content Include="settings.json" />
+    <Content Include="..\..\ControlRelay\settings.json">
+      <Link>settings.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="ControlRelayTests_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
