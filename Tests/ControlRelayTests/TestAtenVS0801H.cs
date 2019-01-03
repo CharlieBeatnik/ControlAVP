@@ -15,16 +15,16 @@ namespace Tests
 
         public TestAtenVS0801H()
         {
-            dynamic settings;
+            JObject jsonParsed;
             using (StreamReader r = new StreamReader(_settingsFile))
             {
                 string json = r.ReadToEnd();
-                settings = JObject.Parse(json);
+                jsonParsed = JObject.Parse(json);
             }
 
             if (_device == null)
             {
-                _device = new AtenVS0801H((string)settings.SelectToken("AtenVS0801H[0].SerialID"));
+                _device = new AtenVS0801H(jsonParsed["AtenVS0801H"][0]["PortId"].ToString());
             }
         }
 

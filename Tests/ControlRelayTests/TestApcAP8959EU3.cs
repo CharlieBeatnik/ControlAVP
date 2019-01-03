@@ -19,18 +19,18 @@ namespace Tests
 
         public TestApcAP8959EU3()
         {
-            dynamic settings;
+            JObject jsonParsed;
 
             using (StreamReader r = new StreamReader(_settingsFile))
             {
                 string json = r.ReadToEnd();
-                settings = JObject.Parse(json);
+                jsonParsed = JObject.Parse(json);
             }
 
-            _host = (string)settings.SelectToken("ApcAP8959EU3.Host");
-            _port = int.Parse((string)settings.SelectToken("ApcAP8959EU3.Port"));
-            _username = (string)settings.SelectToken("ApcAP8959EU3.Username");
-            _password = (string)settings.SelectToken("ApcAP8959EU3.Password");
+            _host = jsonParsed["ApcAP8959EU3"]["Host"].ToString();
+            _port = int.Parse(jsonParsed["ApcAP8959EU3"]["Port"].ToString());
+            _username = jsonParsed["ApcAP8959EU3"]["Username"].ToString();
+            _password = jsonParsed["ApcAP8959EU3"]["Password"].ToString();
         }
 
         private ApcAP8959EU3 GetDevice()
