@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Net;
+using System.Text;
+using System.Threading.Tasks;
 using ControllableDevice;
 using Microsoft.Azure.Devices.Client;
+using Newtonsoft.Json;
 
 namespace ControlRelay
 {
@@ -24,7 +26,24 @@ namespace ControlRelay
 
         public override void SetMethodHandlers(DeviceClient deviceClient)
         {
+            deviceClient.SetMethodHandlerAsync("ScalerGetFirmware", ScalerGetFirmware, null).Wait();
         }
-     
+
+        private Task<MethodResponse> ScalerGetFirmware(MethodRequest methodRequest, object userContext)
+        {
+            var result = _device.GetFirmware();
+
+            if (result != null)
+            {
+                string json = JsonConvert.SerializeObject(result);
+                var response = new MethodResponse(Encoding.UTF8.GetBytes(json), (int)HttpStatusCode.OK);
+                return Task.FromResult(response);
+            }
+            else
+            {
+                return Task.FromResult(GetMethodResponse(methodRequest, false));
+            }
+        }
+
     }
 }

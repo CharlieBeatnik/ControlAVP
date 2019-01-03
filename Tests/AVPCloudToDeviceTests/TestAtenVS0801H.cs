@@ -5,7 +5,6 @@ using Newtonsoft.Json.Converters;
 using NUnit.Framework;
 using System.Dynamic;
 using System.IO;
-using System.Linq;
 using ControllableDeviceTypes.AtenVS0801HTypes;
 
 namespace Tests

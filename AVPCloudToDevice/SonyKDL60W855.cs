@@ -5,12 +5,12 @@ using System.Text;
 
 namespace AVPCloudToDevice
 {
-    public class SonyKDL60W855BBU
+    public class SonyKDL60W855
     {
         private ServiceClient _serviceClient;
         private string _deviceId;
 
-        public SonyKDL60W855BBU(ServiceClient serviceClient, string deviceId)
+        public SonyKDL60W855(ServiceClient serviceClient, string deviceId)
         {
             _serviceClient = serviceClient;
             _deviceId = deviceId;
@@ -20,7 +20,7 @@ namespace AVPCloudToDevice
         {
             try
             {
-                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "TVOn", null);
+                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "TVTurnOn", null);
                 return true;
             }
             catch

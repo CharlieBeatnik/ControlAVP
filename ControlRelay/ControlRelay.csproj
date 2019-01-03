@@ -109,6 +109,7 @@
     <Compile Include="DeviceCloudInterface\AtenVS0801HCloudInterface.cs" />
     <Compile Include="DeviceCloudInterface\DeviceCloudInterface.cs" />
     <Compile Include="DeviceCloudInterface\ExtronDSC301HDCloudInterface.cs" />
+    <Compile Include="DeviceCloudInterface\SonyKDL60W855CloudInterface.cs" />
     <Compile Include="StartupTask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
