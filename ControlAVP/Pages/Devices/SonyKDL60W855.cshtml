@@ -4,10 +4,29 @@
 @{
     ViewData["Title"] = "Sony KDL60W855";
 }
-<h3>@ViewData["Title"]</h3>
+<h2></h2>
+
 
 <form method="post">
-    <div>
-        <button type="submit" asp-page-handler="TurnOn" class="btn btn-success btn-md">Turn TV On</button>
+@*@if (false)
+{
+    <div class="alert alert-warning">
+        <strong>Warning!</strong> Device not found, is it turned on?
     </div>
+}
+else
+{*@
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <p>
+                <strong>@ViewData["Title"]</strong>
+            </p>
+        </div>
+        <div class="panel-body">
+            <div>
+                <button type="submit" asp-page-handler="TurnOn" class="btn btn-success btn-sm">Turn TV On</button>
+            </div>
+        </div>
+    </div>
+@*}*@
 </form>

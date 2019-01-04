@@ -31,7 +31,7 @@ namespace Tests
         public void Setup()
         {
             _serviceClient = ServiceClient.CreateFromConnectionString(_settings.ConnectionString);
-            _device = new AtenVS0801H(_serviceClient, _settings.DeviceId, (int)_settings.HdmiSwitchId);
+            _device = new AtenVS0801H(_serviceClient, _settings.DeviceId, (uint)_settings.HdmiSwitchId);
         }
 
         [Test]

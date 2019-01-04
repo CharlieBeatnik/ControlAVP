@@ -4,12 +4,37 @@
 @{
     ViewData["Title"] = "Extron DSC301HD";
 }
-<h3>@ViewData["Title"]</h3>
+<h2></h2>
 
-<p>Firmware <span class="label label-primary">@Model.Firmware</span></p>
+@if (Model.Firmware == null)
+{
+    <div class="alert alert-warning">
+        <strong>Warning!</strong> Device not found, is it turned on?
+    </div>
+}
+else
+{
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <p>
+                <strong>@ViewData["Title"]</strong>
+            </p>
+        </div>
+        <div class="panel-body">
+            <div class="col-sm-3">
+                <table class="table table-sm table-borderless table-condensed">
+                    <tr>
+                        <td>Firmware</td>
+                        <td><span class="label label-primary">@Model.Firmware</span></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
 
-<form method="post">
-    @*<div>
-        <button type="submit" asp-page-handler="TurnOn" class="btn btn-success btn-md">Turn TV On</button>
-    </div>*@
-</form>
+        <form method="post">
+            @*<div>
+                    <button type="submit" asp-page-handler="TurnOn" class="btn btn-success btn-md">Turn TV On</button>
+                </div>*@
+        </form>
+    </div>
+}

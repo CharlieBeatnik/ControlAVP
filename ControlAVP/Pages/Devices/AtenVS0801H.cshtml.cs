@@ -44,7 +44,12 @@ namespace ControlAVP.Pages.Devices
 
         public void OnGet()
         {
-            States.Add(_devices[0].GetState());
+            var state = _devices[0].GetState();
+
+            if (state != null)
+            {
+                States.Add(state);
+            }
         }
     }
 }
