@@ -70,9 +70,14 @@ namespace ControlRelay
         {
             _logger.Debug($"Status: {status.ToString()}, Reason: {reason.ToString()}");
 
-            if (status == ConnectionStatus.Disconnected)
+            switch(status)
             {
-                ResetConnection();
+                case ConnectionStatus.Disabled:
+                case ConnectionStatus.Disconnected:
+                    ResetConnection();
+                    break;
+                default:
+                    break;
             }
         }
 
