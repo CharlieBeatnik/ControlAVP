@@ -21,10 +21,15 @@ namespace ControlAVP.Pages.Devices
         private string _deviceId;
         private ServiceClient _serviceClient;
 
-        private const uint _numHdmiSwitches = 2;
+        private const uint _numHdmiSwitches = 1;
         private List<AtenVS0801H> _devices = new List<AtenVS0801H>();
 
-        public List<State> States { get; private set; } = new List<State>();
+        public class DeviceInfo
+        {
+            public bool Available;
+            public State State;
+        }
+        public List<DeviceInfo> DeviceInfoCaches { get; private set; } = new List<DeviceInfo>();
 
         public AtenVS0801HModel(IConfiguration configuration, IHostingEnvironment environment)
         {
@@ -39,16 +44,16 @@ namespace ControlAVP.Pages.Devices
             for(uint deviceIdx = 0; deviceIdx < _numHdmiSwitches; ++deviceIdx)
             {
                 _devices.Add(new AtenVS0801H(_serviceClient, _deviceId, deviceIdx));
+                DeviceInfoCaches.Add(new DeviceInfo());
             }
         }
 
         public void OnGet()
         {
-            var state = _devices[0].GetState();
-
-            if (state != null)
+            for (int deviceIdx = 0; deviceIdx < _numHdmiSwitches; ++deviceIdx)
             {
-                States.Add(state);
+                DeviceInfoCaches[deviceIdx].Available = _devices[deviceIdx].Available;
+                DeviceInfoCaches[deviceIdx].State = _devices[deviceIdx].GetState();
             }
         }
     }

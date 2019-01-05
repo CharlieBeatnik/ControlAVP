@@ -3,7 +3,7 @@ using System.Net.NetworkInformation;
 
 namespace ControllableDevice
 {
-    public class SonyKDL60W855
+    public class SonyKDL60W855 : IControllableDevice
     {
         private IPAddress _host;
         private  PhysicalAddress _physicalAddress;
@@ -12,6 +12,15 @@ namespace ControllableDevice
         {
             _host = host;
             _physicalAddress = physicalAddress;
+        }
+
+        public bool Available
+        {
+            get
+            {
+                //ANDREWDENN_TODO
+                return false;
+            }
         }
 
         public bool TurnOn()

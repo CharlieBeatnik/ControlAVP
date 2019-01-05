@@ -6,7 +6,7 @@ using ControllableDeviceTypes.ApcAP8959EU3Types;
 
 namespace ControllableDevice
 {
-    public class ApcAP8959EU3
+    public class ApcAP8959EU3 : IControllableDevice
     {
         private SshDevice _sshDevice;
         private string _host;
@@ -31,6 +31,14 @@ namespace ControllableDevice
         public void Connect()
         {
             _sshDevice.Connect(_host, _port, _username, _password, ApcAP8959EU3.TerminalPrompt);
+        }
+
+        public bool Available
+        {
+            get
+            {
+                return _sshDevice.Connected;
+            }
         }
 
         public IEnumerable<Outlet> GetOutletsWaitForPending()

@@ -28,10 +28,10 @@ namespace ControlRelay
 
         public override void SetMethodHandlers(DeviceClient deviceClient)
         {
-            deviceClient.SetMethodHandlerAsync("TVTurnOn", TVTurnOn, null).Wait();
+            deviceClient.SetMethodHandlerAsync("TVTurnOn", TurnOn, null).Wait();
         }
 
-        private Task<MethodResponse> TVTurnOn(MethodRequest methodRequest, object userContext)
+        private Task<MethodResponse> TurnOn(MethodRequest methodRequest, object userContext)
         {
             bool success = _device.TurnOn();
             return Task.FromResult(GetMethodResponse(methodRequest, success));

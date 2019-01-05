@@ -77,5 +77,12 @@ namespace Tests
             var result = sshClient.Connect(_host, _port, _username, "", ApcAP8959EU3.TerminalPrompt);
             Assert.IsFalse(result);
         }
+
+        [TestMethod]
+        public void GivenDevice_WhenCallAvailable_ThenDeviceIsAvailable()
+        {
+            var device = GetDevice();
+            Assert.IsTrue(device.Available);
+        }
     }
 }

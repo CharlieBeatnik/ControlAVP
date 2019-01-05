@@ -31,13 +31,14 @@ namespace ControlRelay
 
         public override void SetMethodHandlers(DeviceClient deviceClient)
         {
-            deviceClient.SetMethodHandlerAsync("PDUGetOutlets", PDUGetOutlets, null).Wait();
-            deviceClient.SetMethodHandlerAsync("PDUGetOutletsWaitForPending", PDUGetOutletsWaitForPending, null).Wait();
-            deviceClient.SetMethodHandlerAsync("PDUTurnOutletOn", PDUTurnOutletOn, null).Wait();
-            deviceClient.SetMethodHandlerAsync("PDUTurnOutletOff", PDUTurnOutletOff, null).Wait();
+            deviceClient.SetMethodHandlerAsync("PDUGetOutlets", GetOutlets, null).Wait();
+            deviceClient.SetMethodHandlerAsync("PDUGetOutletsWaitForPending", GetOutletsWaitForPending, null).Wait();
+            deviceClient.SetMethodHandlerAsync("PDUTurnOutletOn", TurnOutletOn, null).Wait();
+            deviceClient.SetMethodHandlerAsync("PDUTurnOutletOff", TurnOutletOff, null).Wait();
+            deviceClient.SetMethodHandlerAsync("PDUAvailable", Available, null).Wait();
         }
 
-        private Task<MethodResponse> PDUGetOutlets(MethodRequest methodRequest, object userContext)
+        private Task<MethodResponse> GetOutlets(MethodRequest methodRequest, object userContext)
         {
             var result = _device.GetOutlets();
 
@@ -53,7 +54,7 @@ namespace ControlRelay
             }
         }
 
-        private Task<MethodResponse> PDUGetOutletsWaitForPending(MethodRequest methodRequest, object userContext)
+        private Task<MethodResponse> GetOutletsWaitForPending(MethodRequest methodRequest, object userContext)
         {
             var result = _device.GetOutletsWaitForPending();
 
@@ -69,7 +70,7 @@ namespace ControlRelay
             }
         }
 
-        private Task<MethodResponse> PDUTurnOutletOn(MethodRequest methodRequest, object userContext)
+        private Task<MethodResponse> TurnOutletOn(MethodRequest methodRequest, object userContext)
         {
             var payloadDefintion = new
             {
@@ -83,7 +84,7 @@ namespace ControlRelay
             return Task.FromResult(GetMethodResponse(methodRequest, success));
         }
 
-        private Task<MethodResponse> PDUTurnOutletOff(MethodRequest methodRequest, object userContext)
+        private Task<MethodResponse> TurnOutletOff(MethodRequest methodRequest, object userContext)
         {
             var payloadDefintion = new
             {
@@ -95,6 +96,15 @@ namespace ControlRelay
             //ANDREWDENN_TODO: No way of determining outlet change succeded or failed
             bool success = true;
             return Task.FromResult(GetMethodResponse(methodRequest, success));
+        }
+
+        private Task<MethodResponse> Available(MethodRequest methodRequest, object userContext)
+        {
+            var result = _device.Available;
+
+            string json = JsonConvert.SerializeObject(result);
+            var response = new MethodResponse(Encoding.UTF8.GetBytes(json), (int)HttpStatusCode.OK);
+            return Task.FromResult(response);
         }
     }
 }

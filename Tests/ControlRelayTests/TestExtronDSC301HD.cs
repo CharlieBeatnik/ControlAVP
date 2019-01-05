@@ -40,5 +40,11 @@ namespace Tests
             var firmware = _device.GetFirmware();
             Assert.IsTrue(firmware >= new Version(1, 25, 1, 0));
         }
+
+        [TestMethod]
+        public void GivenDevice_WhenCallAvailable_ThenDeviceIsAvailable()
+        {
+            Assert.IsTrue(_device.Available);
+        }
     }
 }

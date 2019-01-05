@@ -31,13 +31,14 @@ namespace ControlRelay
 
         public override void SetMethodHandlers(DeviceClient deviceClient)
         {
-            deviceClient.SetMethodHandlerAsync("HDMISwitchGoToNextInput", HDMISwitchGoToNextInput, null).Wait();
-            deviceClient.SetMethodHandlerAsync("HDMISwitchGoToPreviousInput", HDMISwitchGoToPreviousInput, null).Wait();
-            deviceClient.SetMethodHandlerAsync("HDMISwitchGetState", HDMISwitchGetState, null).Wait();
-            deviceClient.SetMethodHandlerAsync("HDMISwitchSetInput", HDMISwitchSetInput, null).Wait();
+            deviceClient.SetMethodHandlerAsync("HDMISwitchGoToNextInput", GoToNextInput, null).Wait();
+            deviceClient.SetMethodHandlerAsync("HDMISwitchGoToPreviousInput", GoToPreviousInput, null).Wait();
+            deviceClient.SetMethodHandlerAsync("HDMISwitchGetState", GetState, null).Wait();
+            deviceClient.SetMethodHandlerAsync("HDMISwitchSetInput", SetInput, null).Wait();
+            deviceClient.SetMethodHandlerAsync("HDMISwitchAvailable", Available, null).Wait();
         }
 
-        private Task<MethodResponse> HDMISwitchGoToNextInput(MethodRequest methodRequest, object userContext)
+        private Task<MethodResponse> GoToNextInput(MethodRequest methodRequest, object userContext)
         {
             var payloadDefintion = new { _hdmiSwitchId = -1 };
 
@@ -46,7 +47,7 @@ namespace ControlRelay
             return Task.FromResult(GetMethodResponse(methodRequest, success));
         }
 
-        private Task<MethodResponse> HDMISwitchGoToPreviousInput(MethodRequest methodRequest, object userContext)
+        private Task<MethodResponse> GoToPreviousInput(MethodRequest methodRequest, object userContext)
         {
             var payloadDefintion = new { _hdmiSwitchId = -1 };
 
@@ -55,7 +56,7 @@ namespace ControlRelay
             return Task.FromResult(GetMethodResponse(methodRequest, success));
         }
 
-        private Task<MethodResponse> HDMISwitchGetState(MethodRequest methodRequest, object userContext)
+        private Task<MethodResponse> GetState(MethodRequest methodRequest, object userContext)
         {
             var payloadDefintion = new { _hdmiSwitchId = -1 };
 
@@ -74,7 +75,7 @@ namespace ControlRelay
             }
         }
 
-        private Task<MethodResponse> HDMISwitchSetInput(MethodRequest methodRequest, object userContext)
+        private Task<MethodResponse> SetInput(MethodRequest methodRequest, object userContext)
         {
             var payloadDefintion = new
             {
@@ -85,6 +86,18 @@ namespace ControlRelay
             var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
             bool success = _devices[payload._hdmiSwitchId].SetInput(payload.inputPort);
             return Task.FromResult(GetMethodResponse(methodRequest, success));
+        }
+
+        private Task<MethodResponse> Available(MethodRequest methodRequest, object userContext)
+        {
+            var payloadDefintion = new { _hdmiSwitchId = -1 };
+
+            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
+            var result = _devices[payload._hdmiSwitchId].Available;
+
+            string json = JsonConvert.SerializeObject(result);
+            var response = new MethodResponse(Encoding.UTF8.GetBytes(json), (int)HttpStatusCode.OK);
+            return Task.FromResult(response);
         }
     }
 }

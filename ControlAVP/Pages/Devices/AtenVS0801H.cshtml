@@ -7,55 +7,49 @@
 }
 <h2></h2>
 
-@if (Model.States.Count == 0)
+@for(int i = 0; i < Model.DeviceInfoCaches.Count; ++i)
 {
-    <div class="alert alert-warning">
-        <strong>Warning!</strong> Device not found, is it turned on?
-    </div>
-}
-else
-{
-    for (uint i = 0; i < Model.States.Count; ++i)
-    {
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <p>
-                    <strong>@ViewData["Title"]</strong><br />
-                    <small>Device #@(i + 1)</small>
-                </p>
-            </div>
-            <div class="panel-body">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <p>
+                <strong>@ViewData["Title"]</strong><br />
+                <small>Device #@(i + 1)</small>
+            </p>
+        </div>
+        <div class="panel-body">
+            @if (Model.DeviceInfoCaches[i].Available)
+            {
                 <div class="col-sm-3">
                     <table class="table table-sm table-borderless table-condensed">
                         <tr>
                             <td>Firmware</td>
-                            <td><span class="label label-primary">@Model.States[0].Firmware</span></td>
+                            <td><span class="label label-primary">@Model.DeviceInfoCaches[i].State.Firmware</span></td>
                         </tr>
                         <tr>
                             <td>Input Port</td>
-                            <td><span class="label label-success">@Model.States[0].InputPort</span></td>
+                            <td><span class="label label-success">@Model.DeviceInfoCaches[i].State.InputPort</span></td>
                         </tr>
                         <tr>
                             <td>Output</td>
-                            <td><span class="label label-default">@Model.States[0].Output</span></td>
+                            <td><span class="label label-default">@Model.DeviceInfoCaches[i].State.Output</span></td>
                         </tr>
                         <tr>
                             <td>GoTo</td>
-                            <td><span class="label label-default">@Model.States[0].GoTo</span></td>
+                            <td><span class="label label-default">@Model.DeviceInfoCaches[i].State.GoTo</span></td>
                         </tr>
                         <tr>
                             <td>Mode</td>
-                            <td><span class="label label-default">@Model.States[0].Mode</span></td>
+                            <td><span class="label label-default">@Model.DeviceInfoCaches[i].State.Mode</span></td>
                         </tr>
                     </table>
                 </div>
-            </div>
-
-            <form method="post">
-                @*<div>
-                        <button type="submit" asp-page-handler="TurnOn" class="btn btn-success btn-md">Turn TV On</button>
-                    </div>*@
-            </form>
+            }
+            else
+            {
+                <div class="alert alert-warning">
+                    <strong>Warning!</strong> Device not found, is it turned on?
+                </div>
+            }
         </div>
-    }
+    </div>
 }

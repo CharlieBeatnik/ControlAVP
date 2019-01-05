@@ -7,7 +7,7 @@ using ControllableDeviceTypes.AtenVS0801HTypes;
 
 namespace ControllableDevice
 {
-    public class AtenVS0801H
+    public class AtenVS0801H : IControllableDevice
     {
         private Rs232Device _rs232Device;
 
@@ -26,6 +26,16 @@ namespace ControllableDevice
         private bool Success(string response)
         {
             return response.Contains("Command OK");
+        }
+
+        public bool Available
+        {
+            get
+            {
+                // Getting state as a good way to determine if device is on
+                var state = GetState();
+                return state != null;
+            }
         }
 
         public bool GoToNextInput()

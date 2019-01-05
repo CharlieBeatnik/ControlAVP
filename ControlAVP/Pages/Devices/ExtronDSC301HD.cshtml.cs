@@ -21,7 +21,12 @@ namespace ControlAVP.Pages.Devices
         private ServiceClient _serviceClient;
         private ExtronDSC301HD _device;
 
-        public Version Firmware { get; private set; }
+        public class DeviceInfo
+        {
+            public bool Available;
+            public Version Firmware;
+        }
+        public DeviceInfo DeviceInfoCache { get; private set; } = new DeviceInfo();
 
         public ExtronDSC301HDModel(IConfiguration configuration, IHostingEnvironment environment)
         {
@@ -37,13 +42,8 @@ namespace ControlAVP.Pages.Devices
 
         public void OnGet()
         {
-            Firmware = _device.GetFirmware();
-        }
-
-        public IActionResult OnPostGetFirmware()
-        {
-            Firmware = _device.GetFirmware();
-            return RedirectToPage();
+            DeviceInfoCache.Available = _device.Available;
+            DeviceInfoCache.Firmware = _device.GetFirmware();
         }
     }
 }

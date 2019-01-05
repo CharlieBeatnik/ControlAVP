@@ -69,5 +69,11 @@ namespace Tests
             Assert.IsTrue(state != null);
             Assert.IsTrue(state.InputPort == InputPort.Port2);
         }
+
+        [Test]
+        public void GivenDevice_WhenCallAvailable_ThenDeviceIsAvailable()
+        {
+            Assert.IsTrue(_device.Available);
+        }
     }
 }

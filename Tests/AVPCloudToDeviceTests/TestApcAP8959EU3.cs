@@ -68,5 +68,11 @@ namespace Tests
             if (outlet == null) Assert.Fail();
             Assert.IsTrue(outlet.State == Outlet.PowerState.On);
         }
+
+        [Test]
+        public void GivenDevice_WhenCallAvailable_ThenDeviceIsAvailable()
+        {
+            Assert.IsTrue(_device.Available);
+        }
     }
 }

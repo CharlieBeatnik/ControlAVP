@@ -6,35 +6,29 @@
 }
 <h2></h2>
 
-@if (Model.Firmware == null)
-{
-    <div class="alert alert-warning">
-        <strong>Warning!</strong> Device not found, is it turned on?
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <p>
+            <strong>@ViewData["Title"]</strong>
+        </p>
     </div>
-}
-else
-{
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <p>
-                <strong>@ViewData["Title"]</strong>
-            </p>
-        </div>
-        <div class="panel-body">
+    <div class="panel-body">
+        @if (Model.DeviceInfoCache.Available)
+        {
             <div class="col-sm-3">
                 <table class="table table-sm table-borderless table-condensed">
                     <tr>
                         <td>Firmware</td>
-                        <td><span class="label label-primary">@Model.Firmware</span></td>
+                        <td><span class="label label-primary">@Model.DeviceInfoCache.Firmware</span></td>
                     </tr>
                 </table>
             </div>
-        </div>
-
-        <form method="post">
-            @*<div>
-                    <button type="submit" asp-page-handler="TurnOn" class="btn btn-success btn-md">Turn TV On</button>
-                </div>*@
-        </form>
+        }
+        else
+        {
+            <div class="alert alert-warning">
+                <strong>Warning!</strong> Device not found, is it turned on?
+            </div>
+        }
     </div>
-}
+</div>

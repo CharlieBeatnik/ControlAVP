@@ -5,7 +5,7 @@ using System.Diagnostics;
 
 namespace ControllableDevice
 {
-    public class ExtronDSC301HD
+    public class ExtronDSC301HD : IControllableDevice
     {
         private Rs232Device _rs232Device;
 
@@ -34,6 +34,16 @@ namespace ControllableDevice
 
             var match = Regex.Match(response, @"E[0-9][0-9]");
             return !match.Success;
+        }
+
+        public bool Available
+        {
+            get
+            {
+                // Getting firmware as a good way to determine if device is on
+                var firmware = GetFirmware();
+                return firmware != null;
+            }
         }
 
         public Version GetFirmware()

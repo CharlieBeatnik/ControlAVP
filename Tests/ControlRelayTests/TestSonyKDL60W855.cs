@@ -44,5 +44,11 @@ namespace Tests
             var result = _device.TurnOn();
             Assert.IsTrue(result);
         }
+
+        [TestMethod]
+        public void GivenDevice_WhenCallAvailable_ThenDeviceIsAvailable()
+        {
+            Assert.IsTrue(_device.Available);
+        }
     }
 }

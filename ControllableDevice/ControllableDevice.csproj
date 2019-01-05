@@ -120,6 +120,7 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="IControllableDevice.cs" />
     <Compile Include="Devices\SonyKDL60W855.cs" />
     <Compile Include="Rs232Device.cs" />
     <Compile Include="Devices\ApcAP8959EU3.cs" />

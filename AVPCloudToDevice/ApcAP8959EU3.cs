@@ -22,11 +22,7 @@ namespace AVPCloudToDevice
         {
             try
             {
-                var payload = new
-                {
-                };
-
-                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "PDUGetOutlets", payload);
+                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "PDUGetOutlets", null);
                 string json = response.GetPayloadAsJson();
                 return JsonConvert.DeserializeObject<List<Outlet>>(json);
             }
@@ -40,11 +36,7 @@ namespace AVPCloudToDevice
         {
             try
             {
-                var payload = new
-                {
-                };
-
-                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "PDUGetOutletsWaitForPending", payload);
+                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "PDUGetOutletsWaitForPending", null);
                 string json = response.GetPayloadAsJson();
                 return JsonConvert.DeserializeObject<List<Outlet>>(json);
             }
@@ -87,6 +79,23 @@ namespace AVPCloudToDevice
             catch
             {
                 return false;
+            }
+        }
+
+        public bool Available
+        {
+            get
+            {
+                try
+                {
+                    var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "PDUAvailable", null);
+                    string json = response.GetPayloadAsJson();
+                    return JsonConvert.DeserializeObject<bool>(json);
+                }
+                catch
+                {
+                    return false;
+                }
             }
         }
     }

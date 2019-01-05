@@ -86,5 +86,24 @@ namespace AVPCloudToDevice
                 return false;
             }
         }
+
+        public bool Available
+        {
+            get
+            {
+                try
+                {
+                    var payload = new { _hdmiSwitchId };
+
+                    var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "HDMISwitchAvailable", payload);
+                    string json = response.GetPayloadAsJson();
+                    return JsonConvert.DeserializeObject<bool>(json);
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+        }
     }
 }
