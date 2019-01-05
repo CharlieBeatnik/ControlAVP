@@ -1,8 +1,6 @@
 ﻿using Microsoft.Azure.Devices;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using ControllableDeviceTypes.ApcAP8959EU3Types;
 
 namespace AVPCloudToDevice
@@ -82,20 +80,17 @@ namespace AVPCloudToDevice
             }
         }
 
-        public bool Available
+        public bool GetAvailable()
         {
-            get
+            try
             {
-                try
-                {
-                    var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "PDUAvailable", null);
-                    string json = response.GetPayloadAsJson();
-                    return JsonConvert.DeserializeObject<bool>(json);
-                }
-                catch
-                {
-                    return false;
-                }
+                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "PDUGetAvailable", null);
+                string json = response.GetPayloadAsJson();
+                return JsonConvert.DeserializeObject<bool>(json);
+            }
+            catch
+            {
+                return false;
             }
         }
     }

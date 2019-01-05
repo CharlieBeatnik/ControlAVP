@@ -35,7 +35,7 @@ namespace ControlRelay
             deviceClient.SetMethodHandlerAsync("HDMISwitchGoToPreviousInput", GoToPreviousInput, null).Wait();
             deviceClient.SetMethodHandlerAsync("HDMISwitchGetState", GetState, null).Wait();
             deviceClient.SetMethodHandlerAsync("HDMISwitchSetInput", SetInput, null).Wait();
-            deviceClient.SetMethodHandlerAsync("HDMISwitchAvailable", Available, null).Wait();
+            deviceClient.SetMethodHandlerAsync("HDMISwitchGetAvailable", GetAvailable, null).Wait();
         }
 
         private Task<MethodResponse> GoToNextInput(MethodRequest methodRequest, object userContext)
@@ -88,12 +88,12 @@ namespace ControlRelay
             return Task.FromResult(GetMethodResponse(methodRequest, success));
         }
 
-        private Task<MethodResponse> Available(MethodRequest methodRequest, object userContext)
+        private Task<MethodResponse> GetAvailable(MethodRequest methodRequest, object userContext)
         {
             var payloadDefintion = new { _hdmiSwitchId = -1 };
 
             var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
-            var result = _devices[payload._hdmiSwitchId].Available;
+            var result = _devices[payload._hdmiSwitchId].GetAvailable();
 
             string json = JsonConvert.SerializeObject(result);
             var response = new MethodResponse(Encoding.UTF8.GetBytes(json), (int)HttpStatusCode.OK);

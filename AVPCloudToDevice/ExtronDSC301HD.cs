@@ -29,20 +29,17 @@ namespace AVPCloudToDevice
             }
         }
 
-        public bool Available
+        public bool GetAvailable()
         {
-            get
+            try
             {
-                try
-                {
-                    var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "ScalerAvailable", null);
-                    string json = response.GetPayloadAsJson();
-                    return JsonConvert.DeserializeObject<bool>(json);
-                }
-                catch
-                {
-                    return false;
-                }
+                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "ScalerGetAvailable", null);
+                string json = response.GetPayloadAsJson();
+                return JsonConvert.DeserializeObject<bool>(json);
+            }
+            catch
+            {
+                return false;
             }
         }
     }

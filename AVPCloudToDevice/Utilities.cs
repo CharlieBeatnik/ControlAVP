@@ -1,9 +1,7 @@
 ﻿using Microsoft.Azure.Devices;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace AVPCloudToDevice
@@ -34,7 +32,7 @@ namespace AVPCloudToDevice
             methodInvocation.SetPayloadJson(payloadString);
 
             // Invoke the direct method asynchronously and get the response from the device.
-            var response = Task.Run(async () => await Utilities.InvokeDeviceMethodAsync(serviceClient, deviceId, methodInvocation)).Result;
+            var response = Task.Run(async () => await InvokeDeviceMethodAsync(serviceClient, deviceId, methodInvocation)).Result;
 
             if (response == null)
             {

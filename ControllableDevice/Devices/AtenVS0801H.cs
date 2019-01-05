@@ -28,14 +28,11 @@ namespace ControllableDevice
             return response.Contains("Command OK");
         }
 
-        public bool Available
+        public bool GetAvailable()
         {
-            get
-            {
-                // Getting state as a good way to determine if device is on
-                var state = GetState();
-                return state != null;
-            }
+            // Getting state as a good way to determine if device is on
+            var state = GetState();
+            return state != null;
         }
 
         public bool GoToNextInput()

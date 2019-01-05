@@ -14,13 +14,10 @@ namespace ControllableDevice
             _physicalAddress = physicalAddress;
         }
 
-        public bool Available
+        public bool GetAvailable()
         {
-            get
-            {
-                //ANDREWDENN_TODO
-                return false;
-            }
+            //ANDREWDENN_TODO
+            return false;
         }
 
         public bool TurnOn()

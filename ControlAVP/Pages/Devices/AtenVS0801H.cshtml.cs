@@ -52,7 +52,7 @@ namespace ControlAVP.Pages.Devices
         {
             for (int deviceIdx = 0; deviceIdx < _numHdmiSwitches; ++deviceIdx)
             {
-                DeviceInfoCaches[deviceIdx].Available = _devices[deviceIdx].Available;
+                DeviceInfoCaches[deviceIdx].Available = _devices[deviceIdx].GetAvailable();
                 DeviceInfoCaches[deviceIdx].State = _devices[deviceIdx].GetState();
             }
         }

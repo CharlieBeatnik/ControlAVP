@@ -72,7 +72,7 @@ namespace Tests
         [Test]
         public void GivenDevice_WhenCallAvailable_ThenDeviceIsAvailable()
         {
-            Assert.IsTrue(_device.Available);
+            Assert.IsTrue(_device.GetAvailable());
         }
     }
 }

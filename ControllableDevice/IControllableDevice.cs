@@ -8,6 +8,6 @@ namespace ControllableDevice
 {
     interface IControllableDevice
     {
-        bool Available { get; }
+        bool GetAvailable();
     }
 }

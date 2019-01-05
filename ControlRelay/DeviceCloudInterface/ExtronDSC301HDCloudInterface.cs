@@ -27,7 +27,7 @@ namespace ControlRelay
         public override void SetMethodHandlers(DeviceClient deviceClient)
         {
             deviceClient.SetMethodHandlerAsync("ScalerGetFirmware", GetFirmware, null).Wait();
-            deviceClient.SetMethodHandlerAsync("ScalerAvailable", Available, null).Wait();
+            deviceClient.SetMethodHandlerAsync("ScalerGetAvailable", GetAvailable, null).Wait();
         }
 
         private Task<MethodResponse> GetFirmware(MethodRequest methodRequest, object userContext)
@@ -46,9 +46,9 @@ namespace ControlRelay
             }
         }
 
-        private Task<MethodResponse> Available(MethodRequest methodRequest, object userContext)
+        private Task<MethodResponse> GetAvailable(MethodRequest methodRequest, object userContext)
         {
-            var result = _device.Available;
+            var result = _device.GetAvailable();
 
             string json = JsonConvert.SerializeObject(result);
             var response = new MethodResponse(Encoding.UTF8.GetBytes(json), (int)HttpStatusCode.OK);

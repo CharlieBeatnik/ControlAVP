@@ -33,12 +33,9 @@ namespace ControllableDevice
             _sshDevice.Connect(_host, _port, _username, _password, ApcAP8959EU3.TerminalPrompt);
         }
 
-        public bool Available
+        public bool GetAvailable()
         {
-            get
-            {
-                return _sshDevice.Connected;
-            }
+            return _sshDevice.Connected;
         }
 
         public IEnumerable<Outlet> GetOutletsWaitForPending()

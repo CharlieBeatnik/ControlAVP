@@ -82,7 +82,7 @@ namespace Tests
         public void GivenDevice_WhenCallAvailable_ThenDeviceIsAvailable()
         {
             var device = GetDevice();
-            Assert.IsTrue(device.Available);
+            Assert.IsTrue(device.GetAvailable());
         }
     }
 }

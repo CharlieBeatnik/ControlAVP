@@ -36,14 +36,11 @@ namespace ControllableDevice
             return !match.Success;
         }
 
-        public bool Available
+        public bool GetAvailable()
         {
-            get
-            {
-                // Getting firmware as a good way to determine if device is on
-                var firmware = GetFirmware();
-                return firmware != null;
-            }
+            // Getting firmware as a good way to determine if device is on
+            var firmware = GetFirmware();
+            return firmware != null;
         }
 
         public Version GetFirmware()

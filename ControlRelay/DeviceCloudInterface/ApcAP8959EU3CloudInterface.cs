@@ -35,7 +35,7 @@ namespace ControlRelay
             deviceClient.SetMethodHandlerAsync("PDUGetOutletsWaitForPending", GetOutletsWaitForPending, null).Wait();
             deviceClient.SetMethodHandlerAsync("PDUTurnOutletOn", TurnOutletOn, null).Wait();
             deviceClient.SetMethodHandlerAsync("PDUTurnOutletOff", TurnOutletOff, null).Wait();
-            deviceClient.SetMethodHandlerAsync("PDUAvailable", Available, null).Wait();
+            deviceClient.SetMethodHandlerAsync("PDUGetAvailable", GetAvailable, null).Wait();
         }
 
         private Task<MethodResponse> GetOutlets(MethodRequest methodRequest, object userContext)
@@ -98,9 +98,9 @@ namespace ControlRelay
             return Task.FromResult(GetMethodResponse(methodRequest, success));
         }
 
-        private Task<MethodResponse> Available(MethodRequest methodRequest, object userContext)
+        private Task<MethodResponse> GetAvailable(MethodRequest methodRequest, object userContext)
         {
-            var result = _device.Available;
+            var result = _device.GetAvailable();
 
             string json = JsonConvert.SerializeObject(result);
             var response = new MethodResponse(Encoding.UTF8.GetBytes(json), (int)HttpStatusCode.OK);

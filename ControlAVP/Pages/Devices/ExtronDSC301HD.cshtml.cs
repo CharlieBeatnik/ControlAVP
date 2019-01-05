@@ -42,7 +42,7 @@ namespace ControlAVP.Pages.Devices
 
         public void OnGet()
         {
-            DeviceInfoCache.Available = _device.Available;
+            DeviceInfoCache.Available = _device.GetAvailable();
             DeviceInfoCache.Firmware = _device.GetFirmware();
         }
     }

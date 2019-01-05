@@ -1,9 +1,5 @@
 ﻿using Microsoft.Azure.Devices;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Net;
 using ControllableDeviceTypes.AtenVS0801HTypes;
 
 
@@ -87,22 +83,19 @@ namespace AVPCloudToDevice
             }
         }
 
-        public bool Available
+        public bool GetAvailable()
         {
-            get
+            try
             {
-                try
-                {
-                    var payload = new { _hdmiSwitchId };
+                var payload = new { _hdmiSwitchId };
 
-                    var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "HDMISwitchAvailable", payload);
-                    string json = response.GetPayloadAsJson();
-                    return JsonConvert.DeserializeObject<bool>(json);
-                }
-                catch
-                {
-                    return false;
-                }
+                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "HDMISwitchGetAvailable", payload);
+                string json = response.GetPayloadAsJson();
+                return JsonConvert.DeserializeObject<bool>(json);
+            }
+            catch
+            {
+                return false;
             }
         }
     }
