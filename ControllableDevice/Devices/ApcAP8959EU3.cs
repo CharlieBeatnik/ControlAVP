@@ -8,7 +8,7 @@ namespace ControllableDevice
 {
     public class ApcAP8959EU3
     {
-        private SshDevice _pduSshClient;
+        private SshDevice _sshDevice;
         private string _host;
         private int _port;
         private string _username;
@@ -18,7 +18,7 @@ namespace ControllableDevice
 
         public ApcAP8959EU3(string host, int port, string username, string password)
         {
-            _pduSshClient = new SshDevice();
+            _sshDevice = new SshDevice();
 
             _host = host;
             _port = port;
@@ -30,7 +30,7 @@ namespace ControllableDevice
 
         public void Connect()
         {
-            _pduSshClient.Connect(_host, _port, _username, _password, ApcAP8959EU3.TerminalPrompt);
+            _sshDevice.Connect(_host, _port, _username, _password, ApcAP8959EU3.TerminalPrompt);
         }
 
         public IEnumerable<Outlet> GetOutletsWaitForPending()
@@ -90,15 +90,15 @@ namespace ControllableDevice
             string name;
             string tail;
 
-            if(!_pduSshClient.Connected)
+            if(!_sshDevice.Connected)
             {
                 Connect();
             }
-            Debug.Assert(_pduSshClient.Connected);
+            Debug.Assert(_sshDevice.Connected);
 
-            var olStatusAll = _pduSshClient.ExecuteCommand("olStatus all");
-            var olReadingAllPower = _pduSshClient.ExecuteCommand("olReading all power");
-            var olReadingAllCurrent = _pduSshClient.ExecuteCommand("olReading all current");
+            var olStatusAll = _sshDevice.ExecuteCommand("olStatus all");
+            var olReadingAllPower = _sshDevice.ExecuteCommand("olReading all power");
+            var olReadingAllCurrent = _sshDevice.ExecuteCommand("olReading all current");
 
             // Added asserts as ExecuteCommand has been oberved to return null
             Debug.Assert(olStatusAll != null);
@@ -194,12 +194,12 @@ namespace ControllableDevice
 
         public void TurnOutletOn(int id)
         {
-            _pduSshClient.ExecuteCommand(string.Format("olOn {0}", id.ToString()));
+            _sshDevice.ExecuteCommand(string.Format("olOn {0}", id.ToString()));
         }
 
         public void TurnOutletOff(int id)
         {
-            _pduSshClient.ExecuteCommand(string.Format("olOff {0}", id.ToString()));
+            _sshDevice.ExecuteCommand(string.Format("olOff {0}", id.ToString()));
         }
     }
 }

@@ -7,16 +7,17 @@ using ControllableDeviceTypes.AtenVS0801HTypes;
 
 namespace ControllableDevice
 {
-    public class AtenVS0801H : Rs232Device
+    public class AtenVS0801H
     {
-        protected override uint BaudRate { get; } = 19200;
-        protected override SerialStopBitCount StopBits { get; } = SerialStopBitCount.One;
-        protected override ushort DataBits { get; } = 8;
-        protected override SerialParity Parity { get; } = SerialParity.None;
+        private Rs232Device _rs232Device;
 
-        public AtenVS0801H(string portId) : base(portId)
+        public AtenVS0801H(string portId)
         {
-            PreWrite = (x) =>
+            _rs232Device = new Rs232Device(portId);
+            Debug.Assert(_rs232Device != null);
+
+            _rs232Device.BaudRate = 19200;
+            _rs232Device.PreWrite = (x) =>
             {
                 return x + "\r";
             };
@@ -29,26 +30,26 @@ namespace ControllableDevice
 
         public bool GoToNextInput()
         {
-            var result = WriteWithResponse("sw+");
+            var result = _rs232Device.WriteWithResponse("sw+");
             return Success(result);
         }
 
         public bool GoToPreviousInput()
         {
-            var result = WriteWithResponse("sw-");
+            var result = _rs232Device.WriteWithResponse("sw-");
             return Success(result);
         }
 
         public bool SetInput(InputPort inputPort)
         {
-            var result = WriteWithResponse($"sw i{(int)inputPort:00}");
+            var result = _rs232Device.WriteWithResponse($"sw i{(int)inputPort:00}");
             return Success(result);
         }
 
         public bool SetOutput(bool enable)
         {
             var write = string.Format("sw {0}", enable ? "on" : "off");
-            var result = WriteWithResponse(write);
+            var result = _rs232Device.WriteWithResponse(write);
             return Success(result);
         }
 
@@ -59,13 +60,13 @@ namespace ControllableDevice
             switch(mode)
             {
                 case SwitchMode.Default:
-                    result = WriteWithResponse("swmode default");
+                    result = _rs232Device.WriteWithResponse("swmode default");
                     break;
                 case SwitchMode.Next:
-                    result = WriteWithResponse("swmode next");
+                    result = _rs232Device.WriteWithResponse("swmode next");
                     break;
                 case SwitchMode.Auto:
-                    result = WriteWithResponse($"swmode i{inputPort:00} auto");
+                    result = _rs232Device.WriteWithResponse($"swmode i{inputPort:00} auto");
                     break;
                 default:
                     Debug.Assert(false, "Unkown SwitchMode");
@@ -78,13 +79,13 @@ namespace ControllableDevice
         public bool SetGoTo(bool enable)
         {
             var write = string.Format("swmode goto {0}", enable ? "on" : "off");
-            var result = WriteWithResponse(write);
+            var result = _rs232Device.WriteWithResponse(write);
             return Success(result);
         }
        
         public State GetState()
         {
-            string result = WriteWithResponse("read");
+            string result = _rs232Device.WriteWithResponse("read");
             if (Success(result))
             {
                 var lines = result.Split("\r\n", StringSplitOptions.RemoveEmptyEntries).ToList();

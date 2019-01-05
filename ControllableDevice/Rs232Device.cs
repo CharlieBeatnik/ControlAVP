@@ -9,27 +9,55 @@ using Windows.Storage.Streams;
 
 namespace ControllableDevice
 {
-    public abstract class Rs232Device
+    public class Rs232Device
     {
         private DataWriter _dataWriter;
         private DataReader _dataReader;
         private string _partialId;
 
-        protected uint ReadBufferLengthBytes { get; set; } = 1024;
-        protected TimeSpan ZeroByteReadTimeout { get; set; } = TimeSpan.FromMilliseconds(500);
-        protected TimeSpan WriteTimeout { get; set; } = TimeSpan.FromMilliseconds(250);
-        protected TimeSpan ReadTimeout { get; set; } = TimeSpan.FromMilliseconds(250);
+        private SerialDevice _serialPort;
+        private uint _readBufferLengthBytes = 1024;
+        private TimeSpan _zeroByteReadTimeout = TimeSpan.FromMilliseconds(500);
 
-        protected abstract uint BaudRate { get; }
-        protected abstract SerialStopBitCount StopBits { get; }
-        protected abstract ushort DataBits { get; }
-        protected abstract SerialParity Parity { get; }
+        public TimeSpan WriteTimeout
+        {
+            get { return _serialPort.WriteTimeout; }
+            set { _serialPort.WriteTimeout = value; }
+        }
 
-        protected SerialDevice SerialPort { get; set; }
+        public TimeSpan ReadTimeout
+        {
+            get { return _serialPort.ReadTimeout; }
+            set { _serialPort.ReadTimeout = value; }
+        }
 
-        protected delegate string ProcessString(string input);
-        protected ProcessString PreWrite { get; set; } = (x) => { return x; };
-        protected ProcessString PostRead { get; set; } = (x) => { return x; };
+        public uint BaudRate
+        {
+            get { return _serialPort.BaudRate; }
+            set { _serialPort.BaudRate = value; }
+        }
+
+        public ushort DataBits
+        {
+            get { return _serialPort.DataBits; }
+            set { _serialPort.DataBits = value; }
+        }
+
+        public SerialParity Parity
+        {
+            get { return _serialPort.Parity; }
+            set { _serialPort.Parity = value; }
+        }
+
+        public SerialStopBitCount StopBits
+        {
+            get { return _serialPort.StopBits; }
+            set { _serialPort.StopBits = value; }
+        }
+
+        public delegate string ProcessString(string input);
+        public ProcessString PreWrite { get; set; } = (x) => { return x; };
+        public ProcessString PostRead { get; set; } = (x) => { return x; };
     
 
         public string Id { get; private set; }
@@ -48,29 +76,29 @@ namespace ControllableDevice
             Id = devices.Single(s => s.Id.Contains(_partialId)).Id;
 
             //Create serial port
-            SerialPort = Task.Run(async () => await SerialDevice.FromIdAsync(Id)).Result;
-            Debug.Assert(SerialPort != null);
-            SetSerialParameters();
+            _serialPort = Task.Run(async () => await SerialDevice.FromIdAsync(Id)).Result;
+            Debug.Assert(_serialPort != null);
 
             //Create data writer
-            _dataWriter = new DataWriter(SerialPort.OutputStream);
+            _dataWriter = new DataWriter(_serialPort.OutputStream);
 
             //Create data reader
-            _dataReader = new DataReader(SerialPort.InputStream)
+            _dataReader = new DataReader(_serialPort.InputStream)
             {
                 //Used to allow reading of > 0 bytes within serialPort.ReadTimeout
                 InputStreamOptions = InputStreamOptions.Partial
             };
         }
 
-        private void SetSerialParameters()
+        private void SetSerialDefaultParameters()
         {
-            SerialPort.WriteTimeout = WriteTimeout;
-            SerialPort.ReadTimeout = ReadTimeout;
-            SerialPort.BaudRate = BaudRate;
-            SerialPort.StopBits = StopBits;
-            SerialPort.DataBits = DataBits;
-            SerialPort.Parity = Parity;
+            WriteTimeout = TimeSpan.FromMilliseconds(250);
+            ReadTimeout = TimeSpan.FromMilliseconds(250);
+
+            BaudRate = 9600;
+            DataBits = 8;
+            Parity = SerialParity.None;
+            StopBits = SerialStopBitCount.One;
         }
 
         public static async Task<DeviceInformationCollection> GetAvailableDevices()
@@ -79,7 +107,7 @@ namespace ControllableDevice
             return await DeviceInformation.FindAllAsync(aqs);
         }
 
-        protected void Write(string write)
+        public void Write(string write)
         {
             var processedWriteString = PreWrite(write);
             _dataWriter.WriteString(processedWriteString);
@@ -94,12 +122,12 @@ namespace ControllableDevice
             Debug.Assert(storeAsyncTask.Status == TaskStatus.RanToCompletion);
         }
 
-        protected string Read()
+        public string Read()
         {
-            var cts = new CancellationTokenSource(ZeroByteReadTimeout);
+            var cts = new CancellationTokenSource(_zeroByteReadTimeout);
             try
             {
-                var loadAsyncTask = _dataReader.LoadAsync(ReadBufferLengthBytes).AsTask(cts.Token);
+                var loadAsyncTask = _dataReader.LoadAsync(_readBufferLengthBytes).AsTask(cts.Token);
                 loadAsyncTask.Wait();
 
                 var bytesRead = loadAsyncTask.Result;
@@ -120,7 +148,7 @@ namespace ControllableDevice
             }
         }
 
-        protected string WriteWithResponse(string write)
+        public string WriteWithResponse(string write)
         {
             Write(write);
             return Read();

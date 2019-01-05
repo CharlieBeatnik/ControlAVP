@@ -5,16 +5,17 @@ using System.Diagnostics;
 
 namespace ControllableDevice
 {
-    public class ExtronDSC301HD : Rs232Device
+    public class ExtronDSC301HD
     {
-        protected override uint BaudRate { get; } = 9600;
-        protected override SerialStopBitCount StopBits { get; } = SerialStopBitCount.One;
-        protected override ushort DataBits { get; } = 8;
-        protected override SerialParity Parity { get; } = SerialParity.None;
+        private Rs232Device _rs232Device;
 
-        public ExtronDSC301HD(string portId) : base(portId)
+        public ExtronDSC301HD(string portId)
         {
-            PostRead = (x) =>
+            _rs232Device = new Rs232Device(portId);
+            Debug.Assert(_rs232Device != null);
+
+            _rs232Device.BaudRate = 9600;
+            _rs232Device.PostRead = (x) =>
             {
                 return x.TrimEnd("\r\n".ToCharArray());
             };
@@ -37,7 +38,7 @@ namespace ControllableDevice
 
         public Version GetFirmware()
         {
-            var result = WriteWithResponse("*Q");
+            var result = _rs232Device.WriteWithResponse("*Q");
             if (Success(result))
             {
                 var match = Regex.Match(result, @"^([0-9]+).([0-9]+).([0-9]+)$");
