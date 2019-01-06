@@ -6,6 +6,7 @@ using NUnit.Framework;
 using System.Dynamic;
 using System.IO;
 using ControllableDeviceTypes.AtenVS0801HTypes;
+using System.Collections.Generic;
 
 namespace Tests
 {
@@ -15,7 +16,7 @@ namespace Tests
         private readonly string _settingsFile = "settings.json";
 
         private ServiceClient _serviceClient;
-        private AtenVS0801H _device;
+        private List<AtenVS0801H> _devices = new List<AtenVS0801H>();
 
         public TestAtenVS0801H()
         {
@@ -31,49 +32,67 @@ namespace Tests
         public void Setup()
         {
             _serviceClient = ServiceClient.CreateFromConnectionString(_settings.ConnectionString);
-            _device = new AtenVS0801H(_serviceClient, _settings.DeviceId, (uint)_settings.HdmiSwitchId);
+
+            uint deviceCount = (uint)_settings.DeviceCount;
+            for (uint i = 0; i < deviceCount; i++)
+            {
+                var device = new AtenVS0801H(_serviceClient, _settings.DeviceId, i);
+                _devices.Add(device);
+            }
         }
 
         [Test]
         public void GivenInputPortIsPort1_WhenGoToNextInput_ThenInputPortIsPort2()
         {
-            Assert.IsTrue(_device.SetInput(InputPort.Port1));
-            Assert.IsTrue(_device.GoToNextInput());
+            foreach (var device in _devices)
+            {
+                Assert.IsTrue(device.SetInput(InputPort.Port1));
+                Assert.IsTrue(device.GoToNextInput());
 
-            var state = _device.GetState();
-            Assert.IsTrue(state != null);
-            Assert.IsTrue(state.InputPort == InputPort.Port2);
+                var state = device.GetState();
+                Assert.IsTrue(state != null);
+                Assert.IsTrue(state.InputPort == InputPort.Port2);
+            }
         }
 
         [Test]
         public void GivenInputPortIsPort2_WhenGoToPreviousInput_ThenInputPortIsPort1()
         {
-            Assert.IsTrue(_device.SetInput(InputPort.Port2));
-            Assert.IsTrue(_device.GoToPreviousInput());
+            foreach (var device in _devices)
+            {
+                Assert.IsTrue(device.SetInput(InputPort.Port2));
+                Assert.IsTrue(device.GoToPreviousInput());
 
-            var state = _device.GetState();
-            Assert.IsTrue(state != null);
-            Assert.IsTrue(state.InputPort == InputPort.Port1);
+                var state = device.GetState();
+                Assert.IsTrue(state != null);
+                Assert.IsTrue(state.InputPort == InputPort.Port1);
+            }
         }
 
         [Test]
         public void GivenInputPortIsPort1_WhenSetInputPort2_ThenInputPortIsPort2()
         {
-            Assert.IsTrue(_device.SetInput(InputPort.Port1));
-            var state = _device.GetState();
-            Assert.IsTrue(state != null);
-            Assert.IsTrue(state.InputPort == InputPort.Port1);
+            foreach (var device in _devices)
+            {
+                Assert.IsTrue(device.SetInput(InputPort.Port1));
+                var state = device.GetState();
+                Assert.IsTrue(state != null);
+                Assert.IsTrue(state.InputPort == InputPort.Port1);
 
-            Assert.IsTrue(_device.SetInput(InputPort.Port2));
-            state = _device.GetState();
-            Assert.IsTrue(state != null);
-            Assert.IsTrue(state.InputPort == InputPort.Port2);
+                Assert.IsTrue(device.SetInput(InputPort.Port2));
+                state = device.GetState();
+                Assert.IsTrue(state != null);
+                Assert.IsTrue(state.InputPort == InputPort.Port2);
+            }
         }
 
         [Test]
         public void GivenDevice_WhenCallAvailable_ThenDeviceIsAvailable()
         {
-            Assert.IsTrue(_device.GetAvailable());
+            foreach (var device in _devices)
+            {
+                Assert.IsTrue(device.GetAvailable());
+            }
         }
     }
 }

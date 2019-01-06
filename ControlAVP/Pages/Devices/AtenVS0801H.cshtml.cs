@@ -21,7 +21,7 @@ namespace ControlAVP.Pages.Devices
         private string _deviceId;
         private ServiceClient _serviceClient;
 
-        private const uint _numHdmiSwitches = 1;
+        private const uint _numHdmiSwitches = 2;
         private List<AtenVS0801H> _devices = new List<AtenVS0801H>();
 
         public class DeviceInfo
