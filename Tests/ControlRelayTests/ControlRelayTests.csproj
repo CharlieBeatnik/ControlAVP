@@ -119,7 +119,7 @@
     </AppxManifest>
     <Content Include="..\..\ControlRelay\settings.json">
       <Link>settings.json</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="ControlRelayTests_TemporaryKey.pfx" />
   </ItemGroup>

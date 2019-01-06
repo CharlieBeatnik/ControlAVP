@@ -17,7 +17,7 @@ namespace ControllableDevice
 
         private SerialDevice _serialPort;
         private uint _readBufferLengthBytes = 1024;
-        private TimeSpan _zeroByteReadTimeout = TimeSpan.FromMilliseconds(500);
+        private TimeSpan _zeroByteReadTimeout = TimeSpan.FromMilliseconds(750);
 
         public TimeSpan WriteTimeout
         {
@@ -79,6 +79,8 @@ namespace ControllableDevice
             _serialPort = Task.Run(async () => await SerialDevice.FromIdAsync(Id)).Result;
             Debug.Assert(_serialPort != null);
 
+            SetSerialDefaultParameters();
+
             //Create data writer
             _dataWriter = new DataWriter(_serialPort.OutputStream);
 
@@ -92,8 +94,8 @@ namespace ControllableDevice
 
         private void SetSerialDefaultParameters()
         {
-            WriteTimeout = TimeSpan.FromMilliseconds(250);
-            ReadTimeout = TimeSpan.FromMilliseconds(250);
+            WriteTimeout = TimeSpan.FromMilliseconds(500);
+            ReadTimeout = TimeSpan.FromMilliseconds(500);
 
             BaudRate = 9600;
             DataBits = 8;
