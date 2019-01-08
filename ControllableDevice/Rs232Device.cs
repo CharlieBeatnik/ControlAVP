@@ -17,7 +17,12 @@ namespace ControllableDevice
 
         private SerialDevice _serialPort;
         private uint _readBufferLengthBytes = 1024;
-        private TimeSpan _zeroByteReadTimeout = TimeSpan.FromMilliseconds(750);
+
+        private readonly TimeSpan _defaultWriteTimeout = TimeSpan.FromMilliseconds(150);
+        private readonly TimeSpan _defaultReadTimeout = TimeSpan.FromMilliseconds(150);
+        private readonly TimeSpan _defaultZeroByteReadTimeout = TimeSpan.FromMilliseconds(175);
+
+        public TimeSpan ZeroByteReadTimeout{ get; set; }
 
         public TimeSpan WriteTimeout
         {
@@ -80,6 +85,7 @@ namespace ControllableDevice
             Debug.Assert(_serialPort != null);
 
             SetSerialDefaultParameters();
+            ZeroByteReadTimeout = _defaultZeroByteReadTimeout;
 
             //Create data writer
             _dataWriter = new DataWriter(_serialPort.OutputStream);
@@ -94,8 +100,8 @@ namespace ControllableDevice
 
         private void SetSerialDefaultParameters()
         {
-            WriteTimeout = TimeSpan.FromMilliseconds(500);
-            ReadTimeout = TimeSpan.FromMilliseconds(500);
+            WriteTimeout = _defaultWriteTimeout;
+            ReadTimeout = _defaultReadTimeout;
 
             BaudRate = 9600;
             DataBits = 8;
@@ -126,7 +132,7 @@ namespace ControllableDevice
 
         public string Read()
         {
-            var cts = new CancellationTokenSource(_zeroByteReadTimeout);
+            var cts = new CancellationTokenSource(ZeroByteReadTimeout);
             try
             {
                 var loadAsyncTask = _dataReader.LoadAsync(_readBufferLengthBytes).AsTask(cts.Token);
@@ -143,15 +149,14 @@ namespace ControllableDevice
 
                 return processedReadString;
             }
-            catch (TaskCanceledException)
+            catch (Exception e)
             {
-                //Exception is thrown in the event of a zero byte read timeout
-                return string.Empty;
-            }
-            catch (AggregateException)
-            {
-                //Exception is thrown in the event of a zero byte read timeout
-                return string.Empty;
+                if (e.InnerException is TaskCanceledException)
+                {
+                    //Exception is thrown in the event of a zero byte read timeout
+                    return string.Empty;
+                }
+                else throw e;
             }
         }
 

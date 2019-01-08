@@ -19,6 +19,10 @@ namespace ControllableDevice
             {
                 return x.TrimEnd("\r\n".ToCharArray());
             };
+
+            _rs232Device.ZeroByteReadTimeout = TimeSpan.FromMilliseconds(150);
+            _rs232Device.WriteTimeout = TimeSpan.FromMilliseconds(150);
+            _rs232Device.ReadTimeout = TimeSpan.FromMilliseconds(175);
         }
 
         private bool Success(string response)
