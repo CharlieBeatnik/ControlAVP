@@ -148,6 +148,11 @@ namespace ControllableDevice
                 //Exception is thrown in the event of a zero byte read timeout
                 return string.Empty;
             }
+            catch (AggregateException)
+            {
+                //Exception is thrown in the event of a zero byte read timeout
+                return string.Empty;
+            }
         }
 
         public string WriteWithResponse(string write)

@@ -7,12 +7,12 @@ using Newtonsoft.Json.Linq;
 namespace Tests
 {
     [TestClass]
-    public class TestExtronDSC301HD
+    public class TestExtronMVX44VGA
     {
-        private static ExtronDSC301HD _device = null;
+        private static ExtronMVX44VGA _device = null;
         private readonly string _settingsFile = "settings.json";
 
-        public TestExtronDSC301HD()
+        public TestExtronMVX44VGA()
         {
             JObject jsonParsed;
             using (StreamReader r = new StreamReader(_settingsFile))
@@ -23,7 +23,7 @@ namespace Tests
 
             if (_device == null)
             {
-                _device = new ExtronDSC301HD(jsonParsed["ExtronDSC301HD"]["PortId"].ToString());
+                _device = new ExtronMVX44VGA(jsonParsed["ExtronMVX44VGA"]["PortId"].ToString());
             }
         }
 
@@ -35,10 +35,10 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GivenDevice_WhenGetFirmware_ThenFirmwareIsGTE1_25_1()
+        public void GivenDevice_WhenGetFirmware_ThenFirmwareIsGTE1_4()
         {
             var firmware = _device.GetFirmware();
-            Assert.IsTrue(firmware >= new Version(1, 25, 1));
+            Assert.IsTrue(firmware >= new Version(1, 4));
         }
 
         [TestMethod]

@@ -5,11 +5,11 @@ using System.Diagnostics;
 
 namespace ControllableDevice
 {
-    public class ExtronDSC301HD : IControllableDevice
+    public class ExtronMVX44VGA : IControllableDevice
     {
         private Rs232Device _rs232Device;
 
-        public ExtronDSC301HD(string portId)
+        public ExtronMVX44VGA(string portId)
         {
             _rs232Device = new Rs232Device(portId);
             Debug.Assert(_rs232Device != null);
@@ -28,9 +28,6 @@ namespace ControllableDevice
             //E11 — Invalid preset number
             //E13 — Invalid parameter
             //E14 — Not valid for this configuration
-            //E17 — Invalid command for signal type
-            //E22 — Busy
-            //E25 — Device not present
 
             var match = Regex.Match(response, @"E[0-9][0-9]");
             return !match.Success;
@@ -45,15 +42,14 @@ namespace ControllableDevice
 
         public Version GetFirmware()
         {
-            var result = _rs232Device.WriteWithResponse("*Q");
+            var result = _rs232Device.WriteWithResponse("Q");
             if (Success(result))
             {
-                var match = Regex.Match(result, @"^([0-9]+).([0-9]+).([0-9]+)$");
+                var match = Regex.Match(result, @"^([0-9]+).([0-9]+)$");
                 Debug.Assert(match.Success);
                 int major = int.Parse(match.Groups[1].Value);
                 int minor = int.Parse(match.Groups[2].Value);
-                int build = int.Parse(match.Groups[3].Value);
-                return new Version(major, minor, build);
+                return new Version(major, minor);
             }
             else return null;
         }

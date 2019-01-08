@@ -98,6 +98,7 @@
     <SDKReference Include="TestPlatform.Universal, Version=$(UnitTestPlatformVersion)" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TestExtronMVX44VGA.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestApcAP8959EU3.cs" />
     <Compile Include="TestAtenVS0801H.cs" />
