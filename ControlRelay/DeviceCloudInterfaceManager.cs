@@ -57,12 +57,32 @@ namespace ControlRelay
 
         private void CreateDeviceClient()
         {
-            _deviceClient = DeviceClient.CreateFromConnectionString(_connectionString, TransportType.Mqtt);
-            _deviceClient.SetConnectionStatusChangesHandler(DeviceClientConnectionStatusChanged);
+            _logger.Debug(string.Empty);
 
-            foreach (var device in _deviceCloudInterfaces)
+            _deviceClient = null;
+
+            try
             {
-                device.SetMethodHandlers(_deviceClient);
+                _logger.Debug("Pos: DeviceClient.CreateFromConnectionString");
+                _deviceClient = DeviceClient.CreateFromConnectionString(_connectionString, TransportType.Mqtt);
+
+                if (_deviceClient == null)
+                {
+                    _logger.Debug("_deviceClient is null after CreateFromConnectionString()");
+                }
+
+                _logger.Debug("Pos: SetConnectionStatusChangesHandler");
+                _deviceClient.SetConnectionStatusChangesHandler(DeviceClientConnectionStatusChanged);
+
+                foreach (var device in _deviceCloudInterfaces)
+                {
+                    _logger.Debug("Pos: SetMethodHandlers");
+                    device.SetMethodHandlers(_deviceClient);
+                }
+            }
+            catch(Exception exp)
+            {
+                _logger.Debug(exp, "Exception in CreateDeviceClient()");
             }
         }
 
@@ -85,14 +105,23 @@ namespace ControlRelay
         {
             _logger.Debug(string.Empty);
 
-            // Attempt to close any existing connections before creating a new one
-            if (_deviceClient != null)
+            try
             {
-                _deviceClient.CloseAsync().Wait();
-            }
+                // Attempt to close any existing connections before creating a new one
+                if (_deviceClient != null)
+                {
+                    _logger.Debug("Pos: CloseAsync().Wait()");
+                    _deviceClient.CloseAsync().Wait();
+                }
 
-            // Create new connection
-            CreateDeviceClient();
-        }
+                // Create new connection
+                _logger.Debug("Pos: CreateDeviceClient()");
+                CreateDeviceClient();
+            }
+            catch(Exception exp)
+            {
+                _logger.Debug(exp, "Exception in ResetConnection()");
+            }
+}
     }
 }
