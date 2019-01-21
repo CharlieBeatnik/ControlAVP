@@ -86,5 +86,12 @@ namespace Tests
                 Assert.IsTrue(device.GetAvailable());
             }
         }
+
+        //[TestMethod]
+        //public void GivenUnknownPortId_WhenCreateDevice_ResultIsNull()
+        //{
+        //    var device = new AtenVS0801H("unknown");
+        //    Assert.IsNull(device);
+        //}
     }
 }

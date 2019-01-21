@@ -16,19 +16,12 @@ namespace ControllableDevice
         private string _partialId;
 
         private SerialDevice _serialPort;
-        private uint _readBufferLengthBytes = 1024;
+        private uint _batchReadSize = 4;
 
-        private readonly TimeSpan _defaultWriteTimeout = TimeSpan.FromMilliseconds(150);
-        private readonly TimeSpan _defaultReadTimeout = TimeSpan.FromMilliseconds(150);
-        private readonly TimeSpan _defaultZeroByteReadTimeout = TimeSpan.FromMilliseconds(175);
+        private readonly TimeSpan _defaultReadTimeout = TimeSpan.FromMilliseconds(10);
+        private readonly TimeSpan _defaultZeroByteReadTimeout = TimeSpan.FromMilliseconds(15);
 
         public TimeSpan ZeroByteReadTimeout{ get; set; }
-
-        public TimeSpan WriteTimeout
-        {
-            get { return _serialPort.WriteTimeout; }
-            set { _serialPort.WriteTimeout = value; }
-        }
 
         public TimeSpan ReadTimeout
         {
@@ -93,14 +86,14 @@ namespace ControllableDevice
             //Create data reader
             _dataReader = new DataReader(_serialPort.InputStream)
             {
-                //Used to allow reading of > 0 bytes within serialPort.ReadTimeout
+                //Used to allow reading of > 0 bytes within _serialPort.ReadTimeout
                 InputStreamOptions = InputStreamOptions.Partial
             };
         }
 
         private void SetSerialDefaultParameters()
         {
-            WriteTimeout = _defaultWriteTimeout;
+            //WriteTimeout = _defaultWriteTimeout;
             ReadTimeout = _defaultReadTimeout;
 
             BaudRate = 9600;
@@ -129,39 +122,45 @@ namespace ControllableDevice
             Debug.Assert(storeAsyncTask.IsCompletedSuccessfully == true);
             Debug.Assert(storeAsyncTask.Status == TaskStatus.RanToCompletion);
         }
-
         public string Read()
         {
-            var cts = new CancellationTokenSource(ZeroByteReadTimeout);
+            string readString = string.Empty;
+
             try
             {
-                var loadAsyncTask = _dataReader.LoadAsync(_readBufferLengthBytes).AsTask(cts.Token);
-                loadAsyncTask.Wait();
+                while(true)
+                {
+                    var cts = new CancellationTokenSource(ZeroByteReadTimeout);
 
-                var bytesRead = loadAsyncTask.Result;
-                Debug.Assert(bytesRead > 0);
-                Debug.Assert(loadAsyncTask.IsCompleted == true);
-                Debug.Assert(loadAsyncTask.IsCompletedSuccessfully == true);
-                Debug.Assert(loadAsyncTask.Status == TaskStatus.RanToCompletion);
+                    var loadAsyncTask = _dataReader.LoadAsync(_batchReadSize).AsTask(cts.Token);
+                    loadAsyncTask.Wait();
 
-                var readString = _dataReader.ReadString(bytesRead);
-                var processedReadString = PostRead(readString);
+                    var bytesRead = loadAsyncTask.Result;
+                    Debug.Assert(bytesRead > 0);
+                    Debug.Assert(loadAsyncTask.IsCompleted == true);
+                    Debug.Assert(loadAsyncTask.IsCompletedSuccessfully == true);
+                    Debug.Assert(loadAsyncTask.Status == TaskStatus.RanToCompletion);
 
-                return processedReadString;
+                    readString += _dataReader.ReadString(bytesRead);
+                }
             }
             catch (Exception e)
             {
                 if (e.InnerException is TaskCanceledException)
                 {
                     //Exception is thrown in the event of a zero byte read timeout
-                    return string.Empty;
+                    var processedReadString = PostRead(readString);
+                    return processedReadString;
                 }
                 else throw e;
             }
         }
 
-        public string WriteWithResponse(string write)
+        public string ClearWriteWithResponse(string write)
         {
+            // Perform a read to clear any characters already waiting to be read
+            Read();
+
             Write(write);
             return Read();
         }

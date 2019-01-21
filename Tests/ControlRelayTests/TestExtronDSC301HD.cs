@@ -46,5 +46,21 @@ namespace Tests
         {
             Assert.IsTrue(_device.GetAvailable());
         }
+
+        [TestMethod]
+        public void GivenDevice_TestSerial_ResultIsTrue()
+        {
+            var firmware = _device.TestSerial();
+            Assert.IsTrue(firmware >= new Version(1, 25, 1));
+        }
+
+        [TestMethod]
+        public void GivenDeviceHasUnreadData_WhenGetFirmware_ThenFirmwareIsGTE1_25_1()
+        {
+            _device._rs232Device.Write("*Q");
+
+            var firmware = _device.GetFirmware();
+            Assert.IsTrue(firmware >= new Version(1, 25, 1));
+        }
     }
 }
