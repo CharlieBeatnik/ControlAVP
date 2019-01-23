@@ -14,22 +14,16 @@ namespace ControllableDevice
         private DataWriter _dataWriter;
         private DataReader _dataReader;
         private string _partialId;
-
         private SerialDevice _serialPort;
-        private uint _readBufferLengthBytes = 1024;
 
         private readonly TimeSpan _defaultWriteTimeout = TimeSpan.FromMilliseconds(150);
-        private readonly TimeSpan _defaultReadTimeout = TimeSpan.FromMilliseconds(150);
-        private readonly TimeSpan _defaultZeroByteReadTimeout = TimeSpan.FromMilliseconds(175);
-
-        public TimeSpan ZeroByteReadTimeout{ get; set; }
-
         public TimeSpan WriteTimeout
         {
             get { return _serialPort.WriteTimeout; }
             set { _serialPort.WriteTimeout = value; }
         }
 
+        private readonly TimeSpan _defaultReadTimeout = TimeSpan.FromMilliseconds(150);
         public TimeSpan ReadTimeout
         {
             get { return _serialPort.ReadTimeout; }
@@ -60,6 +54,14 @@ namespace ControllableDevice
             set { _serialPort.StopBits = value; }
         }
 
+        public uint MaximumBytesPerRead { get; set; } = 1024;
+
+        public TimeSpan ZeroByteReadTimeout { get; set; } = TimeSpan.FromMilliseconds(175);
+
+        public bool UseFastClearBeforeEveryWrite { get; set; } = false;
+        public TimeSpan FastClearReadTimeout { get; set; } = TimeSpan.FromMilliseconds(3);
+        public TimeSpan FastClearZeroByteReadTimeout { get; set; } = TimeSpan.FromMilliseconds(5);
+
         public delegate string ProcessString(string input);
         public ProcessString PreWrite { get; set; } = (x) => { return x; };
         public ProcessString PostRead { get; set; } = (x) => { return x; };
@@ -84,8 +86,13 @@ namespace ControllableDevice
             _serialPort = Task.Run(async () => await SerialDevice.FromIdAsync(Id)).Result;
             Debug.Assert(_serialPort != null);
 
-            SetSerialDefaultParameters();
-            ZeroByteReadTimeout = _defaultZeroByteReadTimeout;
+            //Serial port defaults
+            WriteTimeout = _defaultWriteTimeout;
+            ReadTimeout = _defaultReadTimeout;
+            BaudRate = 9600;
+            DataBits = 8;
+            Parity = SerialParity.None;
+            StopBits = SerialStopBitCount.One;
 
             //Create data writer
             _dataWriter = new DataWriter(_serialPort.OutputStream);
@@ -98,17 +105,6 @@ namespace ControllableDevice
             };
         }
 
-        private void SetSerialDefaultParameters()
-        {
-            WriteTimeout = _defaultWriteTimeout;
-            ReadTimeout = _defaultReadTimeout;
-
-            BaudRate = 9600;
-            DataBits = 8;
-            Parity = SerialParity.None;
-            StopBits = SerialStopBitCount.One;
-        }
-
         public static async Task<DeviceInformationCollection> GetAvailableDevices()
         {
             string aqs = SerialDevice.GetDeviceSelector();
@@ -117,6 +113,11 @@ namespace ControllableDevice
 
         public void Write(string write)
         {
+            if (UseFastClearBeforeEveryWrite)
+            {
+                FastClear();
+            }
+
             var processedWriteString = PreWrite(write);
             _dataWriter.WriteString(processedWriteString);
 
@@ -135,7 +136,7 @@ namespace ControllableDevice
             var cts = new CancellationTokenSource(ZeroByteReadTimeout);
             try
             {
-                var loadAsyncTask = _dataReader.LoadAsync(_readBufferLengthBytes).AsTask(cts.Token);
+                var loadAsyncTask = _dataReader.LoadAsync(MaximumBytesPerRead).AsTask(cts.Token);
                 loadAsyncTask.Wait();
 
                 var bytesRead = loadAsyncTask.Result;
@@ -158,6 +159,22 @@ namespace ControllableDevice
                 }
                 else throw e;
             }
+        }
+
+        public string FastClear()
+        {
+            var previousZeroByteReadTimeout = ZeroByteReadTimeout;
+            var previousReadTimeout = ReadTimeout;
+
+            ZeroByteReadTimeout = TimeSpan.FromMilliseconds(5);
+            ReadTimeout = TimeSpan.FromMilliseconds(3);
+
+            var result = Read();
+
+            ZeroByteReadTimeout = previousZeroByteReadTimeout;
+            ReadTimeout = previousReadTimeout;
+
+            return result;
         }
 
         public string WriteWithResponse(string write)

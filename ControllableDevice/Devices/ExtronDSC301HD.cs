@@ -23,7 +23,8 @@ namespace ControllableDevice
             _rs232Device.ZeroByteReadTimeout = TimeSpan.FromMilliseconds(350);
             _rs232Device.WriteTimeout = TimeSpan.FromMilliseconds(300);
             _rs232Device.ReadTimeout = TimeSpan.FromMilliseconds(300);
-    }
+            _rs232Device.UseFastClearBeforeEveryWrite = true;
+        }
 
         private bool Success(string response)
         {
