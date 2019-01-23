@@ -7,7 +7,7 @@ namespace ControllableDevice
 {
     public class ExtronMVX44VGA : IControllableDevice
     {
-        internal Rs232Device _rs232Device;
+        private Rs232Device _rs232Device;
 
         public ExtronMVX44VGA(string portId)
         {
@@ -19,6 +19,10 @@ namespace ControllableDevice
             {
                 return x.TrimEnd("\r\n".ToCharArray());
             };
+
+            _rs232Device.ZeroByteReadTimeout = TimeSpan.FromMilliseconds(350);
+            _rs232Device.WriteTimeout = TimeSpan.FromMilliseconds(300);
+            _rs232Device.ReadTimeout = TimeSpan.FromMilliseconds(300);
         }
 
         private bool Success(string response)
@@ -42,7 +46,7 @@ namespace ControllableDevice
 
         public Version GetFirmware()
         {
-            var result = _rs232Device.ClearWriteWithResponse("Q");
+            var result = _rs232Device.WriteWithResponse("Q");
             if (Success(result))
             {
                 var match = Regex.Match(result, @"^([0-9]+).([0-9]+)$");
