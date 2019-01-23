@@ -118,10 +118,26 @@ namespace ControlRelay
                 _logger.Debug("Pos: CreateDeviceClient()");
                 CreateDeviceClient();
             }
-            catch(Exception exp)
+            catch (Exception exp)
             {
-                _logger.Debug(exp, "Exception in ResetConnection()");
+                _logger.Error("Exception in ResetConnection()");
+                _logger.Error($"Exp Message: {exp.Message}");
+                _logger.Error($"Exp StackTrace: {exp.StackTrace}");
+                _logger.Error($"Exp TargetSite: {exp.TargetSite}");
+                _logger.Error($"Exp Source: {exp.Source}");
+                _logger.Error($"Exp HResult: {exp.HResult}");
+
+                if (exp.InnerException != null)
+                {
+                    _logger.Error($"InExp Message: {exp.InnerException.Message}");
+                    _logger.Error($"InExp StackTrace: {exp.InnerException.StackTrace}");
+                    _logger.Error($"InExp TargetSite: {exp.InnerException.TargetSite}");
+                    _logger.Error($"InExp Source: {exp.InnerException.Source}");
+                    _logger.Error($"Exp HResult: {exp.InnerException.HResult}");
+                }
+
+                _logger.Error(exp, "NLog Exception Logger in ResetConnection()");
             }
-}
+        }
     }
 }

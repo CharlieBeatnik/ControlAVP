@@ -29,7 +29,7 @@ namespace ControlRelay
             var logfile = new FileTarget("logfile")
             {
                     FileName = Path.Combine(localFolder.Path, "log.txt"),
-                    Layout = "${longdate}|${level:uppercase=true}|${callsite:className=True:fileName=False:includeSourcePath=False:methodName=True}|${message}"
+                    Layout = "${longdate}|${level:uppercase=true}|${callsite:className=True:fileName=False:includeSourcePath=False:methodName=True}|${message} ${exception:format=tostring}"
             };
             config.AddRule(LogLevel.Debug, LogLevel.Fatal, logfile);
             LogManager.Configuration = config;
