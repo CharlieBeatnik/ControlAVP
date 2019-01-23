@@ -26,7 +26,7 @@ namespace ControllableDevice
             _rs232Device.WriteTimeout = TimeSpan.FromMilliseconds(500);
             _rs232Device.ReadTimeout = TimeSpan.FromMilliseconds(500);
 
-            _rs232Device.UseFastClearBeforeEveryWrite = true;
+            _rs232Device.UseFastReadBeforeEveryWrite = true;
         }
 
         private bool Success(string response)

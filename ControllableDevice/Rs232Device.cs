@@ -58,9 +58,9 @@ namespace ControllableDevice
 
         public TimeSpan ZeroByteReadTimeout { get; set; } = TimeSpan.FromMilliseconds(175);
 
-        public bool UseFastClearBeforeEveryWrite { get; set; } = false;
-        public TimeSpan FastClearReadTimeout { get; set; } = TimeSpan.FromMilliseconds(3);
-        public TimeSpan FastClearZeroByteReadTimeout { get; set; } = TimeSpan.FromMilliseconds(5);
+        public bool UseFastReadBeforeEveryWrite { get; set; } = false;
+        public TimeSpan FastReadReadTimeout { get; set; } = TimeSpan.FromMilliseconds(3);
+        public TimeSpan FastReadZeroByteReadTimeout { get; set; } = TimeSpan.FromMilliseconds(5);
 
         public delegate string ProcessString(string input);
         public ProcessString PreWrite { get; set; } = (x) => { return x; };
@@ -113,9 +113,9 @@ namespace ControllableDevice
 
         public void Write(string write)
         {
-            if (UseFastClearBeforeEveryWrite)
+            if (UseFastReadBeforeEveryWrite)
             {
-                FastClear();
+                FastRead();
             }
 
             var processedWriteString = PreWrite(write);
@@ -161,7 +161,7 @@ namespace ControllableDevice
             }
         }
 
-        public string FastClear()
+        public string FastRead()
         {
             var previousZeroByteReadTimeout = ZeroByteReadTimeout;
             var previousReadTimeout = ReadTimeout;
