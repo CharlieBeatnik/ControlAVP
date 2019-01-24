@@ -22,9 +22,9 @@ namespace ControllableDevice
                 return x + "\r";
             };
 
-            _rs232Device.ZeroByteReadTimeout = TimeSpan.FromMilliseconds(750);
-            _rs232Device.WriteTimeout = TimeSpan.FromMilliseconds(500);
-            _rs232Device.ReadTimeout = TimeSpan.FromMilliseconds(500);
+            _rs232Device.ZeroByteReadTimeout = TimeSpan.FromMilliseconds(1000);
+            _rs232Device.WriteTimeout = TimeSpan.FromMilliseconds(750);
+            _rs232Device.ReadTimeout = TimeSpan.FromMilliseconds(50);
 
             _rs232Device.UseFastReadBeforeEveryWrite = true;
         }

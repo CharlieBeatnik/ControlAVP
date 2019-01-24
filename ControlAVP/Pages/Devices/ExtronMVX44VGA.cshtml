@@ -1,0 +1,34 @@
+﻿@page
+@model ControlAVP.Pages.Devices.ExtronMVX44VGAModel
+
+@{
+    ViewData["Title"] = "Extron MVX44VGA";
+}
+<h2></h2>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <p>
+            <strong>@ViewData["Title"]</strong>
+        </p>
+    </div>
+    <div class="panel-body">
+        @if (Model.DeviceInfoCache.Available)
+        {
+            <div class="col-sm-3">
+                <table class="table table-sm table-borderless table-condensed">
+                    <tr>
+                        <td>Firmware</td>
+                        <td><span class="label label-primary">@Model.DeviceInfoCache.Firmware</span></td>
+                    </tr>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-warning">
+                <strong>Warning!</strong> Device not found, is it turned on?
+            </div>
+        }
+    </div>
+</div>
