@@ -28,14 +28,18 @@ namespace ControllableDevice
 
         private bool Success(string response)
         {
-            //E01 — Invalid input number
-            //E10 — Invalid command
-            //E11 — Invalid preset number
-            //E13 — Invalid parameter
-            //E14 — Not valid for this configuration
+            if (!string.IsNullOrEmpty(response))
+            {
+                //E01 — Invalid input number
+                //E10 — Invalid command
+                //E11 — Invalid preset number
+                //E13 — Invalid parameter
+                //E14 — Not valid for this configuration
 
-            var match = Regex.Match(response, @"E[0-9][0-9]");
-            return !match.Success;
+                var match = Regex.Match(response, @"E[0-9][0-9]");
+                return !match.Success;
+            }
+            else return false;
         }
 
         public bool GetAvailable()
