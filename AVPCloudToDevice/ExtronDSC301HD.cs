@@ -1,5 +1,6 @@
 ﻿using Microsoft.Azure.Devices;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 
 namespace AVPCloudToDevice
@@ -21,7 +22,7 @@ namespace AVPCloudToDevice
             {
                 var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "ScalerGetFirmware", null);
                 string json = response.GetPayloadAsJson();
-                return JsonConvert.DeserializeObject<Version>(json);
+                return JsonConvert.DeserializeObject<Version>(json, new VersionConverter());
             }
             catch
             {

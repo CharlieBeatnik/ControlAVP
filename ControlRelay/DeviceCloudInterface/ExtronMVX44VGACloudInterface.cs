@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using ControllableDevice;
 using Microsoft.Azure.Devices.Client;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace ControlRelay
 {
@@ -36,7 +37,7 @@ namespace ControlRelay
 
             if (result != null)
             {
-                string json = JsonConvert.SerializeObject(result);
+                string json = JsonConvert.SerializeObject(result, new VersionConverter());
                 var response = new MethodResponse(Encoding.UTF8.GetBytes(json), (int)HttpStatusCode.OK);
                 return Task.FromResult(response);
             }
