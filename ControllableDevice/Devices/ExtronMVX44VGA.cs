@@ -17,13 +17,14 @@ namespace ControllableDevice
             _rs232Device.BaudRate = 9600;
             _rs232Device.PostRead = (x) =>
             {
-                return x.TrimEnd("\r\n".ToCharArray());
+                //Always take the last line in case there are other strings in the buffer
+                var results = x.Split("\r\n", StringSplitOptions.RemoveEmptyEntries);
+                return results[results.Length - 1];
             };
 
             _rs232Device.ZeroByteReadTimeout = TimeSpan.FromMilliseconds(1000);
             _rs232Device.WriteTimeout = TimeSpan.FromMilliseconds(750);
             _rs232Device.ReadTimeout = TimeSpan.FromMilliseconds(50);
-            _rs232Device.UseFastReadBeforeEveryWrite = true;
         }
 
         private bool Success(string response)

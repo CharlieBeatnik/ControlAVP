@@ -58,9 +58,6 @@ namespace ControllableDevice
 
         public TimeSpan ZeroByteReadTimeout { get; set; } = TimeSpan.FromMilliseconds(175);
 
-        public bool UseFastReadBeforeEveryWrite { get; set; } = false;
-        public TimeSpan FastReadReadTimeout { get; set; } = TimeSpan.FromMilliseconds(10);
-        public TimeSpan FastReadZeroByteReadTimeout { get; set; } = TimeSpan.FromMilliseconds(15);
 
         public delegate string ProcessString(string input);
         public ProcessString PreWrite { get; set; } = (x) => { return x; };
@@ -113,11 +110,6 @@ namespace ControllableDevice
 
         public void Write(string write)
         {
-            if (UseFastReadBeforeEveryWrite)
-            {
-                FastRead();
-            }
-
             var processedWriteString = PreWrite(write);
             _dataWriter.WriteString(processedWriteString);
 
@@ -139,15 +131,16 @@ namespace ControllableDevice
                 var loadAsyncTask = _dataReader.LoadAsync(MaximumBytesPerRead).AsTask(cts.Token);
                 loadAsyncTask.Wait();
 
-                var bytesRead = loadAsyncTask.Result;
-                Debug.Assert(bytesRead > 0);
+                var numBytesRead = loadAsyncTask.Result;
+                Debug.Assert(numBytesRead > 0);
                 Debug.Assert(loadAsyncTask.IsCompleted == true);
                 Debug.Assert(loadAsyncTask.IsCompletedSuccessfully == true);
                 Debug.Assert(loadAsyncTask.Status == TaskStatus.RanToCompletion);
 
-                var readString = _dataReader.ReadString(bytesRead);
+                var bytesRead = new byte[numBytesRead];
+                _dataReader.ReadBytes(bytesRead);
+                var readString = System.Text.Encoding.UTF8.GetString(bytesRead);
                 var processedReadString = PostRead(readString);
-
                 return processedReadString;
             }
             catch (Exception e)
@@ -159,22 +152,6 @@ namespace ControllableDevice
                 }
                 else throw e;
             }
-        }
-
-        public string FastRead()
-        {
-            var previousZeroByteReadTimeout = ZeroByteReadTimeout;
-            var previousReadTimeout = ReadTimeout;
-
-            ZeroByteReadTimeout = FastReadZeroByteReadTimeout;
-            ReadTimeout = FastReadReadTimeout;
-
-            var result = Read();
-
-            ZeroByteReadTimeout = previousZeroByteReadTimeout;
-            ReadTimeout = previousReadTimeout;
-
-            return result;
         }
 
         public string WriteWithResponse(string write)
