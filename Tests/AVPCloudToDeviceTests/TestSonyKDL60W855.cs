@@ -34,9 +34,6 @@ namespace Tests
             _serviceClient = ServiceClient.CreateFromConnectionString(_settings.ConnectionString);
             _device = new SonyKDL60W855(_serviceClient, _settings.DeviceId);
         }
-
-        [Test]
-        [Ignore("Can't turn TV off yet, so disabling for now.")]
         public void GivenTVIsOff_WhenTurnOn_ThenTVIsOn()
         {
             var result = _device.TurnOn();

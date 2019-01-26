@@ -17,7 +17,16 @@ namespace ControllableDevice
         private bool _connectionValid = false;
         private readonly Object _lock = new Object();
 
+        private string _host;
+        private int _port;
+        private string _username;
+        private string _password;
         private string _terminalPrompt = String.Empty;
+
+        public SshDevice()
+        {
+
+        }
 
         public bool Connected
         {
@@ -35,6 +44,12 @@ namespace ControllableDevice
         {
             lock (_lock)
             {
+                _host = host;
+                _port = port;
+                _username = username;
+                _password = password;
+                _terminalPrompt = terminalPrompt;
+
                 if (Connected)
                 {
                     Disconnect();
@@ -42,13 +57,11 @@ namespace ControllableDevice
 
                 try
                 {
-                    _terminalPrompt = terminalPrompt;
-                    _authMethod = new PasswordAuthenticationMethod(username, password);
-                    _connectionInfo = new ConnectionInfo(host, port, username, _authMethod);
+                    _authMethod = new PasswordAuthenticationMethod(_username, _password);
+                    _connectionInfo = new ConnectionInfo(_host, _port, _username, _authMethod);
+
                     _sshClient = new SshClient(_connectionInfo);
-
                     _sshClient.Connect();
-
                     _shellStream = _sshClient.CreateShellStream("xterm", 80, 24, 800, 600, 1024);
 
                     // This will pull the initial login prompt off the stream
@@ -84,6 +97,11 @@ namespace ControllableDevice
             }
         }
 
+        private bool Connect()
+        {
+            return Connect(_host, _port, _username, _password, _terminalPrompt);
+        }
+
         public void Disconnect()
         {
             lock (_lock)
@@ -96,8 +114,6 @@ namespace ControllableDevice
 
                 _shellStream = null;
                 _sshClient = null;
-                _connectionInfo = null;
-                _authMethod = null;
 
                 _connectionValid = false;
             }
@@ -107,29 +123,30 @@ namespace ControllableDevice
         {
             lock (_lock)
             {
-                if (Connected)
+                if (!Connected)
                 {
-                    //Split Write and WriteLine as it looked like WriteLine was truncating commands
-                    _shellStream.Write(command);
-                    _shellStream.WriteLine("");
-
-                    string streamOutput = _shellStream.Expect(new Regex(_terminalPrompt));
-                    Debug.Assert(!string.IsNullOrEmpty(streamOutput));
-
-                    using (StringReader sr = new StringReader(streamOutput))
-                    {
-                        var result = new List<string>();
-                        string line;
-                        while ((line = sr.ReadLine()) != null)
-                        {
-                            result.Add(line);
-                        }
-
-                        return result;
-                    }
+                    Connect();
+                    if (!Connected) return null;
                 }
 
-                return null;
+                //Split Write and WriteLine as it looked like WriteLine was truncating commands
+                _shellStream.Write(command);
+                _shellStream.WriteLine("");
+
+                string streamOutput = _shellStream.Expect(new Regex(_terminalPrompt));
+                Debug.Assert(!string.IsNullOrEmpty(streamOutput));
+
+                using (StringReader sr = new StringReader(streamOutput))
+                {
+                    var result = new List<string>();
+                    string line;
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        result.Add(line);
+                    }
+
+                    return result;
+                }
             }
         }
 

@@ -4,6 +4,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using System.IO;
 using Newtonsoft.Json.Linq;
+using System.Threading;
 
 namespace Tests
 {

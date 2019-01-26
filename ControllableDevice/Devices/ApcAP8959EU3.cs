@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -9,28 +10,12 @@ namespace ControllableDevice
     public class ApcAP8959EU3 : IControllableDevice
     {
         private SshDevice _sshDevice;
-        private string _host;
-        private int _port;
-        private string _username;
-        private string _password;
-
         public static readonly string TerminalPrompt = "apc>";
 
         public ApcAP8959EU3(string host, int port, string username, string password)
         {
             _sshDevice = new SshDevice();
-
-            _host = host;
-            _port = port;
-            _username = username;
-            _password = password;
-
-            Connect();
-        }
-
-        public void Connect()
-        {
-            _sshDevice.Connect(_host, _port, _username, _password, ApcAP8959EU3.TerminalPrompt);
+            _sshDevice.Connect(host, port, username, password, ApcAP8959EU3.TerminalPrompt);
         }
 
         public bool GetAvailable()
@@ -94,12 +79,6 @@ namespace ControllableDevice
             int id;
             string name;
             string tail;
-
-            if(!_sshDevice.Connected)
-            {
-                Connect();
-            }
-            Debug.Assert(_sshDevice.Connected);
 
             var olStatusAll = _sshDevice.ExecuteCommand("olStatus all");
             var olReadingAllPower = _sshDevice.ExecuteCommand("olReading all power");
