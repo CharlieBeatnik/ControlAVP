@@ -35,8 +35,6 @@ namespace Tests
             }
         }
 
-        [TestMethod]
-        [Ignore("Can't turn TV off yet, so disabling for now.")]
         public void GivenTVIsOff_WhenTurnOn_ThenTVIsOn()
         {
             //ANDREWDENN_TODO: Need to make sure TV is off first
@@ -45,7 +43,6 @@ namespace Tests
             Assert.IsTrue(result);
         }
 
-        [TestMethod]
         public void GivenDevice_WhenCallAvailable_ThenDeviceIsAvailable()
         {
             Assert.IsTrue(_device.GetAvailable());
