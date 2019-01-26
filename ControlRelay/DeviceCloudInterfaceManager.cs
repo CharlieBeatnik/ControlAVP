@@ -87,7 +87,7 @@ namespace ControlRelay
             }
             catch(Exception exp)
             {
-                _logger.Debug(exp, "Exception in CreateDeviceClient()");
+                _logger.Error(exp);
             }
         }
 
@@ -108,41 +108,26 @@ namespace ControlRelay
 
         private void ResetConnection()
         {
-            _logger.Debug(string.Empty);
+            _logger.Debug("Resetting Connection");
 
-            try
+            // Attempt to close any existing connections before creating a new one
+            if (_deviceClient != null)
             {
-                // Attempt to close any existing connections before creating a new one
-                if (_deviceClient != null)
+                try
                 {
-                    _logger.Debug("Pos: CloseAsync().Wait()");
                     _deviceClient.CloseAsync().Wait();
                 }
-
-                // Create new connection
-                _logger.Debug("Pos: CreateDeviceClient()");
-                CreateDeviceClient();
-            }
-            catch (Exception exp)
-            {
-                _logger.Error("Exception in ResetConnection()");
-                _logger.Error($"Exp Message: {exp.Message}");
-                _logger.Error($"Exp StackTrace: {exp.StackTrace}");
-                _logger.Error($"Exp TargetSite: {exp.TargetSite}");
-                _logger.Error($"Exp Source: {exp.Source}");
-                _logger.Error($"Exp HResult: {exp.HResult}");
-
-                if (exp.InnerException != null)
+                catch (AggregateException ae)
                 {
-                    _logger.Error($"InExp Message: {exp.InnerException.Message}");
-                    _logger.Error($"InExp StackTrace: {exp.InnerException.StackTrace}");
-                    _logger.Error($"InExp TargetSite: {exp.InnerException.TargetSite}");
-                    _logger.Error($"InExp Source: {exp.InnerException.Source}");
-                    _logger.Error($"Exp HResult: {exp.InnerException.HResult}");
+                    //ANDREWDENN_TODO: Once "IotHubClientException" is public then make this catch 
+                    //explicitly look for IotHubClientException and SocketException
+                    //https://docs.microsoft.com/en-us/dotnet/api/system.aggregateexception.flatten?view=netframework-4.7.2
+                    _logger.Debug(ae, "_deviceClient.CloseAsync().Wait()");
                 }
-
-                _logger.Error(exp, "NLog Exception Logger in ResetConnection()");
             }
+
+            // Create new connection
+            CreateDeviceClient();
         }
     }
 }
