@@ -43,5 +43,17 @@ namespace AVPCloudToDevice
                 return false;
             }
         }
+        public bool SetPixelPerfectAndCentered()
+        {
+            try
+            {
+                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "ScalerSetPixelPerfectAndCentered", null);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }

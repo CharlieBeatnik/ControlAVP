@@ -45,5 +45,11 @@ namespace ControlAVP.Pages.Devices
             DeviceInfoCache.Available = _device.GetAvailable();
             DeviceInfoCache.Firmware = _device.GetFirmware();
         }
+
+        public IActionResult OnPostPixelPerfectAndCentered()
+        {
+            _device.SetPixelPerfectAndCentered();
+            return RedirectToPage();
+        }
     }
 }

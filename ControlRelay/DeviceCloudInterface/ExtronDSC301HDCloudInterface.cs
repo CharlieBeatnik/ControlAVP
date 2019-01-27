@@ -29,6 +29,7 @@ namespace ControlRelay
         {
             deviceClient.SetMethodHandlerAsync("ScalerGetFirmware", GetFirmware, null).Wait();
             deviceClient.SetMethodHandlerAsync("ScalerGetAvailable", GetAvailable, null).Wait();
+            deviceClient.SetMethodHandlerAsync("ScalerSetPixelPerfectAndCentered", SetPixelPerfectAndCentered, null).Wait();
         }
 
         private Task<MethodResponse> GetFirmware(MethodRequest methodRequest, object userContext)
@@ -54,6 +55,12 @@ namespace ControlRelay
             string json = JsonConvert.SerializeObject(result);
             var response = new MethodResponse(Encoding.UTF8.GetBytes(json), (int)HttpStatusCode.OK);
             return Task.FromResult(response);
+        }
+
+        private Task<MethodResponse> SetPixelPerfectAndCentered(MethodRequest methodRequest, object userContext)
+        {
+            _device.SetPixelPerfectAndCentered();
+            return Task.FromResult(new MethodResponse((int)HttpStatusCode.OK));
         }
 
     }
