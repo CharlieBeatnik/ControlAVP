@@ -120,6 +120,7 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="External\CircularBuffer.cs" />
     <Compile Include="Devices\ExtronMVX44VGA.cs" />
     <Compile Include="IControllableDevice.cs" />
     <Compile Include="Devices\SonyKDL60W855.cs" />

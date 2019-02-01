@@ -3,6 +3,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ControllableDevice;
 using System.IO;
 using Newtonsoft.Json.Linq;
+using ControllableDeviceTypes.ExtronDSC301HDTypes;
+using System.Threading;
 
 namespace Tests
 {

@@ -21,10 +21,6 @@ namespace ControllableDevice
             {
                 return x + "\r";
             };
-
-            _rs232Device.ZeroByteReadTimeout = TimeSpan.FromMilliseconds(1000);
-            _rs232Device.WriteTimeout = TimeSpan.FromMilliseconds(750);
-            _rs232Device.ReadTimeout = TimeSpan.FromMilliseconds(50);
         }
 
         private bool Success(string response)
@@ -96,17 +92,16 @@ namespace ControllableDevice
        
         public State GetState()
         {
-            string result = _rs232Device.WriteWithResponse("read");
-            if (Success(result))
-            {
-                var lines = result.Split("\r\n", StringSplitOptions.RemoveEmptyEntries).ToList();
-                Debug.Assert(lines.Count == 6);
+            var responses = _rs232Device.WriteWithResponses("read", 6);
+            Debug.Assert(responses.Count == 6);
 
+            if (Success(responses[0]))
+            {
                 Match match;
                 State state = new State();
 
                 //Input 
-                match = Regex.Match(lines[1], @"^Input: port([0-9]+)$");
+                match = Regex.Match(responses[1], @"^Input: port([0-9]+)$");
                 Debug.Assert(match.Success);
                 var inputParseSuccess = int.TryParse(match.Groups[1].Value, out int inputPort);
                 Debug.Assert(inputParseSuccess);
@@ -114,12 +109,12 @@ namespace ControllableDevice
                 Debug.Assert((state.InputPort >= InputPort.Port1) && (state.InputPort <= InputPort.Port8));
 
                 //Output
-                match = Regex.Match(lines[2], @"^Output: ([A-Z]+)$");
+                match = Regex.Match(responses[2], @"^Output: ([A-Z]+)$");
                 Debug.Assert(match.Success);
                 state.Output = match.Groups[1].Value == "ON";
 
                 //Mode
-                match = Regex.Match(lines[3], @"^Mode: ([A-Za-z]+)$");
+                match = Regex.Match(responses[3], @"^Mode: ([A-Za-z]+)$");
                 Debug.Assert(match.Success);
                 switch (match.Groups[1].Value)
                 {
@@ -132,12 +127,12 @@ namespace ControllableDevice
                 }
 
                 //GoTo
-                match = Regex.Match(lines[4], @"^Goto: ([A-Z]+)$");
+                match = Regex.Match(responses[4], @"^Goto: ([A-Z]+)$");
                 Debug.Assert(match.Success);
                 state.GoTo = match.Groups[1].Value == "ON";
 
                 //Firmware
-                match = Regex.Match(lines[5], @"^F/W: V([0-9]+).([0-9]+).([0-9]+)$");
+                match = Regex.Match(responses[5], @"^F/W: V([0-9]+).([0-9]+).([0-9]+)$");
                 Debug.Assert(match.Success);
                 int major = int.Parse(match.Groups[1].Value);
                 int minor = int.Parse(match.Groups[2].Value);

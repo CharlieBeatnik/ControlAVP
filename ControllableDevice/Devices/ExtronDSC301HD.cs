@@ -12,7 +12,7 @@ namespace ControllableDevice
 
         private readonly string _cmdEsc = ('\x1B').ToString();
         private readonly string _cmdCr = "\r";
-        private readonly string _cmdCrLf = "\r\n";
+        //private readonly string _cmdCrLf = "\r\n";
 
         public ExtronDSC301HD(string portId)
         {
@@ -20,17 +20,6 @@ namespace ControllableDevice
             Debug.Assert(_rs232Device != null);
 
             _rs232Device.BaudRate = 9600;
-            _rs232Device.PostRead = (x) =>
-            {
-                Debug.WriteLine($"Last Read was: {x}");
-                //Always take the last line in case there are other strings in the buffer
-                var results = x.Split(_cmdCrLf, StringSplitOptions.RemoveEmptyEntries);
-                return results[results.Length - 1];
-            };
-
-            _rs232Device.ZeroByteReadTimeout = TimeSpan.FromMilliseconds(1000);
-            _rs232Device.WriteTimeout = TimeSpan.FromMilliseconds(750);
-            _rs232Device.ReadTimeout = TimeSpan.FromMilliseconds(50);
         }
 
         private bool Success(string response)
