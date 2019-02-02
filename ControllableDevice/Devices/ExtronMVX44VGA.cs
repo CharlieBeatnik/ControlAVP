@@ -17,22 +17,6 @@ namespace ControllableDevice
             _rs232Device.BaudRate = 9600;
         }
 
-        private bool Success(string response)
-        {
-            if (!string.IsNullOrEmpty(response))
-            {
-                //E01 — Invalid input number
-                //E10 — Invalid command
-                //E11 — Invalid preset number
-                //E13 — Invalid parameter
-                //E14 — Not valid for this configuration
-
-                var match = Regex.Match(response, @"E[0-9][0-9]");
-                return !match.Success;
-            }
-            else return false;
-        }
-
         public bool GetAvailable()
         {
             // Getting firmware as a good way to determine if device is on
@@ -42,16 +26,18 @@ namespace ControllableDevice
 
         public Version GetFirmware()
         {
-            var result = _rs232Device.WriteWithResponse("Q");
-            if (Success(result))
+            string pattern = @"^([0-9]+).([0-9]+)$";
+            var result = _rs232Device.WriteWithResponse("Q", pattern);
+            if (result != null)
             {
-                var match = Regex.Match(result, @"^([0-9]+).([0-9]+)$");
+                var match = Regex.Match(result, pattern);
                 Debug.Assert(match.Success);
                 int major = int.Parse(match.Groups[1].Value);
                 int minor = int.Parse(match.Groups[2].Value);
                 return new Version(major, minor);
             }
-            else return null;
+
+            return null;
         }
     }
 }

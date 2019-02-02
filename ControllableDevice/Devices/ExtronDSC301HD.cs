@@ -13,6 +13,18 @@ namespace ControllableDevice
         private readonly string _cmdEsc = ('\x1B').ToString();
         private readonly string _cmdCr = "\r";
         //private readonly string _cmdCrLf = "\r\n";
+        private readonly string _patternNumber = @"^[+-]*[0-9]+$";
+
+        private readonly int _hPosMin = -2048;
+        private readonly int _hPosMax = 2048;
+        private readonly int _vPosMin = -1200;
+        private readonly int _vPosMax = 1200;
+
+        private readonly int _hSizeMin = 10;
+        private readonly int _hSizeMax = 4096;
+        private readonly int _vSizeMin = 10;
+        private readonly int _vSizeMax = 2400;
+
 
         public ExtronDSC301HD(string portId)
         {
@@ -20,25 +32,6 @@ namespace ControllableDevice
             Debug.Assert(_rs232Device != null);
 
             _rs232Device.BaudRate = 9600;
-        }
-
-        private bool Success(string response)
-        {
-            if (!string.IsNullOrEmpty(response))
-            {
-                //E01 — Invalid input number
-                //E10 — Invalid command
-                //E11 — Invalid preset number
-                //E13 — Invalid parameter
-                //E14 — Not valid for this configuration
-                //E17 — Invalid command for signal type
-                //E22 — Busy
-                //E25 — Device not present
-
-                var match = Regex.Match(response, @"E[0-9][0-9]");
-                return !match.Success;
-            }
-            else return false;
         }
 
         public bool GetAvailable()
@@ -50,23 +43,25 @@ namespace ControllableDevice
 
         public Version GetFirmware()
         {
-            var result = _rs232Device.WriteWithResponse("*Q");
-            if (Success(result))
+            string pattern = @"^([0-9]+).([0-9]+).([0-9]+)$";
+            var result = _rs232Device.WriteWithResponse("*Q", pattern);
+            if (result != null)
             {
-                var match = Regex.Match(result, @"^([0-9]+).([0-9]+).([0-9]+)$");
+                var match = Regex.Match(result, pattern);
                 Debug.Assert(match.Success);
                 int major = int.Parse(match.Groups[1].Value);
                 int minor = int.Parse(match.Groups[2].Value);
                 int build = int.Parse(match.Groups[3].Value);
                 return new Version(major, minor, build);
             }
-            else return null;
+
+            return null;
         }
 
         public void SetPixelPerfectAndCentered()
         {
-            uint inputWidth = ActivePixels;
-            uint inputHeight = ActiveLines;
+            int inputWidth = ActivePixels;
+            int inputHeight = ActiveLines;
 
             HorizontalSize = inputWidth;
             VerticalSize = inputHeight;
@@ -75,83 +70,127 @@ namespace ControllableDevice
             VerticalPosition = ((1080 - inputHeight) / 2);
         }
 
-        public void GetSetFormat(InputPort inputPort)
-        {
-            _rs232Device.WriteWithResponse($"{inputPort}\\");
-        }
 
-        public string GetAssignedEDIDData(InputPort inputPort)
-        {
-            return _rs232Device.WriteWithResponse($"{_cmdEsc}A{(int)inputPort:0}EDID{_cmdCr}");
-        }
-
-        public uint ActivePixels
+        public int ActivePixels
         {
             get
             {
-                var result = _rs232Device.WriteWithResponse($"{_cmdEsc}APIX{_cmdCr}");
-                return uint.Parse(result);
+                var result = _rs232Device.WriteWithResponse($"{_cmdEsc}APIX{_cmdCr}", _patternNumber);
+                Debug.Assert(result != null);
+                if (result == null) return 0;
+                return int.Parse(result);
             }
         }
 
-        public uint ActiveLines
+        public int ActiveLines
         {
             get
             {
-                var result = _rs232Device.WriteWithResponse($"{_cmdEsc}ALIN{_cmdCr}");
-                return uint.Parse(result);
+                var result = _rs232Device.WriteWithResponse($"{_cmdEsc}ALIN{_cmdCr}", _patternNumber);
+
+                Debug.Assert(result != null);
+                if (result == null) return 0;
+                return int.Parse(result);
             }
         }
 
-        public uint HorizontalPosition
+        public int HorizontalPosition
         {
             get
             {
-                var result = _rs232Device.WriteWithResponse($"{_cmdEsc}HCTR{_cmdCr}");
-                return uint.Parse(result);
+                var result = _rs232Device.WriteWithResponse($"{_cmdEsc}HCTR{_cmdCr}", _patternNumber);
+
+                Debug.Assert(result != null);
+                if (result == null) return 0;
+
+                int number = int.Parse(result);
+                Debug.Assert(number >= _hPosMin);
+                Debug.Assert(number <= _hPosMax);
+                if (number >= _hPosMin && number <= _hPosMax)
+                {
+                    return number;
+                }
+                else return 0;
             }
             set
             {
-                var result = _rs232Device.WriteWithResponse($"{_cmdEsc}{value}HCTR{_cmdCr}");
+                int newValue = Math.Clamp(value, _hPosMin, _hPosMax);
+                var result = _rs232Device.WriteWithResponse($"{_cmdEsc}{newValue}HCTR{_cmdCr}", @"^Hctr[+-][0-9]+$");
+                Debug.Assert(result != null);
             }
         }
 
-        public uint VerticalPosition
+        public int VerticalPosition
         {
             get
             {
-                var result = _rs232Device.WriteWithResponse($"{_cmdEsc}VCTR{_cmdCr}");
-                return uint.Parse(result);
+                var result = _rs232Device.WriteWithResponse($"{_cmdEsc}VCTR{_cmdCr}", _patternNumber);
+
+                Debug.Assert(result != null);
+                if (result == null) return 0;
+
+                int number = int.Parse(result);
+                Debug.Assert(number >= _vPosMin);
+                Debug.Assert(number <= _vPosMax);
+                if (number >= _vPosMin && number <= _vPosMax)
+                {
+                    return number;
+                }
+                else return 0;
             }
             set
             {
-                var result = _rs232Device.WriteWithResponse($"{_cmdEsc}{value}VCTR{_cmdCr}");
+                int newValue = Math.Clamp(value, _vPosMin, _vPosMax);
+                var result = _rs232Device.WriteWithResponse($"{_cmdEsc}{newValue}VCTR{_cmdCr}", @"^Vctr[+-][0-9]+$");
+                Debug.Assert(result != null);
             }
         }
 
-        public uint HorizontalSize
+        public int HorizontalSize
         {
             get
             {
-                var result = _rs232Device.WriteWithResponse($"{_cmdEsc}HSIZ{_cmdCr}");
-                return uint.Parse(result);
+                var result = _rs232Device.WriteWithResponse($"{_cmdEsc}HSIZ{_cmdCr}", _patternNumber);
+                Debug.Assert(result != null);
+                if (result == null) return 0;
+
+                int number = int.Parse(result);
+                Debug.Assert(number >= _hSizeMin);
+                Debug.Assert(number <= _hSizeMax);
+                if (number >= _hSizeMin && number <= _hSizeMax)
+                {
+                    return number;
+                }
+                else return 0;
             }
             set
             {
-                var result = _rs232Device.WriteWithResponse($"{_cmdEsc}{value}HSIZ{_cmdCr}");
+                int newValue = Math.Clamp(value, _hSizeMin, _hSizeMax);
+                var result = _rs232Device.WriteWithResponse($"{_cmdEsc}{newValue}HSIZ{_cmdCr}", @"^Hsiz[0-9]+$");
+                Debug.Assert(result != null);
             }
         }
 
-        public uint VerticalSize
+        public int VerticalSize
         {
             get
             {
-                var result = _rs232Device.WriteWithResponse($"{_cmdEsc}VSIZ{_cmdCr}");
-                return uint.Parse(result);
+                var result = _rs232Device.WriteWithResponse($"{_cmdEsc}VSIZ{_cmdCr}", _patternNumber);
+
+                int number = int.Parse(result);
+                Debug.Assert(number >= _vSizeMin);
+                Debug.Assert(number <= _vSizeMax);
+                if (number >= _vSizeMin && number <= _vSizeMax)
+                {
+                    return number;
+                }
+                else return 0;
             }
             set
             {
-                var result = _rs232Device.WriteWithResponse($"{_cmdEsc}{value}VSIZ{_cmdCr}");
+                int newValue = Math.Clamp(value, _vSizeMin, _vSizeMax);
+                var result = _rs232Device.WriteWithResponse($"{_cmdEsc}{newValue}VSIZ{_cmdCr}", @"^Vsiz[0-9]+$");
+                Debug.Assert(result != null);
             }
         }
     }

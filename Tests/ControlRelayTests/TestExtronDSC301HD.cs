@@ -48,5 +48,57 @@ namespace Tests
         {
             Assert.IsTrue(_device.GetAvailable());
         }
+
+        [TestMethod]
+        public void GivenDevice_WhenGetActivePixels_ThenResultIsValid()
+        {
+            Assert.IsTrue(_device.ActivePixels != -1);
+        }
+
+        [TestMethod]
+        public void GivenDevice_WhenGetActiveLines_ThenResultIsValid()
+        {
+            Assert.IsTrue(_device.ActiveLines != -1);
+        }
+
+        [TestMethod]
+        public void GivenDevice_WhenSetHorizontalPostion_ThenHorizontalPostionIsTheSame()
+        {
+            _device.HorizontalPosition = 10;
+            Assert.IsTrue(_device.HorizontalPosition == 10);
+
+            _device.HorizontalPosition = 0;
+            Assert.IsTrue(_device.HorizontalPosition == 0);
+
+            _device.HorizontalPosition = -10;
+            Assert.IsTrue(_device.HorizontalPosition == -10);
+        }
+
+        [TestMethod]
+        public void GivenDevice_WhenSetVertialPostion_ThenVerticalPostionIsTheSame()
+        {
+            _device.VerticalPosition = 10;
+            Assert.IsTrue(_device.VerticalPosition == 10);
+
+            _device.VerticalPosition = 0;
+            Assert.IsTrue(_device.VerticalPosition == 0);
+
+            _device.VerticalPosition = -10;
+            Assert.IsTrue(_device.VerticalPosition == -10);
+        }
+
+        [TestMethod]
+        public void GivenDevice_WhenSetHorizontalSize_ThenHorizontalSizeIsTheSame()
+        {
+            _device.HorizontalSize = 10;
+            Assert.IsTrue(_device.HorizontalSize == 10);
+        }
+
+        [TestMethod]
+        public void GivenDevice_WhenSetVerticalSize_ThenVerticalSizeIsTheSame()
+        {
+            _device.VerticalSize = 10;
+            Assert.IsTrue(_device.VerticalSize == 10);
+        }
     }
 }

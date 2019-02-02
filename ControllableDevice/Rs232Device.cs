@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Windows.Devices.Enumeration;
@@ -30,7 +31,6 @@ namespace ControllableDevice
 
         public string Id { get; private set; }
         public uint MaximumBytesPerRead { get; set; } = 1024;
-
         public string MessageTerminator { get; set; } = "\r\n";
 
         public TimeSpan WriteTimeout
@@ -186,7 +186,10 @@ namespace ControllableDevice
 
                 foreach (var message in messages)
                 {
-                    _messageStore.Put(message);
+                    lock (_messageStore)
+                    {
+                        _messageStore.Put(message);
+                    }
                 }
             }
         }
@@ -198,7 +201,11 @@ namespace ControllableDevice
                 _serialPort.Dispose();
             }
             _serialPort = null;
-            _messageStore.Clear();
+
+            lock (_messageStore)
+            {
+                _messageStore.Clear();
+            }
         }
 
         public static async Task<DeviceInformationCollection> GetAvailableDevices()
@@ -231,15 +238,44 @@ namespace ControllableDevice
             Write(write);
             Thread.Sleep(PostWriteWait);
 
-            if (!_messageStore.IsEmpty)
+            lock (_messageStore)
             {
-                string read = _messageStore.PeekLast();
-                return read;
+                if (!_messageStore.IsEmpty)
+                {
+                    string read = _messageStore.PeekLast();
+                    return read;
+                }
+                else
+                {
+                    return null;
+                }
             }
-            else
+        }
+
+        public string WriteWithResponse(string write, string pattern)
+        {
+            Write(write);
+            Thread.Sleep(PostWriteWait);
+
+            lock (_messageStore)
             {
-                return string.Empty;
+                if (!_messageStore.IsEmpty)
+                {
+                    var messageStore = _messageStore.ToList();
+                    messageStore.Reverse();
+
+                    foreach (var message in messageStore)
+                    {
+                        var match = Regex.Match(message, pattern);
+                        if (match.Success)
+                        {
+                            return message;
+                        }
+                    }
+                }
             }
+
+            return null;
         }
 
         public List<string> WriteWithResponses(string write, int numResponses)
@@ -247,15 +283,18 @@ namespace ControllableDevice
             Write(write);
             Thread.Sleep(PostWriteWait);
 
-            if (!_messageStore.IsEmpty)
+            lock (_messageStore)
             {
-                var messageStore = _messageStore.ToList();
-                int take = Math.Min(numResponses, messageStore.Count);
-                return messageStore.TakeLast(take).ToList();
-            }
-            else
-            {
-                return new List<string> { string.Empty };
+                if (!_messageStore.IsEmpty)
+                {
+                    var messageStore = _messageStore.ToList();
+                    int take = Math.Min(numResponses, messageStore.Count);
+                    return messageStore.TakeLast(take).ToList();
+                }
+                else
+                {
+                    return null;
+                }
             }
         }
     }
