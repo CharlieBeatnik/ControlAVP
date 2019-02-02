@@ -1,8 +1,8 @@
 ﻿using System;
-using Windows.Devices.SerialCommunication;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
 using ControllableDeviceTypes.ExtronDSC301HDTypes;
+using System.Threading;
 
 namespace ControllableDevice
 {
@@ -24,7 +24,6 @@ namespace ControllableDevice
         private readonly int _hSizeMax = 4096;
         private readonly int _vSizeMin = 10;
         private readonly int _vSizeMax = 2400;
-
 
         public ExtronDSC301HD(string portId)
         {
@@ -60,16 +59,17 @@ namespace ControllableDevice
 
         public void SetPixelPerfectAndCentered()
         {
+            var edid = OutputRate;
+
             int inputWidth = ActivePixels;
             int inputHeight = ActiveLines;
 
             HorizontalSize = inputWidth;
             VerticalSize = inputHeight;
 
-            HorizontalPosition = ((1920 - inputWidth) / 2);
-            VerticalPosition = ((1080 - inputHeight) / 2);
+            HorizontalPosition = ((edid.Width - inputWidth) / 2);
+            VerticalPosition = ((edid.Height - inputHeight) / 2);
         }
-
 
         public int ActivePixels
         {
@@ -190,6 +190,26 @@ namespace ControllableDevice
             {
                 int newValue = Math.Clamp(value, _vSizeMin, _vSizeMax);
                 var result = _rs232Device.WriteWithResponse($"{_cmdEsc}{newValue}VSIZ{_cmdCr}", @"^Vsiz[0-9]+$");
+                Debug.Assert(result != null);
+            }
+        }
+
+        public Edid OutputRate
+        {
+            get
+            {
+                var result = _rs232Device.WriteWithResponse($"{_cmdEsc}RATE{_cmdCr}", _patternNumber);
+                var number = int.Parse(result);
+                return Edid.GetEdid(number);
+            }
+            set
+            {
+                _rs232Device.Write($"{_cmdEsc}{value.Id}RATE{_cmdCr}");
+
+                //Output Rate change needs longer than normal to take effect
+                Thread.Sleep(TimeSpan.FromSeconds(2));
+
+                var result = _rs232Device.Read(@"^Rate[0-9]+$");
                 Debug.Assert(result != null);
             }
         }

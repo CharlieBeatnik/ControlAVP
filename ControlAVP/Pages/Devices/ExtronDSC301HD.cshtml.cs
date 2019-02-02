@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Azure.Devices;
 using Microsoft.Extensions.Configuration;
 using AVPCloudToDevice;
+using ControllableDeviceTypes.ExtronDSC301HDTypes;
 
 namespace ControlAVP.Pages.Devices
 {
@@ -49,6 +50,13 @@ namespace ControlAVP.Pages.Devices
         public IActionResult OnPostPixelPerfectAndCentered()
         {
             _device.SetPixelPerfectAndCentered();
+            return RedirectToPage();
+        }
+
+        public IActionResult OnPostOutputRate(int width, int height, float refreshRate)
+        {
+            var edid = Edid.GetEdid(width, height, refreshRate);
+            _device.SetOutputRate(edid);
             return RedirectToPage();
         }
     }

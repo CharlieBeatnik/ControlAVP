@@ -62,7 +62,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GivenDevice_WhenSetHorizontalPostion_ThenHorizontalPostionIsTheSame()
+        public void GivenDevice_WhenSetHorizontalPosition_ThenHorizontalPositionIsTheSame()
         {
             _device.HorizontalPosition = 10;
             Assert.IsTrue(_device.HorizontalPosition == 10);
@@ -75,7 +75,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GivenDevice_WhenSetVertialPostion_ThenVerticalPostionIsTheSame()
+        public void GivenDevice_WhenSetVertialPosition_ThenVerticalPositionIsTheSame()
         {
             _device.VerticalPosition = 10;
             Assert.IsTrue(_device.VerticalPosition == 10);
@@ -99,6 +99,18 @@ namespace Tests
         {
             _device.VerticalSize = 10;
             Assert.IsTrue(_device.VerticalSize == 10);
+        }
+
+        [TestMethod]
+        public void GivenDevice_WhenSetOutputRate_ThenOutputRateIsTheSame()
+        {
+            var edid = Edid.GetEdid(1280, 720, 60.0f);
+            Assert.IsNotNull(edid);
+
+            _device.OutputRate = edid;
+
+            var outputRate = _device.OutputRate;
+            Assert.IsTrue(outputRate == edid);
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Text;
 using System.Threading.Tasks;
 using ControllableDevice;
+using ControllableDeviceTypes.ExtronDSC301HDTypes;
 using Microsoft.Azure.Devices.Client;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -30,6 +31,7 @@ namespace ControlRelay
             deviceClient.SetMethodHandlerAsync("ScalerGetFirmware", GetFirmware, null).Wait();
             deviceClient.SetMethodHandlerAsync("ScalerGetAvailable", GetAvailable, null).Wait();
             deviceClient.SetMethodHandlerAsync("ScalerSetPixelPerfectAndCentered", SetPixelPerfectAndCentered, null).Wait();
+            deviceClient.SetMethodHandlerAsync("ScalerSetOutputRate", SetOutputRate, null).Wait();
         }
 
         private Task<MethodResponse> GetFirmware(MethodRequest methodRequest, object userContext)
@@ -61,6 +63,26 @@ namespace ControlRelay
         {
             _device.SetPixelPerfectAndCentered();
             return Task.FromResult(new MethodResponse((int)HttpStatusCode.OK));
+        }
+
+        private Task<MethodResponse> SetOutputRate(MethodRequest methodRequest, object userContext)
+        {
+            bool success = false;
+            var payloadDefintion = new
+            {
+                Id = 0,
+            };
+
+            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
+
+            var edid = Edid.GetEdid(payload.Id);
+            if(edid != null)
+            {
+                _device.OutputRate = edid;
+                success = true;
+            }
+
+            return Task.FromResult(GetMethodResponse(methodRequest, success));
         }
 
     }

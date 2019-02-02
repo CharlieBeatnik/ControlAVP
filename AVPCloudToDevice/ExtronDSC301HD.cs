@@ -1,4 +1,5 @@
-﻿using Microsoft.Azure.Devices;
+﻿using ControllableDeviceTypes.ExtronDSC301HDTypes;
+using Microsoft.Azure.Devices;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
@@ -48,6 +49,20 @@ namespace AVPCloudToDevice
             try
             {
                 var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "ScalerSetPixelPerfectAndCentered", null);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public bool SetOutputRate(Edid outputRate)
+        {
+            try
+            {
+                var payload = new { outputRate.Id };
+                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "ScalerSetOutputRate", payload);
                 return true;
             }
             catch

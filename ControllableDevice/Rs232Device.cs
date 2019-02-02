@@ -233,11 +233,8 @@ namespace ControllableDevice
             }
         }
 
-        public string WriteWithResponse(string write, string pattern)
+        public string Read(string pattern)
         {
-            Write(write);
-            Thread.Sleep(PostWriteWait);
-
             lock (_messageStore)
             {
                 if (!_messageStore.IsEmpty)
@@ -257,6 +254,14 @@ namespace ControllableDevice
             }
 
             return null;
+        }
+
+        public string WriteWithResponse(string write, string pattern)
+        {
+            Write(write);
+            Thread.Sleep(PostWriteWait);
+
+            return Read(pattern);
         }
 
         public List<string> WriteWithResponses(string write, int numResponses)

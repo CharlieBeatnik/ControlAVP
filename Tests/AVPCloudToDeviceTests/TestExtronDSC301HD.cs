@@ -1,4 +1,5 @@
 ﻿using AVPCloudToDevice;
+using ControllableDeviceTypes.ExtronDSC301HDTypes;
 using Microsoft.Azure.Devices;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -47,6 +48,12 @@ namespace Tests
         public void GivenDevice_WhenCallAvailable_ThenDeviceIsAvailable()
         {
             Assert.IsTrue(_device.GetAvailable());
+        }
+
+        [Test]
+        public void GivenDevice_WhenSetOutputRate_ThenResultIsTrue()
+        {
+            Assert.IsTrue(_device.SetOutputRate(Edid.GetEdid(1280, 720, 50.0f)));
         }
     }
 }

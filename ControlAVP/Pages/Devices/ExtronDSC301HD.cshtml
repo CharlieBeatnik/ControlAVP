@@ -23,8 +23,19 @@
                             <td><span class="label label-primary">@Model.DeviceInfoCache.Firmware</span></td>
                         </tr>
                         <tr>
-                            <td></td>
+                            <td>Scaling</td>
                             <td><button type="submit" asp-page-handler="PixelPerfectAndCentered" class="btn btn-success btn-xs">Pixel Perfect & Centered</button></td>
+                        </tr>
+                        <tr>
+                            <td>Refresh</td>
+                            <td>
+                                <div class="btn-group-vertical">
+                                    <button type="submit" asp-page-handler="OutputRate" asp-route-width="1920" asp-route-height="1080" asp-route-refreshRate="50" class="btn btn-success btn-xs">1080p 50Hz</button>
+                                    <button type="submit" asp-page-handler="OutputRate" asp-route-width="1920" asp-route-height="1080" asp-route-refreshRate="59.94" class="btn btn-success btn-xs">1080p 59.94Hz</button>
+                                    <button type="submit" asp-page-handler="OutputRate" asp-route-width="1920" asp-route-height="1080" asp-route-refreshRate="60" class="btn btn-success btn-xs">1080p 60Hz</button>
+                                </div>
+                                
+                            </td>
                         </tr>
                     </table>
                 </div>
