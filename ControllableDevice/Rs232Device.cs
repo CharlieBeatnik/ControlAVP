@@ -22,7 +22,7 @@ namespace ControllableDevice
         private CircularBuffer<string> _messageStore;
         static string _unterminatedMessage = string.Empty;
 
-        private readonly TimeSpan _defaultWriteTimeout = TimeSpan.FromMilliseconds(100);
+        private readonly TimeSpan _defaultWriteTimeout = TimeSpan.FromMilliseconds(50);
         private readonly TimeSpan _defaultReadTimeout = TimeSpan.FromMilliseconds(50);
         private readonly int _defaultMessageStoreCapacity = 30;
 
@@ -45,7 +45,7 @@ namespace ControllableDevice
             set { _serialPort.ReadTimeout = value; }
         }
 
-        public TimeSpan PostWriteWait { get; set; } = TimeSpan.FromMilliseconds(1200);
+        public TimeSpan PostWriteWait { get; set; } = TimeSpan.FromMilliseconds(750);
 
         public uint BaudRate
         {

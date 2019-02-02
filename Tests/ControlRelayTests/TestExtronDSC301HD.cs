@@ -52,13 +52,13 @@ namespace Tests
         [TestMethod]
         public void GivenDevice_WhenGetActivePixels_ThenResultIsValid()
         {
-            Assert.IsTrue(_device.ActivePixels != -1);
+            Assert.IsTrue(_device.ActivePixels != 0);
         }
 
         [TestMethod]
         public void GivenDevice_WhenGetActiveLines_ThenResultIsValid()
         {
-            Assert.IsTrue(_device.ActiveLines != -1);
+            Assert.IsTrue(_device.ActiveLines != 0);
         }
 
         [TestMethod]

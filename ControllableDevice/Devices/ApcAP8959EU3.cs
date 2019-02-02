@@ -20,7 +20,8 @@ namespace ControllableDevice
 
         public bool GetAvailable()
         {
-            return _sshDevice.Connected;
+            var outlets = GetOutlets();
+            return outlets.Count() == 24;
         }
 
         public IEnumerable<Outlet> GetOutletsWaitForPending()
