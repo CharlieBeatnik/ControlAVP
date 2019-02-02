@@ -160,11 +160,13 @@ namespace ControllableDevice
                 loadAsyncTask = _dataReader.LoadAsync(ReadBufferLength).AsTask(childCancellationTokenSource.Token);
 
                 // Launch the task and wait
-                UInt32 bytesRead = await loadAsyncTask;
-                if (bytesRead > 0)
+                UInt32 numBytesRead = await loadAsyncTask;
+                if (numBytesRead > 0)
                 {
-                    string readData = _dataReader.ReadString(bytesRead);
-                    AddToMessageStore(readData);
+                    var bytesRead = new byte[numBytesRead];
+                    _dataReader.ReadBytes(bytesRead);
+                    var readString = System.Text.Encoding.UTF8.GetString(bytesRead);
+                    AddToMessageStore(readString);
                 }
             }
         }
