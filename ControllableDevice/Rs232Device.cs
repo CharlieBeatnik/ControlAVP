@@ -233,25 +233,6 @@ namespace ControllableDevice
             }
         }
 
-        public string WriteWithResponse(string write)
-        {
-            Write(write);
-            Thread.Sleep(PostWriteWait);
-
-            lock (_messageStore)
-            {
-                if (!_messageStore.IsEmpty)
-                {
-                    string read = _messageStore.PeekLast();
-                    return read;
-                }
-                else
-                {
-                    return null;
-                }
-            }
-        }
-
         public string WriteWithResponse(string write, string pattern)
         {
             Write(write);
