@@ -9,6 +9,7 @@ namespace ControllableDevice
 {
     public class ApcAP8959EU3 : IControllableDevice
     {
+        private bool _disposed = false;
         private SshDevice _sshDevice;
         public static readonly string TerminalPrompt = "apc>";
 
@@ -16,6 +17,27 @@ namespace ControllableDevice
         {
             _sshDevice = new SshDevice();
             _sshDevice.Connect(host, port, username, password, ApcAP8959EU3.TerminalPrompt);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed)
+                return;
+
+            if (disposing)
+            {
+                _sshDevice?.Disconnect();
+                _sshDevice?.Dispose();
+                _sshDevice = null;
+            }
+
+            _disposed = true;
         }
 
         public bool GetAvailable()

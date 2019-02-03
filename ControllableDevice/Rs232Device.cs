@@ -12,25 +12,31 @@ using Windows.Storage.Streams;
 
 namespace ControllableDevice
 {
-    public class Rs232Device
+    public class Rs232Device : IDisposable
     {
-        private DataWriter _dataWriter;
-        private DataReader _dataReader;
+        private bool _disposed = false;
+
         private string _partialId;
         private SerialDevice _serialPort;
+
         private CancellationTokenSource _readCancellationTokenSource;
+        private DataWriter _dataWriter;
+        private DataReader _dataReader;
+
+        private Task _listenTask;
         private CircularBuffer<string> _messageStore;
-        static string _unterminatedMessage = string.Empty;
+        private string _unterminatedMessage = string.Empty;
+
 
         private readonly TimeSpan _defaultWriteTimeout = TimeSpan.FromMilliseconds(50);
         private readonly TimeSpan _defaultReadTimeout = TimeSpan.FromMilliseconds(50);
-        private readonly int _defaultMessageStoreCapacity = 30;
+        private readonly uint _defaultMessageStoreCapacity = 32;
 
         public delegate string ProcessString(string input);
         public ProcessString PreWrite { get; set; } = (x) => { return x; };
 
         public string Id { get; private set; }
-        public uint MaximumBytesPerRead { get; set; } = 1024;
+        public uint ReadBufferLength { get; set; } = 1024;
         public string MessageTerminator { get; set; } = "\r\n";
 
         public TimeSpan WriteTimeout
@@ -71,7 +77,13 @@ namespace ControllableDevice
             set { _serialPort.StopBits = value; }
         }
 
-        public Rs232Device(string partialId, int readStoreCapacity = 0)
+        public static async Task<DeviceInformationCollection> GetAvailableDevices()
+        {
+            string aqs = SerialDevice.GetDeviceSelector();
+            return await DeviceInformation.FindAllAsync(aqs);
+        }
+
+        public Rs232Device(string partialId, uint messageStoreCapacity = 0)
         {
             if (string.IsNullOrEmpty(partialId))
             {
@@ -79,11 +91,11 @@ namespace ControllableDevice
             }
             _partialId = partialId;
 
-            if (readStoreCapacity == 0)
+            if (messageStoreCapacity == 0)
             {
-                readStoreCapacity = _defaultMessageStoreCapacity;
+                messageStoreCapacity = _defaultMessageStoreCapacity;
             }
-            _messageStore = new CircularBuffer<string>(readStoreCapacity);
+            _messageStore = new CircularBuffer<string>((int)messageStoreCapacity);
 
             //Find device ID
             var devices = Task.Run(async () => await GetAvailableDevices()).Result;
@@ -91,7 +103,10 @@ namespace ControllableDevice
 
             //Create serial port
             _serialPort = Task.Run(async () => await SerialDevice.FromIdAsync(Id)).Result;
-            Debug.Assert(_serialPort != null);
+            if(_serialPort == null)
+            {
+                throw new Exception("Unable to create SerialDevice, is it already is use?");
+            }
 
             //Serial port defaults
             WriteTimeout = _defaultWriteTimeout;
@@ -101,53 +116,80 @@ namespace ControllableDevice
             Parity = SerialParity.None;
             StopBits = SerialStopBitCount.One;
 
-            //Create data writer
+            //Create data reader/writer
             _dataWriter = new DataWriter(_serialPort.OutputStream);
+            _dataReader = new DataReader(_serialPort.InputStream);
 
             //Start async listen task to deal with async reads
             _readCancellationTokenSource = new CancellationTokenSource();
-            Listen();
+            _listenTask = new Task(Listen);
+            _listenTask.Start();
         }
 
-        private async void Listen()
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed)
+                return;
+
+            if (disposing)
+            {
+                _readCancellationTokenSource?.Cancel();
+
+                _listenTask?.Wait();
+                _listenTask = null;
+
+                _readCancellationTokenSource?.Dispose();
+                _readCancellationTokenSource = null;
+
+                CloseDevice();
+            }
+
+            _disposed = true;
+        }
+
+        private void CloseDevice()
+        {
+            _dataReader?.DetachStream();
+            _dataReader = null;
+
+            _dataWriter?.DetachStream();
+            _dataReader = null;
+
+            _serialPort?.Dispose();
+            _serialPort = null;
+
+            _messageStore = null;
+        }
+
+        private void Listen()
         {
             try
             {
                 if (_serialPort != null)
                 {
-                    _dataReader = new DataReader(_serialPort.InputStream);
-
-                    // keep reading the serial input
                     while (true)
                     {
-                        await ReadAsync(_readCancellationTokenSource.Token);
+                        Read(_readCancellationTokenSource.Token);
                     }
                 }
             }
-            catch (TaskCanceledException)
+            catch (Exception ex)
             {
-                CloseDevice();
-            }
-            catch (Exception)
-            {
-            }
-            finally
-            {
-                // Cleanup once complete
-                if (_dataReader != null)
+                if (ex is TaskCanceledException || ex is OperationCanceledException)
                 {
-                    _dataReader.DetachStream();
-                    _dataReader = null;
+                    CloseDevice();
                 }
             }
         }
 
-        private async Task ReadAsync(CancellationToken cancellationToken)
+        private void Read(CancellationToken cancellationToken)
         {
-            Task<UInt32> loadAsyncTask;
-
-            uint ReadBufferLength = MaximumBytesPerRead;
-
             // If task cancellation was requested, comply
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -157,10 +199,10 @@ namespace ControllableDevice
             using (var childCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken))
             {
                 // Create a task object to wait for data on the serialPort.InputStream
-                loadAsyncTask = _dataReader.LoadAsync(ReadBufferLength).AsTask(childCancellationTokenSource.Token);
+                var loadAsyncTask = _dataReader.LoadAsync(ReadBufferLength).AsTask(childCancellationTokenSource.Token);
+                loadAsyncTask.Wait();
 
-                // Launch the task and wait
-                UInt32 numBytesRead = await loadAsyncTask;
+                var numBytesRead = loadAsyncTask.Result;
                 if (numBytesRead > 0)
                 {
                     var bytesRead = new byte[numBytesRead];
@@ -194,26 +236,6 @@ namespace ControllableDevice
                     }
                 }
             }
-        }
-
-        private void CloseDevice()
-        {
-            if (_serialPort != null)
-            {
-                _serialPort.Dispose();
-            }
-            _serialPort = null;
-
-            lock (_messageStore)
-            {
-                _messageStore.Clear();
-            }
-        }
-
-        public static async Task<DeviceInformationCollection> GetAvailableDevices()
-        {
-            string aqs = SerialDevice.GetDeviceSelector();
-            return await DeviceInformation.FindAllAsync(aqs);
         }
 
         public void Write(string write)

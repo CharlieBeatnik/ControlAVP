@@ -11,10 +11,12 @@ namespace Tests
     [TestClass]
     public class TestAtenVS0801H
     {
-        private static List<AtenVS0801H> _devices = new List<AtenVS0801H>();
-        private readonly string _settingsFile = "settings.json";
+        private static AtenVS0801H _device;
+        private static readonly string _settingsFile = "settings.json";
+        private static JToken _deviceSettings;
 
-        public TestAtenVS0801H()
+        [ClassInitialize]
+        public static void ClassInitialize(TestContext tc)
         {
             JObject jsonParsed;
             using (StreamReader r = new StreamReader(_settingsFile))
@@ -23,68 +25,67 @@ namespace Tests
                 jsonParsed = JObject.Parse(json);
             }
 
-            if (_devices.Count == 0)
-            {
-                foreach (var deviceSettings in jsonParsed["AtenVS0801H"])
-                {
-                    var device = new AtenVS0801H(deviceSettings["PortId"].ToString());
-                    _devices.Add(device);
-                }
-            }
+            _deviceSettings = jsonParsed["AtenVS0801H"][0];
+        }
+
+        [ClassCleanup]
+        public static void ClassCleanup()
+        {
+        }
+
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            _device = new AtenVS0801H(_deviceSettings["PortId"].ToString());
+        }
+
+        [TestCleanup]
+        public void TestCleanup()
+        {
+            _device.Dispose();
+            _device = null;
         }
 
         [TestMethod]
         public void GivenInputPortIsPort1_WhenGoToNextInput_ThenInputPortIsPort2()
         {
-            foreach (var device in _devices)
-            {
-                Assert.IsTrue(device.SetInput(InputPort.Port1));
-                Assert.IsTrue(device.GoToNextInput());
+            Assert.IsTrue(_device.SetInput(InputPort.Port1));
+            Assert.IsTrue(_device.GoToNextInput());
 
-                var state = device.GetState();
-                Assert.IsTrue(state != null);
-                Assert.IsTrue(state.InputPort == InputPort.Port2);
-            }
+            var state = _device.GetState();
+            Assert.IsTrue(state != null);
+            Assert.IsTrue(state.InputPort == InputPort.Port2);
         }
 
         [TestMethod]
         public void GivenInputPortIsPort2_WhenGoToPreviousInput_ThenInputPortIsPort1()
         {
-            foreach (var device in _devices)
-            {
-                Assert.IsTrue(device.SetInput(InputPort.Port2));
-                Assert.IsTrue(device.GoToPreviousInput());
+            Assert.IsTrue(_device.SetInput(InputPort.Port2));
+            Assert.IsTrue(_device.GoToPreviousInput());
 
-                var state = device.GetState();
-                Assert.IsTrue(state != null);
-                Assert.IsTrue(state.InputPort == InputPort.Port1);
-            }
+            var state = _device.GetState();
+            Assert.IsTrue(state != null);
+            Assert.IsTrue(state.InputPort == InputPort.Port1);
         }
 
         [TestMethod]
         public void GivenInputPortIsPort1_WhenSetInputPort2_ThenInputPortIsPort2()
         {
-            foreach (var device in _devices)
-            {
-                Assert.IsTrue(device.SetInput(InputPort.Port1));
-                var state = device.GetState();
-                Assert.IsTrue(state != null);
-                Assert.IsTrue(state.InputPort == InputPort.Port1);
+            Assert.IsTrue(_device.SetInput(InputPort.Port1));
+            var state = _device.GetState();
+            Assert.IsTrue(state != null);
+            Assert.IsTrue(state.InputPort == InputPort.Port1);
 
-                Assert.IsTrue(device.SetInput(InputPort.Port2));
-                state = device.GetState();
-                Assert.IsTrue(state != null);
-                Assert.IsTrue(state.InputPort == InputPort.Port2);
-            }
+            Assert.IsTrue(_device.SetInput(InputPort.Port2));
+            state = _device.GetState();
+            Assert.IsTrue(state != null);
+            Assert.IsTrue(state.InputPort == InputPort.Port2);
         }
 
         [TestMethod]
         public void GivenDevice_WhenCallAvailable_ThenDeviceIsAvailable()
         {
-            foreach (var device in _devices)
-            {
-                Assert.IsTrue(device.GetAvailable());
-            }
+            Assert.IsTrue(_device.GetAvailable());
         }
     }
 }

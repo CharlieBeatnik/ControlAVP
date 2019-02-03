@@ -10,9 +10,11 @@ namespace Tests
     public class TestExtronMVX44VGA
     {
         private static ExtronMVX44VGA _device = null;
-        private readonly string _settingsFile = "settings.json";
+        private static readonly string _settingsFile = "settings.json";
+        private static JToken _deviceSettings;
 
-        public TestExtronMVX44VGA()
+        [ClassInitialize]
+        public static void ClassInitialize(TestContext tc)
         {
             JObject jsonParsed;
             using (StreamReader r = new StreamReader(_settingsFile))
@@ -21,10 +23,25 @@ namespace Tests
                 jsonParsed = JObject.Parse(json);
             }
 
-            if (_device == null)
-            {
-                _device = new ExtronMVX44VGA(jsonParsed["ExtronMVX44VGA"]["PortId"].ToString());
-            }
+            _deviceSettings = jsonParsed["ExtronMVX44VGA"];
+        }
+
+        [ClassCleanup]
+        public static void ClassCleanup()
+        {
+        }
+
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            _device = new ExtronMVX44VGA(_deviceSettings["PortId"].ToString());
+        }
+
+        [TestCleanup]
+        public void TestCleanup()
+        {
+            _device.Dispose();
+            _device = null;
         }
 
         [TestMethod]

@@ -8,6 +8,7 @@ namespace ControllableDevice
 {
     public class ExtronDSC301HD : IControllableDevice
     {
+        private bool _disposed = false;
         private Rs232Device _rs232Device;
 
         private readonly string _cmdEsc = ('\x1B').ToString();
@@ -31,6 +32,25 @@ namespace ControllableDevice
             Debug.Assert(_rs232Device != null);
 
             _rs232Device.BaudRate = 9600;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed)
+                return;
+
+            if (disposing)
+            {
+                _rs232Device.Dispose();
+            }
+
+            _disposed = true;
         }
 
         public bool GetAvailable()

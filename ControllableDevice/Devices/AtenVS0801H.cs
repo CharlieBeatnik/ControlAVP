@@ -9,6 +9,7 @@ namespace ControllableDevice
 {
     public class AtenVS0801H : IControllableDevice
     {
+        private bool _disposed = false;
         private Rs232Device _rs232Device;
         private readonly string _respSuccess = "Command OK";
 
@@ -22,6 +23,25 @@ namespace ControllableDevice
             {
                 return x + "\r";
             };
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed)
+                return;
+
+            if (disposing)
+            {
+                _rs232Device.Dispose();
+            }
+
+            _disposed = true;
         }
 
         public bool GetAvailable()

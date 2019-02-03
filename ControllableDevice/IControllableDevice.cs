@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ControllableDevice
 {
-    interface IControllableDevice
+    interface IControllableDevice : IDisposable
     {
         bool GetAvailable();
     }

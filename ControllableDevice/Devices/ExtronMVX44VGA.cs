@@ -7,6 +7,7 @@ namespace ControllableDevice
 {
     public class ExtronMVX44VGA : IControllableDevice
     {
+        private bool _disposed = false;
         private Rs232Device _rs232Device;
 
         public ExtronMVX44VGA(string portId)
@@ -15,6 +16,25 @@ namespace ControllableDevice
             Debug.Assert(_rs232Device != null);
 
             _rs232Device.BaudRate = 9600;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed)
+                return;
+
+            if (disposing)
+            {
+                _rs232Device.Dispose();
+            }
+
+            _disposed = true;
         }
 
         public bool GetAvailable()

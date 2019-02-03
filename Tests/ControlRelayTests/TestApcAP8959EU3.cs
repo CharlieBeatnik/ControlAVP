@@ -11,14 +11,15 @@ namespace Tests
     [TestClass]
     public class TestApcAP8959EU3
     {
-        private readonly string _settingsFile = "settings.json";
+        private static readonly string _settingsFile = "settings.json";
 
-        private string _host;
-        private int _port;
-        private string _username;
-        private string _password;
+        private static string _host;
+        private static int _port;
+        private static string _username;
+        private static string _password;
 
-        public TestApcAP8959EU3()
+        [ClassInitialize]
+        public static void ClassInitialize(TestContext tc)
         {
             JObject jsonParsed;
 
@@ -32,6 +33,12 @@ namespace Tests
             _port = int.Parse(jsonParsed["ApcAP8959EU3"]["Port"].ToString());
             _username = jsonParsed["ApcAP8959EU3"]["Username"].ToString();
             _password = jsonParsed["ApcAP8959EU3"]["Password"].ToString();
+        }
+
+        [ClassCleanup]
+        public static void ClassCleanup()
+        {
+            //ANDREWDENN_TODO: What to cleanup?
         }
 
         private ApcAP8959EU3 GetDevice()

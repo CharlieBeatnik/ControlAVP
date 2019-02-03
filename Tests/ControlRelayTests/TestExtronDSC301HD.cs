@@ -12,9 +12,11 @@ namespace Tests
     public class TestExtronDSC301HD
     {
         private static ExtronDSC301HD _device = null;
-        private readonly string _settingsFile = "settings.json";
+        private static readonly string _settingsFile = "settings.json";
+        private static JToken _deviceSettings;
 
-        public TestExtronDSC301HD()
+        [ClassInitialize]
+        public static void ClassInitialize(TestContext tc)
         {
             JObject jsonParsed;
             using (StreamReader r = new StreamReader(_settingsFile))
@@ -23,10 +25,25 @@ namespace Tests
                 jsonParsed = JObject.Parse(json);
             }
 
-            if (_device == null)
-            {
-                _device = new ExtronDSC301HD(jsonParsed["ExtronDSC301HD"]["PortId"].ToString());
-            }
+            _deviceSettings = jsonParsed["ExtronDSC301HD"];
+        }
+
+        [ClassCleanup]
+        public static void ClassCleanup()
+        {
+        }
+
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            _device = new ExtronDSC301HD(_deviceSettings["PortId"].ToString());
+        }
+
+        [TestCleanup]
+        public void TestCleanup()
+        {
+            _device.Dispose();
+            _device = null;
         }
 
         [TestMethod]
@@ -49,17 +66,18 @@ namespace Tests
             Assert.IsTrue(_device.GetAvailable());
         }
 
-        [TestMethod]
-        public void GivenDevice_WhenGetActivePixels_ThenResultIsValid()
-        {
-            Assert.IsTrue(_device.ActivePixels != 0);
-        }
+        //ANDREWDENN_TODO: Disabled these because they can fail depending on if the scaler has a video input
+        //[TestMethod]
+        //public void GivenDevice_WhenGetActivePixels_ThenResultIsValid()
+        //{
+        //    Assert.IsTrue(_device.ActivePixels != 0);
+        //}
 
-        [TestMethod]
-        public void GivenDevice_WhenGetActiveLines_ThenResultIsValid()
-        {
-            Assert.IsTrue(_device.ActiveLines != 0);
-        }
+        //[TestMethod]
+        //public void GivenDevice_WhenGetActiveLines_ThenResultIsValid()
+        //{
+        //    Assert.IsTrue(_device.ActiveLines != 0);
+        //}
 
         [TestMethod]
         public void GivenDevice_WhenSetHorizontalPosition_ThenHorizontalPositionIsTheSame()
