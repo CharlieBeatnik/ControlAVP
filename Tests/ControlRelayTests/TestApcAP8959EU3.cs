@@ -11,12 +11,13 @@ namespace Tests
     [TestClass]
     public class TestApcAP8959EU3
     {
+        private static ApcAP8959EU3 _device = null;
         private static readonly string _settingsFile = "settings.json";
 
         private static string _host;
         private static int _port;
         private static string _username;
-        private static string _password;
+        private static string _password; 
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext tc)
@@ -38,19 +39,25 @@ namespace Tests
         [ClassCleanup]
         public static void ClassCleanup()
         {
-            //ANDREWDENN_TODO: What to cleanup?
         }
 
-        private ApcAP8959EU3 GetDevice()
+        [TestInitialize]
+        public void TestInitialize()
         {
-            return new ApcAP8959EU3(_host, _port, _username, _password);
+            _device = new ApcAP8959EU3(_host, _port, _username, _password);
+        }
+
+        [TestCleanup]
+        public void TestCleanup()
+        {
+            _device.Dispose();
+            _device = null;
         }
 
         [TestMethod]
         public void GivenDevice_WhenGetOutlets_ThenOutletCountIs24()
         {
-            var device = GetDevice();
-            var outlets = device.GetOutlets();
+            var outlets = _device.GetOutlets();
             Assert.IsTrue(outlets.Count() == 24);
         }
 
@@ -89,8 +96,7 @@ namespace Tests
         [TestMethod]
         public void GivenDevice_WhenCallAvailable_ThenDeviceIsAvailable()
         {
-            var device = GetDevice();
-            Assert.IsTrue(device.GetAvailable());
+            Assert.IsTrue(_device.GetAvailable());
         }
     }
 }
