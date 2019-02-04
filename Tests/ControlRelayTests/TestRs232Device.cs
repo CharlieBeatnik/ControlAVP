@@ -130,5 +130,15 @@ namespace Tests
                 }
             }
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void GivenDevice_WhenRequestTooManyResponses_ThenExceptionIsThrown()
+        {
+            using (var device = GetDevice())
+            {
+                var result = device.WriteWithResponses("read", 7);
+            }
+        }
     }
 }

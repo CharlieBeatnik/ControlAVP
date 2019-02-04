@@ -87,7 +87,7 @@ namespace ControllableDevice
         {
             if (string.IsNullOrEmpty(partialId))
             {
-                throw new ArgumentException("Must not be Null or Empty", "partialId");
+                throw new ArgumentException("Must not be Null or Empty.", "partialId");
             }
             _partialId = partialId;
 
@@ -298,6 +298,11 @@ namespace ControllableDevice
                 if (!_messageStore.IsEmpty)
                 {
                     var messageStore = _messageStore.ToList();
+
+                    if(messageStore.Count < numResponses)
+                    {
+                        throw new ArgumentException($"Unable to return {numResponses} responses, only {messageStore.Count} available.", "numResponses");
+                    }
                     int take = Math.Min(numResponses, messageStore.Count);
                     return messageStore.TakeLast(take).ToList();
                 }
