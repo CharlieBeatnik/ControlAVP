@@ -51,7 +51,7 @@ namespace ControllableDevice
             set { _serialPort.ReadTimeout = value; }
         }
 
-        public TimeSpan PostWriteWait { get; set; } = TimeSpan.FromMilliseconds(750);
+        public TimeSpan PostWriteWait { get; set; } = TimeSpan.FromMilliseconds(500);
 
         public uint BaudRate
         {
