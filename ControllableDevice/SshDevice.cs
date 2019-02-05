@@ -9,6 +9,8 @@ namespace ControllableDevice
 {
     public class SshDevice : IDisposable
     {
+        private bool _disposed = false;
+
         private PasswordAuthenticationMethod _authMethod;
         private ConnectionInfo _connectionInfo;
         private SshClient _sshClient;
@@ -23,9 +25,15 @@ namespace ControllableDevice
         private string _password;
         private string _terminalPrompt = String.Empty;
 
-        public SshDevice()
+        public SshDevice(string host, int port, string username, string password, string terminalPrompt)
         {
+            _host = host;
+            _port = port;
+            _username = username;
+            _password = password;
+            _terminalPrompt = terminalPrompt;
 
+            Connect();
         }
 
         public bool Connected
@@ -40,16 +48,15 @@ namespace ControllableDevice
             }
         }
 
-        public bool Connect(string host, int port, string username, string password, string terminalPrompt)
+        private void Connect()
+        {
+            Connect(_host, _port, _username, _password, _terminalPrompt);
+        }
+
+        private void Connect(string host, int port, string username, string password, string terminalPrompt)
         {
             lock (_lock)
             {
-                _host = host;
-                _port = port;
-                _username = username;
-                _password = password;
-                _terminalPrompt = terminalPrompt;
-
                 if (Connected)
                 {
                     Disconnect();
@@ -91,18 +98,12 @@ namespace ControllableDevice
 
                     _connectionValid = false;
 
-                    return false;
+                    throw;
                 }
-                return true;
             }
         }
 
-        private bool Connect()
-        {
-            return Connect(_host, _port, _username, _password, _terminalPrompt);
-        }
-
-        public void Disconnect()
+        private void Disconnect()
         {
             lock (_lock)
             {
@@ -117,6 +118,28 @@ namespace ControllableDevice
 
                 _connectionValid = false;
             }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed)
+                return;
+
+            if (disposing)
+            {
+                lock (_lock)
+                {
+                    Disconnect();
+                }
+            }
+
+            _disposed = true;
         }
 
         public IEnumerable<string> ExecuteCommand(string command)
@@ -147,14 +170,6 @@ namespace ControllableDevice
 
                     return result;
                 }
-            }
-        }
-
-        public void Dispose()
-        {
-            lock (_lock)
-            {
-                Disconnect();
             }
         }
     }

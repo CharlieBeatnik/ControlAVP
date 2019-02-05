@@ -27,11 +27,6 @@ namespace Tests
             _deviceSettings = jsonParsed["ExtronDSC301HD"];
         }
 
-        [ClassCleanup]
-        public static void ClassCleanup()
-        {
-        }
-
         public ExtronDSC301HD CreateDevice()
         {
             return ExtronDSC301HD.Create(_deviceSettings["PortId"].ToString());

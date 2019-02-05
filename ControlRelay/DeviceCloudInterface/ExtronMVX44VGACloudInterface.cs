@@ -22,7 +22,7 @@ namespace ControlRelay
         public ExtronMVX44VGACloudInterface(Settings settings)
         {
             _settings = settings;
-            _device = new ExtronMVX44VGA(_settings.PortId);
+            _device = ExtronMVX44VGA.Create(_settings.PortId);
         }
 
         public override void SetMethodHandlers(DeviceClient deviceClient)

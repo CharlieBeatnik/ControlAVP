@@ -13,7 +13,8 @@ namespace ControllableDevice
         private Rs232Device _rs232Device;
         private readonly string _respSuccess = "Command OK";
 
-        public AtenVS0801H(string portId)
+        private AtenVS0801H() { Debug.Assert(true, "Default constructor should never be called"); }
+        private AtenVS0801H(string portId)
         {
             _rs232Device = new Rs232Device(portId);
             Debug.Assert(_rs232Device != null);
@@ -23,6 +24,18 @@ namespace ControllableDevice
             {
                 return x + "\r";
             };
+        }
+
+        public static AtenVS0801H Create(string portId)
+        {
+            try
+            {
+                return new AtenVS0801H(portId);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public void Dispose()

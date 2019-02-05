@@ -26,7 +26,7 @@ namespace ControlRelay
         public ApcAP8959EU3CloudInterface(Settings settings)
         {
             _settings = settings;
-            _device = new ApcAP8959EU3(_settings.Host, _settings.Port, _settings.Username, _settings.Password);
+            _device = ApcAP8959EU3.Create(_settings.Host, _settings.Port, _settings.Username, _settings.Password);
         }
 
         public override void SetMethodHandlers(DeviceClient deviceClient)

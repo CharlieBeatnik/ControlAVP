@@ -13,10 +13,22 @@ namespace ControllableDevice
         private SshDevice _sshDevice;
         public static readonly string TerminalPrompt = "apc>";
 
-        public ApcAP8959EU3(string host, int port, string username, string password)
+        private ApcAP8959EU3() { Debug.Assert(true, "Default constructor should never be called"); }
+        private ApcAP8959EU3(string host, int port, string username, string password)
         {
-            _sshDevice = new SshDevice();
-            _sshDevice.Connect(host, port, username, password, ApcAP8959EU3.TerminalPrompt);
+            _sshDevice = new SshDevice(host, port, username, password, ApcAP8959EU3.TerminalPrompt);
+        }
+
+        public static ApcAP8959EU3 Create(string host, int port, string username, string password)
+        {
+            try
+            {
+                return new ApcAP8959EU3(host, port, username, password);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public void Dispose()
@@ -32,7 +44,6 @@ namespace ControllableDevice
 
             if (disposing)
             {
-                _sshDevice?.Disconnect();
                 _sshDevice?.Dispose();
                 _sshDevice = null;
             }

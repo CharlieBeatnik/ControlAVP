@@ -9,7 +9,6 @@ namespace Tests
     [TestClass]
     public class TestExtronMVX44VGA
     {
-        private static ExtronMVX44VGA _device = null;
         private static readonly string _settingsFile = "settings.json";
         private static JToken _deviceSettings;
 
@@ -26,42 +25,59 @@ namespace Tests
             _deviceSettings = jsonParsed["ExtronMVX44VGA"];
         }
 
-        [ClassCleanup]
-        public static void ClassCleanup()
+        public ExtronMVX44VGA CreateDevice()
         {
-        }
-
-        [TestInitialize]
-        public void TestInitialize()
-        {
-            _device = new ExtronMVX44VGA(_deviceSettings["PortId"].ToString());
-        }
-
-        [TestCleanup]
-        public void TestCleanup()
-        {
-            _device.Dispose();
-            _device = null;
+            return ExtronMVX44VGA.Create(_deviceSettings["PortId"].ToString());
         }
 
         [TestMethod]
         public void GivenDevice_WhenGetFirmware_ThenFirmwareIsNotNull()
         {
-            var firmware = _device.GetFirmware();
-            Assert.IsNotNull(firmware);
+            using (var device = CreateDevice())
+            {
+                var firmware = device.GetFirmware();
+                Assert.IsNotNull(firmware);
+            }
         }
 
         [TestMethod]
         public void GivenDevice_WhenGetFirmware_ThenFirmwareIsGTE1_4()
         {
-            var firmware = _device.GetFirmware();
-            Assert.IsTrue(firmware >= new Version(1, 4));
+            using (var device = CreateDevice())
+            {
+                var firmware = device.GetFirmware();
+                Assert.IsTrue(firmware >= new Version(1, 4));
+            }
         }
 
         [TestMethod]
         public void GivenDevice_WhenCallAvailable_ThenDeviceIsAvailable()
         {
-            Assert.IsTrue(_device.GetAvailable());
+            using (var device = CreateDevice())
+            {
+                Assert.IsTrue(device.GetAvailable());
+            }
+        }
+
+        [TestMethod]
+        public void GivenEmptyPartialId_WhenNewDevice_ThenDeviceIsNull()
+        {
+            var device = ExtronMVX44VGA.Create(string.Empty);
+            Assert.IsNull(device);
+        }
+
+        [TestMethod]
+        public void GivenNullPartialId_WhenNewDevice_ThenDeviceIsNull()
+        {
+            var device = ExtronMVX44VGA.Create(null);
+            Assert.IsNull(device);
+        }
+
+        [TestMethod]
+        public void GivenInvalidPartialId_WhenNewDevice_ThenDeviceIsNull()
+        {
+            var device = ExtronMVX44VGA.Create("invalid");
+            Assert.IsNull(device);
         }
     }
 }
