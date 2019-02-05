@@ -22,7 +22,7 @@ namespace Tests
             }
         }
 
-        private Rs232Device GetDevice()
+        private Rs232Device CreateDevice()
         {
             var device = new Rs232Device(_settings["AtenVS0801H"][0]["PortId"].ToString());
             device.BaudRate = 19200;
@@ -36,21 +36,21 @@ namespace Tests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void GivenEmptyPartialId_WhenNewRs232Device_ThenExceptionThrown()
+        public void GivenEmptyPartialId_WhenNewDevice_ThenExceptionThrown()
         {
             var rs232Device = new Rs232Device(string.Empty);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void GivenNullPartialId_WhenNewRs232Device_ThenExceptionThrown()
+        public void GivenNullPartialId_WhenNewDevice_ThenExceptionThrown()
         {
             var rs232Device = new Rs232Device(null);
         }
 
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
-        public void GivenInvalidPartialId_WhenNewRs232Device_ThenExceptionThrown()
+        public void GivenInvalidPartialId_WhenNewDevice_ThenExceptionThrown()
         {
             var rs232Device = new Rs232Device("invalid");
         }
@@ -61,7 +61,7 @@ namespace Tests
         {
             for(int i = 0; i < 2; ++i)
             {
-                using (var device = GetDevice())
+                using (var device = CreateDevice())
                 {
                 }
             }
@@ -70,7 +70,7 @@ namespace Tests
         [TestMethod]
         public void GivenDevice_WhenWrite_ThenNoExceptionThrown()
         {
-            using (var device = GetDevice())
+            using (var device = CreateDevice())
             {
                 device.Write("invalid");
             }
@@ -79,7 +79,7 @@ namespace Tests
         [TestMethod]
         public void GivenDevice_WhenWriteWithResponse_ThenResponseIsNotNullOrEmpty()
         {
-            using (var device = GetDevice())
+            using (var device = CreateDevice())
             {
                 var result = device.WriteWithResponse("invalid", ".*");
                 Assert.IsFalse(string.IsNullOrEmpty(result));
@@ -89,7 +89,7 @@ namespace Tests
         [TestMethod]
         public void GivenDevice_WhenWriteWithResponse_ThenResponseIsExactlyAsExpected()
         {
-            using (var device = GetDevice())
+            using (var device = CreateDevice())
             {
                 var result = device.WriteWithResponse("read", @"^F/W: V[0-9]+.[0-9]+.[0-9]+$");
                 Assert.AreEqual(result, "F/W: V2.0.197");
@@ -99,7 +99,7 @@ namespace Tests
         [TestMethod]
         public void GivenDevice_WhenWriteThenRead_ThenReadIsExactlyAsExpected()
         {
-            using (var device = GetDevice())
+            using (var device = CreateDevice())
             {
                 device.Write("read");
                 Thread.Sleep(device.PostWriteWait);
@@ -111,7 +111,7 @@ namespace Tests
         [TestMethod]
         public void GivenDevice_WhenWriteWithResponses_ThenResponsesAreAsExpected()
         {
-            using (var device = GetDevice())
+            using (var device = CreateDevice())
             {
                 var result = device.WriteWithResponses("read", 6);
                 Assert.AreEqual(result.Count, 6);
@@ -123,9 +123,9 @@ namespace Tests
         [ExpectedException(typeof(Exception))]
         public void GivenDevice_WhenCreateAnotherDeviceWithSameID_ThenExceptionThrown()
         {
-            using (var device1 = GetDevice())
+            using (var device1 = CreateDevice())
             {
-                using (var device2 = GetDevice())
+                using (var device2 = CreateDevice())
                 {
                 }
             }
@@ -135,7 +135,7 @@ namespace Tests
         [ExpectedException(typeof(ArgumentException))]
         public void GivenDevice_WhenRequestTooManyResponses_ThenExceptionIsThrown()
         {
-            using (var device = GetDevice())
+            using (var device = CreateDevice())
             {
                 var result = device.WriteWithResponses("read", 7);
             }

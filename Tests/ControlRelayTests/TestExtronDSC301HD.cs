@@ -11,7 +11,6 @@ namespace Tests
     [TestClass]
     public class TestExtronDSC301HD
     {
-        private static ExtronDSC301HD _device = null;
         private static readonly string _settingsFile = "settings.json";
         private static JToken _deviceSettings;
 
@@ -33,102 +32,158 @@ namespace Tests
         {
         }
 
-        [TestInitialize]
-        public void TestInitialize()
+        public ExtronDSC301HD CreateDevice()
         {
-            _device = new ExtronDSC301HD(_deviceSettings["PortId"].ToString());
-        }
-
-        [TestCleanup]
-        public void TestCleanup()
-        {
-            _device.Dispose();
-            _device = null;
+            return ExtronDSC301HD.Create(_deviceSettings["PortId"].ToString());
         }
 
         [TestMethod]
         public void GivenDevice_WhenGetFirmware_ThenFirmwareIsNotNull()
         {
-            var firmware = _device.GetFirmware();
-            Assert.IsNotNull(firmware);
+            using (var device = CreateDevice())
+            {
+                var firmware = device.GetFirmware();
+                Assert.IsNotNull(firmware);
+            }
         }
 
         [TestMethod]
         public void GivenDevice_WhenGetFirmware_ThenFirmwareIsGTE1_25_1()
         {
-            var firmware = _device.GetFirmware();
-            Assert.IsTrue(firmware >= new Version(1, 25, 1));
+            using (var device = CreateDevice())
+            {
+                var firmware = device.GetFirmware();
+                Assert.IsTrue(firmware >= new Version(1, 25, 1));
+            }
         }
 
         [TestMethod]
         public void GivenDevice_WhenCallAvailable_ThenDeviceIsAvailable()
         {
-            Assert.IsTrue(_device.GetAvailable());
+            using (var device = CreateDevice())
+            {
+                Assert.IsTrue(device.GetAvailable());
+            }
         }
 
         //ANDREWDENN_TODO: Disabled these because they can fail depending on if the scaler has a video input
         //[TestMethod]
         //public void GivenDevice_WhenGetActivePixels_ThenResultIsValid()
         //{
-        //    Assert.IsTrue(_device.ActivePixels != 0);
+        //    using (var device = CreateDevice())
+        //    {
+        //        Assert.IsTrue(device.ActivePixels != 0);
+        //    }
         //}
 
         //[TestMethod]
         //public void GivenDevice_WhenGetActiveLines_ThenResultIsValid()
         //{
-        //    Assert.IsTrue(_device.ActiveLines != 0);
+        //    using (var device = CreateDevice())
+        //    {
+        //        Assert.IsTrue(device.ActiveLines != 0);
+        //    }
         //}
 
         [TestMethod]
         public void GivenDevice_WhenSetHorizontalPosition_ThenHorizontalPositionIsTheSame()
         {
-            _device.HorizontalPosition = 10;
-            Assert.IsTrue(_device.HorizontalPosition == 10);
+            using (var device = CreateDevice())
+            {
+                device.HorizontalPosition = 10;
+                Assert.IsTrue(device.HorizontalPosition == 10);
 
-            _device.HorizontalPosition = 0;
-            Assert.IsTrue(_device.HorizontalPosition == 0);
+                device.HorizontalPosition = 0;
+                Assert.IsTrue(device.HorizontalPosition == 0);
 
-            _device.HorizontalPosition = -10;
-            Assert.IsTrue(_device.HorizontalPosition == -10);
+                device.HorizontalPosition = -10;
+                Assert.IsTrue(device.HorizontalPosition == -10);
+            }
         }
 
         [TestMethod]
         public void GivenDevice_WhenSetVertialPosition_ThenVerticalPositionIsTheSame()
         {
-            _device.VerticalPosition = 10;
-            Assert.IsTrue(_device.VerticalPosition == 10);
+            using (var device = CreateDevice())
+            {
+                device.VerticalPosition = 10;
+                Assert.IsTrue(device.VerticalPosition == 10);
 
-            _device.VerticalPosition = 0;
-            Assert.IsTrue(_device.VerticalPosition == 0);
+                device.VerticalPosition = 0;
+                Assert.IsTrue(device.VerticalPosition == 0);
 
-            _device.VerticalPosition = -10;
-            Assert.IsTrue(_device.VerticalPosition == -10);
+                device.VerticalPosition = -10;
+                Assert.IsTrue(device.VerticalPosition == -10);
+            }
         }
 
         [TestMethod]
         public void GivenDevice_WhenSetHorizontalSize_ThenHorizontalSizeIsTheSame()
         {
-            _device.HorizontalSize = 10;
-            Assert.IsTrue(_device.HorizontalSize == 10);
+            using (var device = CreateDevice())
+            {
+                device.HorizontalSize = 10;
+                Assert.IsTrue(device.HorizontalSize == 10);
+            }
         }
 
         [TestMethod]
         public void GivenDevice_WhenSetVerticalSize_ThenVerticalSizeIsTheSame()
         {
-            _device.VerticalSize = 10;
-            Assert.IsTrue(_device.VerticalSize == 10);
+            using (var device = CreateDevice())
+            {
+                device.VerticalSize = 10;
+                Assert.IsTrue(device.VerticalSize == 10);
+            }
         }
 
         [TestMethod]
         public void GivenDevice_WhenSetOutputRate_ThenOutputRateIsTheSame()
         {
-            var edid = Edid.GetEdid(1280, 720, 60.0f);
-            Assert.IsNotNull(edid);
+            using (var device = CreateDevice())
+            {
+                var edid = Edid.GetEdid(1280, 720, 60.0f);
+                Assert.IsNotNull(edid);
 
-            _device.OutputRate = edid;
+                device.OutputRate = edid;
 
-            var outputRate = _device.OutputRate;
-            Assert.IsTrue(outputRate == edid);
+                var outputRate = device.OutputRate;
+                Assert.IsTrue(outputRate == edid);
+            }
+        }
+
+        [TestMethod]
+        public void GivenDevice_WhenCreateAnotherDeviceWithSameID_ThenDeviceIsNull()
+        {
+            using (var device1 = CreateDevice())
+            {
+                Assert.IsNotNull(device1);
+                using (var device2 = CreateDevice())
+                {
+                    Assert.IsNull(device2);
+                }
+            }
+        }
+
+        [TestMethod]
+        public void GivenEmptyPartialId_WhenNewDevice_ThenDeviceIsNull()
+        {
+            var device = ExtronDSC301HD.Create(string.Empty);
+            Assert.IsNull(device);
+        }
+
+        [TestMethod]
+        public void GivenNullPartialId_WhenNewDevice_ThenDeviceIsNull()
+        {
+            var device = ExtronDSC301HD.Create(null);
+            Assert.IsNull(device);
+        }
+
+        [TestMethod]
+        public void GivenInvalidPartialId_WhenNewDevice_ThenDeviceIsNull()
+        {
+            var device = ExtronDSC301HD.Create("invalid");
+            Assert.IsNull(device);
         }
     }
 }

@@ -26,12 +26,23 @@ namespace ControllableDevice
         private readonly int _vSizeMin = 10;
         private readonly int _vSizeMax = 2400;
 
-        public ExtronDSC301HD(string portId)
+        private ExtronDSC301HD() { Debug.Assert(true, "Default constructor should never be called"); }
+        private ExtronDSC301HD(string portId)
         {
             _rs232Device = new Rs232Device(portId);
-            Debug.Assert(_rs232Device != null);
-
             _rs232Device.BaudRate = 9600;
+        }
+
+        public static ExtronDSC301HD Create(string portId)
+        {
+            try
+            {
+                return new ExtronDSC301HD(portId);
+            }
+            catch(Exception)
+            {
+                return null;
+            }
         }
 
         public void Dispose()
