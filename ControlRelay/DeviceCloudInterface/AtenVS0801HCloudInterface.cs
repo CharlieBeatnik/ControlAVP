@@ -25,7 +25,7 @@ namespace ControlRelay
             _settings = settings;
             foreach (var setting in settings)
             {
-                _devices.Add(AtenVS0801H.Create(setting.PortId));
+                _devices.Add(new AtenVS0801H(setting.PortId));
             }
         }
 

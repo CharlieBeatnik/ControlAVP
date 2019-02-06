@@ -29,7 +29,7 @@ namespace Tests
 
         public ExtronDSC301HD CreateDevice()
         {
-            return ExtronDSC301HD.Create(_deviceSettings["PortId"].ToString());
+            return new ExtronDSC301HD(_deviceSettings["PortId"].ToString());
         }
 
         [TestMethod]
@@ -148,37 +148,36 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GivenDevice_WhenCreateAnotherDeviceWithSameID_ThenDeviceIsNull()
+        [ExpectedException(typeof(Exception))]
+        public void GivenDevice_WhenCreateAnotherDeviceWithSameID_ThenExceptionThrown()
         {
             using (var device1 = CreateDevice())
             {
-                Assert.IsNotNull(device1);
                 using (var device2 = CreateDevice())
                 {
-                    Assert.IsNull(device2);
                 }
             }
         }
 
         [TestMethod]
-        public void GivenEmptyPartialId_WhenNewDevice_ThenDeviceIsNull()
+        [ExpectedException(typeof(ArgumentException))]
+        public void GivenEmptyPartialId_WhenNewDevice_ThenExceptionThrown()
         {
-            var device = ExtronDSC301HD.Create(string.Empty);
-            Assert.IsNull(device);
+            var device = new ExtronDSC301HD(string.Empty);
         }
 
         [TestMethod]
-        public void GivenNullPartialId_WhenNewDevice_ThenDeviceIsNull()
+        [ExpectedException(typeof(ArgumentException))]
+        public void GivenNullPartialId_WhenNewDevice_ThenExceptionThrown()
         {
-            var device = ExtronDSC301HD.Create(null);
-            Assert.IsNull(device);
+            var device = new ExtronDSC301HD(null);
         }
 
         [TestMethod]
-        public void GivenInvalidPartialId_WhenNewDevice_ThenDeviceIsNull()
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void GivenInvalidPartialId_WhenNewDevice_ThenExceptionThrown()
         {
-            var device = ExtronDSC301HD.Create("invalid");
-            Assert.IsNull(device);
+            var device = new ExtronDSC301HD("invalid");
         }
     }
 }

@@ -27,7 +27,7 @@ namespace Tests
 
         public ExtronMVX44VGA CreateDevice()
         {
-            return ExtronMVX44VGA.Create(_deviceSettings["PortId"].ToString());
+            return new ExtronMVX44VGA(_deviceSettings["PortId"].ToString());
         }
 
         [TestMethod]
@@ -60,24 +60,36 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GivenEmptyPartialId_WhenNewDevice_ThenDeviceIsNull()
+        [ExpectedException(typeof(ArgumentException))]
+        public void GivenEmptyPartialId_WhenNewDevice_ThenExceptionThrown()
         {
-            var device = ExtronMVX44VGA.Create(string.Empty);
-            Assert.IsNull(device);
+            var device = new ExtronMVX44VGA(string.Empty);
         }
 
         [TestMethod]
-        public void GivenNullPartialId_WhenNewDevice_ThenDeviceIsNull()
+        [ExpectedException(typeof(ArgumentException))]
+        public void GivenNullPartialId_WhenNewDevice_ThenExceptionThrown()
         {
-            var device = ExtronMVX44VGA.Create(null);
-            Assert.IsNull(device);
+            var device = new ExtronMVX44VGA(null);
         }
 
         [TestMethod]
-        public void GivenInvalidPartialId_WhenNewDevice_ThenDeviceIsNull()
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void GivenInvalidPartialId_WhenNewDevice_ThenExceptionThrown()
         {
-            var device = ExtronMVX44VGA.Create("invalid");
-            Assert.IsNull(device);
+            var device = new ExtronMVX44VGA("invalid");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(Exception))]
+        public void GivenDevice_WhenCreateAnotherDeviceWithSameID_ThenExceptionThrown()
+        {
+            using (var device1 = CreateDevice())
+            {
+                using (var device2 = CreateDevice())
+                {
+                }
+            }
         }
     }
 }

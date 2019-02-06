@@ -5,6 +5,7 @@ using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using System;
 
 namespace Tests
 {
@@ -29,7 +30,7 @@ namespace Tests
 
         public AtenVS0801H CreateDevice()
         {
-            return AtenVS0801H.Create(_deviceSettings["PortId"].ToString());
+            return new AtenVS0801H(_deviceSettings["PortId"].ToString());
         }
 
         [TestMethod]
@@ -87,24 +88,36 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GivenEmptyPartialId_WhenNewDevice_ThenDeviceIsNull()
+        [ExpectedException(typeof(ArgumentException))]
+        public void GivenEmptyPartialId_WhenNewDevice_ThenExceptionThrown()
         {
-            var device = AtenVS0801H.Create(string.Empty);
-            Assert.IsNull(device);
+            var device = new AtenVS0801H(string.Empty);
         }
 
         [TestMethod]
-        public void GivenNullPartialId_WhenNewDevice_ThenDeviceIsNull()
+        [ExpectedException(typeof(ArgumentException))]
+        public void GivenNullPartialId_WhenNewDevice_ThenExceptionThrown()
         {
-            var device = AtenVS0801H.Create(null);
-            Assert.IsNull(device);
+            var device = new AtenVS0801H(null);
         }
 
         [TestMethod]
-        public void GivenInvalidPartialId_WhenNewDevice_ThenDeviceIsNull()
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void GivenInvalidPartialId_WhenNewDevice_ThenExceptionThrown()
         {
-            var device = AtenVS0801H.Create("invalid");
-            Assert.IsNull(device);
+            var device = new AtenVS0801H("invalid");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(Exception))]
+        public void GivenDevice_WhenCreateAnotherDeviceWithSameID_ThenExceptionThrown()
+        {
+            using (var device1 = CreateDevice())
+            {
+                using (var device2 = CreateDevice())
+                {
+                }
+            }
         }
     }
 }

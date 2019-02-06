@@ -10,25 +10,12 @@ namespace ControllableDevice
         private bool _disposed = false;
         private Rs232Device _rs232Device;
 
-        private ExtronMVX44VGA() { Debug.Assert(true, "Default constructor should never be called"); }
-        private ExtronMVX44VGA(string portId)
+        public ExtronMVX44VGA(string portId)
         {
             _rs232Device = new Rs232Device(portId);
             Debug.Assert(_rs232Device != null);
 
             _rs232Device.BaudRate = 9600;
-        }
-
-        public static ExtronMVX44VGA Create(string portId)
-        {
-            try
-            {
-                return new ExtronMVX44VGA(portId);
-            }
-            catch (Exception)
-            {
-                return null;
-            }
         }
 
         public void Dispose()

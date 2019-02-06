@@ -23,7 +23,7 @@ namespace ControlRelay
         public ExtronDSC301HDCloudInterface(Settings settings)
         {
             _settings = settings;
-            _device = ExtronDSC301HD.Create(_settings.PortId);
+            _device = new ExtronDSC301HD(_settings.PortId);
         }
 
         public override void SetMethodHandlers(DeviceClient deviceClient)
