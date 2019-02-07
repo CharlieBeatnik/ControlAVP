@@ -39,25 +39,38 @@ namespace ControlRelay
 
             //AtenVS0801H Settings 
             _settingsAtenVS0801H = JsonConvert.DeserializeObject<List<AtenVS0801HCloudInterface.Settings>>(jsonParsed["AtenVS0801H"].ToString());
-            _deviceCloudInterfaces.Add(new AtenVS0801HCloudInterface(_settingsAtenVS0801H));
+            AddCloudInterface(_settingsAtenVS0801H, (x) => new AtenVS0801HCloudInterface(x));
 
-            //AtenVS0801H Settings 
+            // ApcAP8959EU Settings 
             _settingsApcAP8959EU3 = JsonConvert.DeserializeObject<ApcAP8959EU3CloudInterface.Settings>(jsonParsed["ApcAP8959EU3"].ToString());
-            _deviceCloudInterfaces.Add(new ApcAP8959EU3CloudInterface(_settingsApcAP8959EU3));
+            AddCloudInterface(_settingsApcAP8959EU3, (x) => new ApcAP8959EU3CloudInterface(x));
 
             //ExtronDSC301HD Settings 
             _settingsExtronDSC301HD = JsonConvert.DeserializeObject<ExtronDSC301HDCloudInterface.Settings>(jsonParsed["ExtronDSC301HD"].ToString());
-            _deviceCloudInterfaces.Add(new ExtronDSC301HDCloudInterface(_settingsExtronDSC301HD));
+            AddCloudInterface(_settingsExtronDSC301HD, (x) => new ExtronDSC301HDCloudInterface(x));
 
             //SonyKDL60W855 Settings 
             _settingsSonyKDL60W855 = JsonConvert.DeserializeObject<SonyKDL60W855CloudInterface.Settings>(jsonParsed["SonyKDL60W855"].ToString());
-            _deviceCloudInterfaces.Add(new SonyKDL60W855CloudInterface(_settingsSonyKDL60W855));
+            AddCloudInterface(_settingsSonyKDL60W855, (x) => new SonyKDL60W855CloudInterface(x));
 
             //ExtronMVX44VGA Settings 
             _settingsExtronMVX44VGA = JsonConvert.DeserializeObject<ExtronMVX44VGACloudInterface.Settings>(jsonParsed["ExtronMVX44VGA"].ToString());
-            _deviceCloudInterfaces.Add(new ExtronMVX44VGACloudInterface(_settingsExtronMVX44VGA));
+            AddCloudInterface(_settingsExtronMVX44VGA, (x) => new ExtronMVX44VGACloudInterface(x));
 
             CreateDeviceClient();
+        }
+
+        private void AddCloudInterface<T, U>(U settings, Func<U, T> creator) where T : DeviceCloudInterface
+        {
+            try
+            {
+                T cloudInterface = creator(settings);
+                _deviceCloudInterfaces.Add(cloudInterface);
+            }
+            catch (Exception)
+            {
+
+            }
         }
 
         private void CreateDeviceClient()
