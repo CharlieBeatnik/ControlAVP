@@ -9,6 +9,7 @@ using Microsoft.Azure.Devices;
 using Microsoft.Extensions.Configuration;
 using AVPCloudToDevice;
 using ControllableDeviceTypes.AtenVS0801HTypes;
+using System.Diagnostics;
 
 namespace ControlAVP.Pages.Devices
 {
@@ -50,11 +51,22 @@ namespace ControlAVP.Pages.Devices
 
         public void OnGet()
         {
-            for (int deviceIdx = 0; deviceIdx < _numHdmiSwitches; ++deviceIdx)
+            for (int deviceIndex = 0; deviceIndex < _numHdmiSwitches; ++deviceIndex)
             {
-                DeviceInfoCaches[deviceIdx].Available = _devices[deviceIdx].GetAvailable();
-                DeviceInfoCaches[deviceIdx].State = _devices[deviceIdx].GetState();
+                DeviceInfoCaches[deviceIndex].Available = _devices[deviceIndex].GetAvailable();
+                DeviceInfoCaches[deviceIndex].State = _devices[deviceIndex].GetState();
             }
+        }
+
+        public IActionResult OnPostSetInput(int deviceIndex, InputPort inputPort)
+        {
+            Debug.Assert(deviceIndex < _numHdmiSwitches);
+            if (deviceIndex < _numHdmiSwitches)
+            {
+                _devices[deviceIndex].SetInput(inputPort);
+                DeviceInfoCaches[deviceIndex].State = _devices[deviceIndex].GetState();
+            }
+            return RedirectToPage();
         }
     }
 }
