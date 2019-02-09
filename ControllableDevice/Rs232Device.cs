@@ -12,6 +12,19 @@ using Windows.Storage.Streams;
 
 namespace ControllableDevice
 {
+    public class TimestampedMessage
+    {
+        public TimestampedMessage(string message)
+        {
+            Recieved = DateTime.Now;
+            Message = message;
+        }
+        public DateTime Recieved { private set; get; }
+        public string Message { private set; get; }
+
+        public TimeSpan Age { get { return DateTime.Now - Recieved; } }
+    }
+
     public class Rs232Device : IDisposable
     {
         private bool _disposed = false;
@@ -24,9 +37,8 @@ namespace ControllableDevice
         private DataReader _dataReader;
 
         private Task _listenTask;
-        private CircularBuffer<string> _messageStore;
+        private CircularBuffer<TimestampedMessage> _messageStore;
         private string _unterminatedMessage = string.Empty;
-
 
         private readonly TimeSpan _defaultWriteTimeout = TimeSpan.FromMilliseconds(50);
         private readonly TimeSpan _defaultReadTimeout = TimeSpan.FromMilliseconds(50);
@@ -52,6 +64,7 @@ namespace ControllableDevice
         }
 
         public TimeSpan PostWriteWait { get; set; } = TimeSpan.FromMilliseconds(500);
+        public TimeSpan MessageLifetime { get; set; } = TimeSpan.FromSeconds(5);
 
         public uint BaudRate
         {
@@ -95,7 +108,7 @@ namespace ControllableDevice
             {
                 messageStoreCapacity = _defaultMessageStoreCapacity;
             }
-            _messageStore = new CircularBuffer<string>((int)messageStoreCapacity);
+            _messageStore = new CircularBuffer<TimestampedMessage>((int)messageStoreCapacity);
 
             //Find device ID
             var devices = Task.Run(async () => await GetAvailableDevices()).Result;
@@ -230,9 +243,10 @@ namespace ControllableDevice
 
                 foreach (var message in messages)
                 {
+                    var timestampedMessage = new TimestampedMessage(message);
                     lock (_messageStore)
                     {
-                        _messageStore.Put(message);
+                        _messageStore.Put(timestampedMessage);
                     }
                 }
             }
@@ -268,10 +282,13 @@ namespace ControllableDevice
 
                     foreach (var message in messageStore)
                     {
-                        var match = Regex.Match(message, pattern);
-                        if (match.Success)
+                        if (message.Age < MessageLifetime)
                         {
-                            return message;
+                            var match = Regex.Match(message.Message, pattern);
+                            if (match.Success)
+                            {
+                                return message.Message;
+                            }
                         }
                     }
                 }
@@ -297,9 +314,12 @@ namespace ControllableDevice
             {
                 if (!_messageStore.IsEmpty)
                 {
-                    var messageStore = _messageStore.ToList();
+                    List<string> messageStore =
+                         (from x in _messageStore
+                          where x.Age < MessageLifetime
+                          select x.Message).ToList();
 
-                    if(messageStore.Count < numResponses)
+                    if (messageStore.Count < numResponses)
                     {
                         throw new ArgumentException($"Unable to return {numResponses} responses, only {messageStore.Count} available.", "numResponses");
                     }

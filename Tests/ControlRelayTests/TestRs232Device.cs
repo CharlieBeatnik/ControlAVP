@@ -140,5 +140,19 @@ namespace Tests
                 var result = device.WriteWithResponses("read", 7);
             }
         }
+
+        [TestMethod]
+        public void GivenDevice_WhenWriteCommandAndWaitGreaterThanMessageExpiry_ThenReadIsNull()
+        {
+            using (var device = CreateDevice())
+            {
+                device.Write("read");
+                Thread.Sleep(device.PostWriteWait);
+                Thread.Sleep(device.MessageLifetime + TimeSpan.FromSeconds(2));
+
+                var result = device.Read(@"^F/W: V[0-9]+.[0-9]+.[0-9]+$");
+                Assert.IsNull(result);
+            }
+        }
     }
 }
