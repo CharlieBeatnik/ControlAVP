@@ -35,3 +35,7 @@ body {
         display: none;
     }
 }
+
+.btn-default {
+    background-color: #DDDDDD;
+}
