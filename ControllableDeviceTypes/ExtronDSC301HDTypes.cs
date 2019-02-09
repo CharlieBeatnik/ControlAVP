@@ -211,5 +211,16 @@ namespace ControllableDeviceTypes
                 }
             }
         }
+
+        public enum ScaleType
+        {
+            Fit,
+            PixelPerfect
+        }
+
+        public enum PositionType
+        {
+            Centre
+        }
     }
 }

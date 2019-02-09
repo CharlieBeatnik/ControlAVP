@@ -1,5 +1,6 @@
 ﻿@page
 @model ControlAVP.Pages.Devices.ExtronDSC301HDModel
+@using ControllableDeviceTypes.ExtronDSC301HDTypes;
 
 @{
     ViewData["Title"] = "Extron DSC301HD";
@@ -24,15 +25,20 @@
                         </tr>
                         <tr>
                             <td>Scaling</td>
-                            <td><button type="submit" asp-page-handler="PixelPerfectAndCentered" class="btn btn-success btn-xs">Pixel Perfect & Centered</button></td>
+                            <td>
+                                <div class="btn-group-vertical">
+                                    <button type="submit" asp-page-handler="Scale" asp-route-scaletype=@ScaleType.PixelPerfect asp-route-positiontype=@PositionType.Centre class="btn btn-success btn-xs" style="text-align: left;">Pixel Perfect</button>
+                                    <button type="submit" asp-page-handler="Scale" asp-route-scaletype=@ScaleType.Fit asp-route-positiontype=@PositionType.Centre class="btn btn-success btn-xs" style="text-align: left;">Fit</button>
+                                </div>
+                            </td>
                         </tr>
                         <tr>
                             <td>Refresh</td>
                             <td>
                                 <div class="btn-group-vertical">
-                                    <button type="submit" asp-page-handler="OutputRate" asp-route-width="1920" asp-route-height="1080" asp-route-refreshRate="50" class="btn btn-success btn-xs">1080p 50Hz</button>
-                                    <button type="submit" asp-page-handler="OutputRate" asp-route-width="1920" asp-route-height="1080" asp-route-refreshRate="59.94" class="btn btn-success btn-xs">1080p 59.94Hz</button>
-                                    <button type="submit" asp-page-handler="OutputRate" asp-route-width="1920" asp-route-height="1080" asp-route-refreshRate="60" class="btn btn-success btn-xs">1080p 60Hz</button>
+                                    <button type="submit" asp-page-handler="OutputRate" asp-route-width="1920" asp-route-height="1080" asp-route-refreshRate="50" class="btn btn-success btn-xs" style="text-align: left;">1080p 50Hz</button>
+                                    <button type="submit" asp-page-handler="OutputRate" asp-route-width="1920" asp-route-height="1080" asp-route-refreshRate="59.94" class="btn btn-success btn-xs" style="text-align: left;">1080p 59.94Hz</button>
+                                    <button type="submit" asp-page-handler="OutputRate" asp-route-width="1920" asp-route-height="1080" asp-route-refreshRate="60" class="btn btn-success btn-xs" style="text-align: left;">1080p 60Hz</button>
                                 </div>
                             </td>
                         </tr>

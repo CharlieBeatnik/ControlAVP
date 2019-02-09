@@ -47,9 +47,9 @@ namespace ControlAVP.Pages.Devices
             DeviceInfoCache.Firmware = _device.GetFirmware();
         }
 
-        public IActionResult OnPostPixelPerfectAndCentered()
+        public IActionResult OnPostScale(ScaleType scaleType, PositionType positionType)
         {
-            _device.SetPixelPerfectAndCentered();
+            _device.SetScale(scaleType, positionType);
             return RedirectToPage();
         }
 

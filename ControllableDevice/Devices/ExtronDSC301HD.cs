@@ -75,18 +75,65 @@ namespace ControllableDevice
             return null;
         }
 
-        public void SetPixelPerfectAndCentered()
+        public void Scale(ScaleType scaleType, PositionType positionType = PositionType.Centre)
         {
             var edid = OutputRate;
 
             int inputWidth = ActivePixels;
             int inputHeight = ActiveLines;
 
-            HorizontalSize = inputWidth;
-            VerticalSize = inputHeight;
+            int verticalSize = 0;
+            int horizontalSize = 0;
+            int verticalPosition = 0;
+            int horizontalPosition = 0;
 
-            HorizontalPosition = ((edid.Width - inputWidth) / 2);
-            VerticalPosition = ((edid.Height - inputHeight) / 2);
+            float edidRatio = (float)edid.Width / (float)edid.Height;
+            float inputRatio = (float)inputWidth / (float)inputHeight;
+
+            switch (scaleType)
+            {
+                case ScaleType.PixelPerfect:
+                    verticalSize = inputHeight;
+                    horizontalSize = inputWidth;
+                    break;
+
+                case ScaleType.Fit:
+                    if (inputHeight > inputWidth) //Portrait
+                    {
+                        verticalSize = edid.Height;
+                        horizontalSize = (int)(verticalSize * inputRatio);
+
+                        float finalScale = (float)edid.Width / (float)horizontalSize;
+                        horizontalSize = (int)((float)horizontalSize * finalScale);
+                        verticalSize = (int)((float)verticalSize * finalScale);
+                    }
+                    else //Landscape or Square
+                    {
+                        horizontalSize = edid.Width;
+                        verticalSize = (int)(horizontalSize * (1/inputRatio));
+
+                        float finalScale = (float)edid.Height / (float)verticalSize;
+                        horizontalSize = (int)((float)horizontalSize * finalScale);
+                        verticalSize = (int)((float)verticalSize * finalScale);
+                    }
+                    break;
+            }
+
+            switch (positionType)
+            {
+                case PositionType.Centre:
+
+                    horizontalPosition = ((edid.Width - horizontalSize) / 2);
+                    verticalPosition = ((edid.Height - verticalSize) / 2);
+                    break;
+            }
+
+            //Write changes
+            HorizontalSize = horizontalSize;
+            VerticalSize = verticalSize;
+
+            HorizontalPosition = horizontalPosition;
+            VerticalPosition = verticalPosition;
         }
 
         public int ActivePixels

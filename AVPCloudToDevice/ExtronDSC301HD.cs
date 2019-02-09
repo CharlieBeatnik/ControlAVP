@@ -44,11 +44,12 @@ namespace AVPCloudToDevice
                 return false;
             }
         }
-        public bool SetPixelPerfectAndCentered()
+        public bool SetScale(ScaleType scaleType, PositionType positionType)
         {
             try
             {
-                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "ScalerSetPixelPerfectAndCentered", null);
+                var payload = new { scaleType, positionType };
+                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "ScalerSetScale", payload);
                 return true;
             }
             catch

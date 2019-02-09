@@ -30,7 +30,7 @@ namespace ControlRelay
         {
             deviceClient.SetMethodHandlerAsync("ScalerGetFirmware", GetFirmware, null).Wait();
             deviceClient.SetMethodHandlerAsync("ScalerGetAvailable", GetAvailable, null).Wait();
-            deviceClient.SetMethodHandlerAsync("ScalerSetPixelPerfectAndCentered", SetPixelPerfectAndCentered, null).Wait();
+            deviceClient.SetMethodHandlerAsync("ScalerSetScale", SetScale, null).Wait();
             deviceClient.SetMethodHandlerAsync("ScalerSetOutputRate", SetOutputRate, null).Wait();
         }
 
@@ -59,10 +59,21 @@ namespace ControlRelay
             return Task.FromResult(response);
         }
 
-        private Task<MethodResponse> SetPixelPerfectAndCentered(MethodRequest methodRequest, object userContext)
+        private Task<MethodResponse> SetScale(MethodRequest methodRequest, object userContext)
         {
-            _device.SetPixelPerfectAndCentered();
-            return Task.FromResult(new MethodResponse((int)HttpStatusCode.OK));
+            bool success = false;
+            var payloadDefintion = new
+            {
+                ScaleType = ScaleType.Fit,
+                PositionType = PositionType.Centre
+            };
+
+            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
+
+            _device.Scale(payload.ScaleType, payload.PositionType);
+            success = true;
+
+            return Task.FromResult(GetMethodResponse(methodRequest, success));
         }
 
         private Task<MethodResponse> SetOutputRate(MethodRequest methodRequest, object userContext)
