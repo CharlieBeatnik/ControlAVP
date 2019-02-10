@@ -222,5 +222,40 @@ namespace ControllableDeviceTypes
         {
             Centre
         }
+
+        public class PositionAndSize
+        {
+            public static readonly int HPosMin = -2048;
+            public static readonly int HPosMax = 2048;
+            public static readonly int VPosMin = -1200;
+            public static readonly int VPosMax = 1200;
+
+            public static readonly int HSizeMin = 10;
+            public static readonly int HSizeMax = 4096;
+            public static readonly int VSizeMin = 10;
+            public static readonly int VSizeMax = 2400;
+
+            public PositionAndSize(int hPos, int vPos, int hSize, int vSize)
+            {
+                HPos = (hPos >= HPosMin && hPos <= HPosMax) ? hPos : 0;
+                VPos = (vPos >= VPosMin && vPos <= VPosMax) ? vPos : 0;
+                HSize = (hSize >= HSizeMin && hSize <= HSizeMax) ? hSize : 0;
+                VSize = (vSize >= VSizeMin && vSize <= VSizeMax) ? vSize : 0;
+            }
+
+            public int HPos { get; private set; }
+            public int VPos { get; private set; }
+            public int HSize { get; private set; }
+            public int VSize { get; private set; }
+
+            public override bool Equals(Object obj)
+            {
+                if (obj == null || GetType() != obj.GetType())
+                    return false;
+
+                PositionAndSize r = (PositionAndSize)obj;
+                return HPos.Equals(r.HPos) && VPos.Equals(r.VPos) && HSize.Equals(r.HSize) && VSize.Equals(r.VSize);
+            }
+        }
     }
 }

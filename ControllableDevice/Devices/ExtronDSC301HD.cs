@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using System.Diagnostics;
 using ControllableDeviceTypes.ExtronDSC301HDTypes;
 using System.Threading;
+using System.Numerics;
 
 namespace ControllableDevice
 {
@@ -14,17 +15,8 @@ namespace ControllableDevice
         private readonly string _cmdEsc = ('\x1B').ToString();
         private readonly string _cmdCr = "\r";
         //private readonly string _cmdCrLf = "\r\n";
-        private readonly string _patternNumber = @"^[+-]*[0-9]+$";
-
-        private readonly int _hPosMin = -2048;
-        private readonly int _hPosMax = 2048;
-        private readonly int _vPosMin = -1200;
-        private readonly int _vPosMax = 1200;
-
-        private readonly int _hSizeMin = 10;
-        private readonly int _hSizeMax = 4096;
-        private readonly int _vSizeMin = 10;
-        private readonly int _vSizeMax = 2400;
+        private readonly string _patternNumberLine = @"^[+-]*[0-9]+$";
+        private readonly string _patternNumber = $@"[+-]*[0-9]+";
 
         public ExtronDSC301HD(string portId)
         {
@@ -82,10 +74,10 @@ namespace ControllableDevice
             int inputWidth = ActivePixels;
             int inputHeight = ActiveLines;
 
-            int verticalSize = 0;
-            int horizontalSize = 0;
-            int verticalPosition = 0;
-            int horizontalPosition = 0;
+            int vSize = 0;
+            int hSize = 0;
+            int vPos = 0;
+            int hPos = 0;
 
             float edidRatio = (float)edid.Width / (float)edid.Height;
             float inputRatio = (float)inputWidth / (float)inputHeight;
@@ -93,28 +85,28 @@ namespace ControllableDevice
             switch (scaleType)
             {
                 case ScaleType.PixelPerfect:
-                    verticalSize = inputHeight;
-                    horizontalSize = inputWidth;
+                    vSize = inputHeight;
+                    hSize = inputWidth;
                     break;
 
                 case ScaleType.Fit:
                     if (inputHeight > inputWidth) //Portrait
                     {
-                        verticalSize = edid.Height;
-                        horizontalSize = (int)(verticalSize * inputRatio);
+                        vSize = edid.Height;
+                        hSize = (int)(vSize * inputRatio);
 
-                        float finalScale = (float)edid.Width / (float)horizontalSize;
-                        horizontalSize = (int)((float)horizontalSize * finalScale);
-                        verticalSize = (int)((float)verticalSize * finalScale);
+                        float scale = (float)edid.Width / (float)hSize;
+                        hSize = (int)((float)hSize * scale);
+                        vSize = (int)((float)vSize * scale);
                     }
                     else //Landscape or Square
                     {
-                        horizontalSize = edid.Width;
-                        verticalSize = (int)(horizontalSize * (1/inputRatio));
+                        hSize = edid.Width;
+                        vSize = (int)(hSize * (1 / inputRatio));
 
-                        float finalScale = (float)edid.Height / (float)verticalSize;
-                        horizontalSize = (int)((float)horizontalSize * finalScale);
-                        verticalSize = (int)((float)verticalSize * finalScale);
+                        float scale = (float)edid.Height / (float)vSize;
+                        hSize = (int)((float)hSize * scale);
+                        vSize = (int)((float)vSize * scale);
                     }
                     break;
             }
@@ -123,24 +115,20 @@ namespace ControllableDevice
             {
                 case PositionType.Centre:
 
-                    horizontalPosition = ((edid.Width - horizontalSize) / 2);
-                    verticalPosition = ((edid.Height - verticalSize) / 2);
+                    hPos = ((edid.Width - hSize) / 2);
+                    vPos = ((edid.Height - vSize) / 2);
                     break;
             }
 
             //Write changes
-            HorizontalSize = horizontalSize;
-            VerticalSize = verticalSize;
-
-            HorizontalPosition = horizontalPosition;
-            VerticalPosition = verticalPosition;
+            ImagePositionAndSize = new PositionAndSize(hPos, vPos, hSize, vSize);
         }
 
         public int ActivePixels
         {
             get
             {
-                var result = _rs232Device.WriteWithResponse($"{_cmdEsc}APIX{_cmdCr}", _patternNumber);
+                var result = _rs232Device.WriteWithResponse($"{_cmdEsc}APIX{_cmdCr}", _patternNumberLine);
                 Debug.Assert(result != null);
                 if (result == null) return 0;
                 return int.Parse(result);
@@ -151,7 +139,7 @@ namespace ControllableDevice
         {
             get
             {
-                var result = _rs232Device.WriteWithResponse($"{_cmdEsc}ALIN{_cmdCr}", _patternNumber);
+                var result = _rs232Device.WriteWithResponse($"{_cmdEsc}ALIN{_cmdCr}", _patternNumberLine);
 
                 Debug.Assert(result != null);
                 if (result == null) return 0;
@@ -163,15 +151,15 @@ namespace ControllableDevice
         {
             get
             {
-                var result = _rs232Device.WriteWithResponse($"{_cmdEsc}HCTR{_cmdCr}", _patternNumber);
+                var result = _rs232Device.WriteWithResponse($"{_cmdEsc}HCTR{_cmdCr}", _patternNumberLine);
 
                 Debug.Assert(result != null);
                 if (result == null) return 0;
 
                 int number = int.Parse(result);
-                Debug.Assert(number >= _hPosMin);
-                Debug.Assert(number <= _hPosMax);
-                if (number >= _hPosMin && number <= _hPosMax)
+                Debug.Assert(number >= PositionAndSize.HPosMin);
+                Debug.Assert(number <= PositionAndSize.HPosMax);
+                if (number >= PositionAndSize.HPosMin && number <= PositionAndSize.HPosMax)
                 {
                     return number;
                 }
@@ -179,7 +167,7 @@ namespace ControllableDevice
             }
             set
             {
-                int newValue = Math.Clamp(value, _hPosMin, _hPosMax);
+                int newValue = Math.Clamp(value, PositionAndSize.HPosMin, PositionAndSize.HPosMax);
                 var result = _rs232Device.WriteWithResponse($"{_cmdEsc}{newValue}HCTR{_cmdCr}", @"^Hctr[+-][0-9]+$");
                 Debug.Assert(result != null);
             }
@@ -189,15 +177,15 @@ namespace ControllableDevice
         {
             get
             {
-                var result = _rs232Device.WriteWithResponse($"{_cmdEsc}VCTR{_cmdCr}", _patternNumber);
+                var result = _rs232Device.WriteWithResponse($"{_cmdEsc}VCTR{_cmdCr}", _patternNumberLine);
 
                 Debug.Assert(result != null);
                 if (result == null) return 0;
 
                 int number = int.Parse(result);
-                Debug.Assert(number >= _vPosMin);
-                Debug.Assert(number <= _vPosMax);
-                if (number >= _vPosMin && number <= _vPosMax)
+                Debug.Assert(number >= PositionAndSize.VPosMin);
+                Debug.Assert(number <= PositionAndSize.VPosMax);
+                if (number >= PositionAndSize.VPosMin && number <= PositionAndSize.VPosMax)
                 {
                     return number;
                 }
@@ -205,7 +193,7 @@ namespace ControllableDevice
             }
             set
             {
-                int newValue = Math.Clamp(value, _vPosMin, _vPosMax);
+                int newValue = Math.Clamp(value, PositionAndSize.VPosMin, PositionAndSize.VPosMax);
                 var result = _rs232Device.WriteWithResponse($"{_cmdEsc}{newValue}VCTR{_cmdCr}", @"^Vctr[+-][0-9]+$");
                 Debug.Assert(result != null);
             }
@@ -215,14 +203,14 @@ namespace ControllableDevice
         {
             get
             {
-                var result = _rs232Device.WriteWithResponse($"{_cmdEsc}HSIZ{_cmdCr}", _patternNumber);
+                var result = _rs232Device.WriteWithResponse($"{_cmdEsc}HSIZ{_cmdCr}", _patternNumberLine);
                 Debug.Assert(result != null);
                 if (result == null) return 0;
 
                 int number = int.Parse(result);
-                Debug.Assert(number >= _hSizeMin);
-                Debug.Assert(number <= _hSizeMax);
-                if (number >= _hSizeMin && number <= _hSizeMax)
+                Debug.Assert(number >= PositionAndSize.HSizeMin);
+                Debug.Assert(number <= PositionAndSize.HSizeMax);
+                if (number >= PositionAndSize.HSizeMin && number <= PositionAndSize.HSizeMax)
                 {
                     return number;
                 }
@@ -230,7 +218,7 @@ namespace ControllableDevice
             }
             set
             {
-                int newValue = Math.Clamp(value, _hSizeMin, _hSizeMax);
+                int newValue = Math.Clamp(value, PositionAndSize.HSizeMin, PositionAndSize.HSizeMax);
                 var result = _rs232Device.WriteWithResponse($"{_cmdEsc}{newValue}HSIZ{_cmdCr}", @"^Hsiz[0-9]+$");
                 Debug.Assert(result != null);
             }
@@ -240,12 +228,12 @@ namespace ControllableDevice
         {
             get
             {
-                var result = _rs232Device.WriteWithResponse($"{_cmdEsc}VSIZ{_cmdCr}", _patternNumber);
+                var result = _rs232Device.WriteWithResponse($"{_cmdEsc}VSIZ{_cmdCr}", _patternNumberLine);
 
                 int number = int.Parse(result);
-                Debug.Assert(number >= _vSizeMin);
-                Debug.Assert(number <= _vSizeMax);
-                if (number >= _vSizeMin && number <= _vSizeMax)
+                Debug.Assert(number >= PositionAndSize.VSizeMin);
+                Debug.Assert(number <= PositionAndSize.VSizeMax);
+                if (number >= PositionAndSize.VSizeMin && number <= PositionAndSize.VSizeMax)
                 {
                     return number;
                 }
@@ -253,7 +241,7 @@ namespace ControllableDevice
             }
             set
             {
-                int newValue = Math.Clamp(value, _vSizeMin, _vSizeMax);
+                int newValue = Math.Clamp(value, PositionAndSize.VSizeMin, PositionAndSize.VSizeMax);
                 var result = _rs232Device.WriteWithResponse($"{_cmdEsc}{newValue}VSIZ{_cmdCr}", @"^Vsiz[0-9]+$");
                 Debug.Assert(result != null);
             }
@@ -263,7 +251,7 @@ namespace ControllableDevice
         {
             get
             {
-                var result = _rs232Device.WriteWithResponse($"{_cmdEsc}RATE{_cmdCr}", _patternNumber);
+                var result = _rs232Device.WriteWithResponse($"{_cmdEsc}RATE{_cmdCr}", _patternNumberLine);
                 var number = int.Parse(result);
                 return Edid.GetEdid(number);
             }
@@ -278,5 +266,33 @@ namespace ControllableDevice
                 Debug.Assert(result != null);
             }
         }
+
+        public PositionAndSize ImagePositionAndSize
+        {
+            get
+            {
+                string pattern = $@"^({_patternNumber})[*]({_patternNumber})[*]({_patternNumber})[*]({_patternNumber})$";
+                var result = _rs232Device.WriteWithResponse($"{_cmdEsc}XIMG{_cmdCr}", pattern);
+                if (result != null)
+                {
+                    var match = Regex.Match(result, pattern);
+                    Debug.Assert(match.Success);
+                    return new PositionAndSize(
+                        int.Parse(match.Groups[1].Value),
+                        int.Parse(match.Groups[2].Value),
+                        int.Parse(match.Groups[3].Value),
+                        int.Parse(match.Groups[4].Value));
+                }
+
+                return null;
+            }
+            set
+            {
+                string pattern = $@"^Ximg({_patternNumber})[*]({_patternNumber})[*]({_patternNumber})[*]({_patternNumber})$";
+                var result = _rs232Device.WriteWithResponse($"{_cmdEsc}{value.HPos}*{value.VPos}*{value.HSize}*{value.VSize}XIMG{_cmdCr}", pattern);
+                Debug.Assert(result != null);
+            }
+        }
+       
     }
 }

@@ -179,5 +179,18 @@ namespace Tests
         {
             var device = new ExtronDSC301HD("invalid");
         }
+
+        [TestMethod]
+        public void GivenDevice_WhenSetPositionAndSize_ThenGetPositionAndSizeMatch()
+        {
+            using (var device = CreateDevice())
+            {
+                var posAndSizeBefore = new PositionAndSize(32, 64, 640, 480);
+                device.ImagePositionAndSize = posAndSizeBefore;
+                var posAndSizeAfter = device.ImagePositionAndSize;
+                Assert.AreEqual(posAndSizeBefore, posAndSizeAfter);
+            }
+        }
+
     }
 }

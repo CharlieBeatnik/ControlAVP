@@ -148,9 +148,12 @@ namespace Tests
             {
                 device.Write("read");
                 Thread.Sleep(device.PostWriteWait);
+                var result = device.Read(@"^F/W: V[0-9]+.[0-9]+.[0-9]+$");
+                Assert.IsNotNull(result);
+
                 Thread.Sleep(device.MessageLifetime + TimeSpan.FromSeconds(2));
 
-                var result = device.Read(@"^F/W: V[0-9]+.[0-9]+.[0-9]+$");
+                result = device.Read(@"^F/W: V[0-9]+.[0-9]+.[0-9]+$");
                 Assert.IsNull(result);
             }
         }
