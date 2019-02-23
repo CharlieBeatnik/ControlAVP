@@ -44,7 +44,7 @@ namespace ControlRelay
 
             var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
             bool success = _devices[payload._hdmiSwitchId].GoToNextInput();
-            return Task.FromResult(GetMethodResponse(methodRequest, success));
+            return GetMethodResponse(methodRequest, success);
         }
 
         private Task<MethodResponse> GoToPreviousInput(MethodRequest methodRequest, object userContext)
@@ -53,7 +53,7 @@ namespace ControlRelay
 
             var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
             bool success = _devices[payload._hdmiSwitchId].GoToPreviousInput();
-            return Task.FromResult(GetMethodResponse(methodRequest, success));
+            return GetMethodResponse(methodRequest, success);
         }
 
         private Task<MethodResponse> GetState(MethodRequest methodRequest, object userContext)
@@ -65,13 +65,11 @@ namespace ControlRelay
             var result = _devices[payload._hdmiSwitchId].GetState();
             if (result != null)
             {
-                string json = JsonConvert.SerializeObject(result);
-                var response = new MethodResponse(Encoding.UTF8.GetBytes(json), (int)HttpStatusCode.OK);
-                return Task.FromResult(response);
+                return GetMethodResponseSerialize(methodRequest, true, result);
             }
             else
             {
-                return Task.FromResult(GetMethodResponse(methodRequest, false));
+                return GetMethodResponse(methodRequest, false);
             }
         }
 
@@ -85,7 +83,7 @@ namespace ControlRelay
 
             var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
             bool success = _devices[payload._hdmiSwitchId].SetInput(payload.inputPort);
-            return Task.FromResult(GetMethodResponse(methodRequest, success));
+            return GetMethodResponse(methodRequest, success);
         }
 
         private Task<MethodResponse> GetAvailable(MethodRequest methodRequest, object userContext)
@@ -95,9 +93,7 @@ namespace ControlRelay
             var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
             var result = _devices[payload._hdmiSwitchId].GetAvailable();
 
-            string json = JsonConvert.SerializeObject(result);
-            var response = new MethodResponse(Encoding.UTF8.GetBytes(json), (int)HttpStatusCode.OK);
-            return Task.FromResult(response);
+            return GetMethodResponseSerialize(methodRequest, true, result);
         }
     }
 }

@@ -44,13 +44,11 @@ namespace ControlRelay
 
             if (result != null)
             {
-                string json = JsonConvert.SerializeObject(result);
-                var response = new MethodResponse(Encoding.UTF8.GetBytes(json), (int)HttpStatusCode.OK);
-                return Task.FromResult(response);
+                return GetMethodResponseSerialize(methodRequest, true, result);
             }
             else
             {
-                return Task.FromResult(GetMethodResponse(methodRequest, false));
+                return GetMethodResponse(methodRequest, false);
             }
         }
 
@@ -60,13 +58,11 @@ namespace ControlRelay
 
             if (result != null)
             {
-                string json = JsonConvert.SerializeObject(result);
-                var response = new MethodResponse(Encoding.UTF8.GetBytes(json), (int)HttpStatusCode.OK);
-                return Task.FromResult(response);
+                return GetMethodResponseSerialize(methodRequest, true, result);
             }
             else
             {
-                return Task.FromResult(GetMethodResponse(methodRequest, false));
+                return GetMethodResponse(methodRequest, false);
             }
         }
 
@@ -81,7 +77,7 @@ namespace ControlRelay
             _device.TurnOutletOn(payload.outletId);
             //ANDREWDENN_TODO: No way of determining outlet change succeded or failed
             bool success = true;
-            return Task.FromResult(GetMethodResponse(methodRequest, success));
+            return GetMethodResponse(methodRequest, success);
         }
 
         private Task<MethodResponse> TurnOutletOff(MethodRequest methodRequest, object userContext)
@@ -95,16 +91,13 @@ namespace ControlRelay
             _device.TurnOutletOff(payload.outletId);
             //ANDREWDENN_TODO: No way of determining outlet change succeded or failed
             bool success = true;
-            return Task.FromResult(GetMethodResponse(methodRequest, success));
+            return GetMethodResponse(methodRequest, success);
         }
 
         private Task<MethodResponse> GetAvailable(MethodRequest methodRequest, object userContext)
         {
             var result = _device.GetAvailable();
-
-            string json = JsonConvert.SerializeObject(result);
-            var response = new MethodResponse(Encoding.UTF8.GetBytes(json), (int)HttpStatusCode.OK);
-            return Task.FromResult(response);
+            return GetMethodResponseSerialize(methodRequest, true, result);
         }
     }
 }

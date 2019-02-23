@@ -41,22 +41,18 @@ namespace ControlRelay
             if (result != null)
             {
                 string json = JsonConvert.SerializeObject(result, new VersionConverter());
-                var response = new MethodResponse(Encoding.UTF8.GetBytes(json), (int)HttpStatusCode.OK);
-                return Task.FromResult(response);
+                return GetMethodResponse(methodRequest, true, json);
             }
             else
             {
-                return Task.FromResult(GetMethodResponse(methodRequest, false));
+                return GetMethodResponse(methodRequest, false);
             }
         }
 
         private Task<MethodResponse> GetAvailable(MethodRequest methodRequest, object userContext)
         {
             var result = _device.GetAvailable();
-
-            string json = JsonConvert.SerializeObject(result);
-            var response = new MethodResponse(Encoding.UTF8.GetBytes(json), (int)HttpStatusCode.OK);
-            return Task.FromResult(response);
+            return GetMethodResponseSerialize(methodRequest, true, result);
         }
 
         private Task<MethodResponse> SetScale(MethodRequest methodRequest, object userContext)
@@ -73,7 +69,7 @@ namespace ControlRelay
             _device.Scale(payload.ScaleType, payload.PositionType);
             success = true;
 
-            return Task.FromResult(GetMethodResponse(methodRequest, success));
+            return GetMethodResponse(methodRequest, success);
         }
 
         private Task<MethodResponse> SetOutputRate(MethodRequest methodRequest, object userContext)
@@ -93,7 +89,7 @@ namespace ControlRelay
                 success = true;
             }
 
-            return Task.FromResult(GetMethodResponse(methodRequest, success));
+            return GetMethodResponse(methodRequest, success);
         }
 
     }

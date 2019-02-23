@@ -1,4 +1,5 @@
 ﻿using Microsoft.Azure.Devices.Client;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,20 +13,37 @@ namespace ControlRelay
     {
         public abstract void SetMethodHandlers(DeviceClient deviceClient);
 
-        protected MethodResponse GetMethodResponse(MethodRequest methodRequest, bool success)
+        protected Task<MethodResponse> GetMethodResponse(MethodRequest methodRequest, bool success, string payload = null)
         {
-            if (success)
+            string result;
+
+            if (payload != null)
             {
-                // Acknowlege the direct method call with a 200 success message
-                string result = "{\"result\":\"Executed direct method: " + methodRequest.Name + "\"}";
-                return new MethodResponse(Encoding.UTF8.GetBytes(result), (int)HttpStatusCode.OK);
+                result = payload;
             }
             else
             {
-                // Acknowlege the direct method call with a 400 error message
-                string result = "{\"result\":\"Invalid parameter\"}";
-                return new MethodResponse(Encoding.UTF8.GetBytes(result), (int)HttpStatusCode.BadRequest);
+                if (success)
+                {
+                    // Acknowlege the direct method call with a 200 success message
+                    result = "{\"result\":\"Executed direct method: " + methodRequest.Name + "\"}";
+                }
+                else
+                {
+                    // Acknowlege the direct method call with a 400 error message
+                    result = "{\"result\":\"Failure to execute direct method: " + methodRequest.Name + "\"}";
+                }
             }
+
+            int status = success ? (int)HttpStatusCode.OK : (int)HttpStatusCode.BadRequest;
+            var methodResponse = new MethodResponse(Encoding.UTF8.GetBytes(result), status);
+            return Task.FromResult(methodResponse);
+        }
+
+        protected Task<MethodResponse> GetMethodResponseSerialize(MethodRequest methodRequest, bool success, object payloadToSerialize)
+        {
+            string result = JsonConvert.SerializeObject(payloadToSerialize);
+            return GetMethodResponse(methodRequest, success, result);
         }
     }
 }

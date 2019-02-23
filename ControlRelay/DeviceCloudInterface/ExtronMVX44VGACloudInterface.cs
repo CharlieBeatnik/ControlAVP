@@ -38,12 +38,11 @@ namespace ControlRelay
             if (result != null)
             {
                 string json = JsonConvert.SerializeObject(result, new VersionConverter());
-                var response = new MethodResponse(Encoding.UTF8.GetBytes(json), (int)HttpStatusCode.OK);
-                return Task.FromResult(response);
+                return GetMethodResponse(methodRequest, true, json);
             }
             else
             {
-                return Task.FromResult(GetMethodResponse(methodRequest, false));
+                return GetMethodResponse(methodRequest, false);
             }
         }
 
@@ -51,9 +50,7 @@ namespace ControlRelay
         {
             var result = _device.GetAvailable();
 
-            string json = JsonConvert.SerializeObject(result);
-            var response = new MethodResponse(Encoding.UTF8.GetBytes(json), (int)HttpStatusCode.OK);
-            return Task.FromResult(response);
+            return GetMethodResponseSerialize(methodRequest, true, result);
         }
 
     }

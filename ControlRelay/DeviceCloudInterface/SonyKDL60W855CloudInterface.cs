@@ -34,7 +34,7 @@ namespace ControlRelay
         private Task<MethodResponse> TurnOn(MethodRequest methodRequest, object userContext)
         {
             bool success = _device.TurnOn();
-            return Task.FromResult(GetMethodResponse(methodRequest, success));
+            return GetMethodResponse(methodRequest, success);
         }
 
     }
