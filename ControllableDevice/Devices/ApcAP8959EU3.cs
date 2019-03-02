@@ -197,14 +197,23 @@ namespace ControllableDevice
             }
         }
 
-        public void TurnOutletOn(int id)
+        public bool TurnOutletOn(int id)
         {
-            _sshDevice.ExecuteCommand(string.Format("olOn {0}", id.ToString()));
+            var output = _sshDevice.ExecuteCommand(string.Format("olOn {0}", id.ToString()));
+            return CommandSuccessful(output);
         }
 
-        public void TurnOutletOff(int id)
+        public bool TurnOutletOff(int id)
         {
-            _sshDevice.ExecuteCommand(string.Format("olOff {0}", id.ToString()));
+            var output = _sshDevice.ExecuteCommand(string.Format("olOff {0}", id.ToString()));
+            return CommandSuccessful(output);
+        }
+
+        private bool CommandSuccessful(IEnumerable<string> commandOutput)
+        {
+            //Look for success string in command output
+            string found = commandOutput.FirstOrDefault(o => o == "E000: Success");
+            return found != null;
         }
     }
 }

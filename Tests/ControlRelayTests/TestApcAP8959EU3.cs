@@ -8,6 +8,7 @@ using System.Threading;
 using System;
 using Renci.SshNet.Common;
 using System.Net.Sockets;
+using ControllableDeviceTypes.ApcAP8959EU3Types;
 
 namespace Tests
 {
@@ -58,6 +59,7 @@ namespace Tests
             using (var device = CreateDevice())
             {
                 var outlets = device.GetOutlets();
+                Assert.IsNotNull(outlets);
                 Assert.IsTrue(outlets.Count() == 24);
             }
         }
@@ -88,6 +90,49 @@ namespace Tests
         public void GivenInvalidPassword_WhenNewDevice_ThenExceptionThrown()
         {
             var device = new ApcAP8959EU3(_host, _port, _username, "");
+        }
+
+        [TestMethod]
+        [Ignore("Risk of physical component wear, ignore by default.")]
+        public void GivenDevice_WhenTurnOutletOn_ThenOutletIsOn()
+        {
+            string outletNamePartial = "Outlet";
+
+            using (var device = CreateDevice())
+            {
+                bool success;
+                var outlets = device.GetOutlets();
+                if (outlets == null) Assert.Fail();
+
+                var outlet = outlets.FirstOrDefault(o => o.Name.Contains(outletNamePartial));
+                if (outlet == null) Assert.Fail();
+
+                //Ensure outlet starts in the Off state
+                if (outlet.State == Outlet.PowerState.On)
+                {
+                    success = device.TurnOutletOff(outlet.Id);
+                    Assert.IsTrue(success);
+
+                    outlets = device.GetOutletsWaitForPending();
+                    if (outlets == null) Assert.Fail();
+
+                    outlet = outlets.FirstOrDefault(o => o.Name.Contains(outletNamePartial));
+                    if (outlet == null) Assert.Fail();
+                    Assert.IsTrue(outlet.State == Outlet.PowerState.Off);
+                }
+
+                //Turn outlet on
+                success = device.TurnOutletOn(outlet.Id);
+                Assert.IsTrue(success);
+
+                outlets = device.GetOutletsWaitForPending();
+                if (outlets == null) Assert.Fail();
+
+                //Check outlet is now on
+                outlet = outlets.FirstOrDefault(o => o.Name.Contains(outletNamePartial));
+                if (outlet == null) Assert.Fail();
+                Assert.IsTrue(outlet.State == Outlet.PowerState.On);
+            }
         }
     }
 }

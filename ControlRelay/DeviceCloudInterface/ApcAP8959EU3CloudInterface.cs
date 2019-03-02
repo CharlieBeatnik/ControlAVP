@@ -74,9 +74,7 @@ namespace ControlRelay
             };
 
             var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
-            _device.TurnOutletOn(payload.outletId);
-            //ANDREWDENN_TODO: No way of determining outlet change succeded or failed
-            bool success = true;
+            bool success = _device.TurnOutletOn(payload.outletId);
             return GetMethodResponse(methodRequest, success);
         }
 
@@ -88,9 +86,7 @@ namespace ControlRelay
             };
 
             var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
-            _device.TurnOutletOff(payload.outletId);
-            //ANDREWDENN_TODO: No way of determining outlet change succeded or failed
-            bool success = true;
+            bool success = _device.TurnOutletOff(payload.outletId);
             return GetMethodResponse(methodRequest, success);
         }
 
