@@ -43,8 +43,13 @@ namespace ControlRelay
             var payloadDefintion = new { _hdmiSwitchId = -1 };
 
             var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
-            bool success = _devices[payload._hdmiSwitchId].GoToNextInput();
-            return GetMethodResponse(methodRequest, success);
+            if (ValidateHdmiSwitchId(payload._hdmiSwitchId))
+            {
+                bool success = _devices[payload._hdmiSwitchId].GoToNextInput();
+                return GetMethodResponse(methodRequest, success);
+            }
+
+            return GetMethodResponse(methodRequest, false);
         }
 
         private Task<MethodResponse> GoToPreviousInput(MethodRequest methodRequest, object userContext)
@@ -52,8 +57,13 @@ namespace ControlRelay
             var payloadDefintion = new { _hdmiSwitchId = -1 };
 
             var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
-            bool success = _devices[payload._hdmiSwitchId].GoToPreviousInput();
-            return GetMethodResponse(methodRequest, success);
+            if (ValidateHdmiSwitchId(payload._hdmiSwitchId))
+            {
+                bool success = _devices[payload._hdmiSwitchId].GoToPreviousInput();
+                return GetMethodResponse(methodRequest, success);
+            }
+
+            return GetMethodResponse(methodRequest, false);
         }
 
         private Task<MethodResponse> GetState(MethodRequest methodRequest, object userContext)
@@ -61,16 +71,16 @@ namespace ControlRelay
             var payloadDefintion = new { _hdmiSwitchId = -1 };
 
             var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
+            if (ValidateHdmiSwitchId(payload._hdmiSwitchId))
+            {
+                var result = _devices[payload._hdmiSwitchId].GetState();
+                if (result != null)
+                {
+                    return GetMethodResponseSerialize(methodRequest, true, result);
+                }
+            }
 
-            var result = _devices[payload._hdmiSwitchId].GetState();
-            if (result != null)
-            {
-                return GetMethodResponseSerialize(methodRequest, true, result);
-            }
-            else
-            {
-                return GetMethodResponse(methodRequest, false);
-            }
+            return GetMethodResponse(methodRequest, false);
         }
 
         private Task<MethodResponse> SetInput(MethodRequest methodRequest, object userContext)
@@ -82,8 +92,13 @@ namespace ControlRelay
             };
 
             var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
-            bool success = _devices[payload._hdmiSwitchId].SetInput(payload.inputPort);
-            return GetMethodResponse(methodRequest, success);
+            if (ValidateHdmiSwitchId(payload._hdmiSwitchId) && ValidateInputPort(payload.inputPort))
+            {
+                bool success = _devices[payload._hdmiSwitchId].SetInput(payload.inputPort);
+                return GetMethodResponse(methodRequest, success);
+            }
+
+            return GetMethodResponse(methodRequest, false);
         }
 
         private Task<MethodResponse> GetAvailable(MethodRequest methodRequest, object userContext)
@@ -91,9 +106,23 @@ namespace ControlRelay
             var payloadDefintion = new { _hdmiSwitchId = -1 };
 
             var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
-            var result = _devices[payload._hdmiSwitchId].GetAvailable();
+            if (ValidateHdmiSwitchId(payload._hdmiSwitchId))
+            {
+                var result = _devices[payload._hdmiSwitchId].GetAvailable();
+                return GetMethodResponseSerialize(methodRequest, true, result);
+            }
 
-            return GetMethodResponseSerialize(methodRequest, true, result);
+            return GetMethodResponse(methodRequest, false);
+        }
+
+        private bool ValidateHdmiSwitchId(int hdmiSwitchId)
+        {
+            return (hdmiSwitchId >= 0 && hdmiSwitchId < _devices.Count);
+        }
+
+        private bool ValidateInputPort(InputPort inputPort)
+        {
+            return (inputPort >= InputPort.Port1 && inputPort <= InputPort.Port8);
         }
     }
 }

@@ -18,6 +18,9 @@ namespace Tests
         private ServiceClient _serviceClient;
         private List<AtenVS0801H> _devices = new List<AtenVS0801H>();
 
+        private uint _invalidHdmiSwitchId = 42;
+        private int _invalidInputPort = 42;
+
         public TestAtenVS0801H()
         {
             using (StreamReader r = new StreamReader(_settingsFile))
@@ -94,5 +97,55 @@ namespace Tests
                 Assert.IsTrue(device.GetAvailable());
             }
         }
-    }
+
+        [Test]
+        public void GivenDeviceWithInvalidHdmiSwitchId_WhenGetState_ThenStateIsNull()
+        {
+            var device = new AtenVS0801H(_serviceClient, _settings.DeviceId, _invalidHdmiSwitchId);
+            var state = device.GetState();
+            Assert.IsNull(state);
+        }
+
+        [Test]
+        public void GivenDeviceWithInvalidHdmiSwitchId_WhenGetAvailable_ThenAvailableIsFalse()
+        {
+            var device = new AtenVS0801H(_serviceClient, _settings.DeviceId, _invalidHdmiSwitchId);
+            var available = device.GetAvailable();
+            Assert.IsFalse(available);
+        }
+
+        [Test]
+        public void GivenDeviceWithInvalidHdmiSwitchId_WhenGoToNextInput_ThenSuccessIsFalse()
+        {
+            var device = new AtenVS0801H(_serviceClient, _settings.DeviceId, _invalidHdmiSwitchId);
+            var success = device.GoToNextInput();
+            Assert.IsFalse(success);
+        }
+
+        [Test]
+        public void GivenDeviceWithInvalidHdmiSwitchId_WhenGoToPreviousInput_ThenSuccessIsFalse()
+        {
+            var device = new AtenVS0801H(_serviceClient, _settings.DeviceId, _invalidHdmiSwitchId);
+            var success = device.GoToPreviousInput();
+            Assert.IsFalse(success);
+        }
+
+        [Test]
+        public void GivenDeviceWithInvalidHdmiSwitchId_WhenSetInput_ThenSuccessIsFalse()
+        {
+            var device = new AtenVS0801H(_serviceClient, _settings.DeviceId, _invalidHdmiSwitchId);
+            var success = device.SetInput(InputPort.Port1);
+            Assert.IsFalse(success);
+        }
+
+        [Test]
+        public void GivenDevice_WhenSetInvalidInput_ThenSuccessIsFalse()
+        {
+            foreach (var device in _devices)
+            {
+                var success = device.SetInput((InputPort)_invalidInputPort);
+                Assert.IsFalse(success);
+            }
+        }
+   }
 }
