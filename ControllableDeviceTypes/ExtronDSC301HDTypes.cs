@@ -218,9 +218,25 @@ namespace ControllableDeviceTypes
             PixelPerfect
         }
 
+        public static class ScaleTypeExtensions
+        {
+            public static bool Valid(this ScaleType scaleType)
+            {
+                return Enum.IsDefined(typeof(ScaleType), scaleType);
+            }
+        }
+
         public enum PositionType
         {
             Centre
+        }
+
+        public static class PositionTypeExtensions
+        {
+            public static bool Valid(this PositionType scaleType)
+            {
+                return Enum.IsDefined(typeof(PositionType), scaleType);
+            }
         }
 
         public class PositionAndSize
@@ -248,13 +264,24 @@ namespace ControllableDeviceTypes
             public int HSize { get; private set; }
             public int VSize { get; private set; }
 
-            public override bool Equals(Object obj)
+            public override bool Equals(object obj)
             {
-                if (obj == null || GetType() != obj.GetType())
-                    return false;
+                var r = obj as PositionAndSize;
+                return r != null &&
+                       HPos == r.HPos &&
+                       VPos == r.VPos &&
+                       HSize == r.HSize &&
+                       VSize == r.VSize;
+            }
 
-                PositionAndSize r = (PositionAndSize)obj;
-                return HPos.Equals(r.HPos) && VPos.Equals(r.VPos) && HSize.Equals(r.HSize) && VSize.Equals(r.VSize);
+            public override int GetHashCode()
+            {
+                var hashCode = 674255106;
+                hashCode = hashCode * -1521134295 + HPos.GetHashCode();
+                hashCode = hashCode * -1521134295 + VPos.GetHashCode();
+                hashCode = hashCode * -1521134295 + HSize.GetHashCode();
+                hashCode = hashCode * -1521134295 + VSize.GetHashCode();
+                return hashCode;
             }
         }
     }
