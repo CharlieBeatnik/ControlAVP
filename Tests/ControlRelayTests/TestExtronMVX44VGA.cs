@@ -104,5 +104,27 @@ namespace Tests
                 }
             }
         }
+
+        [TestMethod]
+        public void GivenDevice_WhenGetInputTie_ThenTieIsNotNull()
+        {
+            using (var device = CreateDevice())
+            {
+                InputTie? inputTie = device.GetInputTieForOutputPort(OutputPort.Port1, TieType.Video);
+                Assert.IsNotNull(inputTie);
+
+                inputTie = device.GetInputTieForOutputPort(OutputPort.Port1, TieType.Audio);
+                Assert.IsNotNull(inputTie);
+            }
+        }
+
+        [TestMethod]
+        public void GivenDevice_WhenGetlTieState_ThenStateIsNotNull()
+        {
+            using (var device = CreateDevice())
+            {
+                Assert.IsNotNull(device.GetTieState());
+            }
+        }
     }
 }

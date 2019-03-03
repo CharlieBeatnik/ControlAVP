@@ -65,7 +65,6 @@ namespace ControllableDevice
             return null;
         }
 
-        //Clear all ties, global presets, and mutes and reset all audio gains to the factory default.
         public bool Reset(ResetType resetType)
         {
             string result = null;
@@ -95,5 +94,53 @@ namespace ControllableDevice
             
             return (result != null);
         }
+
+        public InputTie? GetInputTieForOutputPort(OutputPort outputPort, TieType tieType)
+        {
+            string result = null;
+
+            switch(tieType)
+            {
+                case TieType.Video:
+                    result = _rs232Device.WriteWithResponse($"{(int)outputPort}&", @"^[0-9]+$");
+                    break;
+                case TieType.Audio:
+                    result = _rs232Device.WriteWithResponse($"{(int)outputPort}$", @"^[0-9]+$");
+                    break;
+            }
+
+            if(result == null) return null;
+
+            InputTie tie = (InputTie)int.Parse(result);
+            if(!tie.Valid()) return null;
+
+            return tie;
+        }
+
+        public TieState GetTieState(int preset = 0)
+        {
+            //0 0 0 0 Vid 0 0 0 0 Aud 
+            string pattern = @"^([0-4]) ([0-4]) ([0-4]) ([0-4]) Vid ([0-4]) ([0-4]) ([0-4]) ([0-4]) Aud $";
+            var result = _rs232Device.WriteWithResponse($"{_cmdEsc}{preset:D2}VC{_cmdCr}", pattern);
+            if (result == null) return null;
+
+            var tieState = new TieState();
+
+            var match = Regex.Match(result, pattern);
+            if (!match.Success) return null;
+
+            tieState.VideoOutputPort1 = (InputTie)int.Parse(match.Groups[1].Value);
+            tieState.VideoOutputPort2 = (InputTie)int.Parse(match.Groups[2].Value);
+            tieState.VideoOutputPort3 = (InputTie)int.Parse(match.Groups[3].Value);
+            tieState.VideoOutputPort4 = (InputTie)int.Parse(match.Groups[4].Value);
+
+            tieState.AudioOutputPort1 = (InputTie)int.Parse(match.Groups[5].Value);
+            tieState.AudioOutputPort2 = (InputTie)int.Parse(match.Groups[6].Value);
+            tieState.AudioOutputPort3 = (InputTie)int.Parse(match.Groups[7].Value);
+            tieState.AudioOutputPort4 = (InputTie)int.Parse(match.Groups[8].Value);
+
+            return tieState;
+        }
+
     }
 }
