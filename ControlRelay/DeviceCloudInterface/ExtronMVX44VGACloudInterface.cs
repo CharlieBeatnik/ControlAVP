@@ -29,6 +29,7 @@ namespace ControlRelay
         {
             deviceClient.SetMethodHandlerAsync("VGAMatrixGetFirmware", GetFirmware, null).Wait();
             deviceClient.SetMethodHandlerAsync("VGAMatrixGetAvailable", GetAvailable, null).Wait();
+            deviceClient.SetMethodHandlerAsync("VGAMatrixGetTieState", GetTieState, null).Wait();
         }
 
         private Task<MethodResponse> GetFirmware(MethodRequest methodRequest, object userContext)
@@ -51,6 +52,20 @@ namespace ControlRelay
             var result = _device.GetAvailable();
 
             return GetMethodResponseSerialize(methodRequest, true, result);
+        }
+
+        private Task<MethodResponse> GetTieState(MethodRequest methodRequest, object userContext)
+        {
+            var result = _device.GetTieState();
+
+            if (result != null)
+            {
+                return GetMethodResponseSerialize(methodRequest, true, result);
+            }
+            else
+            {
+                return GetMethodResponse(methodRequest, false);
+            }
         }
 
     }

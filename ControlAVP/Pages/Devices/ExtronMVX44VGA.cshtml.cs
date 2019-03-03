@@ -8,6 +8,7 @@ using AVPCloudToDevice;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Azure.Devices;
+using ControllableDeviceTypes.ExtronMVX44VGATypes;
 
 namespace ControlAVP.Pages.Devices
 {
@@ -25,6 +26,7 @@ namespace ControlAVP.Pages.Devices
         {
             public bool Available;
             public Version Firmware;
+            public TieState TieState;
         }
         public DeviceInfo DeviceInfoCache { get; private set; } = new DeviceInfo();
 
@@ -44,6 +46,7 @@ namespace ControlAVP.Pages.Devices
         {
             DeviceInfoCache.Available = _device.GetAvailable();
             DeviceInfoCache.Firmware = _device.GetFirmware();
+            DeviceInfoCache.TieState = _device.GetTieState();
         }
     }
 }

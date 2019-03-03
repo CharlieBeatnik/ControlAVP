@@ -129,15 +129,15 @@ namespace ControllableDevice
             var match = Regex.Match(result, pattern);
             if (!match.Success) return null;
 
-            tieState.VideoOutputPort1 = (InputTie)int.Parse(match.Groups[1].Value);
-            tieState.VideoOutputPort2 = (InputTie)int.Parse(match.Groups[2].Value);
-            tieState.VideoOutputPort3 = (InputTie)int.Parse(match.Groups[3].Value);
-            tieState.VideoOutputPort4 = (InputTie)int.Parse(match.Groups[4].Value);
+            tieState.Video.Add(OutputPort.Port1, (InputTie)int.Parse(match.Groups[1].Value));
+            tieState.Video.Add(OutputPort.Port2, (InputTie)int.Parse(match.Groups[2].Value));
+            tieState.Video.Add(OutputPort.Port3, (InputTie)int.Parse(match.Groups[3].Value));
+            tieState.Video.Add(OutputPort.Port4, (InputTie)int.Parse(match.Groups[4].Value));
 
-            tieState.AudioOutputPort1 = (InputTie)int.Parse(match.Groups[5].Value);
-            tieState.AudioOutputPort2 = (InputTie)int.Parse(match.Groups[6].Value);
-            tieState.AudioOutputPort3 = (InputTie)int.Parse(match.Groups[7].Value);
-            tieState.AudioOutputPort4 = (InputTie)int.Parse(match.Groups[8].Value);
+            tieState.Audio.Add(OutputPort.Port1, (InputTie)int.Parse(match.Groups[5].Value));
+            tieState.Audio.Add(OutputPort.Port2, (InputTie)int.Parse(match.Groups[6].Value));
+            tieState.Audio.Add(OutputPort.Port3, (InputTie)int.Parse(match.Groups[7].Value));
+            tieState.Audio.Add(OutputPort.Port4, (InputTie)int.Parse(match.Groups[8].Value));
 
             return tieState;
         }

@@ -48,5 +48,11 @@ namespace Tests
         {
             Assert.IsTrue(_device.GetAvailable());
         }
+
+        [Test]
+        public void GivenDevice_WhenGetTieState_ThenTieStateIsNotNull()
+        {
+            Assert.IsNotNull(_device.GetTieState());
+        }
     }
 }

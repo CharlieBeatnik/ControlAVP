@@ -1,4 +1,5 @@
-﻿using Microsoft.Azure.Devices;
+﻿using ControllableDeviceTypes.ExtronMVX44VGATypes;
+using Microsoft.Azure.Devices;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
@@ -41,6 +42,20 @@ namespace AVPCloudToDevice
             catch
             {
                 return false;
+            }
+        }
+
+        public TieState GetTieState()
+        {
+            try
+            {
+                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "VGAMatrixGetTieState", null);
+                string json = response.GetPayloadAsJson();
+                return JsonConvert.DeserializeObject<TieState>(json);
+            }
+            catch
+            {
+                return null;
             }
         }
     }

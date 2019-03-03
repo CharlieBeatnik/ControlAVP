@@ -73,15 +73,9 @@ namespace ControllableDeviceTypes
 
         public class TieState
         {
-            public InputTie VideoOutputPort1 { get; set; }
-            public InputTie VideoOutputPort2 { get; set; }
-            public InputTie VideoOutputPort3 { get; set; }
-            public InputTie VideoOutputPort4 { get; set; }
+            public Dictionary<OutputPort, InputTie> Video = new Dictionary<OutputPort, InputTie>();
+            public Dictionary<OutputPort, InputTie> Audio = new Dictionary<OutputPort, InputTie>();
 
-            public InputTie AudioOutputPort1 { get; set; }
-            public InputTie AudioOutputPort2 { get; set; }
-            public InputTie AudioOutputPort3 { get; set; }
-            public InputTie AudioOutputPort4 { get; set; }
         }
     }
 }
