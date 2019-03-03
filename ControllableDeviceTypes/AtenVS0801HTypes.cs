@@ -18,12 +18,28 @@ namespace ControllableDeviceTypes
             Port8 = 8
         }
 
+        public static class InputPortExtensions
+        {
+            public static bool Valid(this InputPort inputPort)
+            {
+                return Enum.IsDefined(typeof(InputPort), inputPort);
+            }
+        }
+
         public enum SwitchMode
         {
             Default,
             Next,
             Auto
         };
+
+        public static class SwitchModeExtensions
+        {
+            public static bool Valid(this SwitchMode switchMode)
+            {
+                return Enum.IsDefined(typeof(SwitchMode), switchMode);
+            }
+        }
 
         public class State
         {

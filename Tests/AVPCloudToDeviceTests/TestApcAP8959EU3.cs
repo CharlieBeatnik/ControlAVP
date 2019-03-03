@@ -18,6 +18,8 @@ namespace Tests
         private ServiceClient _serviceClient;
         private ApcAP8959EU3 _device;
 
+        private int _invalidOutletId = 999;
+
         public TestApcAP8959EU3()
         {
             using (StreamReader r = new StreamReader(_settingsFile))
@@ -73,6 +75,18 @@ namespace Tests
         public void GivenDevice_WhenCallAvailable_ThenDeviceIsAvailable()
         {
             Assert.IsTrue(_device.GetAvailable());
+        }
+
+        [Test]
+        public void GivenDevice_WhenTurnOutletOnWithInvalidId_ThenSuccessIsFalse()
+        {
+            Assert.IsFalse(_device.TurnOutletOn(_invalidOutletId));
+        }
+
+        [Test]
+        public void GivenDevice_WhenTurnOutletOffWithInvalidId_ThenSuccessIsFalse()
+        {
+            Assert.IsFalse(_device.TurnOutletOff(_invalidOutletId));
         }
     }
 }

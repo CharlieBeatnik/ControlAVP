@@ -11,6 +11,8 @@ namespace ControllableDevice
     {
         private bool _disposed = false;
         private SshDevice _sshDevice;
+
+        private static readonly int _outletCount = 24;
         public static readonly string TerminalPrompt = "apc>";
 
         public ApcAP8959EU3(string host, int port, string username, string password)
@@ -41,7 +43,7 @@ namespace ControllableDevice
         public bool GetAvailable()
         {
             var outlets = GetOutlets();
-            return outlets.Count() == 24;
+            return outlets.Count() == _outletCount;
         }
 
         public IEnumerable<Outlet> GetOutletsWaitForPending()
@@ -214,6 +216,11 @@ namespace ControllableDevice
             //Look for success string in command output
             string found = commandOutput.FirstOrDefault(o => o == "E000: Success");
             return found != null;
+        }
+
+        public static bool OutletIdValid(int id)
+        {
+            return (id >= 1 && id <= _outletCount);
         }
     }
 }

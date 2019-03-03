@@ -43,7 +43,7 @@ namespace ControlRelay
             var payloadDefintion = new { _hdmiSwitchId = -1 };
 
             var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
-            if (ValidateHdmiSwitchId(payload._hdmiSwitchId))
+            if (HdmiSwitchIdValid(payload._hdmiSwitchId))
             {
                 bool success = _devices[payload._hdmiSwitchId].GoToNextInput();
                 return GetMethodResponse(methodRequest, success);
@@ -57,7 +57,7 @@ namespace ControlRelay
             var payloadDefintion = new { _hdmiSwitchId = -1 };
 
             var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
-            if (ValidateHdmiSwitchId(payload._hdmiSwitchId))
+            if (HdmiSwitchIdValid(payload._hdmiSwitchId))
             {
                 bool success = _devices[payload._hdmiSwitchId].GoToPreviousInput();
                 return GetMethodResponse(methodRequest, success);
@@ -71,7 +71,7 @@ namespace ControlRelay
             var payloadDefintion = new { _hdmiSwitchId = -1 };
 
             var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
-            if (ValidateHdmiSwitchId(payload._hdmiSwitchId))
+            if (HdmiSwitchIdValid(payload._hdmiSwitchId))
             {
                 var result = _devices[payload._hdmiSwitchId].GetState();
                 if (result != null)
@@ -92,7 +92,7 @@ namespace ControlRelay
             };
 
             var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
-            if (ValidateHdmiSwitchId(payload._hdmiSwitchId) && ValidateInputPort(payload.inputPort))
+            if (HdmiSwitchIdValid(payload._hdmiSwitchId) && payload.inputPort.Valid())
             {
                 bool success = _devices[payload._hdmiSwitchId].SetInput(payload.inputPort);
                 return GetMethodResponse(methodRequest, success);
@@ -106,7 +106,7 @@ namespace ControlRelay
             var payloadDefintion = new { _hdmiSwitchId = -1 };
 
             var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
-            if (ValidateHdmiSwitchId(payload._hdmiSwitchId))
+            if (HdmiSwitchIdValid(payload._hdmiSwitchId))
             {
                 var result = _devices[payload._hdmiSwitchId].GetAvailable();
                 return GetMethodResponseSerialize(methodRequest, true, result);
@@ -115,14 +115,9 @@ namespace ControlRelay
             return GetMethodResponse(methodRequest, false);
         }
 
-        private bool ValidateHdmiSwitchId(int hdmiSwitchId)
+        private bool HdmiSwitchIdValid(int hdmiSwitchId)
         {
             return (hdmiSwitchId >= 0 && hdmiSwitchId < _devices.Count);
-        }
-
-        private bool ValidateInputPort(InputPort inputPort)
-        {
-            return (inputPort >= InputPort.Port1 && inputPort <= InputPort.Port8);
         }
     }
 }

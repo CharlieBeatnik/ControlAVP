@@ -68,25 +68,34 @@ namespace ControlRelay
 
         private Task<MethodResponse> TurnOutletOn(MethodRequest methodRequest, object userContext)
         {
+            bool success = false;
             var payloadDefintion = new
             {
                 outletId = -1
             };
 
             var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
-            bool success = _device.TurnOutletOn(payload.outletId);
+            if (ApcAP8959EU3.OutletIdValid(payload.outletId))
+            {
+                success = _device.TurnOutletOn(payload.outletId);
+            }
+
             return GetMethodResponse(methodRequest, success);
         }
 
         private Task<MethodResponse> TurnOutletOff(MethodRequest methodRequest, object userContext)
         {
+            bool success = false;
             var payloadDefintion = new
             {
                 outletId = -1
             };
 
             var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
-            bool success = _device.TurnOutletOff(payload.outletId);
+            if (ApcAP8959EU3.OutletIdValid(payload.outletId))
+            {
+                success = _device.TurnOutletOff(payload.outletId);
+            }
             return GetMethodResponse(methodRequest, success);
         }
 
