@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ControllableDevice;
 using System.IO;
 using Newtonsoft.Json.Linq;
+using ControllableDeviceTypes.ExtronMVX44VGATypes;
 
 namespace Tests
 {
@@ -93,11 +94,14 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GivenDevice_WhenResetWholeSwitcher_ThenResultIsSucccessful()
+        public void GivenDevice_WhenIssueAllResetTypes_ThenAllResetsSuccessful()
         {
             using (var device = CreateDevice())
             {
-                Assert.IsTrue(device.ResetWholeSwitcher());
+                foreach (var resetType in Enum.GetValues(typeof(ResetType)))
+                {
+                    Assert.IsTrue(device.Reset((ResetType)resetType));
+                }
             }
         }
     }

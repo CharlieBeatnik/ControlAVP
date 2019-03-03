@@ -3,6 +3,7 @@ using Windows.Devices.SerialCommunication;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
 using System.Threading;
+using ControllableDeviceTypes.ExtronMVX44VGATypes;
 
 namespace ControllableDevice
 {
@@ -65,9 +66,33 @@ namespace ControllableDevice
         }
 
         //Clear all ties, global presets, and mutes and reset all audio gains to the factory default.
-        public bool ResetWholeSwitcher()
+        public bool Reset(ResetType resetType)
         {
-            var result = _rs232Device.WriteWithResponse($"{_cmdEsc}ZXXX{_cmdCr}", @"^Zpx$", TimeSpan.FromSeconds(2));
+            string result = null;
+            var resetCommandWaitTime = TimeSpan.FromSeconds(2);
+
+            switch(resetType)
+            {
+                case ResetType.GlobalPresets:
+                    result = _rs232Device.WriteWithResponse($"{_cmdEsc}ZG{_cmdCr}", @"^Zpg$", resetCommandWaitTime);
+                    break;
+                case ResetType.AudioInputLevels:
+                    result = _rs232Device.WriteWithResponse($"{_cmdEsc}ZA{_cmdCr}", @"^Zpa$", resetCommandWaitTime);
+                    break;
+                case ResetType.AudioOutputLevels:
+                    result = _rs232Device.WriteWithResponse($"{_cmdEsc}ZV{_cmdCr}", @"^Zpv$", resetCommandWaitTime);
+                    break;
+                case ResetType.AllMutes:
+                    result = _rs232Device.WriteWithResponse($"{_cmdEsc}ZZ{_cmdCr}", @"^Zpz$", resetCommandWaitTime);
+                    break;
+                case ResetType.AllRGBDelaySettings:
+                    result = _rs232Device.WriteWithResponse($"{_cmdEsc}ZD{_cmdCr}", @"^Zpd$", resetCommandWaitTime);
+                    break;
+                case ResetType.Full:
+                    result = _rs232Device.WriteWithResponse($"{_cmdEsc}ZXXX{_cmdCr}", @"^Zpx$", resetCommandWaitTime);
+                    break;
+            }
+            
             return (result != null);
         }
     }
