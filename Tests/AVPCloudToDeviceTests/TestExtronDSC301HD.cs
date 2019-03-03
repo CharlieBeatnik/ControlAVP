@@ -19,6 +19,9 @@ namespace Tests
         private ServiceClient _serviceClient;
         private ExtronDSC301HD _device;
 
+        private int _invalidScaleType = 999;
+        private int _invalidPositionType = 999;
+
         public TestExtronDSC301HD()
         {
             using (StreamReader r = new StreamReader(_settingsFile))
@@ -54,6 +57,24 @@ namespace Tests
         public void GivenDevice_WhenSetOutputRate_ThenResultIsTrue()
         {
             Assert.IsTrue(_device.SetOutputRate(Edid.GetEdid(1280, 720, 50.0f)));
+        }
+
+        [Test]
+        public void GivenDevice_WhenSetScale_ThenSuccessIsTrue()
+        {
+            Assert.IsTrue(_device.SetScale(ScaleType.Fit, PositionType.Centre));
+        }
+
+        [Test]
+        public void GivenDevice_WhenSetScaleWithInvalidPositionType_ThenSuccessIsFalse()
+        {
+            Assert.IsFalse(_device.SetScale(ScaleType.Fit, (PositionType)_invalidPositionType));
+        }
+
+        [Test]
+        public void GivenDevice_WhenSetScaleWithInvalidScaleType_ThenSuccessIsFalse()
+        {
+            Assert.IsFalse(_device.SetScale((ScaleType)_invalidScaleType, PositionType.Centre));
         }
     }
 }

@@ -66,8 +66,10 @@ namespace ControlRelay
 
             var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
 
-            _device.Scale(payload.ScaleType, payload.PositionType);
-            success = true;
+            if(payload.ScaleType.Valid() && payload.PositionType.Valid())
+            {
+                success = _device.Scale(payload.ScaleType, payload.PositionType);
+            }
 
             return GetMethodResponse(methodRequest, success);
         }
@@ -85,8 +87,7 @@ namespace ControlRelay
             var edid = Edid.GetEdid(payload.Id);
             if(edid != null)
             {
-                _device.OutputRate = edid;
-                success = true;
+                success = _device.SetOutputRate(edid);
             }
 
             return GetMethodResponse(methodRequest, success);

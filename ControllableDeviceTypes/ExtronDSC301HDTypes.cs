@@ -233,9 +233,9 @@ namespace ControllableDeviceTypes
 
         public static class PositionTypeExtensions
         {
-            public static bool Valid(this PositionType scaleType)
+            public static bool Valid(this PositionType positionType)
             {
-                return Enum.IsDefined(typeof(PositionType), scaleType);
+                return Enum.IsDefined(typeof(PositionType), positionType);
             }
         }
 

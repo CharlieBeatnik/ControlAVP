@@ -85,14 +85,17 @@ namespace Tests
         {
             using (var device = CreateDevice())
             {
-                device.HorizontalPosition = 10;
-                Assert.IsTrue(device.HorizontalPosition == 10);
+                var result = device.SetHorizontalPosition(10);
+                Assert.IsTrue(result);
+                Assert.IsTrue(device.GetHorizontalPosition() == 10);
 
-                device.HorizontalPosition = 0;
-                Assert.IsTrue(device.HorizontalPosition == 0);
+                result = device.SetHorizontalPosition(0);
+                Assert.IsTrue(result);
+                Assert.IsTrue(device.GetHorizontalPosition() == 0);
 
-                device.HorizontalPosition = -10;
-                Assert.IsTrue(device.HorizontalPosition == -10);
+                result = device.SetHorizontalPosition(-10);
+                Assert.IsTrue(result);
+                Assert.IsTrue(device.GetHorizontalPosition() == -10);
             }
         }
 
@@ -101,14 +104,17 @@ namespace Tests
         {
             using (var device = CreateDevice())
             {
-                device.VerticalPosition = 10;
-                Assert.IsTrue(device.VerticalPosition == 10);
+                var result = device.SetVerticalPosition(10);
+                Assert.IsTrue(result);
+                Assert.IsTrue(device.GetVerticalPosition() == 10);
 
-                device.VerticalPosition = 0;
-                Assert.IsTrue(device.VerticalPosition == 0);
+                result = device.SetVerticalPosition(0);
+                Assert.IsTrue(result);
+                Assert.IsTrue(device.GetVerticalPosition() == 0);
 
-                device.VerticalPosition = -10;
-                Assert.IsTrue(device.VerticalPosition == -10);
+                result = device.SetVerticalPosition(-10);
+                Assert.IsTrue(result);
+                Assert.IsTrue(device.GetVerticalPosition() == -10);
             }
         }
 
@@ -117,8 +123,9 @@ namespace Tests
         {
             using (var device = CreateDevice())
             {
-                device.HorizontalSize = 10;
-                Assert.IsTrue(device.HorizontalSize == 10);
+                var result = device.SetHorizontalSize(10);
+                Assert.IsTrue(result);
+                Assert.IsTrue(device.GetHorizontalSize() == 10);
             }
         }
 
@@ -127,8 +134,9 @@ namespace Tests
         {
             using (var device = CreateDevice())
             {
-                device.VerticalSize = 10;
-                Assert.IsTrue(device.VerticalSize == 10);
+                var result = device.SetVerticalSize(10);
+                Assert.IsTrue(result);
+                Assert.IsTrue(device.GetVerticalSize() == 10);
             }
         }
 
@@ -140,9 +148,10 @@ namespace Tests
                 var edid = Edid.GetEdid(1280, 720, 60.0f);
                 Assert.IsNotNull(edid);
 
-                device.OutputRate = edid;
+                var result = device.SetOutputRate(edid);
+                Assert.IsTrue(result);
 
-                var outputRate = device.OutputRate;
+                var outputRate = device.GetOutputRate();
                 Assert.IsTrue(outputRate == edid);
             }
         }
@@ -186,11 +195,12 @@ namespace Tests
             using (var device = CreateDevice())
             {
                 var posAndSizeBefore = new PositionAndSize(32, 64, 640, 480);
-                device.ImagePositionAndSize = posAndSizeBefore;
-                var posAndSizeAfter = device.ImagePositionAndSize;
+                var result = device.SetImagePositionAndSize(posAndSizeBefore);
+                Assert.IsTrue(result);
+
+                var posAndSizeAfter = device.GetImagePositionAndSize();
                 Assert.AreEqual(posAndSizeBefore, posAndSizeAfter);
             }
         }
-
     }
 }

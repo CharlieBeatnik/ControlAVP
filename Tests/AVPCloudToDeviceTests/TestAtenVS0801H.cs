@@ -18,8 +18,8 @@ namespace Tests
         private ServiceClient _serviceClient;
         private List<AtenVS0801H> _devices = new List<AtenVS0801H>();
 
-        private uint _invalidHdmiSwitchId = 42;
-        private int _invalidInputPort = 42;
+        private uint _invalidHdmiSwitchId = 999;
+        private int _invalidInputPort = 999;
 
         public TestAtenVS0801H()
         {
