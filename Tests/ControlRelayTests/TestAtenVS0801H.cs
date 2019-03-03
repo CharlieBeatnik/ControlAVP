@@ -119,5 +119,17 @@ namespace Tests
                 }
             }
         }
+
+        [TestMethod]
+        public void GivenDevice_WhenGetState_ThenFirmwareIsGTE2_0_197()
+        {
+            using (var device = CreateDevice())
+            {
+                var state = device.GetState();
+                Assert.IsNotNull(state);
+
+                Assert.IsTrue(state.Firmware >= new Version(2, 0, 197));
+            }
+        }
     }
 }
