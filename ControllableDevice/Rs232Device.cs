@@ -42,7 +42,7 @@ namespace ControllableDevice
 
         private readonly TimeSpan _defaultWriteTimeout = TimeSpan.FromMilliseconds(50);
         private readonly TimeSpan _defaultReadTimeout = TimeSpan.FromMilliseconds(50);
-        private readonly uint _defaultMessageStoreCapacity = 32;
+        private readonly uint _defaultMessageStoreCapacity = 1024;
 
         public delegate string ProcessString(string input);
         public ProcessString PreWrite { get; set; } = (x) => { return x; };
@@ -64,7 +64,7 @@ namespace ControllableDevice
         }
 
         public TimeSpan PostWriteWait { get; set; } = TimeSpan.FromMilliseconds(500);
-        public TimeSpan MessageLifetime { get; set; } = TimeSpan.FromSeconds(5);
+        public TimeSpan MessageLifetime { get; set; } = TimeSpan.FromSeconds(10);
 
         public uint BaudRate
         {
@@ -297,18 +297,17 @@ namespace ControllableDevice
             return null;
         }
 
-        public string WriteWithResponse(string write, string pattern)
+        public string WriteWithResponse(string write, string pattern, TimeSpan? postWriteWaitOverride = null)
         {
             Write(write);
-            Thread.Sleep(PostWriteWait);
-
+            Thread.Sleep(postWriteWaitOverride == null ? PostWriteWait : (TimeSpan)postWriteWaitOverride);
             return Read(pattern);
         }
 
-        public List<string> WriteWithResponses(string write, int numResponses)
+        public List<string> WriteWithResponses(string write, int numResponses, TimeSpan? postWriteWaitOverride = null)
         {
             Write(write);
-            Thread.Sleep(PostWriteWait);
+            Thread.Sleep(postWriteWaitOverride == null ? PostWriteWait : (TimeSpan)postWriteWaitOverride);
 
             lock (_messageStore)
             {

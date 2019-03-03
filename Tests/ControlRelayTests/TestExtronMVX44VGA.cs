@@ -91,5 +91,14 @@ namespace Tests
                 }
             }
         }
+
+        [TestMethod]
+        public void GivenDevice_WhenResetWholeSwitcher_ThenResultIsSucccessful()
+        {
+            using (var device = CreateDevice())
+            {
+                Assert.IsTrue(device.ResetWholeSwitcher());
+            }
+        }
     }
 }

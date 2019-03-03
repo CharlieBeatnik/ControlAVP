@@ -2,6 +2,7 @@
 using Windows.Devices.SerialCommunication;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
+using System.Threading;
 
 namespace ControllableDevice
 {
@@ -9,6 +10,9 @@ namespace ControllableDevice
     {
         private bool _disposed = false;
         private Rs232Device _rs232Device;
+
+        private readonly string _cmdEsc = ('\x1B').ToString();
+        private readonly string _cmdCr = "\r";
 
         public ExtronMVX44VGA(string portId)
         {
@@ -58,6 +62,13 @@ namespace ControllableDevice
             }
 
             return null;
+        }
+
+        //Clear all ties, global presets, and mutes and reset all audio gains to the factory default.
+        public bool ResetWholeSwitcher()
+        {
+            var result = _rs232Device.WriteWithResponse($"{_cmdEsc}ZXXX{_cmdCr}", @"^Zpx$", TimeSpan.FromSeconds(2));
+            return (result != null);
         }
     }
 }

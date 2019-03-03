@@ -16,7 +16,6 @@ namespace ControllableDevice
         private readonly string _cmdCr = "\r";
         private readonly string _patternNumberLine = @"^[+-]*[0-9]+$";
         private readonly string _patternNumber = $@"[+-]*[0-9]+";
-        private readonly TimeSpan _outputRateChangeWait = TimeSpan.FromSeconds(5);
 
         public ExtronDSC301HD(string portId)
         {
@@ -242,12 +241,7 @@ namespace ControllableDevice
 
         public bool SetOutputRate(Edid value)
         {
-            _rs232Device.Write($"{_cmdEsc}{value.Id}RATE{_cmdCr}");
-
-            //Output Rate change needs longer than normal to take effect
-            Thread.Sleep(_outputRateChangeWait);
-
-            var result = _rs232Device.Read(@"^Rate[0-9]+$");
+            var result = _rs232Device.WriteWithResponse($"{_cmdEsc}{value.Id}RATE{_cmdCr}", @"^Rate[0-9]+$", TimeSpan.FromSeconds(5));
             return (result != null);
         }
 
