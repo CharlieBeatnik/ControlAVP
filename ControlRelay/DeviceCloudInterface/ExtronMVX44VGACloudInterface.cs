@@ -2,6 +2,7 @@
 using System.Text;
 using System.Threading.Tasks;
 using ControllableDevice;
+using ControllableDeviceTypes.ExtronMVX44VGATypes;
 using Microsoft.Azure.Devices.Client;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -30,6 +31,7 @@ namespace ControlRelay
             deviceClient.SetMethodHandlerAsync("VGAMatrixGetFirmware", GetFirmware, null).Wait();
             deviceClient.SetMethodHandlerAsync("VGAMatrixGetAvailable", GetAvailable, null).Wait();
             deviceClient.SetMethodHandlerAsync("VGAMatrixGetTieState", GetTieState, null).Wait();
+            deviceClient.SetMethodHandlerAsync("VGAMatrixTieInputPortToAllOutputPorts", TieInputPortToAllOutputPorts, null).Wait();
         }
 
         private Task<MethodResponse> GetFirmware(MethodRequest methodRequest, object userContext)
@@ -66,6 +68,25 @@ namespace ControlRelay
             {
                 return GetMethodResponse(methodRequest, false);
             }
+        }
+
+        private Task<MethodResponse> TieInputPortToAllOutputPorts(MethodRequest methodRequest, object userContext)
+        {
+            bool success = false;
+            var payloadDefintion = new
+            {
+                inputPort = InputPort.NoTie,
+                tieType = TieType.AudioVideo
+            };
+
+            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
+
+            if (payload.inputPort.Valid() && payload.tieType.Valid())
+            {
+                success = _device.TieInputPortToAllOutputPorts(payload.inputPort, payload.tieType);
+            }
+
+            return GetMethodResponse(methodRequest, success);
         }
 
     }

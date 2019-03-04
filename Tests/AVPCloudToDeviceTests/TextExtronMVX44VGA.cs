@@ -7,6 +7,7 @@ using System;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
+using ControllableDeviceTypes.ExtronMVX44VGATypes;
 
 namespace Tests
 {
@@ -53,6 +54,12 @@ namespace Tests
         public void GivenDevice_WhenGetTieState_ThenTieStateIsNotNull()
         {
             Assert.IsNotNull(_device.GetTieState());
+        }
+
+        [Test]
+        public void GivenDevice_WhenTieInputPortToAllOutputPorts_ThenSuccessIsTrue()
+        {
+            Assert.IsTrue(_device.TieInputPortToAllOutputPorts(InputPort.Port1, TieType.AudioVideo));
         }
     }
 }
