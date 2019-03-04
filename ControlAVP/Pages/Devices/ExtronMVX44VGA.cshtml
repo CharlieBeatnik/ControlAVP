@@ -1,6 +1,7 @@
 ﻿@page
 @model ControlAVP.Pages.Devices.ExtronMVX44VGAModel
 @using ControllableDeviceTypes.ExtronMVX44VGATypes;
+@using System.Linq;
 
 @{
     ViewData["Title"] = "Extron MVX44VGA";
@@ -24,33 +25,31 @@
                             <td><span class="label label-primary">@Model.DeviceInfoCache.Firmware</span></td>
                         </tr>
                         <tr>
-                            <td>Video Ties</td>
+                            <td>Matrix</td>
                             <td>
-                                <div class="btn-group" style="display: flex">
-                                    @foreach (OutputPort outputPort in Enum.GetValues(typeof(OutputPort)))
+                                <table>
+
+                                    @foreach (InputPort inputPort in Enum.GetValues(typeof(InputPort)).OfType<InputPort>().Skip(1))
                                     {
-                                        var inputTie = Model.DeviceInfoCache.TieState.Video[outputPort];
-                                        <button type="submit"
-                                                class="btn btn-sm @(inputTie == InputTie.NoTie ? "btn-default" : "btn-success") ">
-                                            @((inputTie == InputTie.NoTie) ? "Untied" : inputTie.ToString())
-                                        </button>
+                                        <tr>
+                                            <td>
+                                                <span class="label label-default">Input Port @((int)inputPort)</span>
+                                            </td>
+                                            <td>
+                                                <div class="btn-group" style="display: flex">
+                                                    @foreach (OutputPort outputPort in Enum.GetValues(typeof(OutputPort)))
+                                                    {
+                                                        var inputPortActual = Model.DeviceInfoCache.TieState.Video[outputPort];
+                                                        <button type="submit"
+                                                                class="btn btn-sm @((inputPortActual == inputPort) ? "btn-success" : "btn-default")">
+                                                            @inputPort.ToString()
+                                                        </button>
+                                                    }
+                                                </div>
+                                            </td>
+                                        </tr>
                                     }
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Audio Ties</td>
-                            <td>
-                                <div class="btn-group" style="display: flex">
-                                    @foreach (OutputPort outputPort in Enum.GetValues(typeof(OutputPort)))
-                                    {
-                                        var inputTie = Model.DeviceInfoCache.TieState.Audio[outputPort];
-                                        <button type="submit"
-                                                class="btn btn-sm @(inputTie == InputTie.NoTie ? "btn-default" : "btn-success") ">
-                                            @((inputTie == InputTie.NoTie) ? "Untied" : inputTie.ToString())
-                                        </button>
-                                    }
-                                </div>
+                                </table>
                             </td>
                         </tr>
                     </table>
