@@ -106,25 +106,25 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GivenDevice_WhenGetInputTie_ThenTieIsNotNull()
+        public void GivenDevice_WhenGetInputPort_ThenTieIsNotNull()
         {
             using (var device = CreateDevice())
             {
-                InputPort? inputTie = device.GetInputTieForOutputPort(OutputPort.Port1, TieType.Video);
+                InputPort? inputTie = device.GetInputPortForOutputPort(OutputPort.Port1, TieType.Video);
                 Assert.IsNotNull(inputTie);
 
-                inputTie = device.GetInputTieForOutputPort(OutputPort.Port1, TieType.Audio);
+                inputTie = device.GetInputPortForOutputPort(OutputPort.Port1, TieType.Audio);
                 Assert.IsNotNull(inputTie);
             }
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void GivenDevice_WhenGetInputTieWithTypeAudioVideo_ThenExceptionThrown()
+        public void GivenDevice_WhenGetInputPortWithTypeAudioVideo_ThenExceptionThrown()
         {
             using (var device = CreateDevice())
             {
-                device.GetInputTieForOutputPort(OutputPort.Port1, TieType.AudioVideo);
+                device.GetInputPortForOutputPort(OutputPort.Port1, TieType.AudioVideo);
             }
         }
 
@@ -157,6 +157,52 @@ namespace Tests
                 Assert.AreEqual(tieState.Audio[OutputPort.Port2], inputPort);
                 Assert.AreEqual(tieState.Audio[OutputPort.Port3], inputPort);
                 Assert.AreEqual(tieState.Audio[OutputPort.Port4], inputPort);
+            }
+        }
+
+        [TestMethod]
+        public void GivenDevice_WhenTieAudioAndVideoToDifferentInputPorts_ThenTieIsSuccessful()
+        {
+            using (var device = CreateDevice())
+            {
+                var inputPortVideo = InputPort.Port1;
+                var inputPortAudio = InputPort.Port2;
+
+                Assert.IsTrue(device.TieInputPortToAllOutputPorts(inputPortVideo, TieType.Video));
+                Assert.IsTrue(device.TieInputPortToAllOutputPorts(inputPortAudio, TieType.Audio));
+
+                var tieState = device.GetTieState();
+                Assert.IsNotNull(tieState);
+
+                Assert.AreEqual(tieState.Video[OutputPort.Port1], inputPortVideo);
+                Assert.AreEqual(tieState.Video[OutputPort.Port2], inputPortVideo);
+                Assert.AreEqual(tieState.Video[OutputPort.Port3], inputPortVideo);
+                Assert.AreEqual(tieState.Video[OutputPort.Port4], inputPortVideo);
+
+                Assert.AreEqual(tieState.Audio[OutputPort.Port1], inputPortAudio);
+                Assert.AreEqual(tieState.Audio[OutputPort.Port2], inputPortAudio);
+                Assert.AreEqual(tieState.Audio[OutputPort.Port3], inputPortAudio);
+                Assert.AreEqual(tieState.Audio[OutputPort.Port4], inputPortAudio);
+            }
+        }
+
+        [TestMethod]
+        public void GivenDevice_WhenTieInputPortToOutputPort_ThenTieIsSuccessful()
+        {
+            using (var device = CreateDevice())
+            {
+                var result = device.TieInputPortToOutputPort(InputPort.Port1, OutputPort.Port1, TieType.Audio);
+                Assert.IsNotNull(result);
+                Assert.AreEqual(device.GetInputPortForOutputPort(OutputPort.Port1, TieType.Audio), InputPort.Port1);
+
+                result = device.TieInputPortToOutputPort(InputPort.Port2, OutputPort.Port2, TieType.Video);
+                Assert.IsNotNull(result);
+                Assert.AreEqual(device.GetInputPortForOutputPort(OutputPort.Port2, TieType.Video), InputPort.Port2);
+
+                result = device.TieInputPortToOutputPort(InputPort.Port3, OutputPort.Port3, TieType.AudioVideo);
+                Assert.IsNotNull(result);
+                Assert.AreEqual(device.GetInputPortForOutputPort(OutputPort.Port3, TieType.Video), InputPort.Port3);
+                Assert.AreEqual(device.GetInputPortForOutputPort(OutputPort.Port3, TieType.Audio), InputPort.Port3);
             }
         }
     }

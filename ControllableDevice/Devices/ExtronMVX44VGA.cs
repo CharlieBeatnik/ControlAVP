@@ -95,7 +95,7 @@ namespace ControllableDevice
             return (result != null);
         }
 
-        public InputPort? GetInputTieForOutputPort(OutputPort outputPort, TieType tieType)
+        public InputPort? GetInputPortForOutputPort(OutputPort outputPort, TieType tieType)
         {
             string result = null;
 
@@ -149,7 +149,41 @@ namespace ControllableDevice
 
         public bool TieInputPortToAllOutputPorts(InputPort inputPort, TieType tieType)
         {
-            var result = _rs232Device.WriteWithResponse($"{(int)inputPort}*!", $@"^In{(int)inputPort} All$");
+            string result = null;
+
+            switch (tieType)
+            {
+                case TieType.Video:
+                    result = _rs232Device.WriteWithResponse($"{(int)inputPort}*&", $@"^In{(int)inputPort} RGB");
+                    break;
+                case TieType.Audio:
+                    result = _rs232Device.WriteWithResponse($"{(int)inputPort}*$", $@"^In{(int)inputPort} Aud$");
+                    break;
+                case TieType.AudioVideo:
+                    result = _rs232Device.WriteWithResponse($"{(int)inputPort}*!", $@"^In{(int)inputPort} All$");
+                    break;
+            }
+
+            return (result != null);
+        }
+
+        public bool TieInputPortToOutputPort(InputPort inputPort, OutputPort outputPort, TieType tieType)
+        {
+            string result = null;
+
+            switch (tieType)
+            {
+                case TieType.Video:
+                    result = _rs232Device.WriteWithResponse($"{(int)inputPort}*{(int)outputPort}&", $@"^Out{(int)outputPort} In{(int)inputPort} RGB");
+                    break;
+                case TieType.Audio:
+                    result = _rs232Device.WriteWithResponse($"{(int)inputPort}*{(int)outputPort}$", $@"^Out{(int)outputPort} In{(int)inputPort} Aud");
+                    break;
+                case TieType.AudioVideo:
+                    result = _rs232Device.WriteWithResponse($"{(int)inputPort}*{(int)outputPort}!", $@"^Out{(int)outputPort} In{(int)inputPort} All");
+                    break;
+            }
+
             return (result != null);
         }
 
