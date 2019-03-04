@@ -95,11 +95,16 @@ namespace ControllableDevice
             return (result != null);
         }
 
-        public InputTie? GetInputTieForOutputPort(OutputPort outputPort, TieType tieType)
+        public InputPort? GetInputTieForOutputPort(OutputPort outputPort, TieType tieType)
         {
             string result = null;
 
-            switch(tieType)
+            if (tieType == TieType.AudioVideo)
+            {
+                throw new ArgumentException("Unable to get Audio and Video ties at the same time.");
+            }
+
+            switch (tieType)
             {
                 case TieType.Video:
                     result = _rs232Device.WriteWithResponse($"{(int)outputPort}&", @"^[0-9]+$");
@@ -111,7 +116,7 @@ namespace ControllableDevice
 
             if(result == null) return null;
 
-            InputTie tie = (InputTie)int.Parse(result);
+            InputPort tie = (InputPort)int.Parse(result);
             if(!tie.Valid()) return null;
 
             return tie;
@@ -129,17 +134,23 @@ namespace ControllableDevice
             var match = Regex.Match(result, pattern);
             if (!match.Success) return null;
 
-            tieState.Video.Add(OutputPort.Port1, (InputTie)int.Parse(match.Groups[1].Value));
-            tieState.Video.Add(OutputPort.Port2, (InputTie)int.Parse(match.Groups[2].Value));
-            tieState.Video.Add(OutputPort.Port3, (InputTie)int.Parse(match.Groups[3].Value));
-            tieState.Video.Add(OutputPort.Port4, (InputTie)int.Parse(match.Groups[4].Value));
+            tieState.Video.Add(OutputPort.Port1, (InputPort)int.Parse(match.Groups[1].Value));
+            tieState.Video.Add(OutputPort.Port2, (InputPort)int.Parse(match.Groups[2].Value));
+            tieState.Video.Add(OutputPort.Port3, (InputPort)int.Parse(match.Groups[3].Value));
+            tieState.Video.Add(OutputPort.Port4, (InputPort)int.Parse(match.Groups[4].Value));
 
-            tieState.Audio.Add(OutputPort.Port1, (InputTie)int.Parse(match.Groups[5].Value));
-            tieState.Audio.Add(OutputPort.Port2, (InputTie)int.Parse(match.Groups[6].Value));
-            tieState.Audio.Add(OutputPort.Port3, (InputTie)int.Parse(match.Groups[7].Value));
-            tieState.Audio.Add(OutputPort.Port4, (InputTie)int.Parse(match.Groups[8].Value));
+            tieState.Audio.Add(OutputPort.Port1, (InputPort)int.Parse(match.Groups[5].Value));
+            tieState.Audio.Add(OutputPort.Port2, (InputPort)int.Parse(match.Groups[6].Value));
+            tieState.Audio.Add(OutputPort.Port3, (InputPort)int.Parse(match.Groups[7].Value));
+            tieState.Audio.Add(OutputPort.Port4, (InputPort)int.Parse(match.Groups[8].Value));
 
             return tieState;
+        }
+
+        public bool TieInputPortToAllOutputPorts(InputPort inputPort, TieType tieType)
+        {
+            var result = _rs232Device.WriteWithResponse($"{(int)inputPort}*!", $@"^In{(int)inputPort} All$");
+            return (result != null);
         }
 
     }

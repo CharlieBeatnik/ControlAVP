@@ -24,7 +24,7 @@ namespace ControllableDeviceTypes
             }
         }
 
-        public enum InputTie
+        public enum InputPort
         {
             NoTie = 0,
             Port1 = 1,
@@ -33,11 +33,11 @@ namespace ControllableDeviceTypes
             Port4 = 4
         }
 
-        public static class InputTieExtensions
+        public static class InputPortExtensions
         {
-            public static bool Valid(this InputTie inputTie)
+            public static bool Valid(this InputPort inputPort)
             {
-                return Enum.IsDefined(typeof(InputTie), inputTie);
+                return Enum.IsDefined(typeof(InputPort), inputPort);
             }
         }
 
@@ -60,7 +60,8 @@ namespace ControllableDeviceTypes
         public enum TieType
         {
             Video,
-            Audio
+            Audio,
+            AudioVideo
         }
 
         public static class TieTypeExtensions
@@ -73,8 +74,8 @@ namespace ControllableDeviceTypes
 
         public class TieState
         {
-            public Dictionary<OutputPort, InputTie> Video = new Dictionary<OutputPort, InputTie>();
-            public Dictionary<OutputPort, InputTie> Audio = new Dictionary<OutputPort, InputTie>();
+            public Dictionary<OutputPort, InputPort> Video = new Dictionary<OutputPort, InputPort>();
+            public Dictionary<OutputPort, InputPort> Audio = new Dictionary<OutputPort, InputPort>();
 
         }
     }

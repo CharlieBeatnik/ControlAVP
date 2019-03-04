@@ -110,7 +110,7 @@ namespace Tests
         {
             using (var device = CreateDevice())
             {
-                InputTie? inputTie = device.GetInputTieForOutputPort(OutputPort.Port1, TieType.Video);
+                InputPort? inputTie = device.GetInputTieForOutputPort(OutputPort.Port1, TieType.Video);
                 Assert.IsNotNull(inputTie);
 
                 inputTie = device.GetInputTieForOutputPort(OutputPort.Port1, TieType.Audio);
@@ -119,11 +119,44 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GivenDevice_WhenGetlTieState_ThenStateIsNotNull()
+        [ExpectedException(typeof(ArgumentException))]
+        public void GivenDevice_WhenGetInputTieWithTypeAudioVideo_ThenExceptionThrown()
+        {
+            using (var device = CreateDevice())
+            {
+                device.GetInputTieForOutputPort(OutputPort.Port1, TieType.AudioVideo);
+            }
+        }
+
+        [TestMethod]
+        public void GivenDevice_WhenGetTieState_ThenStateIsNotNull()
         {
             using (var device = CreateDevice())
             {
                 Assert.IsNotNull(device.GetTieState());
+            }
+        }
+
+        [TestMethod]
+        public void GivenDevice_WhenTieInputPortToAllOutputPorts_ThenTieIsSuccessful()
+        {
+            using (var device = CreateDevice())
+            {
+                var inputPort = InputPort.Port1;
+                Assert.IsTrue(device.TieInputPortToAllOutputPorts(inputPort, TieType.AudioVideo));
+
+                var tieState = device.GetTieState();
+                Assert.IsNotNull(tieState);
+
+                Assert.AreEqual(tieState.Video[OutputPort.Port1], inputPort);
+                Assert.AreEqual(tieState.Video[OutputPort.Port2], inputPort);
+                Assert.AreEqual(tieState.Video[OutputPort.Port3], inputPort);
+                Assert.AreEqual(tieState.Video[OutputPort.Port4], inputPort);
+
+                Assert.AreEqual(tieState.Audio[OutputPort.Port1], inputPort);
+                Assert.AreEqual(tieState.Audio[OutputPort.Port2], inputPort);
+                Assert.AreEqual(tieState.Audio[OutputPort.Port3], inputPort);
+                Assert.AreEqual(tieState.Audio[OutputPort.Port4], inputPort);
             }
         }
     }
