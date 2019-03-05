@@ -61,5 +61,11 @@ namespace Tests
         {
             Assert.IsTrue(_device.TieInputPortToAllOutputPorts(InputPort.Port1, TieType.AudioVideo));
         }
+
+        [Test]
+        public void GivenDevice_WhenTieInputPortToOutputPort_ThenSuccessIsTrue()
+        {
+            Assert.IsTrue(_device.TieInputPortToOutputPort(InputPort.Port1, OutputPort.Port1, TieType.AudioVideo));
+        }
     }
 }

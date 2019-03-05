@@ -55,5 +55,12 @@ namespace ControlAVP.Pages.Devices
             DeviceInfoCache.TieState = _device.GetTieState();
             return RedirectToPage();
         }
+
+        public IActionResult OnPostTieInputPortTOutputPort(InputPort inputPort, OutputPort outputPort, TieType tieType)
+        {
+            _device.TieInputPortToOutputPort(inputPort, outputPort, tieType);
+            DeviceInfoCache.TieState = _device.GetTieState();
+            return RedirectToPage();
+        }
     }
 }

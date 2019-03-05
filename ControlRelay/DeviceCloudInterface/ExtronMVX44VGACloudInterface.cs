@@ -32,6 +32,7 @@ namespace ControlRelay
             deviceClient.SetMethodHandlerAsync("VGAMatrixGetAvailable", GetAvailable, null).Wait();
             deviceClient.SetMethodHandlerAsync("VGAMatrixGetTieState", GetTieState, null).Wait();
             deviceClient.SetMethodHandlerAsync("VGAMatrixTieInputPortToAllOutputPorts", TieInputPortToAllOutputPorts, null).Wait();
+            deviceClient.SetMethodHandlerAsync("VGAMatrixTieInputPortToOutputPort", TieInputPortToOutputPort, null).Wait();
         }
 
         private Task<MethodResponse> GetFirmware(MethodRequest methodRequest, object userContext)
@@ -75,8 +76,8 @@ namespace ControlRelay
             bool success = false;
             var payloadDefintion = new
             {
-                inputPort = InputPort.NoTie,
-                tieType = TieType.AudioVideo
+                inputPort = (InputPort)(-1),
+                tieType = (TieType)(-1),
             };
 
             var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
@@ -84,6 +85,26 @@ namespace ControlRelay
             if (payload.inputPort.Valid() && payload.tieType.Valid())
             {
                 success = _device.TieInputPortToAllOutputPorts(payload.inputPort, payload.tieType);
+            }
+
+            return GetMethodResponse(methodRequest, success);
+        }
+
+        private Task<MethodResponse> TieInputPortToOutputPort(MethodRequest methodRequest, object userContext)
+        {
+            bool success = false;
+            var payloadDefintion = new
+            {
+                inputPort = (InputPort)(-1),
+                outputPort = (OutputPort)(-1),
+                tieType = (TieType)(-1),
+            };
+
+            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
+
+            if (payload.inputPort.Valid() && payload.outputPort.Valid() && payload.tieType.Valid())
+            {
+                success = _device.TieInputPortToOutputPort(payload.inputPort, payload.outputPort, payload.tieType);
             }
 
             return GetMethodResponse(methodRequest, success);

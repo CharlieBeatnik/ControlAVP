@@ -72,5 +72,19 @@ namespace AVPCloudToDevice
                 return false;
             }
         }
+
+        public bool TieInputPortToOutputPort(InputPort inputPort, OutputPort outputPort, TieType tieType)
+        {
+            try
+            {
+                var payload = new { inputPort, outputPort, tieType };
+                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "VGAMatrixTieInputPortToOutputPort", payload);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }

@@ -62,6 +62,10 @@
                                             <td style="padding:5px">
                                                 @{var inputPortActual = Model.DeviceInfoCache.TieState.Video[outputPort];}
                                                 <button type="submit"
+                                                        asp-page-handler="TieInputPortTOutputPort"
+                                                        asp-route-inputport=@inputPort
+                                                        asp-route-outputport=@outputPort
+                                                        asp-route-tietype=@TieType.AudioVideo
                                                         class="btn btn-lg @((inputPortActual == inputPort) ? "btn-success" : "btn-default")"></button>
                                             </td>
                                         }
