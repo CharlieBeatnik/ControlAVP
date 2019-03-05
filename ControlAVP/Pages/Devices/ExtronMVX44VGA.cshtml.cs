@@ -48,5 +48,12 @@ namespace ControlAVP.Pages.Devices
             DeviceInfoCache.Firmware = _device.GetFirmware();
             DeviceInfoCache.TieState = _device.GetTieState();
         }
+
+        public IActionResult OnPostTieInputPortToAllOutputPorts(InputPort inputPort, TieType tieType)
+        {
+            _device.TieInputPortToAllOutputPorts(inputPort, tieType);
+            DeviceInfoCache.TieState = _device.GetTieState();
+            return RedirectToPage();
+        }
     }
 }
