@@ -26,6 +26,7 @@ namespace ControlAVP.Pages.Devices
         {
             public bool Available;
             public Version Firmware;
+            public InputPort? InputPort;
         }
         public DeviceInfo DeviceInfoCache { get; private set; } = new DeviceInfo();
 
@@ -45,6 +46,7 @@ namespace ControlAVP.Pages.Devices
         {
             DeviceInfoCache.Available = _device.GetAvailable();
             DeviceInfoCache.Firmware = _device.GetFirmware();
+            DeviceInfoCache.InputPort = _device.GetInputPort();
         }
 
         public IActionResult OnPostScale(ScaleType scaleType, PositionType positionType)
@@ -57,6 +59,13 @@ namespace ControlAVP.Pages.Devices
         {
             var edid = Edid.GetEdid(width, height, refreshRate);
             _device.SetOutputRate(edid);
+            return RedirectToPage();
+        }
+
+        public IActionResult OnPostSetInput(InputPort inputPort)
+        {
+            _device.SetInputPort(inputPort);
+            DeviceInfoCache.InputPort = _device.GetInputPort();
             return RedirectToPage();
         }
     }
