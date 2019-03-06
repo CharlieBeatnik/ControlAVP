@@ -71,5 +71,33 @@ namespace AVPCloudToDevice
                 return false;
             }
         }
+
+        public InputPort? GetInputPort()
+        {
+            try
+            {
+                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "ScalerGetInputPort", null);
+                string json = response.GetPayloadAsJson();
+                return JsonConvert.DeserializeObject<InputPort>(json);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public bool SetInputPort(InputPort inputPort)
+        {
+            try
+            {
+                var payload = new { inputPort };
+                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "ScalerSetInputPort", payload);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }

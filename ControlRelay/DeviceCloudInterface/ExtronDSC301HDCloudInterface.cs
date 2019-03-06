@@ -32,6 +32,8 @@ namespace ControlRelay
             deviceClient.SetMethodHandlerAsync("ScalerGetAvailable", GetAvailable, null).Wait();
             deviceClient.SetMethodHandlerAsync("ScalerSetScale", SetScale, null).Wait();
             deviceClient.SetMethodHandlerAsync("ScalerSetOutputRate", SetOutputRate, null).Wait();
+            deviceClient.SetMethodHandlerAsync("ScalerGetInputPort", GetInputPort, null).Wait();
+            deviceClient.SetMethodHandlerAsync("ScalerSetInputPort", SetInputPort, null).Wait();
         }
 
         private Task<MethodResponse> GetFirmware(MethodRequest methodRequest, object userContext)
@@ -60,8 +62,8 @@ namespace ControlRelay
             bool success = false;
             var payloadDefintion = new
             {
-                ScaleType = ScaleType.Fit,
-                PositionType = PositionType.Centre
+                ScaleType = (ScaleType)(-1),
+                PositionType = (PositionType)(-1),
             };
 
             var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
@@ -91,6 +93,36 @@ namespace ControlRelay
             }
 
             return GetMethodResponse(methodRequest, success);
+        }
+
+        private Task<MethodResponse> SetInputPort(MethodRequest methodRequest, object userContext)
+        {
+            bool success = false;
+            var payloadDefintion = new
+            {
+                inputPort = (InputPort)(-1),
+            };
+
+            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
+
+            if (payload.inputPort.Valid())
+            {
+                success = _device.SetInputPort(payload.inputPort);
+            }
+            return GetMethodResponse(methodRequest, success);
+        }
+
+        private Task<MethodResponse> GetInputPort(MethodRequest methodRequest, object userContext)
+        {
+            var inputPort = _device.GetInputPort();
+            if (inputPort != null)
+            {
+                return GetMethodResponseSerialize(methodRequest, true, inputPort);
+            }
+            else
+            {
+                return GetMethodResponse(methodRequest, false);
+            }
         }
 
     }

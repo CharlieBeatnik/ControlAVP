@@ -76,5 +76,15 @@ namespace Tests
         {
             Assert.IsFalse(_device.SetScale((ScaleType)_invalidScaleType, PositionType.Centre));
         }
+
+        [Test]
+        public void GivenDevice_WhenSetInputPortToHDMI_ThenInputPortIsHDMI()
+        {
+            Assert.IsTrue(_device.SetInputPort(InputPort.HDMI));
+
+            var inputPort = _device.GetInputPort();
+            Assert.IsNotNull(inputPort);
+            Assert.AreEqual(InputPort.HDMI, inputPort);
+        }
     }
 }

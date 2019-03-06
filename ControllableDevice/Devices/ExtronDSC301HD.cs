@@ -269,5 +269,27 @@ namespace ControllableDevice
             var result = _rs232Device.WriteWithResponse($"{_cmdEsc}{value.HPos}*{value.VPos}*{value.HSize}*{value.VSize}XIMG{_cmdCr}", pattern);
             return (result != null);
         }
+
+        public bool SetInputPort(InputPort inputPort)
+        {
+            var result = _rs232Device.WriteWithResponse($"{(int)inputPort}!", $@"^In{(int)inputPort} All");
+            return (result != null);
+        }
+
+        public InputPort? GetInputPort()
+        {
+            var result = _rs232Device.WriteWithResponse($"!", _patternNumber);
+
+            if (result != null)
+            {
+                var inputPort = (InputPort)int.Parse(result);
+                if(inputPort.Valid())
+                {
+                    return inputPort;
+                }
+            }
+
+            return null;
+        }
     }
 }

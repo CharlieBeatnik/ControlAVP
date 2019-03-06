@@ -14,12 +14,28 @@ namespace ControllableDeviceTypes
             HDMI = 3
         }
 
+        public static class InputPortExtensions
+        {
+            public static bool Valid(this InputPort inputPort)
+            {
+                return Enum.IsDefined(typeof(InputPort), inputPort);
+            }
+        }
+
         public enum InputVideoFormat //X3
         {
             RGB = 1,
             YUV = 2,
             Composite = 3,
             HDMI = 4
+        }
+
+        public static class InputVideoFormatExtensions
+        {
+            public static bool Valid(this InputVideoFormat inputVideoFormat)
+            {
+                return Enum.IsDefined(typeof(InputVideoFormat), inputVideoFormat);
+            }
         }
 
         public class Edid //X17

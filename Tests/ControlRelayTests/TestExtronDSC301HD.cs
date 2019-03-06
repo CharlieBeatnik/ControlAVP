@@ -202,5 +202,19 @@ namespace Tests
                 Assert.AreEqual(posAndSizeBefore, posAndSizeAfter);
             }
         }
+
+        [TestMethod]
+        public void GivenDevice_WhenSetInputPortToHDMI_ThenInputPortIsHDMI()
+        {
+            using (var device = CreateDevice())
+            {
+                var result = device.SetInputPort(InputPort.HDMI);
+                Assert.IsTrue(result);
+
+                var inputPort = device.GetInputPort();
+                Assert.IsNotNull(inputPort);
+                Assert.AreEqual(InputPort.HDMI, inputPort);
+            }
+        }
     }
 }
