@@ -1,6 +1,21 @@
 ﻿@using ControllableDeviceTypes.ApcAP8959EU3Types
 @model IndexModel.OutletTableViewModel
 
+
+<div class="modal fade" tabindex="-1" role="dialog" id="confirmation-modal">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modal-title"></h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="modal-btn-yes">Yes</button>
+                <button type="button" class="btn btn-danger" id="modal-btn-no">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <table class="table">
     <thead class="thead-dark">
         <tr>
@@ -33,10 +48,10 @@
                     @switch (outlet.State)
                     {
                         case Outlet.PowerState.On:
-                            <button data-outlet="@outlet.Id" data-currentpowerstate="@outlet.State" class="btn btn-danger btn-xs btn-click-action btn-block">Turn Off</button>
+                            <button data-outlet="@outlet.Id" data-currentpowerstate="@outlet.State" data-confirmation="@true" data-message="@string.Format("Turn {0} off?", outlet.Name)"  class="btn btn-danger btn-xs btn-click-action btn-block">Turn Off</button>
                             break;
                         case Outlet.PowerState.Off:
-                            <button data-outlet="@outlet.Id" data-currentpowerstate="@outlet.State" class="btn btn-success btn-xs btn-click-action btn-block">Turn On</button>
+                            <button data-outlet="@outlet.Id" data-currentpowerstate="@outlet.State" data-confirmation="@true" data-message="@string.Format("Turn {0} on?", outlet.Name)" class="btn btn-success btn-xs btn-click-action btn-block">Turn On</button>
                             break;
                     }
                 </td>
@@ -44,3 +59,4 @@
         }
     </tbody>
 </table>
+

@@ -6,38 +6,67 @@
 
 @Html.AntiForgeryToken()
 
-<div id="outletTable">
+<div id="outlet-table">
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script type="text/javascript" language="JavaScript">
-    $(document).ready(function () {
-        $.ajax({
-            type: "GET",
-            url: "/Index?handler=OutletTable"
-        }).done(function (response) {
-            $("#outletTable").html(response);
-            $('.btn-click-action').on('click', btnClassClick);
-        });
 
-        var btnClassClick = function () {
-            var parameters = { id: $(this).data('outlet'), currentPowerState: $(this).data('currentpowerstate') };
+        $(document).ready(function () {
 
-            //Disable the button and add a spinner
-            $(this).prop('disabled', true);
-            var currentHtml = $(this).html();
-            $(this).html("<i class='fa fa-spinner fa-spin'></i>" /*+ currentHtml*/);
+            var toggleOutputState = function (context) {
+                var parameters = {
+                    id: $(context).data('outlet'),
+                    currentPowerState: $(context).data('currentpowerstate')
+                };
+
+                //Disable the button and add a spinner
+                $(context).prop('disabled', true);
+                $(context).html("<i class='fa fa-spinner fa-spin'></i>");
+
+                $.ajax({
+                    type: "GET",
+                    url: "/Index?handler=ToggleOutletState",
+                    data: parameters,
+                }).done(function (response) {
+                    setupOutletTable(response);
+                });
+            }
+
+            var btnClassClick = function () {
+                var confirmation = $(this).data('confirmation');
+                var message = $(this).data('message');
+
+                $("#modal-btn-yes").unbind('click').click({ context: this }, function (event) {
+                    $("#confirmation-modal").modal('hide');
+                    toggleOutputState(event.data.context);
+                });
+
+                $("#modal-btn-no").unbind('click').click({ context: this }, function (event) {
+                    $("#confirmation-modal").modal('hide');
+                });
+
+                if (confirmation == "True") {
+                    $("#modal-title").html(message);
+                    $("#confirmation-modal").modal('show');
+                }
+                else {
+                    toggleOutputState(this);
+                }
+            }
+
+            var setupOutletTable = function (response) {
+                $("#outlet-table").html(response);
+                $('.btn-click-action').unbind('click').on('click', btnClassClick);
+            }
 
             $.ajax({
                 type: "GET",
-                url: "/Index?handler=ToggleOutletState",
-                data: parameters,
-            }).done(function (partialViewResult) {
-                $("#outletTable").html(partialViewResult);
-                $('.btn-click-action').on('click', btnClassClick);
+                url: "/Index?handler=OutletTable"
+            }).done(function (response) {
+                setupOutletTable(response);
             });
-        }
-    });
+        });
     </script>
 }
