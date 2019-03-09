@@ -28,6 +28,7 @@ namespace ControlAVP.Pages
         {
             public IEnumerable<Outlet> Outlets { get; set; }
             public string WebRootPath { get; set; }
+            public IEnumerable<string> OutletConfirmation { get; set; }
         }
 
         public IndexModel(IConfiguration configuration, IHostingEnvironment environment)
@@ -52,6 +53,7 @@ namespace ControlAVP.Pages
             var outletTableViewModel = new OutletTableViewModel();
             outletTableViewModel.Outlets = _pdu.GetOutlets();
             outletTableViewModel.WebRootPath = _environment.WebRootPath;
+            outletTableViewModel.OutletConfirmation = _configuration.GetSection("OutletConfirmation").Get<string[]>();
 
             var viewData = new ViewDataDictionary(new Microsoft.AspNetCore.Mvc.ModelBinding.EmptyModelMetadataProvider(), new Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary()) { { "OutletTableViewModel", outletTableViewModel } };
             viewData.Model = outletTableViewModel;
@@ -80,6 +82,7 @@ namespace ControlAVP.Pages
             var outletTableViewModel = new OutletTableViewModel();
             outletTableViewModel.Outlets = _pdu.GetOutletsWaitForPending();
             outletTableViewModel.WebRootPath = _environment.WebRootPath;
+            outletTableViewModel.OutletConfirmation = _configuration.GetSection("OutletConfirmation").Get<string[]>();
 
             var viewData = new ViewDataDictionary(new Microsoft.AspNetCore.Mvc.ModelBinding.EmptyModelMetadataProvider(), new Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary()) { { "OutletTableViewModel", outletTableViewModel } };
             viewData.Model = outletTableViewModel;

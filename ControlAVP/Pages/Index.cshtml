@@ -37,6 +37,7 @@
             var btnClassClick = function () {
                 var confirmation = $(this).data('confirmation');
                 var message = $(this).data('message');
+                var image = $(this).data('image');
 
                 $("#modal-btn-yes").unbind('click').click({ context: this }, function (event) {
                     $("#confirmation-modal").modal('hide');
@@ -49,6 +50,7 @@
 
                 if (confirmation == "True") {
                     $("#modal-title").html(message);
+                    $("#modal-image").attr('src', image);
                     $("#confirmation-modal").modal('show');
                 }
                 else {
