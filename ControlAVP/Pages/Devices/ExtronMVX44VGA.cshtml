@@ -19,10 +19,6 @@
                 <div class="col-sm-6">
                     <table class="table table-sm table-borderless">
                         <tr>
-                            <td class="align-middle text-right">Firmware</td>
-                            <td class="align-middle"><span class="badge badge-secondary">@Model.DeviceInfoCache.Firmware</span></td>
-                        </tr>
-                        <tr>
                             <td class="align-middle text-right">Matrix</td>
                             <td>
                                 <table class="table table-sm">
@@ -33,36 +29,42 @@
                                             <th class="text-center"><span class="badge badge-secondary">O@((int)outputPort)</span></th>
                                         }
                                     </tr>
-                                
+
                                     @foreach (InputPort inputPort in Enum.GetValues(typeof(InputPort)).OfType<InputPort>().Skip(1))
                                     {
-                                    <tr>
-                                        <td>
-                                            <button type="submit"
-                                                    asp-page-handler="TieInputPortToAllOutputPorts"
-                                                    asp-route-inputport=@inputPort
-                                                    asp-route-tietype=@TieType.AudioVideo
-                                                    class="btn border btn-block btn-primary">Input @((int)inputPort)</button>
-                                        </td>
-
-                                        @foreach (OutputPort outputPort in Enum.GetValues(typeof(OutputPort)))
-                                        {
+                                        <tr>
                                             <td>
-                                                 @{var inputPortActual = Model.DeviceInfoCache.TieState.Video[outputPort];}
                                                 <button type="submit"
-                                                        asp-page-handler="TieInputPortTOutputPort"
+                                                        asp-page-handler="TieInputPortToAllOutputPorts"
                                                         asp-route-inputport=@inputPort
-                                                        asp-route-outputport=@outputPort
                                                         asp-route-tietype=@TieType.AudioVideo
-                                                        class="btn border btn-block @((inputPortActual == inputPort) ? "btn-success" : "btn-light")">
-                                                    &#8205;
+                                                        class="btn border btn-block btn-primary">
+                                                    Input @((int)inputPort)
                                                 </button>
                                             </td>
-                                        }
-                                    </tr>
+
+                                            @foreach (OutputPort outputPort in Enum.GetValues(typeof(OutputPort)))
+                                            {
+                                                <td>
+                                                    @{var inputPortActual = Model.DeviceInfoCache.TieState.Video[outputPort];}
+                                                    <button type="submit"
+                                                            asp-page-handler="TieInputPortTOutputPort"
+                                                            asp-route-inputport=@inputPort
+                                                            asp-route-outputport=@outputPort
+                                                            asp-route-tietype=@TieType.AudioVideo
+                                                            class="btn border btn-block @((inputPortActual == inputPort) ? "btn-success" : "btn-light")">
+                                                        &#8205;
+                                                    </button>
+                                                </td>
+                                            }
+                                        </tr>
                                     }
                                 </table>
                             </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle text-right">Firmware</td>
+                            <td class="align-middle"><span class="badge badge-secondary">@Model.DeviceInfoCache.Firmware</span></td>
                         </tr>
                     </table>
                 </div>

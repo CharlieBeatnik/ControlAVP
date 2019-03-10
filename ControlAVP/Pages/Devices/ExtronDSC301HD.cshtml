@@ -7,24 +7,18 @@
 }
 <h2></h2>
 
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <p>
-            <strong>@ViewData["Title"]</strong>
-        </p>
+<div class="card">
+    <div class="card-header">
+        <h6 class="mb-0">@ViewData["Title"]</h6>
     </div>
     <form method="post">
-        <div class="panel-body">
+        <div class="card-body pb-0 pl-0">
             @if (Model.DeviceInfoCache.Available)
             {
                 <div class="col-sm-6">
-                    <table class="table table-sm table-borderless table-condensed">
+                    <table class="table table-sm table-borderless">
                         <tr>
-                            <td>Firmware</td>
-                            <td><span class="label label-default">@Model.DeviceInfoCache.Firmware</span></td>
-                        </tr>
-                        <tr>
-                            <td>Input</td>
+                            <td class="align-middle text-right">Input</td>
                             <td>
                                 <div class="btn-group">
                                     @foreach (InputPort inputPort in Enum.GetValues(typeof(InputPort)))
@@ -32,7 +26,7 @@
                                         <button type="submit"
                                                 asp-page-handler="SetInput"
                                                 asp-route-inputport=@inputPort
-                                                class="btn @(inputPort == Model.DeviceInfoCache.InputPort ? "btn-success" : "btn-default") btn-sm">
+                                                class="btn border @(inputPort == Model.DeviceInfoCache.InputPort ? "btn-success" : "btn-default")">
                                             @(inputPort.ToString())
                                         </button>
                                     }
@@ -40,28 +34,31 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>Scaling</td>
+                            <td class="align-middle text-right">Scaling</td>
                             <td>
                                 <div class="btn-group-vertical">
-                                    <button type="submit" asp-page-handler="Scale" asp-route-scaletype=@ScaleType.PixelPerfect asp-route-positiontype=@PositionType.Centre class="btn btn-success btn-xs" style="text-align: left;">Pixel Perfect</button>
-                                    <button type="submit" asp-page-handler="Scale" asp-route-scaletype=@ScaleType.Fit asp-route-positiontype=@PositionType.Centre class="btn btn-success btn-xs" style="text-align: left;">Fit</button>
+                                    <button type="submit" asp-page-handler="Scale" asp-route-scaletype=@ScaleType.PixelPerfect asp-route-positiontype=@PositionType.Centre class="btn btn-success border" style="text-align: left;">Pixel Perfect</button>
+                                    <button type="submit" asp-page-handler="Scale" asp-route-scaletype=@ScaleType.Fit asp-route-positiontype=@PositionType.Centre class="btn btn-success border" style="text-align: left;">Fit</button>
                                 </div>
                             </td>
                         </tr>
                         <tr>
-                            <td>Refresh</td>
+                            <td class="align-middle text-right">Refresh</td>
                             <td>
                                 <div class="btn-group-vertical">
-                                    <button type="submit" asp-page-handler="OutputRate" asp-route-width="1920" asp-route-height="1080" asp-route-refreshRate="50" class="btn btn-success btn-xs" style="text-align: left;">1080p 50Hz</button>
-                                    <button type="submit" asp-page-handler="OutputRate" asp-route-width="1920" asp-route-height="1080" asp-route-refreshRate="59.94" class="btn btn-success btn-xs" style="text-align: left;">1080p 59.94Hz</button>
-                                    <button type="submit" asp-page-handler="OutputRate" asp-route-width="1920" asp-route-height="1080" asp-route-refreshRate="60" class="btn btn-success btn-xs" style="text-align: left;">1080p 60Hz</button>
+                                    <button type="submit" asp-page-handler="OutputRate" asp-route-width="1920" asp-route-height="1080" asp-route-refreshRate="50" class="btn btn-success border" style="text-align: left;">1080p 50Hz</button>
+                                    <button type="submit" asp-page-handler="OutputRate" asp-route-width="1920" asp-route-height="1080" asp-route-refreshRate="59.94" class="btn btn-success border" style="text-align: left;">1080p 59.94Hz</button>
+                                    <button type="submit" asp-page-handler="OutputRate" asp-route-width="1920" asp-route-height="1080" asp-route-refreshRate="60" class="btn btn-success border" style="text-align: left;">1080p 60Hz</button>
                                 </div>
                             </td>
                         </tr>
                         <tr>
-                            <td>Temperature</td>
-                            <td>@Model.DeviceInfoCache.Temperature
-                            </td>
+                            <td class="align-middle text-right">Firmware</td>
+                            <td><span class="badge badge-secondary">@Model.DeviceInfoCache.Firmware</span></td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle text-right">Temperature</td>
+                            <td><span class="badge badge-secondary">@Model.DeviceInfoCache.Temperature</span></td>
                         </tr>
                     </table>
                 </div>
