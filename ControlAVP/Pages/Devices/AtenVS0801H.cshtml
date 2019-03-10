@@ -10,48 +10,48 @@
 <form method="post">
     @for (int i = 0; i < Model.DeviceInfoCaches.Count; ++i)
     {
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <p>
-                    <strong>@ViewData["Title"]</strong><br />
-                    <small>Device #@(i + 1)</small>
-                </p>
+        <div class="card mb-4">
+            <div class="card-header pb-0">
+                <h6 class="mb-0">@ViewData["Title"]</h6>
+                <p class="mt-0 small font-weight-bold">Device #@(i + 1)</p>
             </div>
-            <div class="panel-body">
+            <div class="card-body pb-0 pl-0">
                 @if (Model.DeviceInfoCaches[i].Available)
                 {
                     <div class="col-sm-6">
-                        <table class="table table-sm table-borderless table-condensed">
+                        <table class="table table-sm table-borderless">
                             <tr>
-                                <td>Firmware</td>
-                                <td><span class="label label-default">@Model.DeviceInfoCaches[i].State.Firmware</span></td>
-                            </tr>
-                            <tr>
-                                <td>Input</td>
+                                <td class="align-middle text-right">Input</td>
                                 <td>
                                     <div class="btn-group">
                                         @foreach (InputPort inputPort in Enum.GetValues(typeof(InputPort)))
                                         {
                                             <button type="submit"
-                                                asp-page-handler="SetInput"
-                                                asp-route-deviceindex=@i
-                                                asp-route-inputport=@inputPort
-                                                class="btn @(inputPort == Model.DeviceInfoCaches[i].State.InputPort ? "btn-success" : "btn-default") btn-sm">@((int)inputPort)</button>
-                                        }
+                                                    asp-page-handler="SetInput"
+                                                    asp-route-deviceindex=@i
+                                                    asp-route-inputport=@inputPort
+                                                    class="btn @(inputPort == Model.DeviceInfoCaches[i].State.InputPort ? "btn-success" : "btn-light")">
+                                                @((int)inputPort)
+                                                </button>
+                                            }
                                     </div>
                                 </td>
                             </tr>
                             <tr>
-                                <td>Output</td>
-                                <td><span class="label label-default">@Model.DeviceInfoCaches[i].State.Output</span></td>
+                                <td class="align-middle text-right">Firmware</td>
+                                <td class="align-middle"><span class="badge badge-secondary">@Model.DeviceInfoCaches[i].State.Firmware</span></td>
                             </tr>
                             <tr>
-                                <td>GoTo</td>
-                                <td><span class="label label-default">@Model.DeviceInfoCaches[i].State.GoTo</span></td>
+                                <td class="align-middle text-right">Output</td>
+                                <td class="align-middle"><span class="badge badge-secondary">@Model.DeviceInfoCaches[i].State.Output</span></td>
                             </tr>
                             <tr>
-                                <td>Mode</td>
-                                <td><span class="label label-default">@Model.DeviceInfoCaches[i].State.Mode</span></td>
+                                <td class="align-middle text-right">GoTo</td>
+                                <td class="align-middle"><span class="badge badge-secondary">@Model.DeviceInfoCaches[i].State.GoTo</span></td>
+                            </tr>
+                            <tr>
+                                <td class="align-middle text-right">Mode</td>
+                                <td class="align-middle"><span class="badge badge-secondary">@Model.DeviceInfoCaches[i].State.Mode</span></td>
                             </tr>
                         </table>
                     </div>
