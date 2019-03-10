@@ -86,5 +86,12 @@ namespace Tests
             Assert.IsNotNull(inputPort);
             Assert.AreEqual(InputPort.HDMI, inputPort);
         }
+
+        [Test]
+        public void GivenDevice_WhenGetTemperature_ThenResultIsNotNull()
+        {
+            var temperature = _device.GetTemperature();
+            Assert.IsNotNull(temperature);
+        }
     }
 }

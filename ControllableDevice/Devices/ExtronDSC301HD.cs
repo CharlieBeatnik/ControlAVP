@@ -291,5 +291,16 @@ namespace ControllableDevice
 
             return null;
         }
+
+        public float? GetTemperature()
+        {
+            var result = _rs232Device.WriteWithResponse($"{_cmdEsc}20STAT{_cmdCr}", _patternNumber);
+            if (result != null)
+            {
+                return float.Parse(result);
+            }
+
+            return null;
+        }
     }
 }

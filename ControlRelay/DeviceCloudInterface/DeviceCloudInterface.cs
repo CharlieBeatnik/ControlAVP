@@ -45,5 +45,18 @@ namespace ControlRelay
             string result = JsonConvert.SerializeObject(payloadToSerialize);
             return GetMethodResponse(methodRequest, success, result);
         }
+
+        protected Task<MethodResponse> Get<T>(MethodRequest methodRequest, Func<T> deviceFunction)
+        {
+            var result = deviceFunction();
+            if (result != null)
+            {
+                return GetMethodResponseSerialize(methodRequest, true, result);
+            }
+            else
+            {
+                return GetMethodResponse(methodRequest, false);
+            }
+        }
     }
 }

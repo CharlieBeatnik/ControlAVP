@@ -17,7 +17,7 @@
         <div class="panel-body">
             @if (Model.DeviceInfoCache.Available)
             {
-                <div class="col-sm-4">
+                <div class="col-sm-6">
                     <table class="table table-sm table-borderless table-condensed">
                         <tr>
                             <td>Firmware</td>
@@ -34,8 +34,8 @@
                                                 asp-route-inputport=@inputPort
                                                 class="btn @(inputPort == Model.DeviceInfoCache.InputPort ? "btn-success" : "btn-default") btn-sm">
                                             @(inputPort.ToString())
-                                            </button>
-                                        }
+                                        </button>
+                                    }
                                 </div>
                             </td>
                         </tr>
@@ -56,6 +56,11 @@
                                     <button type="submit" asp-page-handler="OutputRate" asp-route-width="1920" asp-route-height="1080" asp-route-refreshRate="59.94" class="btn btn-success btn-xs" style="text-align: left;">1080p 59.94Hz</button>
                                     <button type="submit" asp-page-handler="OutputRate" asp-route-width="1920" asp-route-height="1080" asp-route-refreshRate="60" class="btn btn-success btn-xs" style="text-align: left;">1080p 60Hz</button>
                                 </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Temperature</td>
+                            <td>@Model.DeviceInfoCache.Temperature
                             </td>
                         </tr>
                     </table>

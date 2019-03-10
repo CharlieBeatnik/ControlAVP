@@ -99,5 +99,19 @@ namespace AVPCloudToDevice
                 return false;
             }
         }
+
+        public float? GetTemperature()
+        {
+            try
+            {
+                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "ScalerGetTemperature", null);
+                string json = response.GetPayloadAsJson();
+                return JsonConvert.DeserializeObject<float>(json);
+            }
+            catch
+            {
+                return null;
+            }
+        }
     }
 }

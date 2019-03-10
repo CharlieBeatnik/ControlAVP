@@ -59,16 +59,7 @@ namespace ControlRelay
 
         private Task<MethodResponse> GetTieState(MethodRequest methodRequest, object userContext)
         {
-            var result = _device.GetTieState();
-
-            if (result != null)
-            {
-                return GetMethodResponseSerialize(methodRequest, true, result);
-            }
-            else
-            {
-                return GetMethodResponse(methodRequest, false);
-            }
+            return Get(methodRequest, () => _device.GetTieState());
         }
 
         private Task<MethodResponse> TieInputPortToAllOutputPorts(MethodRequest methodRequest, object userContext)

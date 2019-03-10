@@ -88,7 +88,7 @@ namespace ControlRelay
             var payloadDefintion = new
             {
                 _hdmiSwitchId = -1,
-                inputPort = InputPort.Port1
+                inputPort = (InputPort)(-1)
             };
 
             var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);

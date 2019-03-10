@@ -34,6 +34,7 @@ namespace ControlRelay
             deviceClient.SetMethodHandlerAsync("ScalerSetOutputRate", SetOutputRate, null).Wait();
             deviceClient.SetMethodHandlerAsync("ScalerGetInputPort", GetInputPort, null).Wait();
             deviceClient.SetMethodHandlerAsync("ScalerSetInputPort", SetInputPort, null).Wait();
+            deviceClient.SetMethodHandlerAsync("ScalerGetTemperature", GetTemperature, null).Wait();
         }
 
         private Task<MethodResponse> GetFirmware(MethodRequest methodRequest, object userContext)
@@ -114,15 +115,12 @@ namespace ControlRelay
 
         private Task<MethodResponse> GetInputPort(MethodRequest methodRequest, object userContext)
         {
-            var inputPort = _device.GetInputPort();
-            if (inputPort != null)
-            {
-                return GetMethodResponseSerialize(methodRequest, true, inputPort);
-            }
-            else
-            {
-                return GetMethodResponse(methodRequest, false);
-            }
+            return Get(methodRequest, () => _device.GetInputPort());
+        }
+
+        private Task<MethodResponse> GetTemperature(MethodRequest methodRequest, object userContext)
+        {
+            return Get(methodRequest, () => _device.GetTemperature());
         }
 
     }
