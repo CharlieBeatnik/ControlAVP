@@ -30,7 +30,7 @@
                                                     asp-page-handler="SetInput"
                                                     asp-route-deviceindex=@i
                                                     asp-route-inputport=@inputPort
-                                                    class="btn @(inputPort == Model.DeviceInfoCaches[i].State.InputPort ? "btn-success" : "btn-light")">
+                                                    class="btn border @(inputPort == Model.DeviceInfoCaches[i].State.InputPort ? "btn-success" : "btn-light")">
                                                 @((int)inputPort)
                                                 </button>
                                             }

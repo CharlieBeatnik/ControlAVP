@@ -8,65 +8,55 @@
 }
 <h2></h2>
 
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <p>
-            <strong>@ViewData["Title"]</strong>
-        </p>
+<div class="card panel-default">
+    <div class="card-header">
+        <h6 class="mb-0">@ViewData["Title"]</h6>
     </div>
     <form method="post">
-        <div class="panel-body">
+        <div class="card-body pb-0 pl-0">
             @if (Model.DeviceInfoCache.Available)
             {
                 <div class="col-sm-6">
-                    <table class="table table-sm table-borderless table-condensed">
+                    <table class="table table-sm table-borderless">
                         <tr>
-                            <td>Firmware</td>
-                            <td><span class="label label-default">@Model.DeviceInfoCache.Firmware</span></td>
+                            <td class="align-middle text-right">Firmware</td>
+                            <td class="align-middle"><span class="badge badge-secondary">@Model.DeviceInfoCache.Firmware</span></td>
                         </tr>
                         <tr>
-                            <td>Matrix</td>
+                            <td class="align-middle text-right">Matrix</td>
                             <td>
-                                <table>
+                                <table class="table table-sm">
                                     <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td colspan="4" class="text-center" style="padding:5px"><span class="label label-default center">Output</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
+                                        <th></th>
                                         @foreach (OutputPort outputPort in Enum.GetValues(typeof(OutputPort)))
                                         {
-                                            <td class="text-center"><span class="label label-default">@((int)outputPort)</span></td>
+                                            <th class="text-center"><span class="badge badge-secondary">O@((int)outputPort)</span></th>
                                         }
                                     </tr>
                                 
                                     @foreach (InputPort inputPort in Enum.GetValues(typeof(InputPort)).OfType<InputPort>().Skip(1))
                                     {
                                     <tr>
-                                        @if (inputPort == InputPort.Port1)
-                                        {
-                                            <td rowspan="4" class="text-center" style="padding:5px"><span class="label label-default center">Input</span></td>
-                                        }
                                         <td>
                                             <button type="submit"
                                                     asp-page-handler="TieInputPortToAllOutputPorts"
                                                     asp-route-inputport=@inputPort
                                                     asp-route-tietype=@TieType.AudioVideo
-                                                    class="btn btn-sm btn-primary">@((int)inputPort)</button>
+                                                    class="btn border btn-block btn-primary">Input @((int)inputPort)</button>
                                         </td>
 
                                         @foreach (OutputPort outputPort in Enum.GetValues(typeof(OutputPort)))
                                         {
-                                            <td style="padding:5px">
-                                                @{var inputPortActual = Model.DeviceInfoCache.TieState.Video[outputPort];}
+                                            <td>
+                                                 @{var inputPortActual = Model.DeviceInfoCache.TieState.Video[outputPort];}
                                                 <button type="submit"
                                                         asp-page-handler="TieInputPortTOutputPort"
                                                         asp-route-inputport=@inputPort
                                                         asp-route-outputport=@outputPort
                                                         asp-route-tietype=@TieType.AudioVideo
-                                                        class="btn btn-lg @((inputPortActual == inputPort) ? "btn-success" : "btn-default")"></button>
+                                                        class="btn border btn-block @((inputPortActual == inputPort) ? "btn-success" : "btn-light")">
+                                                    &#8205;
+                                                </button>
                                             </td>
                                         }
                                     </tr>

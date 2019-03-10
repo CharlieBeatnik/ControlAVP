@@ -52,11 +52,11 @@
                     {
                         case Outlet.PowerState.On:
                             var messageOff = string.Format("Turn the {0} off?", outlet.Name);
-                            <button data-outlet="@outlet.Id" data-currentpowerstate="@outlet.State" data-confirmation="@confirmation" data-message="@messageOff" data-image="@relativeImagePath" class="btn btn-danger btn-sm btn-click-action btn-block">Turn Off</button>
+                            <button data-outlet="@outlet.Id" data-currentpowerstate="@outlet.State" data-confirmation="@confirmation" data-message="@messageOff" data-image="@relativeImagePath" class="btn border btn-danger btn-sm btn-click-action btn-block">Turn Off</button>
                             break;
                         case Outlet.PowerState.Off:
                             var messageOn = string.Format("Turn the {0} on?", outlet.Name);
-                            <button data-outlet="@outlet.Id" data-currentpowerstate="@outlet.State" data-confirmation="@false" data-message="@messageOn" data-image="@relativeImagePath" class="btn btn-success btn-sm btn-click-action btn-block">Turn On</button>
+                            <button data-outlet="@outlet.Id" data-currentpowerstate="@outlet.State" data-confirmation="@false" data-message="@messageOn" data-image="@relativeImagePath" class="btn border btn-success btn-sm btn-click-action btn-block">Turn On</button>
                             break;
                     }
                 </td>
