@@ -9,7 +9,7 @@
                 <h4 class="modal-title" id="modal-title"></h4>
             </div>
             <div class="modal-body">
-                <img class="img-responsive" id="modal-image"/>
+                <img class="img-fluid" id="modal-image"/>
             </div>
             <div class="modal-footer">
                 <center>
@@ -21,12 +21,12 @@
     </div>
 </div>
 
-<table class="table">
-    <thead class="thead-dark">
+<table class="table table-sm table-responsive">
+    <thead">
         <tr>
             <th width="38px"></th>
             <th>Name</th>
-            <th width="100px" >Power</th>
+            <th width="100px">Power</th>
             <th>Control</th>
         </tr>
     </thead>
@@ -36,27 +36,27 @@
             string relativeImagePath = string.Format("images/outlets/{0}.png", outlet.Name);
             string absoluteImagePath = System.IO.Path.Combine(Model.WebRootPath, @"images\outlets", outlet.Name + ".png");
 
-            <tr class="@(@outlet.State == Outlet.PowerState.On ? "success" : "")">
-                <td style="padding: 4px;">
+            <tr class="@(@outlet.State == Outlet.PowerState.On ? "table-success" : "")">
+                <td class="align-middle">
                     @if (!System.IO.File.Exists(absoluteImagePath))
                     {
                         relativeImagePath = "images/outlets/empty.png";
                     }
-                    <img src="@relativeImagePath" class="img-responsive" />
+                    <img src="@relativeImagePath" class="img-fluid"/>
                 </td>
-                <td>@outlet.Name</td>
-                <td>@(outlet.Watts)W (@(outlet.Amps)A)</td>
-                <td>
+                <td class="align-middle">@outlet.Name</td>
+                <td class="align-middle">@(outlet.Watts)W (@(outlet.Amps)A)</td>
+                <td class="align-middle">
                     @{bool confirmation = Model.OutletConfirmation.Contains(outlet.Name);}
                     @switch (outlet.State)
                     {
                         case Outlet.PowerState.On:
                             var messageOff = string.Format("Turn the {0} off?", outlet.Name);
-                            <button data-outlet="@outlet.Id" data-currentpowerstate="@outlet.State" data-confirmation="@confirmation" data-message="@messageOff" data-image="@relativeImagePath" class="btn btn-danger btn-xs btn-click-action btn-block">Turn Off</button>
+                            <button data-outlet="@outlet.Id" data-currentpowerstate="@outlet.State" data-confirmation="@confirmation" data-message="@messageOff" data-image="@relativeImagePath" class="btn btn-danger btn-sm btn-click-action btn-block">Turn Off</button>
                             break;
                         case Outlet.PowerState.Off:
                             var messageOn = string.Format("Turn the {0} on?", outlet.Name);
-                            <button data-outlet="@outlet.Id" data-currentpowerstate="@outlet.State" data-confirmation="@false" data-message="@messageOn" data-image="@relativeImagePath" class="btn btn-success btn-xs btn-click-action btn-block">Turn On</button>
+                            <button data-outlet="@outlet.Id" data-currentpowerstate="@outlet.State" data-confirmation="@false" data-message="@messageOn" data-image="@relativeImagePath" class="btn btn-success btn-sm btn-click-action btn-block">Turn On</button>
                             break;
                     }
                 </td>
