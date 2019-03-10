@@ -15,13 +15,13 @@
                 <h6 class="mb-0">@ViewData["Title"]</h6>
                 <p class="mt-0 small font-weight-bold">Device #@(i + 1)</p>
             </div>
-            <div class="card-body pb-0 pl-0">
+            <div class="card-body pb-0">
                 @if (Model.DeviceInfoCaches[i].Available)
                 {
                     <div class="col-sm-6">
                         <table class="table table-sm table-borderless">
                             <tr>
-                                <td class="align-middle text-right">Input</td>
+                                <td class="align-middle text-right" width="1%">Input</td>
                                 <td>
                                     <div class="btn-group">
                                         @foreach (InputPort inputPort in Enum.GetValues(typeof(InputPort)))
