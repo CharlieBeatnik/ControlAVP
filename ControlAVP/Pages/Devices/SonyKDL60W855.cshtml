@@ -16,15 +16,13 @@
 }
 else
 {*@
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <p>
-                <strong>@ViewData["Title"]</strong>
-            </p>
+    <div class="card">
+        <div class="card-header">
+            <h6 class="mb-0">@ViewData["Title"]</h6>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
             <div>
-                <button type="submit" asp-page-handler="TurnOn" class="btn btn-success btn-sm">Turn TV On</button>
+                <button type="submit" asp-page-handler="TurnOn" class="btn btn-success border">Turn TV On</button>
             </div>
         </div>
     </div>
