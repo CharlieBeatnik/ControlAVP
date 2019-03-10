@@ -1,6 +1,6 @@
 @if (User.Identity.IsAuthenticated)
 {
-<ul class="nav navbar-nav navbar-right">
+<ul class="navbar-nav">
     @{
         string identityName = @User.Identity.Name;
         var nameClaim = User.Claims.FirstOrDefault(x => x.Type == "name");
@@ -10,8 +10,10 @@
             identityName = nameClaim.Value;
         }
     }
-    <li class="dropdown">
-        <a class="dropdown-toggle" data-toggle="dropdown" href="#">@identityName <span class="caret"></span></a>
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+            @identityName
+        </a>
         <ul class="dropdown-menu">
             <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="SignOut">Sign Out</a></li>
         </ul>
@@ -20,7 +22,7 @@
 }
 else
 {
-    <ul class="nav navbar-nav navbar-right">
-        <li><a asp-area="" asp-controller="Account" asp-action="SignOn">Sign In</a></li>
+    <ul class="nav-item">
+        <li><a class="nav-link" asp-area="" asp-controller="Account" asp-action="SignOn">Sign In</a></li>
     </ul>
 }
