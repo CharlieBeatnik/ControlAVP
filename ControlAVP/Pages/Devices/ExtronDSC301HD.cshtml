@@ -58,7 +58,29 @@
                         </tr>
                         <tr>
                             <td class="align-middle text-right">Temperature</td>
-                            <td><span class="badge badge-secondary">@Model.DeviceInfoCache.Temperature</span></td>
+                            <td class="align-middle">
+                                <div class="progress position-relative">
+                                    @{
+                                        var temperatureColour = "bg-success";
+                                        if (Model.DeviceInfoCache.Temperature > 35)
+                                        {
+                                            temperatureColour = "bg-warning";
+                                        }
+                                        if (Model.DeviceInfoCache.Temperature > 45)
+                                        {
+                                            temperatureColour = "bg-danger";
+                                        }
+                                    }
+                                    <div class="progress-bar progress-bar-striped progress-bar-animated @temperatureColour"
+                                         role="progressbar"
+                                         aria-valuenow="@Model.DeviceInfoCache.Temperature"
+                                         aria-valuemin="0"
+                                         aria-valuemax="100"
+                                         style="width: @Model.DeviceInfoCache.Temperature%">
+                                    </div>
+                                    <small class="justify-content-center d-flex position-absolute w-100">@Model.DeviceInfoCache.Temperature&#176;</small>
+                                </div>
+                            </td>
                         </tr>
                     </table>
                 </div>
