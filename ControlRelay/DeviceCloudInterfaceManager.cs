@@ -112,14 +112,14 @@ namespace ControlRelay
             {
                 case ConnectionStatus.Disabled:
                 case ConnectionStatus.Disconnected:
-                    ResetConnection();
+                    ResetConnection(status, reason);
                     break;
                 default:
                     break;
             }
         }
 
-        private void ResetConnection()
+        private void ResetConnection(ConnectionStatus status, ConnectionStatusChangeReason reason)
         {
             _logger.Debug("Resetting Connection");
 
@@ -128,7 +128,19 @@ namespace ControlRelay
             {
                 try
                 {
-                    _deviceClient.CloseAsync().Wait();
+                    if (reason == ConnectionStatusChangeReason.Retry_Expired)
+                    {
+                        // It has been observed that closing the device client with reason 'Retry_Expired' 
+                        // results in an assert, so don't call close and log the action taken.
+                        // Exception:
+                        //     DotNetty.Transport.Channels.ClosedChannelException: I/O error occurred.
+                        //
+                        _logger.Debug($"As reason was {reason.ToString()} skipping '_deviceClient.CloseAsync().Wait()'");
+                    }
+                    else
+                    {
+                        _deviceClient.CloseAsync().Wait();
+                    }
                 }
                 catch (AggregateException ae)
                 {
