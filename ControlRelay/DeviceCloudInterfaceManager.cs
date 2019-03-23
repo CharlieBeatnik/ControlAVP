@@ -4,6 +4,7 @@ using Newtonsoft.Json.Linq;
 using NLog;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -14,7 +15,10 @@ namespace ControlRelay
     class DeviceCloudInterfaceManager
     {
         private List<DeviceCloudInterface> _deviceCloudInterfaces = new List<DeviceCloudInterface>();
-        private DeviceClient _deviceClient;
+        private DeviceClient _deviceClient = null;
+        private ConnectionStatus? _latestStatus = null;
+        private ConnectionStatusChangeReason? _latestReason = null;
+        private readonly TimeSpan _createDeviceTimeout = TimeSpan.FromSeconds(5);
 
         private string _connectionString;
         private List<AtenVS0801HCloudInterface.Settings> _settingsAtenVS0801H;
@@ -78,6 +82,8 @@ namespace ControlRelay
             _logger.Debug(string.Empty);
 
             _deviceClient = null;
+            _latestStatus = null;
+            _latestReason = null;
 
             try
             {
@@ -88,6 +94,29 @@ namespace ControlRelay
                 {
                     _logger.Debug("_deviceClient is null after CreateFromConnectionString()");
                 }
+
+                // Wait for the DeviceClient to connect
+                _logger.Debug("Wait for Status: Connnected, Reason: Connection_Ok");
+                bool connected = false;
+                var sw = new Stopwatch();
+                sw.Start();
+
+                do
+                {
+                    if ((_latestStatus == ConnectionStatus.Connected) && (_latestReason == ConnectionStatusChangeReason.Connection_Ok))
+                    {
+                        connected = true;
+                    }
+                }
+                while (!connected && (sw.Elapsed < _createDeviceTimeout));
+
+                if (!connected)
+                {
+                    throw new Exception($"Unable to connect DeviceClient within {sw.Elapsed.TotalSeconds} seconds. Aborting CreateDeviceClient()");
+                }
+
+                _logger.Debug("Successfully connected");
+                sw.Stop();
 
                 _logger.Debug("Pos: SetConnectionStatusChangesHandler");
                 _deviceClient.SetConnectionStatusChangesHandler(DeviceClientConnectionStatusChanged);
@@ -107,8 +136,10 @@ namespace ControlRelay
         private void DeviceClientConnectionStatusChanged(ConnectionStatus status, ConnectionStatusChangeReason reason)
         {
             _logger.Debug($"Status: {status.ToString()}, Reason: {reason.ToString()}");
+            _latestStatus = status;
+            _latestReason = reason;
 
-            switch(status)
+            switch (status)
             {
                 case ConnectionStatus.Disabled:
                 case ConnectionStatus.Disconnected:
