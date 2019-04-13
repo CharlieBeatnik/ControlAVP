@@ -29,13 +29,13 @@ namespace ControlRelay
             _device = new ApcAP8959EU3(_settings.Host, _settings.Port, _settings.Username, _settings.Password);
         }
 
-        public override void SetMethodHandlers(DeviceClient deviceClient)
+        public override IEnumerable<MethodHandlerInfo> GetMethodHandlerInfos(DeviceClient deviceClient)
         {
-            deviceClient.SetMethodHandlerAsync("PDUGetOutlets", GetOutlets, null).Wait();
-            deviceClient.SetMethodHandlerAsync("PDUGetOutletsWaitForPending", GetOutletsWaitForPending, null).Wait();
-            deviceClient.SetMethodHandlerAsync("PDUTurnOutletOn", TurnOutletOn, null).Wait();
-            deviceClient.SetMethodHandlerAsync("PDUTurnOutletOff", TurnOutletOff, null).Wait();
-            deviceClient.SetMethodHandlerAsync("PDUGetAvailable", GetAvailable, null).Wait();
+            yield return new MethodHandlerInfo("PDUGetOutlets", GetOutlets);
+            yield return new MethodHandlerInfo("PDUGetOutletsWaitForPending", GetOutletsWaitForPending);
+            yield return new MethodHandlerInfo("PDUTurnOutletOn", TurnOutletOn);
+            yield return new MethodHandlerInfo("PDUTurnOutletOff", TurnOutletOff);
+            yield return new MethodHandlerInfo("PDUGetAvailable", GetAvailable);
         }
 
         private Task<MethodResponse> GetOutlets(MethodRequest methodRequest, object userContext)

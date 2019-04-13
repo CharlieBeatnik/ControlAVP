@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Collections.Generic;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using ControllableDevice;
@@ -26,13 +27,13 @@ namespace ControlRelay
             _device = new ExtronMVX44VGA(_settings.PortId);
         }
 
-        public override void SetMethodHandlers(DeviceClient deviceClient)
+        public override IEnumerable<MethodHandlerInfo> GetMethodHandlerInfos(DeviceClient deviceClient)
         {
-            deviceClient.SetMethodHandlerAsync("VGAMatrixGetFirmware", GetFirmware, null).Wait();
-            deviceClient.SetMethodHandlerAsync("VGAMatrixGetAvailable", GetAvailable, null).Wait();
-            deviceClient.SetMethodHandlerAsync("VGAMatrixGetTieState", GetTieState, null).Wait();
-            deviceClient.SetMethodHandlerAsync("VGAMatrixTieInputPortToAllOutputPorts", TieInputPortToAllOutputPorts, null).Wait();
-            deviceClient.SetMethodHandlerAsync("VGAMatrixTieInputPortToOutputPort", TieInputPortToOutputPort, null).Wait();
+            yield return new MethodHandlerInfo("VGAMatrixGetFirmware", GetFirmware);
+            yield return new MethodHandlerInfo("VGAMatrixGetAvailable", GetAvailable);
+            yield return new MethodHandlerInfo("VGAMatrixGetTieState", GetTieState);
+            yield return new MethodHandlerInfo("VGAMatrixTieInputPortToAllOutputPorts", TieInputPortToAllOutputPorts);
+            yield return new MethodHandlerInfo("VGAMatrixTieInputPortToOutputPort", TieInputPortToOutputPort);
         }
 
         private Task<MethodResponse> GetFirmware(MethodRequest methodRequest, object userContext)

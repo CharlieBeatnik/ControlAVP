@@ -29,13 +29,13 @@ namespace ControlRelay
             }
         }
 
-        public override void SetMethodHandlers(DeviceClient deviceClient)
+        public override IEnumerable<MethodHandlerInfo> GetMethodHandlerInfos(DeviceClient deviceClient)
         {
-            deviceClient.SetMethodHandlerAsync("HDMISwitchGoToNextInput", GoToNextInput, null).Wait();
-            deviceClient.SetMethodHandlerAsync("HDMISwitchGoToPreviousInput", GoToPreviousInput, null).Wait();
-            deviceClient.SetMethodHandlerAsync("HDMISwitchGetState", GetState, null).Wait();
-            deviceClient.SetMethodHandlerAsync("HDMISwitchSetInput", SetInput, null).Wait();
-            deviceClient.SetMethodHandlerAsync("HDMISwitchGetAvailable", GetAvailable, null).Wait();
+            yield return new MethodHandlerInfo("HDMISwitchGoToNextInput", GoToNextInput);
+            yield return new MethodHandlerInfo("HDMISwitchGoToPreviousInput", GoToPreviousInput);
+            yield return new MethodHandlerInfo("HDMISwitchGetState", GetState);
+            yield return new MethodHandlerInfo("HDMISwitchSetInput", SetInput);
+            yield return new MethodHandlerInfo("HDMISwitchGetAvailable", GetAvailable);
         }
 
         private Task<MethodResponse> GoToNextInput(MethodRequest methodRequest, object userContext)

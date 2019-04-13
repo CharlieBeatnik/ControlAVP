@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Collections.Generic;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using ControllableDevice;
@@ -26,15 +27,15 @@ namespace ControlRelay
             _device = new ExtronDSC301HD(_settings.PortId);
         }
 
-        public override void SetMethodHandlers(DeviceClient deviceClient)
+        public override IEnumerable<MethodHandlerInfo> GetMethodHandlerInfos(DeviceClient deviceClient)
         {
-            deviceClient.SetMethodHandlerAsync("ScalerGetFirmware", GetFirmware, null).Wait();
-            deviceClient.SetMethodHandlerAsync("ScalerGetAvailable", GetAvailable, null).Wait();
-            deviceClient.SetMethodHandlerAsync("ScalerSetScale", SetScale, null).Wait();
-            deviceClient.SetMethodHandlerAsync("ScalerSetOutputRate", SetOutputRate, null).Wait();
-            deviceClient.SetMethodHandlerAsync("ScalerGetInputPort", GetInputPort, null).Wait();
-            deviceClient.SetMethodHandlerAsync("ScalerSetInputPort", SetInputPort, null).Wait();
-            deviceClient.SetMethodHandlerAsync("ScalerGetTemperature", GetTemperature, null).Wait();
+            yield return new MethodHandlerInfo("ScalerGetFirmware", GetFirmware);
+            yield return new MethodHandlerInfo("ScalerGetAvailable", GetAvailable);
+            yield return new MethodHandlerInfo("ScalerSetScale", SetScale);
+            yield return new MethodHandlerInfo("ScalerSetOutputRate", SetOutputRate);
+            yield return new MethodHandlerInfo("ScalerGetInputPort", GetInputPort);
+            yield return new MethodHandlerInfo("ScalerSetInputPort", SetInputPort);
+            yield return new MethodHandlerInfo("ScalerGetTemperature", GetTemperature);
         }
 
         private Task<MethodResponse> GetFirmware(MethodRequest methodRequest, object userContext)

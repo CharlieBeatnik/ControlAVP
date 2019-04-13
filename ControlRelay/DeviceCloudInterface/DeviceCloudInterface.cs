@@ -11,7 +11,19 @@ namespace ControlRelay
 {
     abstract class DeviceCloudInterface
     {
-        public abstract void SetMethodHandlers(DeviceClient deviceClient);
+        public class MethodHandlerInfo
+        {
+            public MethodHandlerInfo(string name, MethodCallback handler)
+            {
+                Name = name;
+                Handler = handler;
+            }
+
+            public string Name { get; }
+            public MethodCallback Handler { get; }
+        }
+
+        public abstract IEnumerable<MethodHandlerInfo> GetMethodHandlerInfos(DeviceClient deviceClient);
 
         protected Task<MethodResponse> GetMethodResponse(MethodRequest methodRequest, bool success, string payload = null)
         {

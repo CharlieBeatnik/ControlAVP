@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Collections.Generic;
+using System.Net;
 using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,9 +27,9 @@ namespace ControlRelay
             _device = new SonyKDL60W855(IPAddress.Parse(_settings.Host), PhysicalAddress.Parse(_settings.PhysicalAddress));
         }
 
-        public override void SetMethodHandlers(DeviceClient deviceClient)
+        public override IEnumerable<MethodHandlerInfo> GetMethodHandlerInfos(DeviceClient deviceClient)
         {
-            deviceClient.SetMethodHandlerAsync("TVTurnOn", TurnOn, null).Wait();
+            yield return new MethodHandlerInfo("TVTurnOn", TurnOn);
         }
 
         private Task<MethodResponse> TurnOn(MethodRequest methodRequest, object userContext)

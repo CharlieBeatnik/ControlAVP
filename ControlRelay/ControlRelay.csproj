@@ -157,6 +157,9 @@
     <PackageReference Include="NLog">
       <Version>4.5.11</Version>
     </PackageReference>
+    <PackageReference Include="Polly">
+      <Version>7.1.0</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ControllableDeviceTypes\ControllableDeviceTypes.csproj">

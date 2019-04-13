@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
+using Polly;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -95,7 +96,22 @@ namespace ControlRelay
                 foreach (var device in _deviceCloudInterfaces)
                 {
                     _logger.Debug("Pos: SetMethodHandlers");
-                    device.SetMethodHandlers(_deviceClient);
+
+                    // SetMethodHandleAsync has been observed to throw "System.TimeoutException: Operation timeout expired"
+                    // This allows this function to contain centralised logic to catch a timeout exception and retry.
+                    foreach (var methodHandlerInfo in device.GetMethodHandlerInfos(_deviceClient))
+                    {
+                        // Use a retry as we know it's possible to encounter a TimeoutException
+                        var policy = Policy
+                                        .Handle<TimeoutException>()
+                                        .Retry(onRetry: (exception, retryCount) =>
+                                        {
+                                            _logger.Debug($"TimeoutException caught during SetMethodHandlerAsync()");
+                                            _logger.Debug($"Retry #{retryCount}: SetMethodHandlerAsync({methodHandlerInfo.Name})");
+                                        });
+
+                        policy.Execute(() => _deviceClient.SetMethodHandlerAsync(methodHandlerInfo.Name, methodHandlerInfo.Handler, null).Wait());
+                    }
                 }
             }
             catch(Exception exp)
