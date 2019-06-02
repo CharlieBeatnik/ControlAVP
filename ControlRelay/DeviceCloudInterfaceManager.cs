@@ -97,16 +97,20 @@ namespace ControlRelay
                 {
                     _logger.Debug("Pos: SetMethodHandlers");
 
-                    // SetMethodHandleAsync has been observed to throw "System.TimeoutException: Operation timeout expired"
-                    // This allows this function to contain centralised logic to catch a timeout exception and retry.
+                    // SetMethodHandlerAsync has been observed to throw "System.TimeoutException: Operation timeout expired"
+                    // SetMethodHandlerAsync has been observed to throw "Microsoft.Azure.Devices.Client.Exceptions.UnauthorizedException: CONNECT failed: RefusedServerUnavailable"
+                    // This allows this function to contain centralised logic to catch one of theses exceptions and retry.
                     foreach (var methodHandlerInfo in device.GetMethodHandlerInfos(_deviceClient))
                     {
-                        // Use a retry as we know it's possible to encounter a TimeoutException
+                        // Use a retry as we know it's possible to encounter serveral different exceptions
                         var policy = Policy
                                         .Handle<TimeoutException>()
+                                        .Or<Microsoft.Azure.Devices.Client.Exceptions.UnauthorizedException>()
                                         .Retry(onRetry: (exception, retryCount) =>
                                         {
-                                            _logger.Debug($"TimeoutException caught during SetMethodHandlerAsync()");
+                                            _logger.Debug($"Exception of type '{exception.GetType().Name}' caught during SetMethodHandlerAsync()");
+                                            _logger.Debug($"Full exception details will now be logged.");
+                                            _logger.Debug(exception);
                                             _logger.Debug($"Retry #{retryCount}: SetMethodHandlerAsync({methodHandlerInfo.Name})");
                                         });
 
