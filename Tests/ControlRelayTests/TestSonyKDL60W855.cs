@@ -27,9 +27,23 @@ namespace Tests
             }
 
             _deviceSettings = jsonParsed["SonyKDL60W855"];
+
+            using (var device = CreateDevice())
+            {
+                device.TurnOn();
+            }
         }
 
-        public SonyKDL60W855 CreateDevice()
+        [ClassCleanup]
+        public static void ClassCleanup()
+        {
+            using (var device = CreateDevice())
+            {
+                device.TurnOff();
+            }
+        }
+
+        public static SonyKDL60W855 CreateDevice()
         {
             return new SonyKDL60W855(IPAddress.Parse(_deviceSettings["Host"].ToString()),
                                      PhysicalAddress.Parse(_deviceSettings["PhysicalAddress"].ToString()),

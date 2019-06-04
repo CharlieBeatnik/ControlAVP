@@ -73,6 +73,11 @@ namespace ControllableDevice
             return true;
         }
 
+        public bool TurnOff()
+        {
+            return false;
+        }
+
         public int GetVolume()
         {
             var volumeInfo = GetVolumeInformation();
