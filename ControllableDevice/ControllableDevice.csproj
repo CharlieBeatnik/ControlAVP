@@ -124,6 +124,7 @@
     <Compile Include="Devices\ExtronMVX44VGA.cs" />
     <Compile Include="IControllableDevice.cs" />
     <Compile Include="Devices\SonyKDL60W855.cs" />
+    <Compile Include="JsonRpcDevice.cs" />
     <Compile Include="Rs232Device.cs" />
     <Compile Include="Devices\ApcAP8959EU3.cs" />
     <Compile Include="Devices\AtenVS0801H.cs" />
@@ -135,7 +136,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>6.1.9</Version>
+      <Version>6.2.8</Version>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>12.0.2</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

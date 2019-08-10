@@ -12,12 +12,12 @@ namespace Tests
     public class TestSonyKDL60W855
     {
         private static SonyKDL60W855 _device = null;
-        private readonly string _settingsFile = "settings.json";
 
-        private IPAddress _host;
-        private PhysicalAddress _physicalAddress;
+        private static readonly string _settingsFile = "settings.json";
+        private static JToken _deviceSettings;
 
-        public TestSonyKDL60W855()
+        [ClassInitialize]
+        public static void ClassInitialize(TestContext tc)
         {
             JObject jsonParsed;
             using (StreamReader r = new StreamReader(_settingsFile))
@@ -26,12 +26,40 @@ namespace Tests
                 jsonParsed = JObject.Parse(json);
             }
 
-            _host = IPAddress.Parse(jsonParsed["SonyKDL60W855"]["Host"].ToString());
-            _physicalAddress = PhysicalAddress.Parse(jsonParsed["SonyKDL60W855"]["PhysicalAddress"].ToString());
+            _deviceSettings = jsonParsed["SonyKDL60W855"];
 
-            if (_device == null)
+            using (var device = CreateDevice())
             {
-                _device = new SonyKDL60W855(_host, _physicalAddress);
+                device.TurnOn();
+            }
+        }
+
+        [ClassCleanup]
+        public static void ClassCleanup()
+        {
+            using (var device = CreateDevice())
+            {
+                device.TurnOff();
+            }
+        }
+
+        public static SonyKDL60W855 CreateDevice()
+        {
+            return new SonyKDL60W855(IPAddress.Parse(_deviceSettings["Host"].ToString()),
+                                     PhysicalAddress.Parse(_deviceSettings["PhysicalAddress"].ToString()),
+                                     _deviceSettings["PreSharedKey"].ToString());
+        }
+
+        [TestMethod]
+        public void GivenDevice_WhenVolumeIsSetTo11_VolumeIs11()
+        {
+            using (var device = CreateDevice())
+            {
+                bool success = device.SetVolume(11);
+                Assert.IsTrue(success);
+
+                int volume = device.GetVolume();
+                Assert.AreEqual(11, volume);
             }
         }
 
