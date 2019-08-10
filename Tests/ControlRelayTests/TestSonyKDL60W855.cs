@@ -51,6 +51,7 @@ namespace Tests
         }
 
         [TestMethod]
+        [Ignore("Fix issues with TV control.")]
         public void GivenDevice_WhenVolumeIsSetTo11_VolumeIs11()
         {
             using (var device = CreateDevice())

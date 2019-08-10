@@ -26,7 +26,6 @@
         <tr>
             <th width="38px"></th>
             <th>Name</th>
-            <th width="100px">Power</th>
             <th>Control</th>
         </tr>
     </thead>
@@ -45,7 +44,6 @@
                     <img src="@relativeImagePath" class="img-fluid"/>
                 </td>
                 <td class="align-middle">@outlet.Name</td>
-                <td class="align-middle">@(outlet.Watts)W (@(outlet.Amps)A)</td>
                 <td class="align-middle">
                     @{bool confirmation = Model.OutletConfirmation.Contains(outlet.Name);}
                     @switch (outlet.State)

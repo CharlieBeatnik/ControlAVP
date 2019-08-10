@@ -95,7 +95,7 @@ namespace ControllableDevice
             return outlets;
         }
 
-        public IEnumerable<Outlet> GetOutlets()
+        public IEnumerable<Outlet> GetOutlets(bool getPower = false, bool getCurrent = false)
         {
             Dictionary<int, Outlet> output = new Dictionary<int, Outlet>();
 
@@ -104,13 +104,9 @@ namespace ControllableDevice
             string tail;
 
             var olStatusAll = _sshDevice.ExecuteCommand("olStatus all");
-            var olReadingAllPower = _sshDevice.ExecuteCommand("olReading all power");
-            var olReadingAllCurrent = _sshDevice.ExecuteCommand("olReading all current");
-
             // Added asserts as ExecuteCommand has been oberved to return null
             Debug.Assert(olStatusAll != null);
-            Debug.Assert(olReadingAllPower != null);
-            Debug.Assert(olReadingAllCurrent != null);
+
 
             // Initially populate Outlet dictionary with information parsed from olStatus all
             foreach (string line in olStatusAll)
@@ -129,37 +125,49 @@ namespace ControllableDevice
                 }
             }
 
-            // Populate additional information parsed from power command
-            foreach (string line in olReadingAllPower)
+            if (getPower)
             {
-                bool success = ParseCommonLine(line, out id, out name, out tail);
-                if (success)
+                var olReadingAllPower = _sshDevice.ExecuteCommand("olReading all power");
+                Debug.Assert(olReadingAllPower != null);
+
+                // Populate additional information parsed from power command
+                foreach (string line in olReadingAllPower)
                 {
-                    Match match = Regex.Match(tail, @"^([0-9.]+) W *$");
-                    if (match.Success)
+                    bool success = ParseCommonLine(line, out id, out name, out tail);
+                    if (success)
                     {
-                        Outlet foundOutlet;
-                        if (output.TryGetValue(id, out foundOutlet))
+                        Match match = Regex.Match(tail, @"^([0-9.]+) W *$");
+                        if (match.Success)
                         {
-                            foundOutlet.Watts = float.Parse(match.Groups[1].Value);
+                            Outlet foundOutlet;
+                            if (output.TryGetValue(id, out foundOutlet))
+                            {
+                                foundOutlet.Watts = float.Parse(match.Groups[1].Value);
+                            }
                         }
                     }
                 }
             }
 
-            // Populate additional information parsed from current command
-            foreach (string line in olReadingAllCurrent)
+            if (getCurrent)
             {
-                bool success = ParseCommonLine(line, out id, out name, out tail);
-                if (success)
+                var olReadingAllCurrent = _sshDevice.ExecuteCommand("olReading all current");
+                Debug.Assert(olReadingAllCurrent != null);
+
+                // Populate additional information parsed from current command
+                foreach (string line in olReadingAllCurrent)
                 {
-                    Match match = Regex.Match(tail, @"^([0-9.]+) A *$");
-                    if (match.Success)
+                    bool success = ParseCommonLine(line, out id, out name, out tail);
+                    if (success)
                     {
-                        Outlet foundOutlet;
-                        if (output.TryGetValue(id, out foundOutlet))
+                        Match match = Regex.Match(tail, @"^([0-9.]+) A *$");
+                        if (match.Success)
                         {
-                            foundOutlet.Amps = float.Parse(match.Groups[1].Value);
+                            Outlet foundOutlet;
+                            if (output.TryGetValue(id, out foundOutlet))
+                            {
+                                foundOutlet.Amps = float.Parse(match.Groups[1].Value);
+                            }
                         }
                     }
                 }
