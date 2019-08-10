@@ -43,7 +43,6 @@
                             </div>
                         </li>
                     </ul>
-                    <partial name="_LoginPartial" />
                 </div>
             </div>
         </nav>
@@ -55,9 +54,19 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="border-top footer text-muted bg-white">
         <div class="container">
-            &copy; 2019 - Andrew Dennison
+            <div class="row">
+                <div class="col-6">
+                    <p>&copy; @DateTime.Now.Year - Andrew Dennison</p>
+                </div>
+                <div class="col-6">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <p class="text-right"><a asp-page="/Logout">Logout</a></p>
+                    }
+                </div>
+            </div>
         </div>
     </footer>
 

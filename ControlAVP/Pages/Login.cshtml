@@ -1,0 +1,20 @@
+﻿@page
+@model Wedding.Pages.LoginModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div asp-validation-summary="All" class="alert alert-danger" role="alert"></div>
+}
+
+<div class="d-flex justify-content-center">
+    <form method="post" class="form-inline">
+        <div class="input-group">
+            <input type="password" class="form-control" id="inputPassword" asp-for="loginData.Password">
+            <button type="submit" class="btn badge-primary text-white ml-2" value="Login">Login</button>
+        </div>
+        @Html.AntiForgeryToken()
+    </form>
+</div>
