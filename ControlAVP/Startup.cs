@@ -39,6 +39,7 @@ namespace ControlAVP
             {
                 options.Conventions.AuthorizeFolder("/");
                 options.Conventions.AllowAnonymousToPage("/Login");
+                options.Conventions.AllowAnonymousToPage("/Error");
             });
 
             services.Configure<CookiePolicyOptions>(options =>
