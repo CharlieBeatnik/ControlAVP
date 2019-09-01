@@ -260,3 +260,5 @@ paket-files/
 __pycache__/
 *.pyc
 **/settings.json
+!SerialBlaster/.vscode/settings.json
+SerialBlaster/build

@@ -1,0 +1,21 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "C:\\Users\\andy\\AppData\\Local\\Arduino15\\packages\\esp32\\tools\\**",
+                "C:\\Users\\andy\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\1.0.2\\**",
+                "C:\\Users\\andy\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\1.0.2\\libraries\\HTTPClient\\src\\**",
+                "C:\\Users\\andy\\Documents\\Arduino\\libraries\\M5StickC\\src\\**",
+                "C:\\Users\\andy\\Documents\\Arduino\\libraries\\IRremote\\**"
+            ],
+            "forcedInclude": [],
+            "intelliSenseMode": "msvc-x64",
+            "compilerPath": "C:/Program Files (x86)/Microsoft Visual Studio/2017/Enterprise/VC/Tools/MSVC/14.16.27023/bin/Hostx64/x64/cl.exe",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "defines": ["ESP32", "ARDUINO=100"]
+        }
+    ],
+    "version": 4
+}
