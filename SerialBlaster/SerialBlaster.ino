@@ -31,19 +31,19 @@ void loop()
     char *action = strtok((char*)in.c_str(), " ");
     if (action != NULL)
     {
-      M5.Lcd.printf("A = %s\n", action);
+      M5.Lcd.printf("%s\n", action);
       if(strcasecmp(action, "send") == 0)
       {
         char *encoding = strtok(NULL, " ");
         if(encoding != NULL)
         {
-          M5.Lcd.printf("E = %s\n", encoding);
+          M5.Lcd.printf("%s\n", encoding);
           if(strcasecmp(encoding, "nec") == 0)
           {
             char *command = strtok(NULL, " ");
             if(command != NULL)
             {
-              M5.Lcd.printf("C = %s\n", command);
+              M5.Lcd.printf("%s\n", command);
               unsigned long commandUL;
               commandUL = strtoul(command, NULL, 16);
               irsend.sendNEC(commandUL, 32);
@@ -78,5 +78,6 @@ void loop()
       Serial.println("ERROR: Empty message.");
     }
 
+    Serial.flush();
   }
 }

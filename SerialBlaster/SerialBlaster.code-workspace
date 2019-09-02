@@ -1,0 +1,30 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "C:\\Users\\andy\\AppData\\Local\\Arduino15\\packages\\esp32"
+		},
+		{
+			"path": "C:\\Program Files (x86)\\Arduino"
+		},
+		{
+			"path": "C:\\Users\\andy\\Documents\\Arduino"
+		}
+	],
+	"settings": {
+		"arduino.path": "C:\\Program Files (x86)\\Arduino",
+		"files.associations": {
+			"ostream": "cpp",
+			"*.tcc": "cpp",
+			"xlocale": "cpp",
+			"xstring": "cpp",
+			"xutility": "cpp",
+			"string": "cpp",
+			"random": "cpp",
+			"iosfwd": "cpp",
+			"string_view": "cpp"
+		}
+	}
+}
