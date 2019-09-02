@@ -16,6 +16,7 @@ namespace ControllableDevice
             _rs232Device = new Rs232Device(portId);
             _rs232Device.BaudRate = 115200;
             _rs232Device.MessageTerminator = "\r";
+            _rs232Device.PostWriteWait = TimeSpan.FromSeconds(10);
         }
 
         public void Dispose()

@@ -24,6 +24,8 @@ void loop()
   while(Serial.available())
   {
     in = Serial.readStringUntil('\r');
+
+    delay(250);
     
     //Example
     //send nec 0x3EC14DB2

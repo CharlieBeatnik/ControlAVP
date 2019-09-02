@@ -188,6 +188,7 @@ namespace ControllableDevice
                 {
                     while (true)
                     {
+                        Debug.WriteLine("Listen Loop");
                         Read(_readCancellationTokenSource.Token);
                     }
                 }
@@ -213,6 +214,7 @@ namespace ControllableDevice
             {
                 // Create a task object to wait for data on the serialPort.InputStream
                 var loadAsyncTask = _dataReader.LoadAsync(ReadBufferLength).AsTask(childCancellationTokenSource.Token);
+                Debug.WriteLine("loadAsyncTask.Wait()");
                 loadAsyncTask.Wait();
 
                 var numBytesRead = loadAsyncTask.Result;
@@ -221,6 +223,7 @@ namespace ControllableDevice
                     var bytesRead = new byte[numBytesRead];
                     _dataReader.ReadBytes(bytesRead);
                     var readString = System.Text.Encoding.UTF8.GetString(bytesRead);
+                    Debug.WriteLine($"AddToMessageStore: {readString}");
                     AddToMessageStore(readString);
                 }
             }
@@ -299,6 +302,7 @@ namespace ControllableDevice
 
         public string WriteWithResponse(string write, string pattern, TimeSpan? postWriteWaitOverride = null)
         {
+            Debug.WriteLine($"WriteWithResponse: {write}");
             Write(write);
             Thread.Sleep(postWriteWaitOverride == null ? PostWriteWait : (TimeSpan)postWriteWaitOverride);
             return Read(pattern);
