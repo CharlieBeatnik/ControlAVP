@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ControllableDevice;
 using System.IO;
 using Newtonsoft.Json.Linq;
+using ControllableDeviceTypes.OSSCTypes;
 
 namespace Tests
 {
@@ -31,11 +32,32 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GivenDevice_WhenSendCommand_ThenResponseIsOK()
+        public void GivenDevice_WhenSendCommandFromUint_ThenResponseIsOK()
         {
             using (var device = CreateDevice())
             {
                 var result = device.SendCommand(0x3EC14DB2);
+                Assert.IsTrue(result);
+            }
+        }
+
+        [TestMethod]
+        public void GivenDevice_WhenSendCommandFromEnum_ThenResponseIsOK()
+        {
+            using (var device = CreateDevice())
+            {
+                var result = device.SendCommand(CommandName.Menu);
+                Assert.IsTrue(result);
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void GivenDevice_WhenSendCommandUsingInvalidEnum_ThenExceptionThrown()
+        {
+            using (var device = CreateDevice())
+            {
+                var result = device.SendCommand((CommandName)int.MaxValue);
                 Assert.IsTrue(result);
             }
         }
