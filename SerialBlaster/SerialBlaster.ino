@@ -3,30 +3,70 @@
 
 IRsend irsend(M5_IR);
 
+bool backlightEnabled = false;
+
 void setup()
 {
   Serial.begin(115200);
-  Serial.setTimeout(60 * 1000);
 
   M5.begin();
+  lcdBacklightEnable(backlightEnabled);
   M5.Lcd.println("SerialBlaster");
 
   pinMode(M5_LED, OUTPUT);
   digitalWrite(M5_LED, LOW);
   digitalWrite(M5_LED, HIGH);
 
-  delay(4000);
+  pinMode(M5_BUTTON_HOME, INPUT);
+  pinMode(M5_BUTTON_RST, INPUT);
+}
+
+void lcdBacklightEnable(bool enable)
+{
+  if(enable)
+  {
+    Wire1.beginTransmission(0x34);
+    Wire1.write(0x12);
+    Wire1.write(0x4d); // Enable LDO2, aka OLED_VDD
+    Wire1.endTransmission();
+  }
+  else
+  {
+    Wire1.beginTransmission(0x34);
+    Wire1.write(0x12);
+    Wire1.write(0b01001011);  // LDO2, aka OLED_VDD, off
+    Wire1.endTransmission();
+  }
 }
 
 void loop()
 {
   String in;
+
+  static int buttonHomePrevious = HIGH;
+  int buttonHome = digitalRead(M5_BUTTON_HOME);
+
+  static int buttonResetPrevious = HIGH;
+  int buttonReset = digitalRead(M5_BUTTON_RST);
+
+  if(buttonHomePrevious == HIGH && buttonHome == LOW)
+  {
+      backlightEnabled = !backlightEnabled;
+      lcdBacklightEnable(backlightEnabled);
+  }
+  buttonHomePrevious = buttonHome;
+
+  if(buttonResetPrevious == HIGH && buttonReset == LOW)
+  {
+    ESP.restart();
+  }
+  buttonResetPrevious = buttonReset;
+  
+
   while(Serial.available())
   {
     in = Serial.readStringUntil('\r');
 
-    delay(250);
-    
     //Example
     //send nec 0x3EC14DB2
 

@@ -35,10 +35,7 @@ namespace Tests
         {
             using (var device = CreateDevice())
             {
-                System.Threading.Thread.Sleep(5000);
                 var result = device.SendCommand(0x3EC14DB2);
-                System.Threading.Thread.Sleep(1000);
-                result = device.SendCommand(0x3EC14DB2);
                 Assert.IsTrue(result);
             }
         }

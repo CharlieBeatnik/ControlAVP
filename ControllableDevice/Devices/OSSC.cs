@@ -15,8 +15,11 @@ namespace ControllableDevice
         {
             _rs232Device = new Rs232Device(portId);
             _rs232Device.BaudRate = 115200;
-            _rs232Device.MessageTerminator = "\r";
-            _rs232Device.PostWriteWait = TimeSpan.FromSeconds(10);
+
+            _rs232Device.PreWrite = (x) =>
+            {
+                return x + "\r";
+            };
         }
 
         public void Dispose()
@@ -46,7 +49,7 @@ namespace ControllableDevice
         public bool SendCommand(uint command)
         {
             string commandHex = command.ToString("X");
-            string result = _rs232Device.WriteWithResponse($"send nec 0x{commandHex}", ".*");
+            string result = _rs232Device.WriteWithResponse($"send nec 0x{commandHex}", "OK");
 
             return result != null;
         }
