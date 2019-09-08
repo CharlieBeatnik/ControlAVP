@@ -23,6 +23,7 @@ namespace ControlRelay
         private ExtronDSC301HDCloudInterface.Settings _settingsExtronDSC301HD;
         private SonyKDL60W855CloudInterface.Settings _settingsSonyKDL60W855;
         private ExtronMVX44VGACloudInterface.Settings _settingsExtronMVX44VGA;
+        private OSSCCloudInterface.Settings _settingsOSSC;
 
         private static Logger _logger = LogManager.GetCurrentClassLogger();
 
@@ -57,6 +58,10 @@ namespace ControlRelay
             //ExtronMVX44VGA Settings 
             _settingsExtronMVX44VGA = JsonConvert.DeserializeObject<ExtronMVX44VGACloudInterface.Settings>(jsonParsed["ExtronMVX44VGA"].ToString());
             AddCloudInterface(_settingsExtronMVX44VGA, (x) => new ExtronMVX44VGACloudInterface(x));
+
+            //OSSC Settings 
+            _settingsOSSC = JsonConvert.DeserializeObject<OSSCCloudInterface.Settings>(jsonParsed["OSSC"].ToString());
+            AddCloudInterface(_settingsOSSC, (x) => new OSSCCloudInterface(x));
 
             CreateDeviceClient();
         }

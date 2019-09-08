@@ -49,5 +49,13 @@ namespace ControllableDeviceTypes
             TonePlus
         };
 
+        public static class CommandNameExtensions
+        {
+            public static bool Valid(this CommandName commandName)
+            {
+                return Enum.IsDefined(typeof(CommandName), commandName);
+            }
+        }
+
     }
 }
