@@ -14,13 +14,14 @@ namespace ControllableDevice
 
         private class CommandCode
         {
-            public uint Code { get; }
+            public ushort Code { get; }
             public uint CodeWithChecksum { get; }
 
             public CommandCode(ushort code)
             {
                 Code = code;
-                CodeWithChecksum = ((Code << 16) & 0xFF000000) | (~(Code << 8) & 0X00FF0000) | ((Code << 8) & 0x0000FF00) | (~(Code) & 0X000000FF);
+                uint code32 = code;
+                CodeWithChecksum = ((code32 << 16) & 0xFF000000) | (~(code32 << 8) & 0X00FF0000) | ((code32 << 8) & 0x0000FF00) | (~(code32) & 0X000000FF);
             }
         };
 
