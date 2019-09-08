@@ -16,12 +16,8 @@
         <div class="card-body">
             @foreach (var commandName in (CommandName[])Enum.GetValues(typeof(CommandName)))
             {
-            <div>
-                <button type="submit" asp-page-handler="SendCommand" asp-route-commandname=@commandName class="btn btn-success border">@commandName.ToString()</button>
-            </div>
+                @await Component.InvokeAsync("OSSCButton", new { commandName = commandName })
             }
-
         </div>
     </div>
-    @*}*@
 </form>

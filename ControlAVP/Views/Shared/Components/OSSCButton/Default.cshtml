@@ -1,0 +1,6 @@
+﻿@model ControllableDeviceTypes.OSSCTypes.CommandName
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<div>
+    <button type="submit" asp-page-handler="SendCommand" asp-route-commandname=@Model class="btn btn-success border">@Model.ToString()</button>
+</div>
