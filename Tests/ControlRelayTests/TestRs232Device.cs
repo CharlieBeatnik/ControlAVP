@@ -24,8 +24,8 @@ namespace Tests
 
         private Rs232Device CreateDevice(int messageStoreCapacity = 0)
         {
-            var device = new Rs232Device(_settings["AtenVS0801H"][0]["PortId"].ToString(), messageStoreCapacity);
-            device.BaudRate = 19200;
+            var device = new Rs232Device(_settings["OSSC"]["PortId"].ToString(), messageStoreCapacity);
+            device.BaudRate = 115200;
             device.PreWrite = (x) =>
             {
                 return x + "\r";
@@ -91,8 +91,8 @@ namespace Tests
         {
             using (var device = CreateDevice())
             {
-                var result = device.WriteWithResponse("read", @"^F/W: V[0-9]+.[0-9]+.[0-9]+$");
-                Assert.AreEqual(result, "F/W: V2.0.197");
+                var result = device.WriteWithResponse($"send nec 0x3EC14DB2", "OK");
+                Assert.AreEqual(result, "OK");
             }
         }
 
@@ -101,10 +101,10 @@ namespace Tests
         {
             using (var device = CreateDevice())
             {
-                device.Write("read");
+                device.Write("send nec 0x3EC14DB2");
                 Thread.Sleep(device.PostWriteWait);
-                var result = device.Read(@"^F/W: V[0-9]+.[0-9]+.[0-9]+$");
-                Assert.AreEqual(result, "F/W: V2.0.197");
+                var result = device.Read("OK");
+                Assert.AreEqual(result, "OK");
             }
         }
 
@@ -113,9 +113,9 @@ namespace Tests
         {
             using (var device = CreateDevice())
             {
-                var result = device.WriteWithResponses("read", 6);
-                Assert.AreEqual(result.Count, 6);
-                Assert.AreEqual(result[5], "F/W: V2.0.197");
+                var result = device.WriteWithResponses("send nec 0x3EC14DB2", 1);
+                Assert.AreEqual(result.Count, 1);
+                Assert.AreEqual(result[0], "OK");
             }
         }
 
@@ -137,7 +137,7 @@ namespace Tests
         {
             using (var device = CreateDevice())
             {
-                var result = device.WriteWithResponses("read", 7);
+                var result = device.WriteWithResponses("send nec 0x3EC14DB2", 2);
             }
         }
 
@@ -146,14 +146,14 @@ namespace Tests
         {
             using (var device = CreateDevice())
             {
-                device.Write("read");
+                device.Write("send nec 0x3EC14DB2");
                 Thread.Sleep(device.PostWriteWait);
-                var result = device.Read(@"^F/W: V[0-9]+.[0-9]+.[0-9]+$");
+                var result = device.Read("OK");
                 Assert.IsNotNull(result);
 
                 Thread.Sleep(device.MessageLifetime + TimeSpan.FromSeconds(2));
 
-                result = device.Read(@"^F/W: V[0-9]+.[0-9]+.[0-9]+$");
+                result = device.Read("OK");
                 Assert.IsNull(result);
             }
         }
