@@ -3,14 +3,14 @@
 
 IRsend irsend(M5_IR);
 
-bool backlightEnabled = false;
+bool userDebugEnabled = false;
 
 void setup()
 {
   Serial.begin(115200);
 
   M5.begin();
-  lcdBacklightEnable(backlightEnabled);
+  lcdBacklightEnable(userDebugEnabled);
   M5.Lcd.println("SerialBlaster");
 
   pinMode(M5_LED, OUTPUT);
@@ -51,8 +51,8 @@ void loop()
 
   if(buttonHomePrevious == HIGH && buttonHome == LOW)
   {
-      backlightEnabled = !backlightEnabled;
-      lcdBacklightEnable(backlightEnabled);
+      userDebugEnabled = !userDebugEnabled;
+      lcdBacklightEnable(userDebugEnabled);
   }
   buttonHomePrevious = buttonHome;
 
@@ -91,9 +91,12 @@ void loop()
               irsend.sendNEC(commandUL, 32);
               Serial.println("OK");
 
-              digitalWrite(M5_LED, LOW);
-              delay(50);
-              digitalWrite(M5_LED, HIGH);
+              if(userDebugEnabled)
+              {
+                digitalWrite(M5_LED, LOW);
+                delay(50);
+                digitalWrite(M5_LED, HIGH);
+              }
             }
             else
             {
