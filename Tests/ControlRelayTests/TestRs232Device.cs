@@ -22,9 +22,9 @@ namespace Tests
             }
         }
 
-        private Rs232Device CreateDevice()
+        private Rs232Device CreateDevice(int messageStoreCapacity = 0)
         {
-            var device = new Rs232Device(_settings["AtenVS0801H"][0]["PortId"].ToString());
+            var device = new Rs232Device(_settings["AtenVS0801H"][0]["PortId"].ToString(), messageStoreCapacity);
             device.BaudRate = 19200;
             device.PreWrite = (x) =>
             {
@@ -36,21 +36,21 @@ namespace Tests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void GivenEmptyPartialId_WhenNewDevice_ThenExceptionThrown()
+        public void GivenEmptyPartialId_WhenNewDevice_ThenArgumentExceptionThrown()
         {
             var rs232Device = new Rs232Device(string.Empty);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void GivenNullPartialId_WhenNewDevice_ThenExceptionThrown()
+        public void GivenNullPartialId_WhenNewDevice_ThenArgumentExceptionThrown()
         {
             var rs232Device = new Rs232Device(null);
         }
 
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
-        public void GivenInvalidPartialId_WhenNewDevice_ThenExceptionThrown()
+        public void GivenInvalidPartialId_WhenNewDevice_ThenInvalidOperationExceptionThrown()
         {
             var rs232Device = new Rs232Device("invalid");
         }
@@ -133,7 +133,7 @@ namespace Tests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void GivenDevice_WhenRequestTooManyResponses_ThenExceptionIsThrown()
+        public void GivenDevice_WhenRequestTooManyResponses_ThenArgumentExceptionIsThrown()
         {
             using (var device = CreateDevice())
             {
@@ -155,6 +155,24 @@ namespace Tests
 
                 result = device.Read(@"^F/W: V[0-9]+.[0-9]+.[0-9]+$");
                 Assert.IsNull(result);
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(OutOfMemoryException))]
+        public void GivenDevice_WhenCreateDeviceWithMessageStoreCapacityOfIntMax_ThenOutOfMemoryExceptionIsThrown()
+        {
+            using (var device = CreateDevice(int.MaxValue))
+            {
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void GivenDevice_WhenCreateDeviceWithMessageStoreCapacityOfIntMin_ThenAgumentExceptionIsThrown()
+        {
+            using (var device = CreateDevice(int.MinValue))
+            {
             }
         }
     }

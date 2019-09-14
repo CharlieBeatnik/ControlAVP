@@ -42,7 +42,7 @@ namespace ControllableDevice
 
         private readonly TimeSpan _defaultWriteTimeout = TimeSpan.FromMilliseconds(50);
         private readonly TimeSpan _defaultReadTimeout = TimeSpan.FromMilliseconds(50);
-        private readonly uint _defaultMessageStoreCapacity = 1024;
+        private readonly int _defaultMessageStoreCapacity = 1024;
 
         public delegate string ProcessString(string input);
         public ProcessString PreWrite { get; set; } = (x) => { return x; };
@@ -96,7 +96,7 @@ namespace ControllableDevice
             return await DeviceInformation.FindAllAsync(aqs);
         }
 
-        public Rs232Device(string partialId, uint messageStoreCapacity = 0)
+        public Rs232Device(string partialId, int messageStoreCapacity = 0)
         {
             if (string.IsNullOrEmpty(partialId))
             {
@@ -108,6 +108,7 @@ namespace ControllableDevice
             {
                 messageStoreCapacity = _defaultMessageStoreCapacity;
             }
+
             _messageStore = new CircularBuffer<TimestampedMessage>((int)messageStoreCapacity);
 
             //Find device ID
