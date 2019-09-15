@@ -49,8 +49,8 @@ namespace Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
-        public void GivenInvalidPartialId_WhenNewDevice_ThenInvalidOperationExceptionThrown()
+        [ExpectedException(typeof(ArgumentException))]
+        public void GivenInvalidPartialId_WhenNewDevice_ThenArgumentExceptionThrown()
         {
             var rs232Device = new Rs232Device("invalid");
         }

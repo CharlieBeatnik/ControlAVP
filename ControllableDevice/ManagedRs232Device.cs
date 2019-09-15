@@ -9,126 +9,198 @@ using System.Threading.Tasks;
 using Windows.Devices.Enumeration;
 using Windows.Devices.SerialCommunication;
 using Windows.Storage.Streams;
+using System.Timers;
 
 namespace ControllableDevice
 {
-    public class Rs232Device : IDisposable
+    public class ManagedRs232Device : IDisposable
     {
         private bool _disposed = false;
+        private System.Timers.Timer _monitorDeviceTimer;
 
         private string _partialId;
-        private SerialDevice _serialPort;
+        private SerialDevice _serialDevice;
+        private readonly object _serialDeviceLock = new object();
 
-        private CancellationTokenSource _readCancellationTokenSource;
         private DataWriter _dataWriter;
         private DataReader _dataReader;
 
+        private CancellationTokenSource _readCancellationTokenSource;
         private Task _listenTask;
         private CircularBuffer<TimestampedMessage> _messageStore;
         private string _unterminatedMessage = string.Empty;
 
         private readonly TimeSpan _defaultWriteTimeout = TimeSpan.FromMilliseconds(50);
         private readonly TimeSpan _defaultReadTimeout = TimeSpan.FromMilliseconds(50);
-        private readonly int _defaultMessageStoreCapacity = 1024;
+        private readonly int _messageStoreCapacity = 1024;
+        private readonly uint _readBufferLength = 1024;
 
+        //Configuration Properties
         public delegate string ProcessString(string input);
         public ProcessString PreWrite { get; set; } = (x) => { return x; };
-
-        public string Id { get; private set; }
-        public uint ReadBufferLength { get; set; } = 1024;
+        public TimeSpan PostWriteWait { get; set; } = TimeSpan.FromMilliseconds(500);
+        public TimeSpan MessageLifetime { get; set; } = TimeSpan.FromSeconds(10);
         public string ReceivedMessageTerminator { get; set; } = "\r\n";
-
         public TimeSpan WriteTimeout
         {
-            get { return _serialPort.WriteTimeout; }
-            set { _serialPort.WriteTimeout = value; }
+            set
+            {
+                lock (_serialDeviceLock)
+                {
+                    if (_serialDevice != null) _serialDevice.WriteTimeout = value;
+                }
+            }
         }
 
         public TimeSpan ReadTimeout
         {
-            get { return _serialPort.ReadTimeout; }
-            set { _serialPort.ReadTimeout = value; }
+            set
+            {
+                lock (_serialDeviceLock)
+                {
+                    if (_serialDevice != null) _serialDevice.ReadTimeout = value;
+                }
+            }
         }
-
-        public TimeSpan PostWriteWait { get; set; } = TimeSpan.FromMilliseconds(500);
-        public TimeSpan MessageLifetime { get; set; } = TimeSpan.FromSeconds(10);
 
         public uint BaudRate
         {
-            get { return _serialPort.BaudRate; }
-            set { _serialPort.BaudRate = value; }
+            set
+            {
+                lock (_serialDeviceLock)
+                {
+                    if (_serialDevice != null) _serialDevice.BaudRate = value;
+                }
+            }
         }
 
         public ushort DataBits
         {
-            get { return _serialPort.DataBits; }
-            set { _serialPort.DataBits = value; }
+            set
+            {
+                lock (_serialDeviceLock)
+                {
+                    if (_serialDevice != null) _serialDevice.DataBits = value;
+                }
+            }
         }
 
         public SerialParity Parity
         {
-            get { return _serialPort.Parity; }
-            set { _serialPort.Parity = value; }
+            set
+            {
+                lock (_serialDeviceLock)
+                {
+                    if (_serialDevice != null) _serialDevice.Parity = value;
+                }
+            }
         }
 
         public SerialStopBitCount StopBits
         {
-            get { return _serialPort.StopBits; }
-            set { _serialPort.StopBits = value; }
-        }
-
-        public static async Task<DeviceInformationCollection> GetAvailableDevices()
-        {
-            string aqs = SerialDevice.GetDeviceSelector();
-            return await DeviceInformation.FindAllAsync(aqs);
-        }
-
-        public Rs232Device(string partialId, int messageStoreCapacity = 0)
-        {
-            if (string.IsNullOrEmpty(partialId))
+            set
             {
-                throw new ArgumentException("Must not be Null or Empty.", "partialId");
+                lock (_serialDeviceLock)
+                {
+                    if (_serialDevice != null) _serialDevice.StopBits = value;
+                }
             }
+        }
+
+        public bool Enabled { get; private set; } = false;
+
+        public ManagedRs232Device(string partialId)
+        {
             _partialId = partialId;
 
-            if (messageStoreCapacity == 0)
+            InitialiseSerialDevice();
+
+            _monitorDeviceTimer = new System.Timers.Timer(TimeSpan.FromSeconds(10).TotalMilliseconds);
+            _monitorDeviceTimer.Elapsed += MonitorDevice;
+            _monitorDeviceTimer.AutoReset = true;
+            _monitorDeviceTimer.Enabled = true;
+        }
+
+        private void MonitorDevice(Object source, ElapsedEventArgs e)
+        {
+            if (SerialDeviceConnected(_partialId) && !Enabled)
             {
-                messageStoreCapacity = _defaultMessageStoreCapacity;
+                InitialiseSerialDevice();
             }
-
-            _messageStore = new CircularBuffer<TimestampedMessage>((int)messageStoreCapacity);
-
-            //Find device ID
-            var devices = Task.Run(async () => await GetAvailableDevices()).Result;
-            Id = GetDeviceId(partialId);
-            if(Id == null)
+            else if (!SerialDeviceConnected(_partialId) && Enabled)
             {
-                throw new ArgumentException($"Unable to find ID from partialId '{partialId}'. Is this partialId correct and the device connected?");
+                DeInitialiseSerialDevice();
             }
+        }
 
-            //Create serial port
-            _serialPort = Task.Run(async () => await SerialDevice.FromIdAsync(Id)).Result;
-            if(_serialPort == null)
+        private void InitialiseSerialDevice()
+        {
+            lock(_serialDeviceLock)
             {
-                throw new Exception("Unable to create SerialDevice, is it already is use?");
+                Debug.WriteLine($"Initialising SerialDevice '{_partialId}'");
+                try
+                {
+                    //It's legitimate to try and initialise the device with a partial ID that doesn't exist
+                    //For example, a serial device isn't yet connected. Handle this case gracefully by just returning.
+                    string id = GetDeviceId(_partialId);
+                    if (id == null) return;
+
+                    _serialDevice = Task.Run(async () => await SerialDevice.FromIdAsync(id))?.Result;
+
+                    //Serial port defaults
+                    WriteTimeout = _defaultWriteTimeout;
+                    ReadTimeout = _defaultReadTimeout;
+                    BaudRate = 9600;
+                    DataBits = 8;
+                    Parity = SerialParity.None;
+                    StopBits = SerialStopBitCount.One;
+
+                    //Create data reader/writer
+                    _dataWriter = new DataWriter(_serialDevice.OutputStream);
+                    _dataReader = new DataReader(_serialDevice.InputStream);
+
+                    _messageStore = new CircularBuffer<TimestampedMessage>(_messageStoreCapacity);
+
+                    //Start async listen task to deal with async reads
+                    _readCancellationTokenSource = new CancellationTokenSource();
+                    _listenTask = new Task(Listen);
+                    _listenTask.Start();
+
+                    Enabled = true;
+                    Debug.WriteLine($"Initialised SerialDevice '{_partialId}'");
+                }
+                catch(Exception)
+                {
+                    //Many different exception types can be thrown if the serial device is pulled during initialisation
+                    return;
+                }
             }
+        }
 
-            //Serial port defaults
-            WriteTimeout = _defaultWriteTimeout;
-            ReadTimeout = _defaultReadTimeout;
-            BaudRate = 9600;
-            DataBits = 8;
-            Parity = SerialParity.None;
-            StopBits = SerialStopBitCount.One;
+        private void DeInitialiseSerialDevice()
+        {
+            lock(_serialDeviceLock)
+            {
+                Debug.WriteLine($"DeInitialising SerialDevice '{_partialId}'");
+                Enabled = false;
 
-            //Create data reader/writer
-            _dataWriter = new DataWriter(_serialPort.OutputStream);
-            _dataReader = new DataReader(_serialPort.InputStream);
+                _readCancellationTokenSource?.Cancel();
 
-            //Start async listen task to deal with async reads
-            _readCancellationTokenSource = new CancellationTokenSource();
-            _listenTask = new Task(Listen);
-            _listenTask.Start();
+                _listenTask?.Wait();
+                _listenTask = null;
+
+                _readCancellationTokenSource?.Dispose();
+                _readCancellationTokenSource = null;
+
+                _dataReader?.DetachStream();
+                _dataReader = null;
+
+                _dataWriter?.DetachStream();
+                _dataReader = null;
+
+                _serialDevice?.Dispose();
+                _serialDevice = null;
+            }
         }
 
         public void Dispose()
@@ -144,43 +216,22 @@ namespace ControllableDevice
 
             if (disposing)
             {
-                _readCancellationTokenSource?.Cancel();
+                _monitorDeviceTimer.Enabled = false;
 
-                _listenTask?.Wait();
-                _listenTask = null;
-
-                _readCancellationTokenSource?.Dispose();
-                _readCancellationTokenSource = null;
-
-                CloseDevice();
+                DeInitialiseSerialDevice();
             }
 
             _disposed = true;
-        }
-
-        private void CloseDevice()
-        {
-            _dataReader?.DetachStream();
-            _dataReader = null;
-
-            _dataWriter?.DetachStream();
-            _dataReader = null;
-
-            _serialPort?.Dispose();
-            _serialPort = null;
-
-            _messageStore = null;
         }
 
         private void Listen()
         {
             try
             {
-                if (_serialPort != null)
+                if (_serialDevice != null)
                 {
                     while (true)
                     {
-                        Debug.WriteLine("Listen Loop");
                         Read(_readCancellationTokenSource.Token);
                     }
                 }
@@ -189,7 +240,7 @@ namespace ControllableDevice
             {
                 if (ex is TaskCanceledException || ex is OperationCanceledException)
                 {
-                    CloseDevice();
+                    
                 }
             }
         }
@@ -205,7 +256,7 @@ namespace ControllableDevice
             using (var childCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken))
             {
                 // Create a task object to wait for data on the serialPort.InputStream
-                var loadAsyncTask = _dataReader.LoadAsync(ReadBufferLength).AsTask(childCancellationTokenSource.Token);
+                var loadAsyncTask = _dataReader.LoadAsync(_readBufferLength).AsTask(childCancellationTokenSource.Token);
                 loadAsyncTask.Wait();
 
                 var numBytesRead = loadAsyncTask.Result;
@@ -247,20 +298,23 @@ namespace ControllableDevice
 
         public void Write(string write)
         {
-            var processedWriteString = PreWrite(write);
-
-            lock (_dataReader)
+            if (Enabled)
             {
-                _dataWriter.WriteString(processedWriteString);
+                var processedWriteString = PreWrite(write);
 
-                var storeAsyncTask = _dataWriter.StoreAsync().AsTask();
-                storeAsyncTask.Wait();
+                lock (_dataReader)
+                {
+                    _dataWriter.WriteString(processedWriteString);
 
-                var bytesWritten = storeAsyncTask.Result;
-                Debug.Assert(bytesWritten == processedWriteString.Length);
-                Debug.Assert(storeAsyncTask.IsCompleted == true);
-                Debug.Assert(storeAsyncTask.IsCompletedSuccessfully == true);
-                Debug.Assert(storeAsyncTask.Status == TaskStatus.RanToCompletion);
+                    var storeAsyncTask = _dataWriter.StoreAsync().AsTask();
+                    storeAsyncTask.Wait();
+
+                    var bytesWritten = storeAsyncTask.Result;
+                    Debug.Assert(bytesWritten == processedWriteString.Length);
+                    Debug.Assert(storeAsyncTask.IsCompleted == true);
+                    Debug.Assert(storeAsyncTask.IsCompletedSuccessfully == true);
+                    Debug.Assert(storeAsyncTask.Status == TaskStatus.RanToCompletion);
+                }
             }
         }
 
@@ -325,20 +379,23 @@ namespace ControllableDevice
             }
         }
 
+        public static async Task<DeviceInformationCollection> GetAvailableDevices()
+        {
+            string aqs = SerialDevice.GetDeviceSelector();
+            return await DeviceInformation.FindAllAsync(aqs);
+        }
+
         private static string GetDeviceId(string partialId)
         {
-            //Find device ID
             var devices = Task.Run(async () => await GetAvailableDevices()).Result;
+            var deviceInformation = devices.FirstOrDefault(s => s.Id.Contains(partialId));
 
-            foreach (var device in devices)
-            {
-                if (device.Id.Contains(partialId))
-                {
-                    return device.Id;
-                }
-            }
+            return deviceInformation?.Id;
+        }
 
-            return null;
+        private static bool SerialDeviceConnected(string partialId)
+        {
+            return GetDeviceId(partialId) != null;
         }
     }
 }
