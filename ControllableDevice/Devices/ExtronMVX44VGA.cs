@@ -44,6 +44,8 @@ namespace ControllableDevice
 
         public bool GetAvailable()
         {
+            if (!_rs232Device.Enabled) return false;
+
             // Getting firmware as a good way to determine if device is on
             var firmware = GetFirmware();
             return firmware != null;
@@ -51,6 +53,8 @@ namespace ControllableDevice
 
         public Version GetFirmware()
         {
+            if (!_rs232Device.Enabled) return null;
+
             string pattern = @"^([0-9]+).([0-9]+)$";
             var result = _rs232Device.WriteWithResponse("Q", pattern);
             if (result != null)
@@ -67,6 +71,8 @@ namespace ControllableDevice
 
         public bool Reset(ResetType resetType)
         {
+            if (!_rs232Device.Enabled) return false;
+
             string result = null;
             var resetCommandWaitTime = TimeSpan.FromSeconds(2);
 
@@ -97,6 +103,8 @@ namespace ControllableDevice
 
         public InputPort? GetInputPortForOutputPort(OutputPort outputPort, TieType tieType)
         {
+            if (!_rs232Device.Enabled) return null;
+
             string result = null;
 
             if (tieType == TieType.AudioVideo)
@@ -124,6 +132,8 @@ namespace ControllableDevice
 
         public TieState GetTieState(int preset = 0)
         {
+            if (!_rs232Device.Enabled) return null;
+
             //0 0 0 0 Vid 0 0 0 0 Aud 
             string pattern = @"^([0-4]) ([0-4]) ([0-4]) ([0-4]) Vid ([0-4]) ([0-4]) ([0-4]) ([0-4]) Aud $";
             var result = _rs232Device.WriteWithResponse($"{_cmdEsc}{preset:D2}VC{_cmdCr}", pattern);
@@ -149,6 +159,7 @@ namespace ControllableDevice
 
         public bool TieInputPortToAllOutputPorts(InputPort inputPort, TieType tieType)
         {
+            if (!_rs232Device.Enabled) return false;
             string result = null;
 
             switch (tieType)
@@ -169,6 +180,7 @@ namespace ControllableDevice
 
         public bool TieInputPortToOutputPort(InputPort inputPort, OutputPort outputPort, TieType tieType)
         {
+            if (!_rs232Device.Enabled) return false;
             string result = null;
 
             switch (tieType)

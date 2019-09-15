@@ -31,6 +31,11 @@ namespace Tests
             return new ExtronMVX44VGA(_deviceSettings["PortId"].ToString());
         }
 
+        public ExtronMVX44VGA CreateInvalidDevice()
+        {
+            return new ExtronMVX44VGA("invalid");
+        }
+
         [TestMethod]
         public void GivenDevice_WhenGetFirmware_ThenFirmwareIsNotNull()
         {
@@ -75,20 +80,23 @@ namespace Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
-        public void GivenInvalidPartialId_WhenNewDevice_ThenExceptionThrown()
+        public void GivenInvalidPartialId_WhenNewDevice_ThenDeviceIsNotAvailable()
         {
-            var device = new ExtronMVX44VGA("invalid");
+            using (var device = new ExtronMVX44VGA("invalid"))
+            {
+                Assert.IsFalse(device.GetAvailable());
+            }
         }
 
         [TestMethod]
-        [ExpectedException(typeof(Exception))]
-        public void GivenDevice_WhenCreateAnotherDeviceWithSameID_ThenExceptionThrown()
+        public void GivenDevice_WhenCreateAnotherDeviceWithSameID_ThenSecondDeviceIsNotAvailable()
         {
             using (var device1 = CreateDevice())
             {
+                Assert.IsTrue(device1.GetAvailable());
                 using (var device2 = CreateDevice())
                 {
+                    Assert.IsFalse(device2.GetAvailable());
                 }
             }
         }
@@ -205,5 +213,68 @@ namespace Tests
                 Assert.AreEqual(device.GetInputPortForOutputPort(OutputPort.Port3, TieType.Audio), InputPort.Port3);
             }
         }
+
+        public void GivenInvalidDevice_WhenGetAvailable_ThenDeviceIsNotAvailable()
+        {
+            using (var device = CreateInvalidDevice())
+            {
+                Assert.IsFalse(device.GetAvailable());
+            }
+        }
+
+        [TestMethod]
+        public void GivenInvalidDevice_WhenGetFirmware_ThenResultsIsNull()
+        {
+            using (var device = CreateInvalidDevice())
+            {
+                Assert.IsNull(device.GetFirmware());
+            }
+        }
+
+        [TestMethod]
+        public void GivenInvalidDevice_WheReset_ThenResultsIsFalse()
+        {
+            using (var device = CreateInvalidDevice())
+            {
+                Assert.IsFalse(device.Reset(ResetType.Full));
+            }
+        }
+
+        [TestMethod]
+        public void GivenInvalidDevice_WhenGetInputPortForOutputPort_ThenResultsIsNull()
+        {
+            using (var device = CreateInvalidDevice())
+            {
+                Assert.IsNull(device.GetInputPortForOutputPort(OutputPort.Port1, TieType.Audio));
+            }
+        }
+
+        [TestMethod]
+        public void GivenInvalidDevice_WhenGetTieState_ThenResultsIsNull()
+        {
+            using (var device = CreateInvalidDevice())
+            {
+                Assert.IsNull(device.GetTieState());
+            }
+        }
+
+        [TestMethod]
+        public void GivenInvalidDevice_WhenTieInputPortToAllOutputPorts_ThenResultsIsFalse()
+        {
+            using (var device = CreateInvalidDevice())
+            {
+                Assert.IsFalse(device.TieInputPortToAllOutputPorts(InputPort.Port1, TieType.Audio));
+            }
+        }
+
+        [TestMethod]
+        public void GivenInvalidDevice_WhenTieInputPortToOutputPort_ThenResultsIsFalse()
+        {
+            using (var device = CreateInvalidDevice())
+            {
+                Assert.IsFalse(device.TieInputPortToOutputPort(InputPort.Port1, OutputPort.Port1, TieType.Audio));
+            }
+        }
+        
     }
 }

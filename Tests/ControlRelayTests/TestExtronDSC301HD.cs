@@ -32,6 +32,11 @@ namespace Tests
             return new ExtronDSC301HD(_deviceSettings["PortId"].ToString());
         }
 
+        public ExtronDSC301HD CreateInvalidDevice()
+        {
+            return new ExtronDSC301HD("invalid");
+        }
+
         [TestMethod]
         public void GivenDevice_WhenGetFirmware_ThenFirmwareIsNotNull()
         {
@@ -157,14 +162,24 @@ namespace Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(Exception))]
-        public void GivenDevice_WhenCreateAnotherDeviceWithSameID_ThenExceptionThrown()
+        public void GivenDevice_WhenCreateAnotherDeviceWithSameID_ThenSecondDeviceIsNotAvailable()
         {
             using (var device1 = CreateDevice())
             {
+                Assert.IsTrue(device1.GetAvailable());
                 using (var device2 = CreateDevice())
                 {
+                    Assert.IsFalse(device2.GetAvailable());
                 }
+            }
+        }
+
+        [TestMethod]
+        public void GivenDevice_WhenGetAvailable_ThenDeviceIsAvailable()
+        {
+            using (var device = CreateDevice())
+            {
+                Assert.IsTrue(device.GetAvailable());
             }
         }
 
@@ -183,10 +198,12 @@ namespace Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
-        public void GivenInvalidPartialId_WhenNewDevice_ThenExceptionThrown()
+        public void GivenInvalidPartialId_WhenNewDevice_ThenDeviceIsNotAvailable()
         {
-            var device = new ExtronDSC301HD("invalid");
+            using (var device = new ExtronDSC301HD("invalid"))
+            {
+                Assert.IsFalse(device.GetAvailable());
+            }
         }
 
         [TestMethod]
@@ -224,6 +241,189 @@ namespace Tests
             {
                 var result = device.GetTemperature();
                 Assert.IsNotNull(result);
+            }
+        }
+
+        [TestMethod]
+        public void GivenInvalidDevice_WhenGetAvailable_ThenDeviceIsNotAvailable()
+        {
+            using (var device = CreateInvalidDevice())
+            {
+                Assert.IsFalse(device.GetAvailable());
+            }
+        }
+
+        [TestMethod]
+        public void GivenInvalidDevice_WhenGetFirmware_ThenResultsIsNull()
+        {
+            using (var device = CreateInvalidDevice())
+            {
+                Assert.IsNull(device.GetFirmware());
+            }
+        }
+
+        [TestMethod]
+        public void GivenInvalidDevice_WhenScale_ThenResultsIsFalse()
+        {
+            using (var device = CreateInvalidDevice())
+            {
+                Assert.IsFalse(device.Scale(ScaleType.Fit));
+            }
+        }
+
+        [TestMethod]
+        public void GivenInvalidDevice_WhenGetActivePixels_ThenResultsIsNull()
+        {
+            using (var device = CreateInvalidDevice())
+            {
+                Assert.IsNull(device.GetActivePixels());
+            }
+        }
+
+        [TestMethod]
+        public void GivenInvalidDevice_WhenGetActiveLines_ThenResultsIsNull()
+        {
+            using (var device = CreateInvalidDevice())
+            {
+                Assert.IsNull(device.GetActiveLines());
+            }
+        }
+
+        [TestMethod]
+        public void GivenInvalidDevice_WhenGetHorizontalPosition_ThenResultsIsNull()
+        {
+            using (var device = CreateInvalidDevice())
+            {
+                Assert.IsNull(device.GetHorizontalPosition());
+            }
+        }
+
+        [TestMethod]
+        public void GivenInvalidDevice_WhenSetHorizontalPosition_ThenResultsIsFalse()
+        {
+            using (var device = CreateInvalidDevice())
+            {
+                Assert.IsFalse(device.SetHorizontalPosition(PositionAndSize.HPosMin));
+            }
+        }
+
+        [TestMethod]
+        public void GivenInvalidDevice_WhenGetVerticalPosition_ThenResultsIsNull()
+        {
+            using (var device = CreateInvalidDevice())
+            {
+                Assert.IsNull(device.GetVerticalPosition());
+            }
+        }
+
+        [TestMethod]
+        public void GivenInvalidDevice_WhenSetVerticalPosition_ThenResultsIsFalse()
+        {
+            using (var device = CreateInvalidDevice())
+            {
+                Assert.IsFalse(device.SetVerticalPosition(PositionAndSize.VPosMin));
+            }
+        }
+
+        [TestMethod]
+        public void GivenInvalidDevice_WhenGetHorizontalSize_ThenResultsIsNull()
+        {
+            using (var device = CreateInvalidDevice())
+            {
+                Assert.IsNull(device.GetHorizontalSize());
+            }
+        }
+
+        [TestMethod]
+        public void GivenInvalidDevice_WhenSetHorizontalSize_ThenResultsIsFalse()
+        {
+            using (var device = CreateInvalidDevice())
+            {
+                Assert.IsFalse(device.SetHorizontalSize(PositionAndSize.HSizeMin));
+            }
+        }
+
+        [TestMethod]
+        public void GivenInvalidDevice_WhenGetVerticalSize_ThenResultsIsNull()
+        {
+            using (var device = CreateInvalidDevice())
+            {
+                Assert.IsNull(device.GetVerticalSize());
+            }
+        }
+
+        [TestMethod]
+        public void GivenInvalidDevice_WhenSetVerticalSize_ThenResultsIsFalse()
+        {
+            using (var device = CreateInvalidDevice())
+            {
+                Assert.IsFalse(device.SetVerticalSize(PositionAndSize.VSizeMin));
+            }
+        }
+
+        [TestMethod]
+        public void GivenInvalidDevice_WhenGetOutputRate_ThenResultsIsNull()
+        {
+            using (var device = CreateInvalidDevice())
+            {
+                Assert.IsNull(device.GetOutputRate());
+            }
+        }
+
+        [TestMethod]
+        public void GivenInvalidDevice_WhenSetOutputRate_ThenResultsIsFalse()
+        {
+            using (var device = CreateInvalidDevice())
+            {
+                var edid = Edid.GetEdid(1280, 720, 60.0f);
+                Assert.IsNotNull(edid);
+                Assert.IsFalse(device.SetOutputRate(edid));
+            }
+        }
+
+        [TestMethod]
+        public void GivenInvalidDevice_WhenGetImagePositionAndSize_ThenResultsIsNull()
+        {
+            using (var device = CreateInvalidDevice())
+            {
+                Assert.IsNull(device.GetImagePositionAndSize());
+            }
+        }
+
+        [TestMethod]
+        public void GivenInvalidDevice_WhenSetImagePositionAndSize_ThenResultsIsFalse()
+        {
+            using (var device = CreateInvalidDevice())
+            {
+                var posAndSize = new PositionAndSize(32, 64, 640, 480);
+                Assert.IsFalse(device.SetImagePositionAndSize(posAndSize));
+            }
+        }
+
+        [TestMethod]
+        public void GivenInvalidDevice_WhenSetInputPort_ThenResultsIsFalse()
+        {
+            using (var device = CreateInvalidDevice())
+            {
+                Assert.IsFalse(device.SetInputPort(InputPort.Composite));
+            }
+        }
+
+        [TestMethod]
+        public void GivenInvalidDevice_WhenGetInputPort_ThenResultsIsNull()
+        {
+            using (var device = CreateInvalidDevice())
+            {
+                Assert.IsNull(device.GetInputPort());
+            }
+        }
+
+        [TestMethod]
+        public void GivenInvalidDevice_WhenGetTemperature_ThenResultsIsNull()
+        {
+            using (var device = CreateInvalidDevice())
+            {
+                Assert.IsNull(device.GetTemperature());
             }
         }
     }

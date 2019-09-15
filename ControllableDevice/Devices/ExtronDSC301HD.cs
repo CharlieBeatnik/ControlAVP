@@ -44,6 +44,8 @@ namespace ControllableDevice
 
         public bool GetAvailable()
         {
+            if (!_rs232Device.Enabled) return false;
+
             // Getting firmware as a good way to determine if device is on
             var firmware = GetFirmware();
             return firmware != null;
@@ -51,6 +53,8 @@ namespace ControllableDevice
 
         public Version GetFirmware()
         {
+            if (!_rs232Device.Enabled) return null;
+
             string pattern = @"^([0-9]+).([0-9]+).([0-9]+)$";
             var result = _rs232Device.WriteWithResponse("*Q", pattern);
             if (result != null)
@@ -68,10 +72,12 @@ namespace ControllableDevice
 
         public bool Scale(ScaleType scaleType, PositionType positionType = PositionType.Centre)
         {
+            if (!_rs232Device.Enabled) return false;
+
             var edid = GetOutputRate();
 
-            int inputWidth = GetActivePixels();
-            int inputHeight = GetActiveLines();
+            int inputWidth = (int)GetActivePixels();
+            int inputHeight = (int)GetActiveLines();
 
             int vSize = 0;
             int hSize = 0;
@@ -123,16 +129,20 @@ namespace ControllableDevice
             return result;
         }
 
-        public int GetActivePixels()
+        public int? GetActivePixels()
         {
+            if (!_rs232Device.Enabled) return null;
+
             var result = _rs232Device.WriteWithResponse($"{_cmdEsc}APIX{_cmdCr}", _patternNumberLine);
             Debug.Assert(result != null);
             if (result == null) return 0;
             return int.Parse(result);
         }
 
-        public int GetActiveLines()
+        public int? GetActiveLines()
         {
+            if (!_rs232Device.Enabled) return null;
+
             var result = _rs232Device.WriteWithResponse($"{_cmdEsc}ALIN{_cmdCr}", _patternNumberLine);
 
             Debug.Assert(result != null);
@@ -140,8 +150,10 @@ namespace ControllableDevice
             return int.Parse(result);
         }
 
-        public int GetHorizontalPosition()
+        public int? GetHorizontalPosition()
         {
+            if (!_rs232Device.Enabled) return null;
+
             var result = _rs232Device.WriteWithResponse($"{_cmdEsc}HCTR{_cmdCr}", _patternNumberLine);
 
             Debug.Assert(result != null);
@@ -159,13 +171,17 @@ namespace ControllableDevice
 
         public bool SetHorizontalPosition(int value)
         {
+            if (!_rs232Device.Enabled) return false;
+
             int newValue = Math.Clamp(value, PositionAndSize.HPosMin, PositionAndSize.HPosMax);
             var result = _rs232Device.WriteWithResponse($"{_cmdEsc}{newValue}HCTR{_cmdCr}", @"^Hctr[+-][0-9]+$");
             return (result != null);
         }
 
-        public int GetVerticalPosition()
+        public int? GetVerticalPosition()
         {
+            if (!_rs232Device.Enabled) return null;
+
             var result = _rs232Device.WriteWithResponse($"{_cmdEsc}VCTR{_cmdCr}", _patternNumberLine);
 
             Debug.Assert(result != null);
@@ -183,13 +199,17 @@ namespace ControllableDevice
 
         public bool SetVerticalPosition(int value)
         {
+            if (!_rs232Device.Enabled) return false;
+
             int newValue = Math.Clamp(value, PositionAndSize.VPosMin, PositionAndSize.VPosMax);
             var result = _rs232Device.WriteWithResponse($"{_cmdEsc}{newValue}VCTR{_cmdCr}", @"^Vctr[+-][0-9]+$");
             return (result != null);
         }
 
-        public int GetHorizontalSize()
+        public int? GetHorizontalSize()
         {
+            if (!_rs232Device.Enabled) return null;
+
             var result = _rs232Device.WriteWithResponse($"{_cmdEsc}HSIZ{_cmdCr}", _patternNumberLine);
             Debug.Assert(result != null);
             if (result == null) return 0;
@@ -206,13 +226,17 @@ namespace ControllableDevice
 
         public bool SetHorizontalSize(int value)
         {
+            if (!_rs232Device.Enabled) return false;
+
             int newValue = Math.Clamp(value, PositionAndSize.HSizeMin, PositionAndSize.HSizeMax);
             var result = _rs232Device.WriteWithResponse($"{_cmdEsc}{newValue}HSIZ{_cmdCr}", @"^Hsiz[0-9]+$");
             return (result != null);
         }
 
-        public int GetVerticalSize()
+        public int? GetVerticalSize()
         {
+            if (!_rs232Device.Enabled) return null;
+
             var result = _rs232Device.WriteWithResponse($"{_cmdEsc}VSIZ{_cmdCr}", _patternNumberLine);
 
             int number = int.Parse(result);
@@ -227,6 +251,8 @@ namespace ControllableDevice
 
         public bool SetVerticalSize(int value)
         {
+            if (!_rs232Device.Enabled) return false;
+
             int newValue = Math.Clamp(value, PositionAndSize.VSizeMin, PositionAndSize.VSizeMax);
             var result = _rs232Device.WriteWithResponse($"{_cmdEsc}{newValue}VSIZ{_cmdCr}", @"^Vsiz[0-9]+$");
             return (result != null);
@@ -234,6 +260,8 @@ namespace ControllableDevice
 
         public Edid GetOutputRate()
         {
+            if (!_rs232Device.Enabled) return null;
+
             var result = _rs232Device.WriteWithResponse($"{_cmdEsc}RATE{_cmdCr}", _patternNumberLine);
             var number = int.Parse(result);
             return Edid.GetEdid(number);
@@ -241,12 +269,16 @@ namespace ControllableDevice
 
         public bool SetOutputRate(Edid value)
         {
+            if (!_rs232Device.Enabled) return false;
+
             var result = _rs232Device.WriteWithResponse($"{_cmdEsc}{value.Id}RATE{_cmdCr}", @"^Rate[0-9]+$", TimeSpan.FromSeconds(5));
             return (result != null);
         }
 
         public PositionAndSize GetImagePositionAndSize()
         {
+            if (!_rs232Device.Enabled) return null;
+
             string pattern = $@"^({_patternNumber})[*]({_patternNumber})[*]({_patternNumber})[*]({_patternNumber})$";
             var result = _rs232Device.WriteWithResponse($"{_cmdEsc}XIMG{_cmdCr}", pattern);
             if (result != null)
@@ -265,6 +297,8 @@ namespace ControllableDevice
 
         public bool SetImagePositionAndSize(PositionAndSize value)
         {
+            if (!_rs232Device.Enabled) return false;
+
             string pattern = $@"^Ximg({_patternNumber})[*]({_patternNumber})[*]({_patternNumber})[*]({_patternNumber})$";
             var result = _rs232Device.WriteWithResponse($"{_cmdEsc}{value.HPos}*{value.VPos}*{value.HSize}*{value.VSize}XIMG{_cmdCr}", pattern);
             return (result != null);
@@ -272,12 +306,16 @@ namespace ControllableDevice
 
         public bool SetInputPort(InputPort inputPort)
         {
+            if (!_rs232Device.Enabled) return false;
+
             var result = _rs232Device.WriteWithResponse($"{(int)inputPort}!", $@"^In{(int)inputPort} All");
             return (result != null);
         }
 
         public InputPort? GetInputPort()
         {
+            if (!_rs232Device.Enabled) return null;
+
             var result = _rs232Device.WriteWithResponse($"!", _patternNumber);
 
             if (result != null)
@@ -294,6 +332,8 @@ namespace ControllableDevice
 
         public float? GetTemperature()
         {
+            if (!_rs232Device.Enabled) return null;
+
             var result = _rs232Device.WriteWithResponse($"{_cmdEsc}20STAT{_cmdCr}", _patternNumber);
             if (result != null)
             {

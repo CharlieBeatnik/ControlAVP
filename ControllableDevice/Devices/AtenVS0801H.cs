@@ -46,6 +46,8 @@ namespace ControllableDevice
 
         public bool GetAvailable()
         {
+            if(!_rs232Device.Enabled) return false;
+
             // Getting state as a good way to determine if device is on
             var state = GetState();
             return state != null;
@@ -53,24 +55,32 @@ namespace ControllableDevice
 
         public bool GoToNextInput()
         {
+            if (!_rs232Device.Enabled) return false;
+
             var result = _rs232Device.WriteWithResponse("sw+", $"^sw[+] {_respSuccess}$");
             return result != null;
         }
 
         public bool GoToPreviousInput()
         {
+            if (!_rs232Device.Enabled) return false;
+
             var result = _rs232Device.WriteWithResponse("sw-", $"^sw[-] {_respSuccess}$");
             return result != null;
         }
 
         public bool SetInput(InputPort inputPort)
         {
+            if (!_rs232Device.Enabled) return false;
+
             var result = _rs232Device.WriteWithResponse($"sw i{(int)inputPort:00}", $"^sw i{(int)inputPort:00} {_respSuccess}$");
             return result != null;
         }
 
         public bool SetOutput(bool enable)
         {
+            if (!_rs232Device.Enabled) return false;
+
             var write = string.Format("sw {0}", enable ? "on" : "off");
             var result = _rs232Device.WriteWithResponse(write, $"{write} {_respSuccess}");
             return result != null;
@@ -78,9 +88,10 @@ namespace ControllableDevice
 
         public bool SetMode(SwitchMode mode, InputPort inputPort)
         {
-            string result = string.Empty;
+            if (!_rs232Device.Enabled) return false;
 
-            switch(mode)
+            string result = string.Empty;
+            switch (mode)
             {
                 case SwitchMode.Default:
                     result = _rs232Device.WriteWithResponse("swmode default", $"^swmode default {_respSuccess}$");
@@ -101,6 +112,8 @@ namespace ControllableDevice
 
         public bool SetGoTo(bool enable)
         {
+            if (!_rs232Device.Enabled) return false;
+
             var write = string.Format("swmode goto {0}", enable ? "on" : "off");
             var result = _rs232Device.WriteWithResponse(write, $"{write} {_respSuccess}");
             return result != null;
@@ -108,6 +121,8 @@ namespace ControllableDevice
        
         public State GetState()
         {
+            if (!_rs232Device.Enabled) return null;
+
             var responses = _rs232Device.WriteWithResponses("read", 6);
             Debug.Assert(responses.Count == 6);
 
@@ -135,8 +150,8 @@ namespace ControllableDevice
                 switch (match.Groups[1].Value)
                 {
                     case "Default": state.Mode = SwitchMode.Default; break;
-                    case "Next":    state.Mode = SwitchMode.Next;    break;
-                    case "Auto":    state.Mode = SwitchMode.Auto;    break;
+                    case "Next": state.Mode = SwitchMode.Next; break;
+                    case "Auto": state.Mode = SwitchMode.Auto; break;
                     default:
                         Debug.Assert(false, "Unknown SwitchMode");
                         break;
@@ -157,7 +172,7 @@ namespace ControllableDevice
 
                 return state;
             }
-            
+
             return null;
         }
     }

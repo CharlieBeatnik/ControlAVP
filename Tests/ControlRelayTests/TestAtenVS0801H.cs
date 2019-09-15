@@ -33,6 +33,11 @@ namespace Tests
             return new AtenVS0801H(_deviceSettings["PortId"].ToString());
         }
 
+        public AtenVS0801H CreateInvalidDevice()
+        {
+            return new AtenVS0801H("invalid");
+        }
+
         [TestMethod]
         public void GivenInputPortIsPort1_WhenGoToNextInput_ThenInputPortIsPort2()
         {
@@ -79,7 +84,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GivenDevice_WhenCallAvailable_ThenDeviceIsAvailable()
+        public void GivenDevice_WhenGetAvailable_ThenDeviceIsAvailable()
         {
             using (var device = CreateDevice())
             {
@@ -102,20 +107,23 @@ namespace Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
-        public void GivenInvalidPartialId_WhenNewDevice_ThenExceptionThrown()
+        public void GivenInvalidPartialId_WhenNewDevice_ThenDeviceIsNotAvailable()
         {
-            var device = new AtenVS0801H("invalid");
+            using (var device = new AtenVS0801H("invalid"))
+            {
+                Assert.IsFalse(device.GetAvailable());
+            }
         }
 
         [TestMethod]
-        [ExpectedException(typeof(Exception))]
-        public void GivenDevice_WhenCreateAnotherDeviceWithSameID_ThenExceptionThrown()
+        public void GivenDevice_WhenCreateAnotherDeviceWithSameID_ThenSecondDeviceIsNotAvailable()
         {
             using (var device1 = CreateDevice())
             {
+                Assert.IsTrue(device1.GetAvailable());
                 using (var device2 = CreateDevice())
                 {
+                    Assert.IsFalse(device2.GetAvailable());
                 }
             }
         }
@@ -129,6 +137,78 @@ namespace Tests
                 Assert.IsNotNull(state);
 
                 Assert.IsTrue(state.Firmware >= new Version(2, 0, 197));
+            }
+        }
+
+        [TestMethod]
+        public void GivenInvalidDevice_WhenGetAvailable_ThenDeviceIsNotAvailable()
+        {
+            using (var device = CreateInvalidDevice())
+            {
+                Assert.IsFalse(device.GetAvailable());
+            }
+        }
+
+        [TestMethod]
+        public void GivenInvalidDevice_WhenGetState_ThenResultsIsNull()
+        {
+            using (var device = CreateInvalidDevice())
+            {
+                Assert.IsNull(device.GetState());
+            }
+        }
+
+        [TestMethod]
+        public void GivenInvalidDevice_WhenSetGoTo_ThenResultsIsFalse()
+        {
+            using (var device = CreateInvalidDevice())
+            {
+                Assert.IsFalse(device.SetGoTo(true));
+            }
+        }
+
+        [TestMethod]
+        public void GivenInvalidDevice_WhenSetMode_ThenResultsIsFalse()
+        {
+            using (var device = CreateInvalidDevice())
+            {
+                Assert.IsFalse(device.SetMode(SwitchMode.Auto, InputPort.Port1));
+            }
+        }
+
+        [TestMethod]
+        public void GivenInvalidDevice_WhenSetOutput_ThenResultsIsFalse()
+        {
+            using (var device = CreateInvalidDevice())
+            {
+                Assert.IsFalse(device.SetOutput(true));
+            }
+        }
+
+        [TestMethod]
+        public void GivenInvalidDevice_WhenSetInput_ThenResultsIsFalse()
+        {
+            using (var device = CreateInvalidDevice())
+            {
+                Assert.IsFalse(device.SetInput(InputPort.Port1));
+            }
+        }
+
+        [TestMethod]
+        public void GivenInvalidDevice_WhenGoToPreviousInput_ThenResultsIsFalse()
+        {
+            using (var device = CreateInvalidDevice())
+            {
+                Assert.IsFalse(device.GoToPreviousInput());
+            }
+        }
+
+        [TestMethod]
+        public void GivenInvalidDevice_WhenGoToNextInput_ThenResultsIsFalse()
+        {
+            using (var device = CreateInvalidDevice())
+            {
+                Assert.IsFalse(device.GoToNextInput());
             }
         }
     }

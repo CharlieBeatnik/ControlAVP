@@ -102,7 +102,7 @@ namespace ControllableDevice
 
         public bool GetAvailable()
         {
-            return true;
+            return _rs232Device.Enabled;
         }
 
         public bool SendCommand(uint command)

@@ -27,7 +27,15 @@ namespace ControlRelay
 
         public override IEnumerable<MethodHandlerInfo> GetMethodHandlerInfos(DeviceClient deviceClient)
         {
+            yield return new MethodHandlerInfo("OSSCGetAvailable", GetAvailable);
             yield return new MethodHandlerInfo("OSSCSendCommand", SendCommand);
+        }
+
+        private Task<MethodResponse> GetAvailable(MethodRequest methodRequest, object userContext)
+        {
+            var result = _device.GetAvailable();
+
+            return GetMethodResponseSerialize(methodRequest, true, result);
         }
 
         private Task<MethodResponse> SendCommand(MethodRequest methodRequest, object userContext)

@@ -22,9 +22,9 @@ namespace Tests
             }
         }
 
-        private Rs232Device CreateDevice(int messageStoreCapacity = 0)
+        private Rs232Device CreateDevice()
         {
-            var device = new Rs232Device(_settings["OSSC"]["PortId"].ToString(), messageStoreCapacity);
+            var device = new Rs232Device(_settings["OSSC"]["PortId"].ToString());
             device.BaudRate = 115200;
             device.PreWrite = (x) =>
             {
@@ -49,17 +49,27 @@ namespace Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void GivenInvalidPartialId_WhenNewDevice_ThenArgumentExceptionThrown()
+        public void GivenDevice_WhenCreateDeviceCorrectPartialId_ThenDeviceIsEnabled()
         {
-            var rs232Device = new Rs232Device("invalid");
+            using (var device = CreateDevice())
+            {
+                Assert.IsTrue(device.Enabled);
+            }
         }
 
+        [TestMethod]
+        public void GivenDevice_WhenCreateDeviceWithUnknownPartialId_ThenDeviceIsNotEnabled()
+        {
+            using (var device = new Rs232Device("invalid"))
+            {
+                Assert.IsFalse(device.Enabled);
+            }
+        }
 
         [TestMethod]
         public void GivenClass_WhenDisposed_ThenClassCanBeRecreated()
         {
-            for(int i = 0; i < 2; ++i)
+            for (int i = 0; i < 2; ++i)
             {
                 using (var device = CreateDevice())
                 {
@@ -114,21 +124,43 @@ namespace Tests
             using (var device = CreateDevice())
             {
                 var result = device.WriteWithResponses("send nec 0x3EC14DB2", 1);
+                Assert.IsNotNull(result);
                 Assert.AreEqual(result.Count, 1);
                 Assert.AreEqual(result[0], "OK");
             }
         }
 
         [TestMethod]
-        [ExpectedException(typeof(Exception))]
-        public void GivenDevice_WhenCreateAnotherDeviceWithSameID_ThenExceptionThrown()
+        public void GivenDevice_WhenCreateAnotherDeviceWithSameID_ThenSecondDeviceIsNotEnabled()
         {
             using (var device1 = CreateDevice())
             {
+                Assert.IsTrue(device1.Enabled);
                 using (var device2 = CreateDevice())
                 {
+                    Assert.IsTrue(device1.Enabled);
+                    Assert.IsFalse(device2.Enabled);
                 }
+                Assert.IsTrue(device1.Enabled);
             }
+        }
+
+        [TestMethod]
+        public void GivenDevice_WhenCreateAnotherDeviceWithSameID_ThenSecondDeviceBecomesEnabledWhenFirstDeviceIsDisposed()
+        {
+            var device1 = CreateDevice();
+            Assert.IsTrue(device1.Enabled);
+
+            var device2 = CreateDevice();
+            device2.MonitorDeviceTimerInterval = TimeSpan.FromMilliseconds(500);
+            Assert.IsFalse(device2.Enabled);
+
+            device1.Dispose();
+
+            Thread.Sleep(device2.MonitorDeviceTimerInterval + TimeSpan.FromSeconds(1));
+            Assert.IsTrue(device2.Enabled);
+
+            device2.Dispose();
         }
 
         [TestMethod]
@@ -155,24 +187,6 @@ namespace Tests
 
                 result = device.Read("OK");
                 Assert.IsNull(result);
-            }
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(OutOfMemoryException))]
-        public void GivenDevice_WhenCreateDeviceWithMessageStoreCapacityOfIntMax_ThenOutOfMemoryExceptionIsThrown()
-        {
-            using (var device = CreateDevice(int.MaxValue))
-            {
-            }
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void GivenDevice_WhenCreateDeviceWithMessageStoreCapacityOfIntMin_ThenAgumentExceptionIsThrown()
-        {
-            using (var device = CreateDevice(int.MinValue))
-            {
             }
         }
     }
