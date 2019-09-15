@@ -25,6 +25,12 @@ namespace Tests
         private ManagedRs232Device CreateDevice()
         {
             var device = new ManagedRs232Device(_settings["OSSC"]["PortId"].ToString());
+            device.BaudRate = 115200;
+            device.PreWrite = (x) =>
+            {
+                return x + "\r";
+            };
+
             return device;
         }
 
@@ -43,6 +49,129 @@ namespace Tests
             using (var device = new ManagedRs232Device("invalid"))
             {
                 Assert.IsFalse(device.Enabled);
+            }
+        }
+
+        [TestMethod]
+        public void GivenClass_WhenDisposed_ThenClassCanBeRecreated()
+        {
+            for (int i = 0; i < 2; ++i)
+            {
+                using (var device = CreateDevice())
+                {
+                }
+            }
+        }
+
+        [TestMethod]
+        public void GivenDevice_WhenWrite_ThenNoExceptionThrown()
+        {
+            using (var device = CreateDevice())
+            {
+                device.Write("invalid");
+            }
+        }
+
+        [TestMethod]
+        public void GivenDevice_WhenWriteWithResponse_ThenResponseIsNotNullOrEmpty()
+        {
+            using (var device = CreateDevice())
+            {
+                var result = device.WriteWithResponse("invalid", ".*");
+                Assert.IsFalse(string.IsNullOrEmpty(result));
+            }
+        }
+
+        [TestMethod]
+        public void GivenDevice_WhenWriteWithResponse_ThenResponseIsExactlyAsExpected()
+        {
+            using (var device = CreateDevice())
+            {
+                var result = device.WriteWithResponse($"send nec 0x3EC14DB2", "OK");
+                Assert.AreEqual(result, "OK");
+            }
+        }
+
+        [TestMethod]
+        public void GivenDevice_WhenWriteThenRead_ThenReadIsExactlyAsExpected()
+        {
+            using (var device = CreateDevice())
+            {
+                device.Write("send nec 0x3EC14DB2");
+                Thread.Sleep(device.PostWriteWait);
+                var result = device.Read("OK");
+                Assert.AreEqual(result, "OK");
+            }
+        }
+
+        [TestMethod]
+        public void GivenDevice_WhenWriteWithResponses_ThenResponsesAreAsExpected()
+        {
+            using (var device = CreateDevice())
+            {
+                var result = device.WriteWithResponses("send nec 0x3EC14DB2", 1);
+                Assert.AreEqual(result.Count, 1);
+                Assert.AreEqual(result[0], "OK");
+            }
+        }
+
+        [TestMethod]
+        public void GivenDevice_WhenCreateAnotherDeviceWithSameID_ThenSecondDeviceIsNotEnabled()
+        {
+            using (var device1 = CreateDevice())
+            {
+                Assert.IsTrue(device1.Enabled);
+                using (var device2 = CreateDevice())
+                {
+                    Assert.IsTrue(device1.Enabled);
+                    Assert.IsFalse(device2.Enabled);
+                }
+                Assert.IsTrue(device1.Enabled);
+            }
+        }
+
+        [TestMethod]
+        public void GivenDevice_WhenCreateAnotherDeviceWithSameID_ThenSecondDeviceBecomesEnabledWhenFirstDeviceIsDisposed()
+        {
+            var device1 = CreateDevice();
+            Assert.IsTrue(device1.Enabled);
+
+            var device2 = CreateDevice();
+            device2.MonitorDeviceTimerInterval = TimeSpan.FromMilliseconds(500);
+            Assert.IsFalse(device2.Enabled);
+
+            device1.Dispose();
+
+            Thread.Sleep(device2.MonitorDeviceTimerInterval + TimeSpan.FromMilliseconds(50));
+            Assert.IsTrue(device2.Enabled);
+
+            device2.Dispose();
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void GivenDevice_WhenRequestTooManyResponses_ThenArgumentExceptionIsThrown()
+        {
+            using (var device = CreateDevice())
+            {
+                var result = device.WriteWithResponses("send nec 0x3EC14DB2", 2);
+            }
+        }
+
+        [TestMethod]
+        public void GivenDevice_WhenWriteCommandAndWaitGreaterThanMessageExpiry_ThenReadIsNull()
+        {
+            using (var device = CreateDevice())
+            {
+                device.Write("send nec 0x3EC14DB2");
+                Thread.Sleep(device.PostWriteWait);
+                var result = device.Read("OK");
+                Assert.IsNotNull(result);
+
+                Thread.Sleep(device.MessageLifetime + TimeSpan.FromSeconds(2));
+
+                result = device.Read("OK");
+                Assert.IsNull(result);
             }
         }
     }
