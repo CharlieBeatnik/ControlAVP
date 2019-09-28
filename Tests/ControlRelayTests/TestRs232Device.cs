@@ -188,7 +188,7 @@ namespace Tests
         }
 
         [TestMethod]
-        //[Ignore("Requires manual intervention.")]
+        [Ignore("Requires manual intervention.")]
         public void GivenDevice_WhenPrintMessageAskingToBeDisconnectedAndWaitForReconnect_ThenResponseIsNotNully()
         {
             using (var device = CreateDevice())
@@ -196,7 +196,7 @@ namespace Tests
                 var result = device.WriteWithResponse("message DisconnectNow", "OK");
                 Assert.IsNotNull(result);
 
-                Thread.Sleep(TimeSpan.FromSeconds(20));
+                Thread.Sleep(TimeSpan.FromSeconds(10));
 
                 result = device.WriteWithResponse("message Reconnected", "OK");
                 Assert.IsNotNull(result);
