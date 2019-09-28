@@ -14,44 +14,48 @@
             <h6 class="mb-0">@ViewData["Title"]</h6>
         </div>
         <div class="card-body">
-            @*@foreach (var commandName in (CommandName[])Enum.GetValues(typeof(CommandName)))
+            @if (Model.DeviceInfoCache.Available)
             {
-                <vc:ossc-button command-name=@commandName/>
-            }*@
-
-            <div class="col-sm-6">
-                <table class="table table-sm table-borderless">
-                    <tr>
-                        <td class="align-middle text-right" width="1%">AV1</td>
-                        <td>
-                            <div class="btn-group">
-                                <vc:ossc-button command-name=@CommandName.Number1 button-label="RGBS" />
-                                <vc:ossc-button command-name=@CommandName.Number4 button-label="RGsB" />
-                                <vc:ossc-button command-name=@CommandName.Number7 button-label="YPbPr" />
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="align-middle text-right" width="1%">AV2</td>
-                        <td>
-                            <div class="btn-group">
-                                <vc:ossc-button command-name=@CommandName.Number2 button-label="YPbPr" />
-                                <vc:ossc-button command-name=@CommandName.Number5 button-label="RGsB" />
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="align-middle text-right" width="1%">AV3</td>
-                        <td>
-                            <div class="btn-group">
-                                <vc:ossc-button command-name=@CommandName.Number3 button-label="RGBHV" />
-                                <vc:ossc-button command-name=@CommandName.Number6 button-label="RGBS" />
-                                <vc:ossc-button command-name=@CommandName.Number9 button-label="RGsB" />
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-            </div>
+                <div class="col-sm-6">
+                    <table class="table table-sm table-borderless">
+                        <tr>
+                            <td class="align-middle text-right" width="1%">AV1</td>
+                            <td>
+                                <div class="btn-group">
+                                    <vc:ossc-button command-name=@CommandName.Number1 button-label="RGBS" />
+                                    <vc:ossc-button command-name=@CommandName.Number4 button-label="RGsB" />
+                                    <vc:ossc-button command-name=@CommandName.Number7 button-label="YPbPr" />
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle text-right" width="1%">AV2</td>
+                            <td>
+                                <div class="btn-group">
+                                    <vc:ossc-button command-name=@CommandName.Number2 button-label="YPbPr" />
+                                    <vc:ossc-button command-name=@CommandName.Number5 button-label="RGsB" />
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle text-right" width="1%">AV3</td>
+                            <td>
+                                <div class="btn-group">
+                                    <vc:ossc-button command-name=@CommandName.Number3 button-label="RGBHV" />
+                                    <vc:ossc-button command-name=@CommandName.Number6 button-label="RGBS" />
+                                    <vc:ossc-button command-name=@CommandName.Number9 button-label="RGsB" />
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-warning">
+                    <strong>Warning!</strong> Device not found, is it turned on?
+                </div>
+            }
         </div>
     </div>
 </form>

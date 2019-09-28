@@ -29,5 +29,19 @@ namespace AVPCloudToDevice
                 return false;
             }
         }
+
+        public bool GetAvailable()
+        {
+            try
+            {
+                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "OSSCGetAvailable", null);
+                string json = response.GetPayloadAsJson();
+                return JsonConvert.DeserializeObject<bool>(json);
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }

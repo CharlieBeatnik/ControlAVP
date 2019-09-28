@@ -22,6 +22,12 @@ namespace ControlAVP.Pages.Devices
         private ServiceClient _serviceClient;
         private OSSC _device;
 
+        public class DeviceInfo
+        {
+            public bool Available;
+        }
+        public DeviceInfo DeviceInfoCache { get; private set; } = new DeviceInfo();
+
         public OSSCModel(IConfiguration configuration, IHostingEnvironment environment)
         {
             _configuration = configuration;
@@ -36,7 +42,7 @@ namespace ControlAVP.Pages.Devices
 
         public void OnGet()
         {
-
+            DeviceInfoCache.Available = _device.GetAvailable();
         }
 
         public IActionResult OnPostSendCommand(CommandName commandName)
