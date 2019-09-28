@@ -13,12 +13,13 @@ namespace ControlAVP.ViewComponents
         {
             public CommandName CommandName { get; set; }
             public string ButtonLabel { get; set; }
+            public string CssClass { get; set; }
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(CommandName commandName, string buttonLabel)
+        public async Task<IViewComponentResult> InvokeAsync(CommandName commandName, string buttonLabel, string cssClass)
         {
             await Task.FromResult(0); //dummy call to make async
-            return View(new Parameters(){ CommandName = commandName, ButtonLabel = buttonLabel });
+            return View(new Parameters(){ CommandName = commandName, ButtonLabel = buttonLabel, CssClass = cssClass });
         }
     }
 }

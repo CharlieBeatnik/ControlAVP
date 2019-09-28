@@ -4,6 +4,7 @@
 
 @{
     ViewData["Title"] = "OSSC";
+    string defaultButtonCss = "btn-light";
 }
 <h2></h2>
 
@@ -22,9 +23,9 @@
                             <td class="align-middle text-right" width="1%">AV1</td>
                             <td>
                                 <div class="btn-group">
-                                    <vc:ossc-button command-name=@CommandName.Number1 button-label="RGBS" />
-                                    <vc:ossc-button command-name=@CommandName.Number4 button-label="RGsB" />
-                                    <vc:ossc-button command-name=@CommandName.Number7 button-label="YPbPr" />
+                                    <vc:ossc-button command-name=@CommandName.Number1 button-label="RGBS" css-class=@defaultButtonCss />
+                                    <vc:ossc-button command-name=@CommandName.Number4 button-label="RGsB" css-class=@defaultButtonCss />
+                                    <vc:ossc-button command-name=@CommandName.Number7 button-label="YPbPr" css-class=@defaultButtonCss />
                                 </div>
                             </td>
                         </tr>
@@ -32,8 +33,8 @@
                             <td class="align-middle text-right" width="1%">AV2</td>
                             <td>
                                 <div class="btn-group">
-                                    <vc:ossc-button command-name=@CommandName.Number2 button-label="YPbPr" />
-                                    <vc:ossc-button command-name=@CommandName.Number5 button-label="RGsB" />
+                                    <vc:ossc-button command-name=@CommandName.Number2 button-label="YPbPr" css-class=@defaultButtonCss />
+                                    <vc:ossc-button command-name=@CommandName.Number5 button-label="RGsB" css-class=@defaultButtonCss />
                                 </div>
                             </td>
                         </tr>
@@ -41,9 +42,48 @@
                             <td class="align-middle text-right" width="1%">AV3</td>
                             <td>
                                 <div class="btn-group">
-                                    <vc:ossc-button command-name=@CommandName.Number3 button-label="RGBHV" />
-                                    <vc:ossc-button command-name=@CommandName.Number6 button-label="RGBS" />
-                                    <vc:ossc-button command-name=@CommandName.Number9 button-label="RGsB" />
+                                    <vc:ossc-button command-name=@CommandName.Number3 button-label="RGBHV" css-class=@defaultButtonCss />
+                                    <vc:ossc-button command-name=@CommandName.Number6 button-label="RGBS" css-class=@defaultButtonCss />
+                                    <vc:ossc-button command-name=@CommandName.Number9 button-label="RGsB" css-class=@defaultButtonCss />
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle text-right" width="1%">Navigation</td>
+                            <td>
+                                <div class="btn-group">
+                                    <vc:ossc-button command-name=@CommandName.Menu button-label="Menu" css-class=@defaultButtonCss />
+                                    <vc:ossc-button command-name=@CommandName.Exit button-label="Back" css-class="btn-danger" />
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle text-right" width="1%">Picture</td>
+                            <td>
+                                <div class="btn-group">
+                                    <vc:ossc-button command-name=@CommandName.TvAv button-label="Line X" css-class=@defaultButtonCss />
+                                    <vc:ossc-button command-name=@CommandName.ToneMinus button-label="Phase -" css-class=@defaultButtonCss />
+                                    <vc:ossc-button command-name=@CommandName.TonePlus button-label="Phase +" css-class=@defaultButtonCss />
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle text-right" width="1%">Scanlines</td>
+                            <td>
+                                <div class="btn-group">
+                                    <vc:ossc-button command-name=@CommandName.Mute button-label="Type" css-class=@defaultButtonCss />
+                                    <vc:ossc-button command-name=@CommandName.Pns button-label="Mode" css-class=@defaultButtonCss />
+                                    <vc:ossc-button command-name=@CommandName.ChMinus button-label="Size -" css-class=@defaultButtonCss />
+                                    <vc:ossc-button command-name=@CommandName.ChPlus button-label="Size +" css-class=@defaultButtonCss />
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle text-right" width="1%">Miscellaneous</td>
+                            <td>
+                                <div class="btn-group">
+                                    <vc:ossc-button command-name=@CommandName.Power button-label="LCD" css-class=@defaultButtonCss />
+                                    <vc:ossc-button command-name=@CommandName.Info button-label="Source Info" css-class=@defaultButtonCss />
                                 </div>
                             </td>
                         </tr>
