@@ -14,15 +14,14 @@ namespace ControlRelay
 
         public struct Settings
         {
-            public string PortId { get; set; }
         }
 
         private Settings _settings;
 
-        public OSSCCloudInterface(Settings settings)
+        public OSSCCloudInterface(Settings settings, SerialBlaster serialBlaster)
         {
             _settings = settings;
-            _device = new OSSC(_settings.PortId);
+            _device = new OSSC(serialBlaster);
         }
 
         public override IEnumerable<MethodHandlerInfo> GetMethodHandlerInfos(DeviceClient deviceClient)

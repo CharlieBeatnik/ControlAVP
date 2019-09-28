@@ -1,4 +1,5 @@
-﻿using Microsoft.Azure.Devices.Client;
+﻿using ControllableDevice;
+using Microsoft.Azure.Devices.Client;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
@@ -18,6 +19,7 @@ namespace ControlRelay
         private DeviceClient _deviceClient;
 
         private string _connectionString;
+        private SerialBlaster _serialBlaster;
         private List<AtenVS0801HCloudInterface.Settings> _settingsAtenVS0801H;
         private ApcAP8959EU3CloudInterface.Settings _settingsApcAP8959EU3;
         private ExtronDSC301HDCloudInterface.Settings _settingsExtronDSC301HD;
@@ -38,6 +40,9 @@ namespace ControlRelay
 
             //Azure Settings
             _connectionString = jsonParsed["Azure"]["IoTHub"]["ConnectionString"].ToString();
+
+            //Create SerialBlaster, which can be used by multiple devices (e.g. OSSC, Framemeister)
+            _serialBlaster = new SerialBlaster(jsonParsed["SerialBlaster"]["PortId"].ToString());
 
             //AtenVS0801H Settings 
             _settingsAtenVS0801H = JsonConvert.DeserializeObject<List<AtenVS0801HCloudInterface.Settings>>(jsonParsed["AtenVS0801H"].ToString());
@@ -61,7 +66,7 @@ namespace ControlRelay
 
             //OSSC Settings 
             _settingsOSSC = JsonConvert.DeserializeObject<OSSCCloudInterface.Settings>(jsonParsed["OSSC"].ToString());
-            AddCloudInterface(_settingsOSSC, (x) => new OSSCCloudInterface(x));
+            AddCloudInterface(_settingsOSSC, (x) => new OSSCCloudInterface(x, _serialBlaster));
 
             CreateDeviceClient();
         }

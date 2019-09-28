@@ -24,7 +24,7 @@ namespace Tests
 
         private Rs232Device CreateDevice()
         {
-            var device = new Rs232Device(_settings["OSSC"]["PortId"].ToString());
+            var device = new Rs232Device(_settings["SerialBlaster"]["PortId"].ToString());
             device.BaudRate = 115200;
             device.PreWrite = (x) =>
             {

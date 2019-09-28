@@ -11,6 +11,7 @@ namespace Tests
     public class TestOSSC
     {
         private static readonly string _settingsFile = "settings.json";
+        private static JToken _serialBlasterSettings;
         private static JToken _deviceSettings;
 
         [ClassInitialize]
@@ -23,33 +24,48 @@ namespace Tests
                 jsonParsed = JObject.Parse(json);
             }
 
+            _serialBlasterSettings = jsonParsed["SerialBlaster"];
             _deviceSettings = jsonParsed["OSSC"];
         }
-        
-        public OSSC CreateDevice()
+
+        public SerialBlaster CreateSerialBlaster()
         {
-            return new OSSC(_deviceSettings["PortId"].ToString());
+            return new SerialBlaster(_serialBlasterSettings["PortId"].ToString());
         }
 
-        public OSSC CreateInvalidDevice()
+        public SerialBlaster CreateInvalidSerialBlaster()
         {
-            return new OSSC("invalid");
+            return new SerialBlaster("invalid");
+        }
+
+        public OSSC CreateDevice(SerialBlaster serialBlaster)
+        {
+            return new OSSC(serialBlaster);
         }
 
         [TestMethod]
-        public void GivenDevice_WhenSendCommandFromUint_ThenResponseIsTrue()
+        public void GivenDevice_WhenSendCommand_ThenResponseIsTrue()
         {
-            using (var device = CreateDevice())
+            using (var serialBlaster = CreateSerialBlaster())
+            using (var device = CreateDevice(serialBlaster))
             {
-                var result = device.SendCommand(0x3EC14DB2);
+                var result = device.SendCommand(CommandName.Menu);
                 Assert.IsTrue(result);
             }
         }
 
         [TestMethod]
-        public void GivenDevice_WhenSendCommandFromEnum_ThenResponseIsTrue()
+        public void GivenDeviceAndCommandSentAndDeviceDisposed_WhenCreateDeviceAndSendCommand_ThenResponseIsTrue()
         {
-            using (var device = CreateDevice())
+            using (var serialBlaster = CreateSerialBlaster())
+            using (var device = CreateDevice(serialBlaster))
+            {
+                var result = device.SendCommand(CommandName.Menu);
+                Assert.IsTrue(result);
+            }
+
+            using (var serialBlaster = CreateSerialBlaster())
+            using (var device = CreateDevice(serialBlaster))
             {
                 var result = device.SendCommand(CommandName.Menu);
                 Assert.IsTrue(result);
@@ -60,7 +76,8 @@ namespace Tests
         [ExpectedException(typeof(ArgumentException))]
         public void GivenDevice_WhenSendCommandUsingInvalidEnum_ThenExceptionThrown()
         {
-            using (var device = CreateDevice())
+            using (var serialBlaster = CreateSerialBlaster())
+            using (var device = CreateDevice(serialBlaster))
             {
                 var result = device.SendCommand((CommandName)int.MaxValue);
                 Assert.IsTrue(result);
@@ -70,7 +87,8 @@ namespace Tests
         [TestMethod]
         public void GivenDevice_WhenGetAvailable_ThenDeviceIsAvailable()
         {
-            using (var device = CreateDevice())
+            using (var serialBlaster = CreateSerialBlaster())
+            using (var device = CreateDevice(serialBlaster))
             {
                 Assert.IsTrue(device.GetAvailable());
             }
@@ -79,48 +97,20 @@ namespace Tests
         [TestMethod]
         public void GivenInvalidDevice_WhenGetAvailable_ThenDeviceIsNotAvailable()
         {
-            using (var device = CreateInvalidDevice())
+            using (var serialBlaster = CreateInvalidSerialBlaster())
+            using (var device = CreateDevice(serialBlaster))
             {
                 Assert.IsFalse(device.GetAvailable());
             }
         }
 
         [TestMethod]
-        public void GivenInvalidDevice_WhenSendCommandFromUint_ThenResponseIsFalse()
-        {
-            using (var device = CreateInvalidDevice())
-            {
-                var result = device.SendCommand(0x3EC14DB2);
-                Assert.IsFalse(result);
-            }
-        }
-
-        [TestMethod]
         public void GivenInvalidDevice_WhenSendCommandFromEnum_ThenResponseIsFalse()
         {
-            using (var device = CreateInvalidDevice())
+            using (var serialBlaster = CreateInvalidSerialBlaster())
+            using (var device = CreateDevice(serialBlaster))
             {
                 var result = device.SendCommand(CommandName.Menu);
-                Assert.IsFalse(result);
-            }
-        }
-
-        [TestMethod]
-        public void GiveDevice_WhenSendMessageThenResponseIsTrue()
-        {
-            using (var device = CreateDevice())
-            {
-                var result = device.SendMessage("TestMessage");
-                Assert.IsTrue(result);
-            }
-        }
-
-        [TestMethod]
-        public void GiveInvalidDevice_WhenSendMessageThenResponseIsFalse()
-        {
-            using (var device = CreateInvalidDevice())
-            {
-                var result = device.SendMessage("TestMessage");
                 Assert.IsFalse(result);
             }
         }

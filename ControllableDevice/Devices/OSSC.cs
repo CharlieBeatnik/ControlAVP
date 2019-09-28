@@ -10,7 +10,7 @@ namespace ControllableDevice
     public class OSSC : IControllableDevice
     {
         private bool _disposed = false;
-        private Rs232Device _rs232Device;
+        private SerialBlaster _serialBlaster;
 
         private class CommandCode
         {
@@ -70,15 +70,9 @@ namespace ControllableDevice
 
         };
 
-        public OSSC(string portId)
+        public OSSC(SerialBlaster serialBlaster)
         {
-            _rs232Device = new Rs232Device(portId);
-            _rs232Device.BaudRate = 115200;
-
-            _rs232Device.PreWrite = (x) =>
-            {
-                return x + "\r";
-            };
+            _serialBlaster = serialBlaster;
         }
 
         public void Dispose()
@@ -94,7 +88,6 @@ namespace ControllableDevice
 
             if (disposing)
             {
-                _rs232Device.Dispose();
             }
 
             _disposed = true;
@@ -102,15 +95,7 @@ namespace ControllableDevice
 
         public bool GetAvailable()
         {
-            return _rs232Device.Enabled;
-        }
-
-        public bool SendCommand(uint command)
-        {
-            string commandHex = command.ToString("X8");
-            string result = _rs232Device.WriteWithResponse($"send nec 0x{commandHex}", "OK");
-
-            return result != null;
+            return _serialBlaster.Enabled;
         }
 
         public bool SendCommand(CommandName commandName)
@@ -120,12 +105,7 @@ namespace ControllableDevice
                 throw new ArgumentException("Unknown command name.", "commandName");
             }
 
-            return SendCommand(_commands[commandName].CodeWithChecksum);
-        }
-        public bool SendMessage(string message)
-        {
-            string result = _rs232Device.WriteWithResponse($"message {message}", "OK");
-            return result != null;
+            return _serialBlaster.SendCommand(SerialBlaster.Protocol.Nec, _commands[commandName].CodeWithChecksum);
         }
     }
 }
