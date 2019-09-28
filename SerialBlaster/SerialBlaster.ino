@@ -4,6 +4,7 @@
 IRsend irsend(M5_IR);
 
 bool userDebugEnabled = false;
+unsigned int cursorYMax = 160;
 
 void setup()
 {
@@ -11,7 +12,9 @@ void setup()
 
   M5.begin();
   lcdBacklightEnable(userDebugEnabled);
-  M5.Lcd.println("SerialBlaster");
+  M5.Lcd.setTextWrap(true);
+  lcdPrintln("SerialBlaster");
+  lcdPrintf("Test %d\n", 42);
 
   pinMode(M5_LED, OUTPUT);
   digitalWrite(M5_LED, LOW);
@@ -21,21 +24,49 @@ void setup()
   pinMode(M5_BUTTON_RST, INPUT);
 }
 
-void lcdBacklightEnableUnsupported(bool enable)
+size_t lcdPrintln(const char *string)
 {
-  if(enable)
+    lcdManageVerticalWrap();
+
+    size_t len = M5.Lcd.print(string);
+    len += M5.Lcd.println();
+    return len;
+}
+
+size_t lcdPrintf(const char *format, ...)
+{
+    lcdManageVerticalWrap();
+
+    char loc_buf[64];
+    char * temp = loc_buf;
+    va_list arg;
+    va_list copy;
+    va_start(arg, format);
+    va_copy(copy, arg);
+    size_t len = vsnprintf(NULL, 0, format, arg);
+    va_end(copy);
+    if(len >= sizeof(loc_buf)){
+        temp = new char[len+1];
+        if(temp == NULL) {
+            return 0;
+        }
+    }
+    len = vsnprintf(temp, len+1, format, arg);
+    M5.Lcd.print(temp);
+    va_end(arg);
+    if(len >= sizeof(loc_buf)){
+        delete[] temp;
+    }
+    return len;
+}
+
+void lcdManageVerticalWrap()
+{
+  int16_t cursorY = M5.Lcd.getCursorY();
+  if(cursorY >= cursorYMax)
   {
-    Wire1.beginTransmission(0x34);
-    Wire1.write(0x12);
-    Wire1.write(0x4d); // Enable LDO2, aka OLED_VDD
-    Wire1.endTransmission();
-  }
-  else
-  {
-    Wire1.beginTransmission(0x34);
-    Wire1.write(0x12);
-    Wire1.write(0b01001011);  // LDO2, aka OLED_VDD, off
-    Wire1.endTransmission();
+    M5.Lcd.fillScreen(0x000000);
+    M5.Lcd.setCursor(0, 0);
   }
 }
 
@@ -74,7 +105,6 @@ void loop()
   }
   buttonResetPrevious = buttonReset;
   
-
   while(Serial.available())
   {
     in = Serial.readStringUntil('\r');
@@ -85,19 +115,19 @@ void loop()
     char *action = strtok((char*)in.c_str(), " ");
     if (action != NULL)
     {
-      M5.Lcd.printf("%s\n", action);
+      lcdPrintf("%s\n", action);
       if(strcasecmp(action, "send") == 0)
       {
         char *encoding = strtok(NULL, " ");
         if(encoding != NULL)
         {
-          M5.Lcd.printf("%s\n", encoding);
+          lcdPrintf("%s\n", encoding);
           if(strcasecmp(encoding, "nec") == 0)
           {
             char *command = strtok(NULL, " ");
             if(command != NULL)
             {
-              M5.Lcd.printf("%s\n", command);
+              lcdPrintf("%s\n", command);
               unsigned long commandUL;
               commandUL = strtoul(command, NULL, 16);
               irsend.sendNEC(commandUL, 32);
@@ -130,7 +160,7 @@ void loop()
         char *message = strtok(NULL, " ");
         if(message != NULL)
         {
-          M5.Lcd.printf("%s\n", message);
+          lcdPrintf("%s\n", message);
           Serial.println("OK");
         }
         else
