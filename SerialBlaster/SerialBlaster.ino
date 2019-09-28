@@ -14,7 +14,6 @@ void setup()
   lcdBacklightEnable(userDebugEnabled);
   M5.Lcd.setTextWrap(true);
   lcdPrintln("SerialBlaster");
-  lcdPrintf("Test %d\n", 42);
 
   pinMode(M5_LED, OUTPUT);
   digitalWrite(M5_LED, LOW);

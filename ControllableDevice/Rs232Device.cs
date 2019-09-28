@@ -156,17 +156,15 @@ namespace ControllableDevice
             if (_deviceWatcher == null)
             {
                 _deviceWatcher = DeviceInformation.CreateWatcher(SerialDevice.GetDeviceSelector());
-
                 _deviceWatcher.Added += new TypedEventHandler<DeviceWatcher, DeviceInformation>(OnDeviceAdded);
                 _deviceWatcher.Removed += new TypedEventHandler<DeviceWatcher, DeviceInformationUpdate>(OnDeviceRemoved);
-
                 _deviceWatcher.Start();
             }
         }
 
         private void OnDeviceAdded(DeviceWatcher sender, DeviceInformation deviceInfo)
         {
-            if ((deviceInfo.Id.Contains(_partialId)) && !Enabled)
+            if (deviceInfo.Id.Contains(_partialId) && !Enabled)
             {
                 InitialiseSerialDevice();
             }
@@ -174,7 +172,7 @@ namespace ControllableDevice
 
         private void OnDeviceRemoved(DeviceWatcher sender, DeviceInformationUpdate deviceInformationUpdate)
         {
-            if (Enabled && (deviceInformationUpdate.Id.Contains(_partialId)))
+            if (deviceInformationUpdate.Id.Contains(_partialId) && Enabled)
             {
                 DeInitialiseSerialDevice();
             }
@@ -188,7 +186,6 @@ namespace ControllableDevice
                 {
                     try
                     {
-                        Debug.WriteLine("InitialiseSerialDevice: Start");
                         //It's legitimate to try and initialise the device with a partial ID that doesn't exist
                         //For example, a serial device isn't yet connected. Handle this case gracefully by just returning.
                         string id = GetDeviceId(_partialId);
@@ -222,7 +219,6 @@ namespace ControllableDevice
                             _listenTask.Start();
 
                             Enabled = true;
-                            Debug.WriteLine("InitialiseSerialDevice: Finish");
                         }
                     }
                     catch (Exception)
@@ -240,7 +236,6 @@ namespace ControllableDevice
             {
                 if (Enabled)
                 {
-                    Debug.WriteLine("DeInitialiseSerialDevice: Start");
                     Enabled = false;
 
                     _readCancellationTokenSource?.Cancel();
@@ -259,7 +254,6 @@ namespace ControllableDevice
 
                     _serialDevice?.Dispose();
                     _serialDevice = null;
-                    Debug.WriteLine("DeInitialiseSerialDevice: Finish");
                 }
             }
         }
