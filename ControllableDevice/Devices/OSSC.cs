@@ -122,5 +122,10 @@ namespace ControllableDevice
 
             return SendCommand(_commands[commandName].CodeWithChecksum);
         }
+        public bool SendMessage(string message)
+        {
+            string result = _rs232Device.WriteWithResponse($"message {message}", "OK");
+            return result != null;
+        }
     }
 }

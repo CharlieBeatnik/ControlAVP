@@ -21,7 +21,7 @@ void setup()
   pinMode(M5_BUTTON_RST, INPUT);
 }
 
-void lcdBacklightEnable(bool enable)
+void lcdBacklightEnableUnsupported(bool enable)
 {
   if(enable)
   {
@@ -36,6 +36,18 @@ void lcdBacklightEnable(bool enable)
     Wire1.write(0x12);
     Wire1.write(0b01001011);  // LDO2, aka OLED_VDD, off
     Wire1.endTransmission();
+  }
+}
+
+void lcdBacklightEnable(bool enable)
+{
+  if(enable)
+  {
+    M5.Axp.ScreenBreath(15); 
+  }
+  else
+  {
+    M5.Axp.ScreenBreath(0) ;
   }
 }
 
@@ -111,6 +123,19 @@ void loop()
         else
         {
           Serial.println("ERROR: No encoding specified.");
+        }
+      }
+      else if(strcasecmp(action, "message") == 0)
+      {
+        char *message = strtok(NULL, " ");
+        if(message != NULL)
+        {
+          M5.Lcd.printf("%s\n", message);
+          Serial.println("OK");
+        }
+        else
+        {
+          Serial.println("ERROR: No message specified.");
         }
       }
       else

@@ -146,21 +146,18 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GivenDevice_WhenCreateAnotherDeviceWithSameID_ThenSecondDeviceBecomesEnabledWhenFirstDeviceIsDisposed()
+        public void GivenDevice_WhenCreateAnotherDeviceWithSameIDAfterDisposingFirstDevice0_ThenSecondDevicIsEnabled()
         {
-            var device1 = CreateDevice();
-            Assert.IsTrue(device1.Enabled);
+            using (var device1 = CreateDevice())
+            {
+                Assert.IsTrue(device1.Enabled);
+            }
 
-            var device2 = CreateDevice();
-            device2.MonitorDeviceTimerInterval = TimeSpan.FromMilliseconds(500);
-            Assert.IsFalse(device2.Enabled);
+            using (var device2 = CreateDevice())
+            {
+                Assert.IsTrue(device2.Enabled);
+            }
 
-            device1.Dispose();
-
-            Thread.Sleep(device2.MonitorDeviceTimerInterval + TimeSpan.FromSeconds(1));
-            Assert.IsTrue(device2.Enabled);
-
-            device2.Dispose();
         }
 
         [TestMethod]
@@ -187,6 +184,22 @@ namespace Tests
 
                 result = device.Read("OK");
                 Assert.IsNull(result);
+            }
+        }
+
+        [TestMethod]
+        //[Ignore("Requires manual intervention.")]
+        public void GivenDevice_WhenPrintMessageAskingToBeDisconnectedAndWaitForReconnect_ThenResponseIsNotNully()
+        {
+            using (var device = CreateDevice())
+            {
+                var result = device.WriteWithResponse("message DisconnectNow", "OK");
+                Assert.IsNotNull(result);
+
+                Thread.Sleep(TimeSpan.FromSeconds(20));
+
+                result = device.WriteWithResponse("message Reconnected", "OK");
+                Assert.IsNotNull(result);
             }
         }
     }

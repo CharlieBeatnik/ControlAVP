@@ -37,7 +37,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GivenDevice_WhenSendCommandFromUint_ThenResponseIsOK()
+        public void GivenDevice_WhenSendCommandFromUint_ThenResponseIsTrue()
         {
             using (var device = CreateDevice())
             {
@@ -47,7 +47,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GivenDevice_WhenSendCommandFromEnum_ThenResponseIsOK()
+        public void GivenDevice_WhenSendCommandFromEnum_ThenResponseIsTrue()
         {
             using (var device = CreateDevice())
             {
@@ -86,7 +86,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GivenInvalidDevice_WhenSendCommandFromUint_ThenResponseIsOK()
+        public void GivenInvalidDevice_WhenSendCommandFromUint_ThenResponseIsFalse()
         {
             using (var device = CreateInvalidDevice())
             {
@@ -96,11 +96,31 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GivenInvalidDevice_WhenSendCommandFromEnum_ThenResponseIsOK()
+        public void GivenInvalidDevice_WhenSendCommandFromEnum_ThenResponseIsFalse()
         {
             using (var device = CreateInvalidDevice())
             {
                 var result = device.SendCommand(CommandName.Menu);
+                Assert.IsFalse(result);
+            }
+        }
+
+        [TestMethod]
+        public void GiveDevice_WhenSendMessageThenResponseIsTrue()
+        {
+            using (var device = CreateDevice())
+            {
+                var result = device.SendMessage("TestMessage");
+                Assert.IsTrue(result);
+            }
+        }
+
+        [TestMethod]
+        public void GiveInvalidDevice_WhenSendMessageThenResponseIsFalse()
+        {
+            using (var device = CreateInvalidDevice())
+            {
+                var result = device.SendMessage("TestMessage");
                 Assert.IsFalse(result);
             }
         }
