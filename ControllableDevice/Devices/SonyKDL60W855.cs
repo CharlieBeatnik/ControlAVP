@@ -16,7 +16,7 @@ namespace ControllableDevice
         private  PhysicalAddress _physicalAddress;
         private string _preSharedKey;
 
-        private readonly TimeSpan _fromColdBootToOnWait = TimeSpan.FromSeconds(15);
+        private readonly TimeSpan _fromColdBootToOnWait = TimeSpan.FromSeconds(20);
         private readonly TimeSpan _fromStandbyToOnWait = TimeSpan.FromSeconds(1);
         private readonly TimeSpan _fromOnToStandbyWait = TimeSpan.FromSeconds(1);
 
@@ -69,6 +69,15 @@ namespace ControllableDevice
             return _jsonRpcDevice.Post(jsonIn, url);
         }
 
+        private bool ResultIsSuccessful(JObject result)
+        {
+            if(result != null)
+            {
+                return true;
+            }
+            else return false;
+        }
+
         private JObject GetVolumeInformation()
         {
             return CallMethod("getVolumeInformation", "sony/audio");
@@ -79,7 +88,7 @@ namespace ControllableDevice
             PowerStatus powerStatus = PowerStatus.Off;
             var result = CallMethod("getPowerStatus", "sony/system");
 
-            if(result != null)
+            if(ResultIsSuccessful(result))
             {
                 string status = result["result"][0]["status"].ToString();
                 switch (status)
@@ -94,8 +103,7 @@ namespace ControllableDevice
 
         public bool GetAvailable()
         {
-            //ANDREWDENN_TODO
-            return false;
+            return true;
         }
 
         public bool TurnOn()
@@ -110,7 +118,9 @@ namespace ControllableDevice
 
                         //TV takes a long time to boot from cold, so wait for it to become responsive
                         Thread.Sleep(_fromColdBootToOnWait);
-                        break;
+
+                        powerStatus = GetPowerStatus();
+                        return (powerStatus == PowerStatus.On);
                     }
                 case PowerStatus.Standby:
                     {
@@ -120,14 +130,13 @@ namespace ControllableDevice
                             )
                         );
 
-                        CallMethod("setPowerStatus", "sony/system", parameters);
+                        var result = CallMethod("setPowerStatus", "sony/system", parameters);
                         Thread.Sleep(_fromStandbyToOnWait);
-                        break;
+                        return ResultIsSuccessful(result);
                     }
             }
 
-            powerStatus = GetPowerStatus();
-            return (powerStatus == PowerStatus.On);
+            return true;
         }
 
         public bool TurnOff()
@@ -144,38 +153,53 @@ namespace ControllableDevice
                             )
                         );
 
-                        CallMethod("setPowerStatus", "sony/system", parameters);
+                        var result = CallMethod("setPowerStatus", "sony/system", parameters);
                         Thread.Sleep(_fromOnToStandbyWait);
-                        break;
+                        return ResultIsSuccessful(result);
                     }
             }
 
-            powerStatus = GetPowerStatus();
-            return (powerStatus == PowerStatus.Off) || (powerStatus == PowerStatus.Standby);
+            return true;
         }
 
-        public int GetVolume()
+        public int? GetVolume()
         {
             var volumeInfo = GetVolumeInformation();
-            return (int)volumeInfo["result"][0][0]["volume"];
+            if (ResultIsSuccessful(volumeInfo))
+            {
+                return (int)volumeInfo["result"][0][0]["volume"];
+            }
+            else return null;
         }
 
-        public int GetMaxVolume()
+        public int? GetMaxVolume()
         {
             var volumeInfo = GetVolumeInformation();
-            return (int)volumeInfo["result"][0][0]["maxVolume"];
+            if(ResultIsSuccessful(volumeInfo))
+            {
+                return (int)volumeInfo["result"][0][0]["maxVolume"];
+            }
+            else return null;
         }
 
-        public int GetMinVolume()
+        public int? GetMinVolume()
         {
             var volumeInfo = GetVolumeInformation();
-            return (int)volumeInfo["result"][0][0]["minVolume"];
+            if (ResultIsSuccessful(volumeInfo))
+            {
+                return (int)volumeInfo["result"][0][0]["minVolume"];
+            }
+            else return null;
         }
 
-        public bool GetIsMuted()
+        public bool? GetIsMuted()
         {
             var volumeInfo = GetVolumeInformation();
-            return (bool)volumeInfo["result"][0][0]["mute"];
+            if (ResultIsSuccessful(volumeInfo))
+            {
+                return (bool)volumeInfo["result"][0][0]["mute"];
+            }
+            else return null;
         }
 
         public bool SetVolume(int volume)
@@ -187,8 +211,32 @@ namespace ControllableDevice
                 )
             );
 
-            CallMethod("setAudioVolume", "sony/audio", parameters);
-            return GetVolume() == volume;
+            var result = CallMethod("setAudioVolume", "sony/audio", parameters);
+            return ResultIsSuccessful(result);
+        }
+
+        public bool SetMute(bool enable)
+        {
+            var parameters = new JArray(
+                new JObject(
+                    new JProperty("status", enable)
+                )
+            );
+
+            var result = CallMethod("setAudioMute", "sony/audio", parameters);
+            return ResultIsSuccessful(result);
+        }
+
+        public InputPort? GetInputPort()
+        {
+            var result = CallMethod("getPlayingContentInfo", "sony/avContent");
+
+            if (ResultIsSuccessful(result))
+            {
+                //string status = result["result"][0]["status"].ToString();
+                return InputPort.Hdmi1;
+            }
+            else return null;
         }
 
     }

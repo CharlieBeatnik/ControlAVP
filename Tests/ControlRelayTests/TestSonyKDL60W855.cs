@@ -84,8 +84,26 @@ namespace Tests
                 bool success = device.SetVolume(11);
                 Assert.IsTrue(success);
 
-                int volume = device.GetVolume();
+                int? volume = device.GetVolume();
+                Assert.IsNotNull(volume);
                 Assert.AreEqual(11, volume);
+            }
+        }
+
+        [TestMethod]
+        public void GivenDeviceVolumeIsUnmuted_WhenVolumeIsMuted_ThenVolumeIsMuted()
+        {
+            using (var device = CreateDevice())
+            {
+                bool success = device.SetMute(false);
+                Assert.IsTrue(success);
+
+                success = device.SetMute(true);
+                Assert.IsTrue(success);
+
+                bool? muted = device.GetIsMuted();
+                Assert.IsNotNull(muted);
+                Assert.IsTrue((bool)muted);
             }
         }
 
@@ -99,11 +117,47 @@ namespace Tests
             }
         }
 
+        [TestMethod]
         public void GivenDevice_WhenCallAvailable_ThenDeviceIsAvailable()
         {
             using (var device = CreateDevice())
             {
                 Assert.IsTrue(device.GetAvailable());
+            }
+        }
+
+        [TestMethod]
+        public void GivenInvalidIPDevice_WhenCallGetFunctions_ThenResultsAreNull()
+        {
+            using (var device = CreateInvalidIPDevice())
+            {
+                Assert.IsNull(device.GetIsMuted());
+                Assert.IsNull(device.GetMaxVolume());
+                Assert.IsNull(device.GetMinVolume());
+                Assert.IsNull(device.GetVolume());
+                Assert.IsNull(device.GetInputPort());
+            }
+        }
+
+        [TestMethod]
+        public void GivenDevice_WhenGetMinVolume_ThenMinVolumeIs0()
+        {
+            using (var device = CreateDevice())
+            {
+                int? minVolume = device.GetMinVolume();
+                Assert.IsNotNull(minVolume);
+                Assert.IsTrue(minVolume == 0);
+            }
+        }
+
+        [TestMethod]
+        public void GivenDevice_WhenGetMaxVolume_ThenMaxVolumeIs100()
+        {
+            using (var device = CreateDevice())
+            {
+                int? maxVolume = device.GetMaxVolume();
+                Assert.IsNotNull(maxVolume);
+                Assert.IsTrue(maxVolume == 100);
             }
         }
     }
