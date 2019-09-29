@@ -5,14 +5,13 @@ using System.IO;
 using Newtonsoft.Json.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
+using ControllableDeviceTypes.SonyKDL60W855Types;
 
 namespace Tests
 {
     [TestClass]
     public class TestSonyKDL60W855
     {
-        private static SonyKDL60W855 _device = null;
-
         private static readonly string _settingsFile = "settings.json";
         private static JToken _deviceSettings;
 
@@ -30,7 +29,7 @@ namespace Tests
 
             using (var device = CreateDevice())
             {
-                device.TurnOn();
+                Assert.IsTrue(device.TurnOn());
             }
         }
 
@@ -39,7 +38,7 @@ namespace Tests
         {
             using (var device = CreateDevice())
             {
-                device.TurnOff();
+                Assert.IsTrue(device.TurnOff());
             }
         }
 
@@ -50,9 +49,25 @@ namespace Tests
                                      _deviceSettings["PreSharedKey"].ToString());
         }
 
+        public static SonyKDL60W855 CreateInvalidIPDevice()
+        {
+            return new SonyKDL60W855(IPAddress.Parse("192.0.2.0"),
+                                     PhysicalAddress.Parse(_deviceSettings["PhysicalAddress"].ToString()),
+                                     _deviceSettings["PreSharedKey"].ToString());
+        }
+
         [TestMethod]
-        [Ignore("Fix issues with TV control.")]
-        public void GivenDevice_WhenVolumeIsSetTo11_VolumeIs11()
+        public void GivenInvalidIPDevice_WhenGetPowerStatus_ThenPowerStatusIsOff()
+        {
+            using (var device = CreateInvalidIPDevice())
+            {
+                var powerStatus = device.GetPowerStatus();
+                Assert.IsTrue(powerStatus == PowerStatus.Off);
+            }
+        }
+
+        [TestMethod]
+        public void GivenDevice_WhenVolumeIsSetTo11_ThenVolumeIs11()
         {
             using (var device = CreateDevice())
             {
@@ -64,17 +79,22 @@ namespace Tests
             }
         }
 
+        [TestMethod]
         public void GivenTVIsOff_WhenTurnOn_ThenTVIsOn()
         {
-            //ANDREWDENN_TODO: Need to make sure TV is off first
-
-            var result = _device.TurnOn();
-            Assert.IsTrue(result);
+            using (var device = CreateDevice())
+            {
+                Assert.IsTrue(device.TurnOff());
+                Assert.IsTrue(device.TurnOn());
+            }
         }
 
         public void GivenDevice_WhenCallAvailable_ThenDeviceIsAvailable()
         {
-            Assert.IsTrue(_device.GetAvailable());
+            using (var device = CreateDevice())
+            {
+                Assert.IsTrue(device.GetAvailable());
+            }
         }
     }
 }
