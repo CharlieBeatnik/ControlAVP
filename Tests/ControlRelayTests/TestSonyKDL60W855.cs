@@ -26,11 +26,6 @@ namespace Tests
             }
 
             _deviceSettings = jsonParsed["SonyKDL60W855"];
-
-            using (var device = CreateDevice())
-            {
-                Assert.IsTrue(device.TurnOn());
-            }
         }
 
         [ClassCleanup]
@@ -41,6 +36,21 @@ namespace Tests
                 Assert.IsTrue(device.TurnOff());
             }
         }
+
+        [TestInitialize()]
+        public void TestInitialize()
+        {
+            using (var device = CreateDevice())
+            {
+                Assert.IsTrue(device.TurnOn());
+            }
+        }
+
+        [TestCleanup()]
+        public void TestCleanup()
+        {
+        }
+
 
         public static SonyKDL60W855 CreateDevice()
         {

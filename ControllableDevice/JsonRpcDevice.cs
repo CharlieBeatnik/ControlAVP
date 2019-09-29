@@ -34,7 +34,7 @@ namespace ControllableDevice
                 var response = _webClient.UploadString(address, "POST", data);
                 return JObject.Parse(response);
             }
-            catch(WebException we)
+            catch(WebException)
             {
                 //The URI formed by combining BaseAddress and address is invalid.
                 // or

@@ -16,7 +16,7 @@ namespace ControllableDevice
         private  PhysicalAddress _physicalAddress;
         private string _preSharedKey;
 
-        private readonly TimeSpan _fromColdBootToOnWait = TimeSpan.FromSeconds(10);
+        private readonly TimeSpan _fromColdBootToOnWait = TimeSpan.FromSeconds(15);
         private readonly TimeSpan _fromStandbyToOnWait = TimeSpan.FromSeconds(1);
         private readonly TimeSpan _fromOnToStandbyWait = TimeSpan.FromSeconds(1);
 
