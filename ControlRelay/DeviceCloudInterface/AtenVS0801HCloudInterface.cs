@@ -34,7 +34,7 @@ namespace ControlRelay
             yield return new MethodHandlerInfo("HDMISwitchGoToNextInput", GoToNextInput);
             yield return new MethodHandlerInfo("HDMISwitchGoToPreviousInput", GoToPreviousInput);
             yield return new MethodHandlerInfo("HDMISwitchGetState", GetState);
-            yield return new MethodHandlerInfo("HDMISwitchSetInput", SetInput);
+            yield return new MethodHandlerInfo("HDMISwitchSetInputPort", SetInputPort);
             yield return new MethodHandlerInfo("HDMISwitchGetAvailable", GetAvailable);
         }
 
@@ -83,7 +83,7 @@ namespace ControlRelay
             return GetMethodResponse(methodRequest, false);
         }
 
-        private Task<MethodResponse> SetInput(MethodRequest methodRequest, object userContext)
+        private Task<MethodResponse> SetInputPort(MethodRequest methodRequest, object userContext)
         {
             var payloadDefintion = new
             {
@@ -94,7 +94,7 @@ namespace ControlRelay
             var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
             if (HdmiSwitchIdValid(payload._hdmiSwitchId) && payload.inputPort.Valid())
             {
-                bool success = _devices[payload._hdmiSwitchId].SetInput(payload.inputPort);
+                bool success = _devices[payload._hdmiSwitchId].SetInputPort(payload.inputPort);
                 return GetMethodResponse(methodRequest, success);
             }
 

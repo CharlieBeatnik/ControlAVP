@@ -69,7 +69,7 @@ namespace ControllableDevice
             return result != null;
         }
 
-        public bool SetInput(InputPort inputPort)
+        public bool SetInputPort(InputPort inputPort)
         {
             if (!_rs232Device.Enabled) return false;
 

@@ -27,7 +27,7 @@
                                         @foreach (InputPort inputPort in Enum.GetValues(typeof(InputPort)))
                                         {
                                             <button type="submit"
-                                                    asp-page-handler="SetInput"
+                                                    asp-page-handler="SetInputPort"
                                                     asp-route-deviceindex=@i
                                                     asp-route-inputport=@inputPort
                                                     class="btn border @(inputPort == Model.DeviceInfoCaches[i].State.InputPort ? "btn-success" : "btn-light")">

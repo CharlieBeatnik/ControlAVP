@@ -49,7 +49,7 @@ namespace Tests
         {
             foreach (var device in _devices)
             {
-                Assert.IsTrue(device.SetInput(InputPort.Port1));
+                Assert.IsTrue(device.SetInputPort(InputPort.Port1));
                 Assert.IsTrue(device.GoToNextInput());
 
                 var state = device.GetState();
@@ -63,7 +63,7 @@ namespace Tests
         {
             foreach (var device in _devices)
             {
-                Assert.IsTrue(device.SetInput(InputPort.Port2));
+                Assert.IsTrue(device.SetInputPort(InputPort.Port2));
                 Assert.IsTrue(device.GoToPreviousInput());
 
                 var state = device.GetState();
@@ -77,12 +77,12 @@ namespace Tests
         {
             foreach (var device in _devices)
             {
-                Assert.IsTrue(device.SetInput(InputPort.Port1));
+                Assert.IsTrue(device.SetInputPort(InputPort.Port1));
                 var state = device.GetState();
                 Assert.IsTrue(state != null);
                 Assert.IsTrue(state.InputPort == InputPort.Port1);
 
-                Assert.IsTrue(device.SetInput(InputPort.Port2));
+                Assert.IsTrue(device.SetInputPort(InputPort.Port2));
                 state = device.GetState();
                 Assert.IsTrue(state != null);
                 Assert.IsTrue(state.InputPort == InputPort.Port2);
@@ -134,7 +134,7 @@ namespace Tests
         public void GivenDeviceWithInvalidHdmiSwitchId_WhenSetInput_ThenSuccessIsFalse()
         {
             var device = new AtenVS0801H(_serviceClient, _settings.DeviceId, _invalidHdmiSwitchId);
-            var success = device.SetInput(InputPort.Port1);
+            var success = device.SetInputPort(InputPort.Port1);
             Assert.IsFalse(success);
         }
 
@@ -143,7 +143,7 @@ namespace Tests
         {
             foreach (var device in _devices)
             {
-                var success = device.SetInput((InputPort)_invalidInputPort);
+                var success = device.SetInputPort((InputPort)_invalidInputPort);
                 Assert.IsFalse(success);
             }
         }

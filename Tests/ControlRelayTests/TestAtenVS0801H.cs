@@ -43,7 +43,7 @@ namespace Tests
         {
             using (var device = CreateDevice())
             {
-                Assert.IsTrue(device.SetInput(InputPort.Port1));
+                Assert.IsTrue(device.SetInputPort(InputPort.Port1));
                 Assert.IsTrue(device.GoToNextInput());
 
                 var state = device.GetState();
@@ -57,7 +57,7 @@ namespace Tests
         {
             using (var device = CreateDevice())
             {
-                Assert.IsTrue(device.SetInput(InputPort.Port2));
+                Assert.IsTrue(device.SetInputPort(InputPort.Port2));
                 Assert.IsTrue(device.GoToPreviousInput());
 
                 var state = device.GetState();
@@ -71,12 +71,12 @@ namespace Tests
         {
             using (var device = CreateDevice())
             {
-                Assert.IsTrue(device.SetInput(InputPort.Port1));
+                Assert.IsTrue(device.SetInputPort(InputPort.Port1));
                 var state = device.GetState();
                 Assert.IsTrue(state != null);
                 Assert.IsTrue(state.InputPort == InputPort.Port1);
 
-                Assert.IsTrue(device.SetInput(InputPort.Port2));
+                Assert.IsTrue(device.SetInputPort(InputPort.Port2));
                 state = device.GetState();
                 Assert.IsTrue(state != null);
                 Assert.IsTrue(state.InputPort == InputPort.Port2);
@@ -190,7 +190,7 @@ namespace Tests
         {
             using (var device = CreateInvalidDevice())
             {
-                Assert.IsFalse(device.SetInput(InputPort.Port1));
+                Assert.IsFalse(device.SetInputPort(InputPort.Port1));
             }
         }
 

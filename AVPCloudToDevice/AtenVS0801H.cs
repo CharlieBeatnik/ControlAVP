@@ -64,7 +64,7 @@ namespace AVPCloudToDevice
             }
         }
 
-        public bool SetInput(InputPort inputPort)
+        public bool SetInputPort(InputPort inputPort)
         {
             try
             {
@@ -74,7 +74,7 @@ namespace AVPCloudToDevice
                     inputPort
                 };
 
-                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "HDMISwitchSetInput", payload);
+                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "HDMISwitchSetInputPort", payload);
                 return true;
             }
             catch

@@ -23,5 +23,13 @@ namespace ControllableDeviceTypes
             Composite1,
             Scart1
         }
+
+        public static class InputPortExtensions
+        {
+            public static bool Valid(this InputPort inputPort)
+            {
+                return Enum.IsDefined(typeof(InputPort), inputPort);
+            }
+        }
     }
 }

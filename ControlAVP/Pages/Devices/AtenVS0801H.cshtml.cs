@@ -63,7 +63,7 @@ namespace ControlAVP.Pages.Devices
             Debug.Assert(deviceIndex < _numHdmiSwitches);
             if (deviceIndex < _numHdmiSwitches)
             {
-                _devices[deviceIndex].SetInput(inputPort);
+                _devices[deviceIndex].SetInputPort(inputPort);
                 DeviceInfoCaches[deviceIndex].State = _devices[deviceIndex].GetState();
             }
             return RedirectToPage();
