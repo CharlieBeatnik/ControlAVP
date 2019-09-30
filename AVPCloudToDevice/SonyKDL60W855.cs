@@ -25,5 +25,18 @@ namespace AVPCloudToDevice
                 return false;
             }
         }
+
+        public bool TurnOff()
+        {
+            try
+            {
+                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "TVTurnOff", null);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }

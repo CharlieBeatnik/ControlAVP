@@ -43,5 +43,11 @@ namespace ControlAVP.Pages.Devices
             _device.TurnOn();
             return RedirectToPage();
         }
+
+        public IActionResult OnPostTurnOff()
+        {
+            _device.TurnOff();
+            return RedirectToPage();
+        }
     }
 }
