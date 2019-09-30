@@ -160,5 +160,30 @@ namespace Tests
                 Assert.IsTrue(maxVolume == 100);
             }
         }
+
+        [TestMethod]
+        public void GivenInputIsPortHdmi1_WhenSetInputPortToHdmi2_ThenInputPortIsHdmi2()
+        {
+            using (var device = CreateDevice())
+            {
+                //Change to HDMI1
+                bool success = device.SetInputPort(InputPort.Hdmi1);
+                Assert.IsTrue(success);
+
+                //Confirm HDMI1
+                var inputPort = device.GetInputPort();
+                Assert.IsNotNull(inputPort);
+                Assert.IsTrue(inputPort == InputPort.Hdmi1);
+
+                //Change to HDMI2
+                success = device.SetInputPort(InputPort.Hdmi2);
+                Assert.IsTrue(success);
+
+                //Confirm HDMI2
+                inputPort = device.GetInputPort();
+                Assert.IsNotNull(inputPort);
+                Assert.IsTrue(inputPort == InputPort.Hdmi2);
+            }
+        }
     }
 }

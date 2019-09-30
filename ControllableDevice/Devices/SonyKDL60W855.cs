@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Net;
 using System.Net.NetworkInformation;
+using System.Text.RegularExpressions;
 using System.Threading;
 
 namespace ControllableDevice
@@ -71,11 +72,10 @@ namespace ControllableDevice
 
         private bool ResultIsSuccessful(JObject result)
         {
-            if(result != null)
-            {
-                return true;
-            }
-            else return false;
+            if (result == null) return false;
+            if (result["error"] != null) return false;
+
+            return true;
         }
 
         private JObject GetVolumeInformation()
@@ -233,11 +233,51 @@ namespace ControllableDevice
 
             if (ResultIsSuccessful(result))
             {
-                //string status = result["result"][0]["status"].ToString();
-                return InputPort.Hdmi1;
+                //Example of playing content uri
+                //extInput:hdmi?port=1
+                string uri = result["result"][0]["uri"].ToString();
+
+                Match match = Regex.Match(uri, @"^.+:(.+)\?port=([0-9]+)$");
+                if (match.Success)
+                {
+                    string portType = match.Groups[1].Value;
+                    string portId = match.Groups[2].Value;
+
+                    InputPort inputPort;
+                    if (Enum.TryParse($"{portType}{portId}", true, out inputPort))
+                    {
+                        return inputPort;
+                    }
+                }
             }
-            else return null;
+
+            return null;
         }
 
+        public bool SetInputPort(InputPort inputPort)
+        {
+            //Build playing content uri
+            //Example of playing content uri
+            //extInput:hdmi?port=1
+            Match match = Regex.Match(inputPort.ToString(), @"^(.+)([0-9]+)$");
+            if (match.Success)
+            {
+                string portType = match.Groups[1].Value.ToLower();
+                string portId = match.Groups[2].Value;
+
+                string uri = $@"extInput:{portType}?port={portId}";
+
+                var parameters = new JArray(
+                new JObject(
+                        new JProperty("uri", uri)
+                    )
+                );
+
+                var result = CallMethod("setPlayContent", "sony/avContent", parameters);
+                return ResultIsSuccessful(result);
+            }
+
+            return false;
+        }
     }
 }
