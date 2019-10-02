@@ -37,12 +37,12 @@ namespace ControlRelay
             {
                 if (success)
                 {
-                    // Acknowlege the direct method call with a 200 success message
+                    // Acknowledge the direct method call with a 200 success message
                     result = "{\"result\":\"Executed direct method: " + methodRequest.Name + "\"}";
                 }
                 else
                 {
-                    // Acknowlege the direct method call with a 400 error message
+                    // Acknowledge the direct method call with a 400 error message
                     result = "{\"result\":\"Failure to execute direct method: " + methodRequest.Name + "\"}";
                 }
             }

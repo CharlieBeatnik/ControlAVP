@@ -28,16 +28,35 @@ namespace Tests
             }
         }
 
+        [OneTimeSetUp]
+        public void OneTimeSetup()
+        {
+        }
+
         [SetUp]
         public void Setup()
         {
             _serviceClient = ServiceClient.CreateFromConnectionString(_settings.ConnectionString);
             _device = new SonyKDL60W855(_serviceClient, _settings.DeviceId);
+            _device.TurnOn();
         }
+
+        [TearDown]
+        public static void TearDown()
+        {
+        }
+
+        [OneTimeTearDown]
+        public void OneTimeTearDown()
+        {
+            _device.TurnOff();
+        }
+
+        [Test]
         public void GivenTVIsOff_WhenTurnOn_ThenTVIsOn()
         {
-            var result = _device.TurnOn();
-            Assert.IsTrue(result);
+            Assert.IsTrue(_device.TurnOff());
+            Assert.IsTrue(_device.TurnOn());
         }
     }
 }
