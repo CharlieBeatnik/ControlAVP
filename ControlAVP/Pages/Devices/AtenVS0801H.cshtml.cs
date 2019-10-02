@@ -58,7 +58,7 @@ namespace ControlAVP.Pages.Devices
             }
         }
 
-        public IActionResult OnPostSetInput(int deviceIndex, InputPort inputPort)
+        public IActionResult OnPostSetInputPort(int deviceIndex, InputPort inputPort)
         {
             Debug.Assert(deviceIndex < _numHdmiSwitches);
             if (deviceIndex < _numHdmiSwitches)
