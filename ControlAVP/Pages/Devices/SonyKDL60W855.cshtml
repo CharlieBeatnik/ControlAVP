@@ -1,5 +1,6 @@
 ﻿@page
 @model ControlAVP.Pages.Devices.SonyKDL60W855Model
+@using ControllableDeviceTypes.SonyKDL60W855Types;
 
 @{
     ViewData["Title"] = "Sony KDL60W855";
@@ -8,24 +9,64 @@
 
 
 <form method="post">
-@*@if (false)
-{
-    <div class="alert alert-warning">
-        <strong>Warning!</strong> Device not found, is it turned on?
-    </div>
-}
-else
-{*@
     <div class="card">
         <div class="card-header">
             <h6 class="mb-0">@ViewData["Title"]</h6>
         </div>
         <div class="card-body">
-            <div class="btn-group">
-                <button type="submit" asp-page-handler="TurnOn" class="btn btn-success border">On</button>
-                <button type="submit" asp-page-handler="TurnOff" class="btn btn-danger border">Off</button>
+            <div class="col-sm-6">
+                <table class="table table-sm table-borderless">
+                    <tr>
+                        <td class="align-middle text-right" width="1%">Power</td>
+                        <td>
+                            <div class="btn-group">
+                                @switch (Model.DeviceInfoCache.PowerStatus)
+                                {
+                                    case PowerStatus.Off:
+                                        <button class="btn btn-danger disabled" disabled>Off</button>
+                                        <button class="btn disabled" disabled>Standby</button>
+                                        <button type="submit" asp-page-handler="TurnOn" class="btn">On</button>
+                                        break;
+
+                                    case PowerStatus.Standby:
+                                        <button class="btn disabled" disabled>Off</button>
+                                        <button class="btn btn-warning disabled" disabled>Standby</button>
+                                        <button type="submit" asp-page-handler="TurnOn" class="btn">On</button>
+                                        break;
+
+                                    case PowerStatus.On:
+                                        <button class="btn disabled" disabled>Off</button>
+                                        <button type="submit" asp-page-handler="TurnOff" class="btn">Standby</button>
+                                        <button class="btn btn-success disabled" disabled>On</button>
+                                        break;
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                    @if (Model.DeviceInfoCache.PowerStatus == PowerStatus.On)
+                    {
+                        <tr>
+                            <td class="align-middle text-right">Input</td>
+                            <td class="align-middle">
+                                <div class="btn-group">
+                                    @foreach (InputPort inputPort in Enum.GetValues(typeof(InputPort)))
+                                    {
+                                        if (inputPort == Model.DeviceInfoCache.InputPort)
+                                        {
+                                            <button class="btn btn-success disabled" disabled>@inputPort</button>
+                                        }
+                                        else
+                                        {
+                                            <button type="submit" asp-page-handler="SetInput" asp-route-inputport=@inputPort class="btn">@inputPort</button>
+                                        }
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </table>
             </div>
+
         </div>
     </div>
-@*}*@
 </form>

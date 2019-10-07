@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Azure.Devices;
 using Microsoft.Extensions.Configuration;
 using AVPCloudToDevice;
+using ControllableDeviceTypes.SonyKDL60W855Types;
 
 namespace ControlAVP.Pages.Devices
 {
@@ -20,6 +21,13 @@ namespace ControlAVP.Pages.Devices
         private string _deviceId;
         private ServiceClient _serviceClient;
         private SonyKDL60W855 _device;
+
+        public class DeviceInfo
+        {
+            public PowerStatus? PowerStatus;
+            public InputPort? InputPort;
+        }
+        public DeviceInfo DeviceInfoCache { get; private set; } = new DeviceInfo();
 
         public SonyKDL60W855Model(IConfiguration configuration, IHostingEnvironment environment)
         {
@@ -35,18 +43,36 @@ namespace ControlAVP.Pages.Devices
 
         public void OnGet()
         {
+            DeviceInfoCache.PowerStatus = _device.GetPowerStatus();
 
+            if (DeviceInfoCache.PowerStatus != PowerStatus.Off)
+            {
+                DeviceInfoCache.InputPort = _device.GetInputPort();
+            }
+            else
+            {
+                DeviceInfoCache.InputPort = null;
+            }
         }
 
         public IActionResult OnPostTurnOn()
         {
             _device.TurnOn();
+            DeviceInfoCache.PowerStatus = _device.GetPowerStatus();
             return RedirectToPage();
         }
 
         public IActionResult OnPostTurnOff()
         {
             _device.TurnOff();
+            DeviceInfoCache.PowerStatus = _device.GetPowerStatus();
+            return RedirectToPage();
+        }
+
+        public IActionResult OnPostSetInput(InputPort inputPort)
+        {
+            _device.SetInputPort(inputPort);
+            DeviceInfoCache.InputPort = _device.GetInputPort();
             return RedirectToPage();
         }
     }

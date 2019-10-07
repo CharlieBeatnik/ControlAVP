@@ -1,4 +1,6 @@
 ﻿using Microsoft.Azure.Devices;
+using ControllableDeviceTypes.SonyKDL60W855Types;
+using Newtonsoft.Json;
 
 namespace AVPCloudToDevice
 {
@@ -36,6 +38,48 @@ namespace AVPCloudToDevice
             catch
             {
                 return false;
+            }
+        }
+
+        public InputPort? GetInputPort()
+        {
+            try
+            {
+                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "TVGetInputPort", null);
+                string json = response.GetPayloadAsJson();
+                return JsonConvert.DeserializeObject<InputPort>(json);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public bool SetInputPort(InputPort inputPort)
+        {
+            try
+            {
+                var payload = new { inputPort };
+                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "TVSetInputPort", payload);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public PowerStatus? GetPowerStatus()
+        {
+            try
+            {
+                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "TVGetPowerStatus", null);
+                string json = response.GetPayloadAsJson();
+                return JsonConvert.DeserializeObject<PowerStatus>(json);
+            }
+            catch
+            {
+                return null;
             }
         }
     }
