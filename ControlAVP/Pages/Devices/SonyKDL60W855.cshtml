@@ -4,9 +4,19 @@
 
 @{
     ViewData["Title"] = "Sony KDL60W855";
+
+    var inputPortNames = new Dictionary<InputPort, string>
+    {
+        [InputPort.Hdmi1] = "HDMI 1",
+        [InputPort.Hdmi2] = "HDMI 2",
+        [InputPort.Hdmi3] = "HDMI 3",
+        [InputPort.Hdmi4] = "HDMI 4",
+        [InputPort.Scart1] = "SCART",
+        [InputPort.Component1] = "Component",
+        [InputPort.Composite1] = "Composite",
+    };
 }
 <h2></h2>
-
 
 <form method="post">
     <div class="card">
@@ -23,21 +33,21 @@
                                 @switch (Model.DeviceInfoCache.PowerStatus)
                                 {
                                     case PowerStatus.Off:
-                                        <button class="btn btn-danger disabled" disabled>Off</button>
-                                        <button class="btn disabled" disabled>Standby</button>
-                                        <button type="submit" asp-page-handler="TurnOn" class="btn">On</button>
+                                        <button class="btn btn-danger border disabled" disabled>Off</button>
+                                        <button class="btn btn-light border disabled" disabled>Standby</button>
+                                        <button type="submit" asp-page-handler="TurnOn" class="btn btn-light border">On</button>
                                         break;
 
                                     case PowerStatus.Standby:
-                                        <button class="btn disabled" disabled>Off</button>
-                                        <button class="btn btn-warning disabled" disabled>Standby</button>
-                                        <button type="submit" asp-page-handler="TurnOn" class="btn">On</button>
+                                        <button class="btn btn-light border disabled" disabled>Off</button>
+                                        <button class="btn btn-warning border disabled" disabled>Standby</button>
+                                        <button type="submit" asp-page-handler="TurnOn" class="btn btn-light border">On</button>
                                         break;
 
                                     case PowerStatus.On:
-                                        <button class="btn disabled" disabled>Off</button>
-                                        <button type="submit" asp-page-handler="TurnOff" class="btn">Standby</button>
-                                        <button class="btn btn-success disabled" disabled>On</button>
+                                        <button class="btn btn-light border disabled" disabled>Off</button>
+                                        <button type="submit" asp-page-handler="TurnOff" class="btn btn-light border">Standby</button>
+                                        <button class="btn btn-success border disabled" disabled>On</button>
                                         break;
                                 }
                             </div>
@@ -46,18 +56,35 @@
                     @if (Model.DeviceInfoCache.PowerStatus == PowerStatus.On)
                     {
                         <tr>
-                            <td class="align-middle text-right">Input</td>
+                            <td class="align-middle text-right" rowspan="2">Input</td>
                             <td class="align-middle">
                                 <div class="btn-group">
-                                    @foreach (InputPort inputPort in Enum.GetValues(typeof(InputPort)))
+                                    @foreach (InputPort inputPort in new InputPort[] { InputPort.Hdmi1, InputPort.Hdmi2, InputPort.Hdmi3, InputPort.Hdmi4 })
                                     {
                                         if (inputPort == Model.DeviceInfoCache.InputPort)
                                         {
-                                            <button class="btn btn-success disabled" disabled>@inputPort</button>
+                                            <button class="btn btn-success border disabled" disabled>@inputPortNames[inputPort]</button>
                                         }
                                         else
                                         {
-                                            <button type="submit" asp-page-handler="SetInput" asp-route-inputport=@inputPort class="btn">@inputPort</button>
+                                            <button type="submit" asp-page-handler="SetInput" asp-route-inputport=@inputPort class="btn btn-light border">@inputPortNames[inputPort]</button>
+                                        }
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">
+                                <div class="btn-group">
+                                    @foreach (InputPort inputPort in new InputPort[] { InputPort.Scart1, InputPort.Component1, InputPort.Composite1 })
+                                    {
+                                        if (inputPort == Model.DeviceInfoCache.InputPort)
+                                        {
+                                            <button class="btn btn-success border disabled" disabled>@inputPortNames[inputPort]</button>
+                                        }
+                                        else
+                                        {
+                                            <button type="submit" asp-page-handler="SetInput" asp-route-inputport=@inputPort class="btn btn-light border">@inputPortNames[inputPort]</button>
                                         }
                                     }
                                 </div>
