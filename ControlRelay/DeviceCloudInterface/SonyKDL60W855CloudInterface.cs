@@ -41,13 +41,13 @@ namespace ControlRelay
         private Task<MethodResponse> TurnOn(MethodRequest methodRequest, object userContext)
         {
             bool success = _device.TurnOn();
-            return GetMethodResponse(methodRequest, success);
+            return methodRequest.GetMethodResponse(success);
         }
 
         private Task<MethodResponse> TurnOff(MethodRequest methodRequest, object userContext)
         {
             bool success = _device.TurnOff();
-            return GetMethodResponse(methodRequest, success);
+            return methodRequest.GetMethodResponse(success);
         }
 
         private Task<MethodResponse> SetInputPort(MethodRequest methodRequest, object userContext)
@@ -61,20 +61,20 @@ namespace ControlRelay
             if (payload.inputPort.Valid())
             {
                 bool success = _device.SetInputPort(payload.inputPort);
-                return GetMethodResponse(methodRequest, success);
+                return methodRequest.GetMethodResponse(success);
             }
 
-            return GetMethodResponse(methodRequest, false);
+            return methodRequest.GetMethodResponse(false);
         }
 
         private Task<MethodResponse> GetInputPort(MethodRequest methodRequest, object userContext)
         {
-            return Get(methodRequest, () => _device.GetInputPort());
+            return methodRequest.Get(() => _device.GetInputPort());
         }
 
         private Task<MethodResponse> GetPowerStatus(MethodRequest methodRequest, object userContext)
         {
-            return Get(methodRequest, () => _device.GetPowerStatus());
+            return methodRequest.Get(() => _device.GetPowerStatus());
         }
 
     }

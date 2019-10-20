@@ -34,7 +34,7 @@ namespace ControlRelay
         {
             var result = _device.GetAvailable();
 
-            return GetMethodResponseSerialize(methodRequest, true, result);
+            return methodRequest.GetMethodResponseSerialize(true, result);
         }
 
         private Task<MethodResponse> SendCommand(MethodRequest methodRequest, object userContext)
@@ -52,7 +52,7 @@ namespace ControlRelay
                 success = _device.SendCommand(payload.commandName);
             }
 
-            return GetMethodResponse(methodRequest, success);
+            return methodRequest.GetMethodResponse(success);
         }
     }
 }

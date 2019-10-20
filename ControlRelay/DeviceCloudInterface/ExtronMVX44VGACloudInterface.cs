@@ -43,11 +43,11 @@ namespace ControlRelay
             if (result != null)
             {
                 string json = JsonConvert.SerializeObject(result, new VersionConverter());
-                return GetMethodResponse(methodRequest, true, json);
+                return methodRequest.GetMethodResponse(true, json);
             }
             else
             {
-                return GetMethodResponse(methodRequest, false);
+                return methodRequest.GetMethodResponse(false);
             }
         }
 
@@ -55,12 +55,12 @@ namespace ControlRelay
         {
             var result = _device.GetAvailable();
 
-            return GetMethodResponseSerialize(methodRequest, true, result);
+            return methodRequest.GetMethodResponseSerialize(true, result);
         }
 
         private Task<MethodResponse> GetTieState(MethodRequest methodRequest, object userContext)
         {
-            return Get(methodRequest, () => _device.GetTieState());
+            return methodRequest.Get(() => _device.GetTieState());
         }
 
         private Task<MethodResponse> TieInputPortToAllOutputPorts(MethodRequest methodRequest, object userContext)
@@ -79,7 +79,7 @@ namespace ControlRelay
                 success = _device.TieInputPortToAllOutputPorts(payload.inputPort, payload.tieType);
             }
 
-            return GetMethodResponse(methodRequest, success);
+            return methodRequest.GetMethodResponse(success);
         }
 
         private Task<MethodResponse> TieInputPortToOutputPort(MethodRequest methodRequest, object userContext)
@@ -99,7 +99,7 @@ namespace ControlRelay
                 success = _device.TieInputPortToOutputPort(payload.inputPort, payload.outputPort, payload.tieType);
             }
 
-            return GetMethodResponse(methodRequest, success);
+            return methodRequest.GetMethodResponse(success);
         }
 
     }

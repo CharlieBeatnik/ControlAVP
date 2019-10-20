@@ -45,18 +45,18 @@ namespace ControlRelay
             if (result != null)
             {
                 string json = JsonConvert.SerializeObject(result, new VersionConverter());
-                return GetMethodResponse(methodRequest, true, json);
+                return methodRequest.GetMethodResponse(true, json);
             }
             else
             {
-                return GetMethodResponse(methodRequest, false);
+                return methodRequest.GetMethodResponse(false);
             }
         }
 
         private Task<MethodResponse> GetAvailable(MethodRequest methodRequest, object userContext)
         {
             var result = _device.GetAvailable();
-            return GetMethodResponseSerialize(methodRequest, true, result);
+            return methodRequest.GetMethodResponseSerialize(true, result);
         }
 
         private Task<MethodResponse> SetScale(MethodRequest methodRequest, object userContext)
@@ -75,7 +75,7 @@ namespace ControlRelay
                 success = _device.Scale(payload.ScaleType, payload.PositionType);
             }
 
-            return GetMethodResponse(methodRequest, success);
+            return methodRequest.GetMethodResponse(success);
         }
 
         private Task<MethodResponse> SetOutputRate(MethodRequest methodRequest, object userContext)
@@ -94,7 +94,7 @@ namespace ControlRelay
                 success = _device.SetOutputRate(edid);
             }
 
-            return GetMethodResponse(methodRequest, success);
+            return methodRequest.GetMethodResponse(success);
         }
 
         private Task<MethodResponse> SetInputPort(MethodRequest methodRequest, object userContext)
@@ -111,17 +111,17 @@ namespace ControlRelay
             {
                 success = _device.SetInputPort(payload.inputPort);
             }
-            return GetMethodResponse(methodRequest, success);
+            return methodRequest.GetMethodResponse(success);
         }
 
         private Task<MethodResponse> GetInputPort(MethodRequest methodRequest, object userContext)
         {
-            return Get(methodRequest, () => _device.GetInputPort());
+            return methodRequest.Get(() => _device.GetInputPort());
         }
 
         private Task<MethodResponse> GetTemperature(MethodRequest methodRequest, object userContext)
         {
-            return Get(methodRequest, () => _device.GetTemperature());
+            return methodRequest.Get(() => _device.GetTemperature());
         }
 
     }

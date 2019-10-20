@@ -44,11 +44,11 @@ namespace ControlRelay
 
             if (result != null)
             {
-                return GetMethodResponseSerialize(methodRequest, true, result);
+                return methodRequest.GetMethodResponseSerialize(true, result);
             }
             else
             {
-                return GetMethodResponse(methodRequest, false);
+                return methodRequest.GetMethodResponse(false);
             }
         }
 
@@ -58,11 +58,11 @@ namespace ControlRelay
 
             if (result != null)
             {
-                return GetMethodResponseSerialize(methodRequest, true, result);
+                return methodRequest.GetMethodResponseSerialize(true, result);
             }
             else
             {
-                return GetMethodResponse(methodRequest, false);
+                return methodRequest.GetMethodResponse(false);
             }
         }
 
@@ -80,7 +80,7 @@ namespace ControlRelay
                 success = _device.TurnOutletOn(payload.outletId);
             }
 
-            return GetMethodResponse(methodRequest, success);
+            return methodRequest.GetMethodResponse(success);
         }
 
         private Task<MethodResponse> TurnOutletOff(MethodRequest methodRequest, object userContext)
@@ -96,13 +96,13 @@ namespace ControlRelay
             {
                 success = _device.TurnOutletOff(payload.outletId);
             }
-            return GetMethodResponse(methodRequest, success);
+            return methodRequest.GetMethodResponse(success);
         }
 
         private Task<MethodResponse> GetAvailable(MethodRequest methodRequest, object userContext)
         {
             var result = _device.GetAvailable();
-            return GetMethodResponseSerialize(methodRequest, true, result);
+            return methodRequest.GetMethodResponseSerialize(true, result);
         }
     }
 }

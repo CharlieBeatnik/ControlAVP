@@ -46,10 +46,10 @@ namespace ControlRelay
             if (HdmiSwitchIdValid(payload._hdmiSwitchId))
             {
                 bool success = _devices[payload._hdmiSwitchId].GoToNextInput();
-                return GetMethodResponse(methodRequest, success);
+                return methodRequest.GetMethodResponse(success);
             }
 
-            return GetMethodResponse(methodRequest, false);
+            return methodRequest.GetMethodResponse(false);
         }
 
         private Task<MethodResponse> GoToPreviousInput(MethodRequest methodRequest, object userContext)
@@ -60,10 +60,10 @@ namespace ControlRelay
             if (HdmiSwitchIdValid(payload._hdmiSwitchId))
             {
                 bool success = _devices[payload._hdmiSwitchId].GoToPreviousInput();
-                return GetMethodResponse(methodRequest, success);
+                return methodRequest.GetMethodResponse(success);
             }
 
-            return GetMethodResponse(methodRequest, false);
+            return methodRequest.GetMethodResponse(false);
         }
 
         private Task<MethodResponse> GetState(MethodRequest methodRequest, object userContext)
@@ -76,11 +76,11 @@ namespace ControlRelay
                 var result = _devices[payload._hdmiSwitchId].GetState();
                 if (result != null)
                 {
-                    return GetMethodResponseSerialize(methodRequest, true, result);
+                    return methodRequest.GetMethodResponseSerialize(true, result);
                 }
             }
 
-            return GetMethodResponse(methodRequest, false);
+            return methodRequest.GetMethodResponse(false);
         }
 
         private Task<MethodResponse> SetInputPort(MethodRequest methodRequest, object userContext)
@@ -95,10 +95,10 @@ namespace ControlRelay
             if (HdmiSwitchIdValid(payload._hdmiSwitchId) && payload.inputPort.Valid())
             {
                 bool success = _devices[payload._hdmiSwitchId].SetInputPort(payload.inputPort);
-                return GetMethodResponse(methodRequest, success);
+                return methodRequest.GetMethodResponse(success);
             }
 
-            return GetMethodResponse(methodRequest, false);
+            return methodRequest.GetMethodResponse(false);
         }
 
         private Task<MethodResponse> GetAvailable(MethodRequest methodRequest, object userContext)
@@ -109,10 +109,10 @@ namespace ControlRelay
             if (HdmiSwitchIdValid(payload._hdmiSwitchId))
             {
                 var result = _devices[payload._hdmiSwitchId].GetAvailable();
-                return GetMethodResponseSerialize(methodRequest, true, result);
+                return methodRequest.GetMethodResponseSerialize(true, result);
             }
 
-            return GetMethodResponse(methodRequest, false);
+            return methodRequest.GetMethodResponse(false);
         }
 
         private bool HdmiSwitchIdValid(int hdmiSwitchId)

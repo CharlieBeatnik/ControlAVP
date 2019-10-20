@@ -108,11 +108,13 @@
     <Compile Include="DeviceCloudInterfaceManager.cs" />
     <Compile Include="DeviceCloudInterface\ApcAP8959EU3CloudInterface.cs" />
     <Compile Include="DeviceCloudInterface\AtenVS0801HCloudInterface.cs" />
+    <Compile Include="DeviceCloudInterface\CommandBatchInterface.cs" />
     <Compile Include="DeviceCloudInterface\DeviceCloudInterface.cs" />
     <Compile Include="DeviceCloudInterface\ExtronDSC301HDCloudInterface.cs" />
     <Compile Include="DeviceCloudInterface\ExtronMVX44VGACloudInterface.cs" />
     <Compile Include="DeviceCloudInterface\OSSCCloudInterface.cs" />
     <Compile Include="DeviceCloudInterface\SonyKDL60W855CloudInterface.cs" />
+    <Compile Include="Extensions\MethodRequestExtensions.cs" />
     <Compile Include="StartupTask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
