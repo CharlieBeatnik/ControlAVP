@@ -17,7 +17,7 @@ namespace ControlAVP.Pages
     public class IndexModel : PageModel
     {
         private readonly IConfiguration _configuration;
-        private readonly IHostingEnvironment _environment;
+        private readonly IWebHostEnvironment _environment;
 
         private string _connectionString;
         private string _deviceId;
@@ -31,7 +31,7 @@ namespace ControlAVP.Pages
             public IEnumerable<string> OutletConfirmation { get; set; }
         }
 
-        public IndexModel(IConfiguration configuration, IHostingEnvironment environment)
+        public IndexModel(IConfiguration configuration, IWebHostEnvironment environment)
         {
             _configuration = configuration;
             _environment = environment;

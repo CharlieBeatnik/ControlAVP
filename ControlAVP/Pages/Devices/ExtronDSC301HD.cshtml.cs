@@ -15,7 +15,7 @@ namespace ControlAVP.Pages.Devices
     public class ExtronDSC301HDModel : PageModel
     {
         private readonly IConfiguration _configuration;
-        private readonly IHostingEnvironment _environment;
+        private readonly IWebHostEnvironment _environment;
 
         private string _connectionString;
         private string _deviceId;
@@ -31,7 +31,7 @@ namespace ControlAVP.Pages.Devices
         }
         public DeviceInfo DeviceInfoCache { get; private set; } = new DeviceInfo();
 
-        public ExtronDSC301HDModel(IConfiguration configuration, IHostingEnvironment environment)
+        public ExtronDSC301HDModel(IConfiguration configuration, IWebHostEnvironment environment)
         {
             _configuration = configuration;
             _environment = environment;

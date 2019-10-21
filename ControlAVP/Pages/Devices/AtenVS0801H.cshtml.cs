@@ -16,7 +16,7 @@ namespace ControlAVP.Pages.Devices
     public class AtenVS0801HModel : PageModel
     {
         private readonly IConfiguration _configuration;
-        private readonly IHostingEnvironment _environment;
+        private readonly IWebHostEnvironment _environment;
 
         private string _connectionString;
         private string _deviceId;
@@ -32,7 +32,7 @@ namespace ControlAVP.Pages.Devices
         }
         public List<DeviceInfo> DeviceInfoCaches { get; private set; } = new List<DeviceInfo>();
 
-        public AtenVS0801HModel(IConfiguration configuration, IHostingEnvironment environment)
+        public AtenVS0801HModel(IConfiguration configuration, IWebHostEnvironment environment)
         {
             _configuration = configuration;
             _environment = environment;

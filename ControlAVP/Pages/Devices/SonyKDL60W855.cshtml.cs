@@ -15,7 +15,7 @@ namespace ControlAVP.Pages.Devices
     public class SonyKDL60W855Model : PageModel
     {
         private readonly IConfiguration _configuration;
-        private readonly IHostingEnvironment _environment;
+        private readonly IWebHostEnvironment _environment;
 
         private string _connectionString;
         private string _deviceId;
@@ -29,7 +29,7 @@ namespace ControlAVP.Pages.Devices
         }
         public DeviceInfo DeviceInfoCache { get; private set; } = new DeviceInfo();
 
-        public SonyKDL60W855Model(IConfiguration configuration, IHostingEnvironment environment)
+        public SonyKDL60W855Model(IConfiguration configuration, IWebHostEnvironment environment)
         {
             _configuration = configuration;
             _environment = environment;

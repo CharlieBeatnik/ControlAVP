@@ -28,7 +28,8 @@
     <AppInstallerUri>http://test</AppInstallerUri>
     <AppInstallerUpdateFrequency>1</AppInstallerUpdateFrequency>
     <AppInstallerCheckForUpdateFrequency>OnApplicationRun</AppInstallerCheckForUpdateFrequency>
-    <PackageCertificateThumbprint>82D1AD644F1F9847B9BCDB8B2C81AF838FBEF9C1</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>9DF1AE9159F9C6567AD3D5E19D43AC4BBA8A59C7</PackageCertificateThumbprint>
+    <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>

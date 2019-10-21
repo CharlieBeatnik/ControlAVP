@@ -44,7 +44,7 @@ namespace ControlRelay
 
             if (result != null)
             {
-                string json = JsonConvert.SerializeObject(result, new VersionConverter());
+                string json = JsonConvert.SerializeObject(result);
                 return methodRequest.GetMethodResponse(true, json);
             }
             else

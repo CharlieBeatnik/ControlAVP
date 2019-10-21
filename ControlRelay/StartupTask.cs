@@ -8,6 +8,7 @@ using NLog;
 using System.IO;
 using NLog.Config;
 using NLog.Targets;
+using System.Collections.Generic;
 
 //using Windows.UI.Core;
 //using Windows.ApplicationModel.Core;
@@ -34,6 +35,12 @@ namespace ControlRelay
             //config.AddRule(LogLevel.Debug, LogLevel.Fatal, logfile);
             //LogManager.Configuration = config;
             _logger = LogManager.GetCurrentClassLogger();
+
+            //Need to ensure System.Version types get serialised as a string in JSON, this ensure correct deserialisation.
+            JsonConvert.DefaultSettings = () => new JsonSerializerSettings
+            {
+                Converters = new List<JsonConverter> { new Newtonsoft.Json.Converters.VersionConverter() }
+            };
         }
 
         public async void Run(IBackgroundTaskInstance taskInstance)

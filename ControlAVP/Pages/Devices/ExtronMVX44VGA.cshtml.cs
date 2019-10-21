@@ -15,7 +15,7 @@ namespace ControlAVP.Pages.Devices
     public class ExtronMVX44VGAModel : PageModel
     {
         private readonly IConfiguration _configuration;
-        private readonly IHostingEnvironment _environment;
+        private readonly IWebHostEnvironment _environment;
 
         private string _connectionString;
         private string _deviceId;
@@ -30,7 +30,7 @@ namespace ControlAVP.Pages.Devices
         }
         public DeviceInfo DeviceInfoCache { get; private set; } = new DeviceInfo();
 
-        public ExtronMVX44VGAModel(IConfiguration configuration, IHostingEnvironment environment)
+        public ExtronMVX44VGAModel(IConfiguration configuration, IWebHostEnvironment environment)
         {
             _configuration = configuration;
             _environment = environment;
