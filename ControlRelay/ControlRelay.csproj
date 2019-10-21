@@ -28,7 +28,7 @@
     <AppInstallerUri>http://test</AppInstallerUri>
     <AppInstallerUpdateFrequency>1</AppInstallerUpdateFrequency>
     <AppInstallerCheckForUpdateFrequency>OnApplicationRun</AppInstallerCheckForUpdateFrequency>
-    <PackageCertificateThumbprint>E9151F90AA8C7C2D065470D09F2ACA921AAEBD39</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>82D1AD644F1F9847B9BCDB8B2C81AF838FBEF9C1</PackageCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>
@@ -153,7 +153,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Azure.Devices.Client">
-      <Version>1.21.0</Version>
+      <Version>1.21.1</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.2.9</Version>
