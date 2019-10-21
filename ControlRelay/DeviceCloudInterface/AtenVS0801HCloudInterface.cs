@@ -13,20 +13,9 @@ namespace ControlRelay
     {
         private List<AtenVS0801H> _devices = new List<AtenVS0801H>();
 
-        public struct Settings
+        public AtenVS0801HCloudInterface(List<AtenVS0801H> devices)
         {
-            public string PortId { get; set; }
-        }
-
-        private List<Settings> _settings;
-
-        public AtenVS0801HCloudInterface(List<Settings> settings)
-        {
-            _settings = settings;
-            foreach (var setting in settings)
-            {
-                _devices.Add(new AtenVS0801H(setting.PortId));
-            }
+            _devices = devices;
         }
 
         public override IEnumerable<MethodHandlerInfo> GetMethodHandlerInfos(DeviceClient deviceClient)

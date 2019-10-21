@@ -14,19 +14,9 @@ namespace ControlRelay
     {
         private SonyKDL60W855 _device;
 
-        public struct Settings
+        public SonyKDL60W855CloudInterface(SonyKDL60W855 device)
         {
-            public string Host { get; set; }
-            public string PhysicalAddress { get; set; }
-            public string PreSharedKey { get; set; }
-        }
-
-        private Settings _settings;
-
-        public SonyKDL60W855CloudInterface(Settings settings)
-        {
-            _settings = settings;
-            _device = new SonyKDL60W855(IPAddress.Parse(_settings.Host), PhysicalAddress.Parse(_settings.PhysicalAddress), _settings.PreSharedKey);
+            _device = device;
         }
 
         public override IEnumerable<MethodHandlerInfo> GetMethodHandlerInfos(DeviceClient deviceClient)

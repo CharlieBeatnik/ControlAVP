@@ -12,16 +12,9 @@ namespace ControlRelay
     {
         private OSSC _device;
 
-        public struct Settings
+        public OSSCCloudInterface(OSSC device)
         {
-        }
-
-        private Settings _settings;
-
-        public OSSCCloudInterface(Settings settings, SerialBlaster serialBlaster)
-        {
-            _settings = settings;
-            _device = new OSSC(serialBlaster);
+            _device = device;
         }
 
         public override IEnumerable<MethodHandlerInfo> GetMethodHandlerInfos(DeviceClient deviceClient)

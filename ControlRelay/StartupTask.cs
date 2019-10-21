@@ -9,6 +9,8 @@ using System.IO;
 using NLog.Config;
 using NLog.Targets;
 using System.Collections.Generic;
+using ControllableDevice;
+using Newtonsoft.Json.Linq;
 
 //using Windows.UI.Core;
 //using Windows.ApplicationModel.Core;
@@ -20,6 +22,8 @@ namespace ControlRelay
     {
         private static BackgroundTaskDeferral _Deferral = null;
 
+        private List<object> _devices;
+        private List<DeviceCloudInterface> _deviceCloudInterfaces;
         private DeviceCloudInterfaceManager _deviceCloudInterfaceManager;
         private Logger _logger;
 
@@ -49,7 +53,20 @@ namespace ControlRelay
 
             await Windows.System.Threading.ThreadPool.RunAsync(workItem =>
             {
-                _deviceCloudInterfaceManager = new DeviceCloudInterfaceManager("settings.json");
+                JObject json;
+                using (StreamReader r = new StreamReader("settings.json"))
+                {
+                    string jsonString = r.ReadToEnd();
+                    json = JObject.Parse(jsonString);
+                }
+
+                var deviceTypesJson = json["Devices"];
+                _devices = ControlRelayInitialisation.CreateControllableDevices(deviceTypesJson);
+
+
+                var connectionString = json["Azure"]["IoTHub"]["ConnectionString"].ToString();
+                _deviceCloudInterfaces = ControlRelayInitialisation.CreateDeviceCloudInterfaces(_devices);
+                _deviceCloudInterfaceManager = new DeviceCloudInterfaceManager(connectionString, _deviceCloudInterfaces);
             });
         }
 

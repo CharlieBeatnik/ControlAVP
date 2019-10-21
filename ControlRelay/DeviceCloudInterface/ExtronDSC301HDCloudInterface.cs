@@ -14,17 +14,9 @@ namespace ControlRelay
     {
         private ExtronDSC301HD _device;
 
-        public struct Settings
+        public ExtronDSC301HDCloudInterface(ExtronDSC301HD device)
         {
-            public string PortId { get; set; }
-        }
-
-        private Settings _settings;
-
-        public ExtronDSC301HDCloudInterface(Settings settings)
-        {
-            _settings = settings;
-            _device = new ExtronDSC301HD(_settings.PortId);
+            _device = device;
         }
 
         public override IEnumerable<MethodHandlerInfo> GetMethodHandlerInfos(DeviceClient deviceClient)

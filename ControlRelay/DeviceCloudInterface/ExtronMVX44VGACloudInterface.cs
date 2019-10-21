@@ -14,17 +14,9 @@ namespace ControlRelay
     {
         private ExtronMVX44VGA _device;
 
-        public struct Settings
+        public ExtronMVX44VGACloudInterface(ExtronMVX44VGA device)
         {
-            public string PortId { get; set; }
-        }
-
-        private Settings _settings;
-
-        public ExtronMVX44VGACloudInterface(Settings settings)
-        {
-            _settings = settings;
-            _device = new ExtronMVX44VGA(_settings.PortId);
+            _device = device;
         }
 
         public override IEnumerable<MethodHandlerInfo> GetMethodHandlerInfos(DeviceClient deviceClient)

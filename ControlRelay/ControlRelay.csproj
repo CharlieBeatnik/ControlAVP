@@ -106,6 +106,8 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="CommandBatchProcessor.cs" />
+    <Compile Include="ControlRelayInitialisation.cs" />
     <Compile Include="DeviceCloudInterfaceManager.cs" />
     <Compile Include="DeviceCloudInterface\ApcAP8959EU3CloudInterface.cs" />
     <Compile Include="DeviceCloudInterface\AtenVS0801HCloudInterface.cs" />
