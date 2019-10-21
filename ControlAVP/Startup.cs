@@ -35,7 +35,8 @@ namespace ControlAVP
                 options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             }).AddCookie(options => { options.LoginPath = "/Login"; options.ReturnUrlParameter = CookieAuthenticationDefaults.ReturnUrlParameter; });
-            services.AddMvc().AddRazorPagesOptions(options =>
+
+            services.AddRazorPages(options =>
             {
                 options.Conventions.AuthorizeFolder("/");
                 options.Conventions.AllowAnonymousToPage("/Login");
@@ -49,8 +50,7 @@ namespace ControlAVP
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            services.AddRazorPages();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -73,7 +73,16 @@ namespace ControlAVP
                 MinimumSameSitePolicy = SameSiteMode.None
             });
 
+            app.UseRouting();
+
             app.UseAuthentication();
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapRazorPages();
+                endpoints.MapControllers();
+            });
         }
     }
 }
