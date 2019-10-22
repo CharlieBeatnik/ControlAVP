@@ -30,19 +30,6 @@ namespace ControlRelay
             CreateDeviceClient();
         }
 
-        private void AddCloudInterface<T>(Func<T> creator) where T : DeviceCloudInterface
-        {
-            try
-            {
-                T cloudInterface = creator();
-                _deviceCloudInterfaces.Add(cloudInterface);
-            }
-            catch (Exception)
-            {
-
-            }
-        }
-
         private void CreateDeviceClient()
         {
             _logger.Debug(string.Empty);

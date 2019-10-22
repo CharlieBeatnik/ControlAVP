@@ -8,11 +8,11 @@ namespace ControlRelay
 {
     internal class CommandBatchProcessor
     {
-        //Dictionary<string, object> _devices;
+        List<object> _devices;
 
-        public CommandBatchProcessor()
+        public CommandBatchProcessor(List<object> devices)
         {
-            //_devices = devices;
+            _devices = devices;
         }
     }
 }
