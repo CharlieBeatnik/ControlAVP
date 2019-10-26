@@ -269,6 +269,11 @@ namespace ControllableDevice
 
         public bool SetOutputRate(Edid value)
         {
+            if(value == null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+
             if (!_rs232Device.Enabled) return false;
 
             var result = _rs232Device.WriteWithResponse($"{_cmdEsc}{value.Id}RATE{_cmdCr}", @"^Rate[0-9]+$", TimeSpan.FromSeconds(5));
@@ -297,6 +302,11 @@ namespace ControllableDevice
 
         public bool SetImagePositionAndSize(PositionAndSize value)
         {
+            if(value == null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+
             if (!_rs232Device.Enabled) return false;
 
             string pattern = $@"^Ximg({_patternNumber})[*]({_patternNumber})[*]({_patternNumber})[*]({_patternNumber})$";

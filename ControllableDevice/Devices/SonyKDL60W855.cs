@@ -49,7 +49,7 @@ namespace ControllableDevice
             _disposed = true;
         }
 
-        private JObject GetDefaultJsonPayload()
+        private static JObject GetDefaultJsonPayload()
         {
             return new JObject(
                       new JProperty("id", 20),
@@ -70,7 +70,7 @@ namespace ControllableDevice
             return _jsonRpcDevice.Post(jsonIn, url);
         }
 
-        private bool ResultIsSuccessful(JObject result)
+        private static bool ResultIsSuccessful(JObject result)
         {
             if (result == null) return false;
             if (result["error"] != null) return false;

@@ -1,4 +1,4 @@
-﻿using Cyotek.Collections.Generic;
+﻿using Collections.Generic;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -34,7 +34,6 @@ namespace ControllableDevice
 
         private readonly int _messageStoreCapacity = 1024;
         private readonly uint _readBufferLength = 1024;
-        private readonly TimeSpan _defaultMonitorDeviceTimerInterval = TimeSpan.FromSeconds(10);
 
         //Serial device defaults
         private TimeSpan _writeTimeout = TimeSpan.FromMilliseconds(50);
@@ -64,6 +63,8 @@ namespace ControllableDevice
                     }
                 }
             }
+
+            get { return _writeTimeout; }
         }
 
         public TimeSpan ReadTimeout
@@ -79,6 +80,8 @@ namespace ControllableDevice
                     }
                 }
             }
+
+            get { return _readTimeout; }
         }
 
         public uint BaudRate
@@ -94,6 +97,8 @@ namespace ControllableDevice
                     }
                 }
             }
+
+            get { return _baudRate; }
         }
 
         public ushort DataBits
@@ -109,6 +114,8 @@ namespace ControllableDevice
                     }
                 }
             }
+
+            get { return _dataBits; }
         }
 
         public SerialParity Parity
@@ -124,6 +131,8 @@ namespace ControllableDevice
                     }
                 }
             }
+
+            get { return _parity; }
         }
 
         public SerialStopBitCount StopBits
@@ -139,6 +148,8 @@ namespace ControllableDevice
                     }
                 }
             }
+
+            get { return _stopBits; }
         }
 
         public bool Enabled { get; private set; } = false;
@@ -147,7 +158,7 @@ namespace ControllableDevice
         {
             if (string.IsNullOrEmpty(partialId))
             {
-                throw new ArgumentException("Must not be Null or Empty.", "partialId");
+                throw new ArgumentException("Must not be Null or Empty.", nameof(partialId));
             }
             _partialId = partialId;
 
@@ -221,7 +232,9 @@ namespace ControllableDevice
                             Enabled = true;
                         }
                     }
+#pragma warning disable CA1031 // Do not catch general exception types
                     catch (Exception)
+#pragma warning restore CA1031 // Do not catch general exception types
                     {
                         //Many different exception types can be thrown if the serial device is pulled during initialisation
                         return;
@@ -247,10 +260,12 @@ namespace ControllableDevice
                     _readCancellationTokenSource = null;
 
                     _dataReader?.DetachStream();
+                    _dataReader?.Dispose();
                     _dataReader = null;
 
                     _dataWriter?.DetachStream();
-                    _dataReader = null;
+                    _dataWriter?.Dispose();
+                    _dataWriter = null;
 
                     _serialDevice?.Dispose();
                     _serialDevice = null;
@@ -292,11 +307,14 @@ namespace ControllableDevice
                     }
                 }
             }
-            catch (Exception ex)
+            catch(AggregateException ae)
             {
-                if (ex is TaskCanceledException || ex is OperationCanceledException)
+                foreach (var ie in ae.InnerExceptions)
                 {
-                    
+                    if (!(ie is TaskCanceledException) && !(ie is OperationCanceledException))
+                    {
+                        throw;
+                    }
                 }
             }
         }
@@ -432,7 +450,7 @@ namespace ControllableDevice
 
                         if (messageStore.Count < numResponses)
                         {
-                            throw new ArgumentException($"Unable to return {numResponses} responses, only {messageStore.Count} available.", "numResponses");
+                            throw new ArgumentException($"Unable to return {numResponses} responses, only {messageStore.Count} available.", nameof(numResponses));
                         }
                         int take = Math.Min(numResponses, messageStore.Count);
                         return messageStore.TakeLast(take).ToList();
@@ -454,7 +472,11 @@ namespace ControllableDevice
 
         private static string GetDeviceId(string partialId)
         {
-            var devices = Task.Run(async () => await GetAvailableDevices()).Result;
+            //Regarding: ConfigureAwait
+            //Call ConfigureAwait(false) on the task to schedule continuations to the thread pool,
+            //thereby avoiding a deadlock on the UI thread. Passing false is a good option for app-independent libraries.
+
+           var devices = Task.Run(async () => await GetAvailableDevices().ConfigureAwait(false)).Result;
             var deviceInformation = devices.FirstOrDefault(s => s.Id.Contains(partialId));
 
             return deviceInformation?.Id;

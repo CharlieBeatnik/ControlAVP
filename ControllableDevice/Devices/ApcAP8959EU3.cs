@@ -12,7 +12,7 @@ namespace ControllableDevice
         private bool _disposed = false;
         private SshDevice _sshDevice;
 
-        private static readonly int _outletCount = 24;
+        private const int _outletCount = 24;
         public static readonly string TerminalPrompt = "apc>";
 
         public ApcAP8959EU3(string host, int port, string username, string password)
@@ -183,7 +183,7 @@ namespace ControllableDevice
             }
         }
 
-        private bool ParseCommonLine(string line, out int id, out string name, out string tail)
+        private static bool ParseCommonLine(string line, out int id, out string name, out string tail)
         {
             // Examples
             // 21: Outlet 21: Off
@@ -219,7 +219,7 @@ namespace ControllableDevice
             return CommandSuccessful(output);
         }
 
-        private bool CommandSuccessful(IEnumerable<string> commandOutput)
+        private static bool CommandSuccessful(IEnumerable<string> commandOutput)
         {
             //Look for success string in command output
             string found = commandOutput.FirstOrDefault(o => o == "E000: Success");

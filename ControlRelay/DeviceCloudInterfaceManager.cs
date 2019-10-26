@@ -77,6 +77,7 @@ namespace ControlRelay
             catch(Exception exp)
             {
                 _logger.Error(exp);
+                throw;
             }
         }
 
@@ -98,6 +99,7 @@ namespace ControlRelay
         private void ResetConnection(ConnectionStatus status, ConnectionStatusChangeReason reason)
         {
             _logger.Debug("Resetting Connection");
+            _logger.Debug($"Status: {status.ToString()}, Reason: {reason.ToString()}");
 
             // Attempt to close any existing connections before creating a new one
             if (_deviceClient != null)

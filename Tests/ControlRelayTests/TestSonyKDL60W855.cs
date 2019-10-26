@@ -12,12 +12,17 @@ namespace Tests
     [TestClass]
     public class TestSonyKDL60W855
     {
-        private static readonly string _settingsFile = "settings.json";
+        private const string _settingsFile = "settings.json";
         private static JToken _deviceSettings;
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext tc)
         {
+            if (tc == null)
+            {
+                throw new ArgumentNullException(nameof(tc));
+            }
+
             JObject jsonParsed;
             using (StreamReader r = new StreamReader(_settingsFile))
             {
@@ -25,7 +30,7 @@ namespace Tests
                 jsonParsed = JObject.Parse(json);
             }
 
-            _deviceSettings = jsonParsed["SonyKDL60W855"];
+            _deviceSettings = jsonParsed["Devices"]["SonyKDL60W855"][0];
         }
 
         [ClassCleanup]
@@ -54,16 +59,16 @@ namespace Tests
 
         public static SonyKDL60W855 CreateDevice()
         {
-            return new SonyKDL60W855(IPAddress.Parse(_deviceSettings["Host"].ToString()),
-                                     PhysicalAddress.Parse(_deviceSettings["PhysicalAddress"].ToString()),
-                                     _deviceSettings["PreSharedKey"].ToString());
+            return new SonyKDL60W855(IPAddress.Parse(_deviceSettings["host"].ToString()),
+                                     PhysicalAddress.Parse(_deviceSettings["physicalAddress"].ToString()),
+                                     _deviceSettings["preSharedKey"].ToString());
         }
 
         public static SonyKDL60W855 CreateInvalidIPDevice()
         {
             return new SonyKDL60W855(IPAddress.Parse("192.0.2.0"),
-                                     PhysicalAddress.Parse(_deviceSettings["PhysicalAddress"].ToString()),
-                                     _deviceSettings["PreSharedKey"].ToString());
+                                     PhysicalAddress.Parse(_deviceSettings["physicalAddress"].ToString()),
+                                     _deviceSettings["preSharedKey"].ToString());
         }
 
         [TestMethod]

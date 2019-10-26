@@ -42,15 +42,8 @@ namespace ControlRelay
 
         public static void AddCloudInterface<T>(Func<T> creator, List<DeviceCloudInterface> list) where T : DeviceCloudInterface
         {
-            try
-            {
-                T cloudInterface = creator();
-                list.Add(cloudInterface);
-            }
-            catch (Exception)
-            {
-
-            }
+            T cloudInterface = creator();
+            list.Add(cloudInterface);
         }
 
         public static List<object> CreateControllableDevices(JToken deviceTypesJson)
@@ -93,7 +86,7 @@ namespace ControlRelay
                                 parameters.Add(PhysicalAddress.Parse(value));
                                 break;
                             default:
-                                //Else rely on an explicit case
+                                //Default is to rely on an explicit case
                                 parameters.Add(Convert.ChangeType(value, parameterInfo.ParameterType));
                                 break;
                         }

@@ -11,36 +11,36 @@ using Newtonsoft.Json.Converters;
 
 namespace ControlRelay
 {
-    class CommandBatchInterface : DeviceCloudInterface
-    {
-        public struct Settings
-        {
-        }
+    //class CommandBatchInterface : DeviceCloudInterface
+    //{
+    //    public struct Settings
+    //    {
+    //    }
 
-        private Settings _settings;
+    //    private Settings _settings;
 
-        public CommandBatchInterface(Settings settings)
-        {
-            _settings = settings;
-        }
+    //    public CommandBatchInterface(Settings settings)
+    //    {
+    //        _settings = settings;
+    //    }
 
-        public override IEnumerable<MethodHandlerInfo> GetMethodHandlerInfos(DeviceClient deviceClient)
-        {
-            yield return new MethodHandlerInfo("ExecuteCommandBatch", ExecuteCommandBatch);
-        }
+    //    public override IEnumerable<MethodHandlerInfo> GetMethodHandlerInfos(DeviceClient deviceClient)
+    //    {
+    //        yield return new MethodHandlerInfo("ExecuteCommandBatch", ExecuteCommandBatch);
+    //    }
 
-        private Task<MethodResponse> ExecuteCommandBatch(MethodRequest methodRequest, object userContext)
-        {
-            bool success = false;
-            //var payloadDefintion = new
-            //{
-            //    commandName = (CommandName)(-1),
-            //};
+    //    private Task<MethodResponse> ExecuteCommandBatch(MethodRequest methodRequest, object userContext)
+    //    {
+    //        bool success = false;
+    //        //var payloadDefintion = new
+    //        //{
+    //        //    commandName = (CommandName)(-1),
+    //        //};
 
-            //var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
+    //        //var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
 
-            success = true;
-            return methodRequest.GetMethodResponse(success);
-        }
-    }
+    //        success = true;
+    //        return methodRequest.GetMethodResponse(success);
+    //    }
+    //}
 }

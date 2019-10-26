@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace ControlRelay
 {
-    internal class CommandBatchProcessor
-    {
-        List<object> _devices;
+    //internal class CommandBatchProcessor
+    //{
+    //    List<object> _devices;
 
-        public CommandBatchProcessor(List<object> devices)
-        {
-            _devices = devices;
-        }
-    }
+    //    public CommandBatchProcessor(List<object> devices)
+    //    {
+    //        _devices = devices;
+    //    }
+    //}
 }

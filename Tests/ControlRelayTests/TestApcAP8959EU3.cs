@@ -15,7 +15,7 @@ namespace Tests
     [TestClass]
     public class TestApcAP8959EU3
     {
-        private static readonly string _settingsFile = "settings.json";
+        private const string _settingsFile = "settings.json";
 
         private static string _host;
         private static int _port;
@@ -25,6 +25,11 @@ namespace Tests
         [ClassInitialize]
         public static void ClassInitialize(TestContext tc)
         {
+            if(tc == null)
+            {
+                throw new ArgumentNullException(nameof(tc));
+            }
+
             JObject jsonParsed;
 
             using (StreamReader r = new StreamReader(_settingsFile))
@@ -33,13 +38,13 @@ namespace Tests
                 jsonParsed = JObject.Parse(json);
             }
 
-            _host = jsonParsed["ApcAP8959EU3"]["Host"].ToString();
-            _port = int.Parse(jsonParsed["ApcAP8959EU3"]["Port"].ToString());
-            _username = jsonParsed["ApcAP8959EU3"]["Username"].ToString();
-            _password = jsonParsed["ApcAP8959EU3"]["Password"].ToString();
+            _host = jsonParsed["Devices"]["ApcAP8959EU3"][0]["host"].ToString();
+            _port = int.Parse(jsonParsed["Devices"]["ApcAP8959EU3"][0]["port"].ToString());
+            _username = jsonParsed["Devices"]["ApcAP8959EU3"][0]["username"].ToString();
+            _password = jsonParsed["Devices"]["ApcAP8959EU3"][0]["password"].ToString();
         }
 
-        public ApcAP8959EU3 CreateDevice()
+        public static ApcAP8959EU3 CreateDevice()
         {
             return new ApcAP8959EU3(_host, _port, _username, _password);
         }
@@ -68,28 +73,36 @@ namespace Tests
         [ExpectedException(typeof(ArgumentException))]
         public void GivenInvalidHost_WhenNewDevice_ThenExceptionThrown()
         {
-            var device = new ApcAP8959EU3("0.0.0.0", _port, _username, _password);
+            using (var device = new ApcAP8959EU3("0.0.0.0", _port, _username, _password))
+            {
+            }
         }
 
         [TestMethod]
         [ExpectedException(typeof(SocketException))]
         public void GivenInvalidPort_WhenNewDevice_ThenExceptionThrown()
         {
-            var device = new ApcAP8959EU3(_host, 0, _username, _password);
+            using (var device = new ApcAP8959EU3(_host, 0, _username, _password))
+            {
+            }
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void GivenInvalidUsername_WhenNewDevice_ThenExceptionThrown()
         {
-            var device = new ApcAP8959EU3(_host, _port, "", _password);
+            using (var device = new ApcAP8959EU3(_host, _port, "", _password))
+            {
+            }
         }
 
         [TestMethod]
         [ExpectedException(typeof(SshConnectionException))]
         public void GivenInvalidPassword_WhenNewDevice_ThenExceptionThrown()
         {
-            var device = new ApcAP8959EU3(_host, _port, _username, "");
+            using (var device = new ApcAP8959EU3(_host, _port, _username, ""))
+            {
+            }
         }
 
         [TestMethod]
@@ -104,7 +117,7 @@ namespace Tests
                 var outlets = device.GetOutlets();
                 if (outlets == null) Assert.Fail();
 
-                var outlet = outlets.FirstOrDefault(o => o.Name.Contains(outletNamePartial));
+                var outlet = outlets.FirstOrDefault(o => o.Name.Contains(outletNamePartial, StringComparison.CurrentCulture));
                 if (outlet == null) Assert.Fail();
 
                 //Ensure outlet starts in the Off state
@@ -116,7 +129,7 @@ namespace Tests
                     outlets = device.GetOutletsWaitForPending();
                     if (outlets == null) Assert.Fail();
 
-                    outlet = outlets.FirstOrDefault(o => o.Name.Contains(outletNamePartial));
+                    outlet = outlets.FirstOrDefault(o => o.Name.Contains(outletNamePartial, StringComparison.CurrentCulture));
                     if (outlet == null) Assert.Fail();
                     Assert.IsTrue(outlet.State == Outlet.PowerState.Off);
                 }
@@ -129,7 +142,7 @@ namespace Tests
                 if (outlets == null) Assert.Fail();
 
                 //Check outlet is now on
-                outlet = outlets.FirstOrDefault(o => o.Name.Contains(outletNamePartial));
+                outlet = outlets.FirstOrDefault(o => o.Name.Contains(outletNamePartial, StringComparison.CurrentCulture));
                 if (outlet == null) Assert.Fail();
                 Assert.IsTrue(outlet.State == Outlet.PowerState.On);
             }

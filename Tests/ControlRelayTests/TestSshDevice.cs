@@ -14,7 +14,7 @@ namespace Tests
     [TestClass]
     public class TestSshDevice
     {
-        private static readonly string _settingsFile = "settings.json";
+        private const string _settingsFile = "settings.json";
 
         private static string _host;
         private static int _port;
@@ -24,6 +24,11 @@ namespace Tests
         [ClassInitialize]
         public static void ClassInitialize(TestContext tc)
         {
+            if (tc == null)
+            {
+                throw new ArgumentNullException(nameof(tc));
+            }
+
             JObject jsonParsed;
 
             using (StreamReader r = new StreamReader(_settingsFile))
@@ -32,14 +37,14 @@ namespace Tests
                 jsonParsed = JObject.Parse(json);
             }
 
-            _host = jsonParsed["ApcAP8959EU3"]["Host"].ToString();
-            _port = int.Parse(jsonParsed["ApcAP8959EU3"]["Port"].ToString());
-            _username = jsonParsed["ApcAP8959EU3"]["Username"].ToString();
-            _password = jsonParsed["ApcAP8959EU3"]["Password"].ToString();
+            _host = jsonParsed["Devices"]["ApcAP8959EU3"][0]["host"].ToString();
+            _port = int.Parse(jsonParsed["Devices"]["ApcAP8959EU3"][0]["port"].ToString());
+            _username = jsonParsed["Devices"]["ApcAP8959EU3"][0]["username"].ToString();
+            _password = jsonParsed["Devices"]["ApcAP8959EU3"][0]["password"].ToString();
         }
 
 
-        public SshDevice CreateDevice()
+        public static SshDevice CreateDevice()
         {
             return new SshDevice(_host, _port, _username, _password, ApcAP8959EU3.TerminalPrompt);
         }
@@ -48,28 +53,36 @@ namespace Tests
         [ExpectedException(typeof(ArgumentException))]
         public void GivenInvalidHost_WhenNewDevice_ThenExceptionThrown()
         {
-            var device = new SshDevice("0.0.0.0", _port, _username, _password, ApcAP8959EU3.TerminalPrompt);
+            using (var device = new SshDevice("0.0.0.0", _port, _username, _password, ApcAP8959EU3.TerminalPrompt))
+            {
+            }
         }
 
         [TestMethod]
         [ExpectedException(typeof(SocketException))]
         public void GivenInvalidPort_WhenNewDevice_ThenExceptionThrown()
         {
-            var device = new SshDevice(_host, 0, _username, _password, ApcAP8959EU3.TerminalPrompt);
+            using (var device = new SshDevice(_host, 0, _username, _password, ApcAP8959EU3.TerminalPrompt))
+            {
+            }
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void GivenInvalidUsername_WhenNewDevice_ThenExceptionThrown()
         {
-            var device = new SshDevice(_host, _port, "", _password, ApcAP8959EU3.TerminalPrompt);
+            using (var device = new SshDevice(_host, _port, "", _password, ApcAP8959EU3.TerminalPrompt))
+            {
+            }
         }
 
         [TestMethod]
         [ExpectedException(typeof(SshConnectionException))]
         public void GivenInvalidPassword_WhenNewDevice_ThenExceptionThrown()
         {
-            var device = new SshDevice(_host, _port, _username, "", ApcAP8959EU3.TerminalPrompt);
+            using (var device = new SshDevice(_host, _port, _username, "", ApcAP8959EU3.TerminalPrompt))
+            {
+            }
         }
     }
 }

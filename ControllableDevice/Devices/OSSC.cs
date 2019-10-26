@@ -102,7 +102,7 @@ namespace ControllableDevice
         {
             if (!_commands.ContainsKey(commandName))
             {
-                throw new ArgumentException("Unknown command name.", "commandName");
+                throw new ArgumentException("Unknown command name.", nameof(commandName));
             }
 
             return _serialBlaster.SendCommand(SerialBlaster.Protocol.Nec, _commands[commandName].CodeWithChecksum);

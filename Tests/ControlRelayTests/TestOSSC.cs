@@ -10,13 +10,18 @@ namespace Tests
     [TestClass]
     public class TestOSSC
     {
-        private static readonly string _settingsFile = "settings.json";
+        private const string _settingsFile = "settings.json";
         private static JToken _serialBlasterSettings;
         private static JToken _deviceSettings;
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext tc)
         {
+            if (tc == null)
+            {
+                throw new ArgumentNullException(nameof(tc));
+            }
+
             JObject jsonParsed;
             using (StreamReader r = new StreamReader(_settingsFile))
             {
@@ -24,21 +29,21 @@ namespace Tests
                 jsonParsed = JObject.Parse(json);
             }
 
-            _serialBlasterSettings = jsonParsed["SerialBlaster"];
-            _deviceSettings = jsonParsed["OSSC"];
+            _serialBlasterSettings = jsonParsed["Devices"]["SerialBlaster"][0];
+            _deviceSettings = jsonParsed["Devices"]["OSSC"][0];
         }
 
-        public SerialBlaster CreateSerialBlaster()
+        public static SerialBlaster CreateSerialBlaster()
         {
-            return new SerialBlaster(_serialBlasterSettings["PortId"].ToString());
+            return new SerialBlaster(_serialBlasterSettings["portId"].ToString());
         }
 
-        public SerialBlaster CreateInvalidSerialBlaster()
+        public static SerialBlaster CreateInvalidSerialBlaster()
         {
             return new SerialBlaster("invalid");
         }
 
-        public OSSC CreateDevice(SerialBlaster serialBlaster)
+        public static OSSC CreateDevice(SerialBlaster serialBlaster)
         {
             return new OSSC(serialBlaster);
         }

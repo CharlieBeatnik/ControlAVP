@@ -56,6 +56,7 @@ namespace ControllableDevice
 
             if (disposing)
             {
+                _webClient.Dispose();
             }
 
             _disposed = true;

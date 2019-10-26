@@ -10,11 +10,17 @@ namespace Tests
     [TestClass]
     public class TestRs232Device
     {
-        private readonly string _settingsFile = "settings.json";
-        private JObject _settings;
+        private const string _settingsFile = "settings.json";
+        private static JObject _settings;
 
-        public TestRs232Device()
+        [ClassInitialize]
+        public static void ClassInitialize(TestContext tc)
         {
+            if (tc == null)
+            {
+                throw new ArgumentNullException(nameof(tc));
+            }
+
             using (StreamReader r = new StreamReader(_settingsFile))
             {
                 string json = r.ReadToEnd();
@@ -24,7 +30,7 @@ namespace Tests
 
         private Rs232Device CreateDevice()
         {
-            var device = new Rs232Device(_settings["SerialBlaster"]["PortId"].ToString());
+            var device = new Rs232Device(_settings["Devices"]["SerialBlaster"][0]["portId"].ToString());
             device.BaudRate = 115200;
             device.PreWrite = (x) =>
             {
@@ -38,14 +44,18 @@ namespace Tests
         [ExpectedException(typeof(ArgumentException))]
         public void GivenEmptyPartialId_WhenNewDevice_ThenArgumentExceptionThrown()
         {
-            var rs232Device = new Rs232Device(string.Empty);
+            using (var rs232Device = new Rs232Device(string.Empty))
+            {
+            }
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void GivenNullPartialId_WhenNewDevice_ThenArgumentExceptionThrown()
         {
-            var rs232Device = new Rs232Device(null);
+            using (var rs232Device = new Rs232Device(null))
+            {
+            }
         }
 
         [TestMethod]

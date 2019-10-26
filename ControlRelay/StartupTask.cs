@@ -11,6 +11,7 @@ using NLog.Targets;
 using System.Collections.Generic;
 using ControllableDevice;
 using Newtonsoft.Json.Linq;
+using System.Threading;
 
 //using Windows.UI.Core;
 //using Windows.ApplicationModel.Core;
@@ -49,6 +50,11 @@ namespace ControlRelay
 
         public async void Run(IBackgroundTaskInstance taskInstance)
         {
+            if(taskInstance == null)
+            {
+                throw new NullReferenceException();
+            }
+
             _Deferral = taskInstance.GetDeferral();
 
             await Windows.System.Threading.ThreadPool.RunAsync(workItem =>
@@ -68,10 +74,6 @@ namespace ControlRelay
                 _deviceCloudInterfaces = ControlRelayInitialisation.CreateDeviceCloudInterfaces(_devices);
                 _deviceCloudInterfaceManager = new DeviceCloudInterfaceManager(connectionString, _deviceCloudInterfaces);
             });
-        }
-
-        ~StartupTask()
-        {
         }
     }
 }

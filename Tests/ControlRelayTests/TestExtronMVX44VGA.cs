@@ -10,12 +10,17 @@ namespace Tests
     [TestClass]
     public class TestExtronMVX44VGA
     {
-        private static readonly string _settingsFile = "settings.json";
+        private const string _settingsFile = "settings.json";
         private static JToken _deviceSettings;
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext tc)
         {
+            if (tc == null)
+            {
+                throw new ArgumentNullException(nameof(tc));
+            }
+
             JObject jsonParsed;
             using (StreamReader r = new StreamReader(_settingsFile))
             {
@@ -23,15 +28,15 @@ namespace Tests
                 jsonParsed = JObject.Parse(json);
             }
 
-            _deviceSettings = jsonParsed["ExtronMVX44VGA"];
+            _deviceSettings = jsonParsed["Devices"]["ExtronMVX44VGA"][0];
         }
 
-        public ExtronMVX44VGA CreateDevice()
+        public static ExtronMVX44VGA CreateDevice()
         {
-            return new ExtronMVX44VGA(_deviceSettings["PortId"].ToString());
+            return new ExtronMVX44VGA(_deviceSettings["portId"].ToString());
         }
 
-        public ExtronMVX44VGA CreateInvalidDevice()
+        public static ExtronMVX44VGA CreateInvalidDevice()
         {
             return new ExtronMVX44VGA("invalid");
         }
@@ -69,14 +74,18 @@ namespace Tests
         [ExpectedException(typeof(ArgumentException))]
         public void GivenEmptyPartialId_WhenNewDevice_ThenExceptionThrown()
         {
-            var device = new ExtronMVX44VGA(string.Empty);
+            using (var device = new ExtronMVX44VGA(string.Empty))
+            {
+            }
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void GivenNullPartialId_WhenNewDevice_ThenExceptionThrown()
         {
-            var device = new ExtronMVX44VGA(null);
+            using (var device = new ExtronMVX44VGA(null))
+            {
+            }
         }
 
         [TestMethod]
@@ -214,7 +223,7 @@ namespace Tests
             }
         }
 
-        public void GivenInvalidDevice_WhenGetAvailable_ThenDeviceIsNotAvailable()
+        public static void GivenInvalidDevice_WhenGetAvailable_ThenDeviceIsNotAvailable()
         {
             using (var device = CreateInvalidDevice())
             {

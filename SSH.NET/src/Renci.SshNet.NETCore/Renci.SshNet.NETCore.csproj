@@ -8,6 +8,7 @@
     <AssemblyOriginatorKeyFile>../Renci.SshNet.snk</AssemblyOriginatorKeyFile>
     <LangVersion>5</LangVersion>
     <SignAssembly>true</SignAssembly>
+    <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\Renci.SshNet\**\*.cs" Exclude="..\Renci.SshNet\Properties\AssemblyInfo.cs">

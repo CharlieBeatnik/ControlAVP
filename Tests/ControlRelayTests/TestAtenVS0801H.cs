@@ -12,12 +12,17 @@ namespace Tests
     [TestClass]
     public class TestAtenVS0801H
     {
-        private static readonly string _settingsFile = "settings.json";
+        private const string _settingsFile = "settings.json";
         private static JToken _deviceSettings;
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext tc)
         {
+            if (tc == null)
+            {
+                throw new ArgumentNullException(nameof(tc));
+            }
+
             JObject jsonParsed;
             using (StreamReader r = new StreamReader(_settingsFile))
             {
@@ -25,15 +30,15 @@ namespace Tests
                 jsonParsed = JObject.Parse(json);
             }
 
-            _deviceSettings = jsonParsed["AtenVS0801H"][0];
+            _deviceSettings = jsonParsed["Devices"]["AtenVS0801H"][0];
         }
 
-        public AtenVS0801H CreateDevice()
+        public static AtenVS0801H CreateDevice()
         {
-            return new AtenVS0801H(_deviceSettings["PortId"].ToString());
+            return new AtenVS0801H(_deviceSettings["portId"].ToString());
         }
 
-        public AtenVS0801H CreateInvalidDevice()
+        public static AtenVS0801H CreateInvalidDevice()
         {
             return new AtenVS0801H("invalid");
         }
@@ -96,14 +101,18 @@ namespace Tests
         [ExpectedException(typeof(ArgumentException))]
         public void GivenEmptyPartialId_WhenNewDevice_ThenExceptionThrown()
         {
-            var device = new AtenVS0801H(string.Empty);
+            using (var device = new AtenVS0801H(string.Empty))
+            {
+            }
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void GivenNullPartialId_WhenNewDevice_ThenExceptionThrown()
         {
-            var device = new AtenVS0801H(null);
+            using (var device = new AtenVS0801H(null))
+            {
+            }
         }
 
         [TestMethod]

@@ -11,12 +11,17 @@ namespace Tests
     [TestClass]
     public class TestExtronDSC301HD
     {
-        private static readonly string _settingsFile = "settings.json";
+        private const string _settingsFile = "settings.json";
         private static JToken _deviceSettings;
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext tc)
         {
+            if (tc == null)
+            {
+                throw new ArgumentNullException(nameof(tc));
+            }
+
             JObject jsonParsed;
             using (StreamReader r = new StreamReader(_settingsFile))
             {
@@ -24,15 +29,15 @@ namespace Tests
                 jsonParsed = JObject.Parse(json);
             }
 
-            _deviceSettings = jsonParsed["ExtronDSC301HD"];
+            _deviceSettings = jsonParsed["Devices"]["ExtronDSC301HD"][0];
         }
 
-        public ExtronDSC301HD CreateDevice()
+        public static ExtronDSC301HD CreateDevice()
         {
-            return new ExtronDSC301HD(_deviceSettings["PortId"].ToString());
+            return new ExtronDSC301HD(_deviceSettings["portId"].ToString());
         }
 
-        public ExtronDSC301HD CreateInvalidDevice()
+        public static ExtronDSC301HD CreateInvalidDevice()
         {
             return new ExtronDSC301HD("invalid");
         }
@@ -162,6 +167,16 @@ namespace Tests
         }
 
         [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void GivenDevice_WhenSetOutputRateWithNullEdid_ThenArgumentNullExceptionThrown()
+        {
+            using (var device = CreateDevice())
+            {
+                var result = device.SetOutputRate(null);
+            }
+        }
+
+        [TestMethod]
         public void GivenDevice_WhenCreateAnotherDeviceWithSameID_ThenSecondDeviceIsNotAvailable()
         {
             using (var device1 = CreateDevice())
@@ -187,14 +202,18 @@ namespace Tests
         [ExpectedException(typeof(ArgumentException))]
         public void GivenEmptyPartialId_WhenNewDevice_ThenExceptionThrown()
         {
-            var device = new ExtronDSC301HD(string.Empty);
+            using (var device = new ExtronDSC301HD(string.Empty))
+            {
+            }
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void GivenNullPartialId_WhenNewDevice_ThenExceptionThrown()
         {
-            var device = new ExtronDSC301HD(null);
+            using (var device = new ExtronDSC301HD(null))
+            {
+            }
         }
 
         [TestMethod]
@@ -217,6 +236,16 @@ namespace Tests
 
                 var posAndSizeAfter = device.GetImagePositionAndSize();
                 Assert.AreEqual(posAndSizeBefore, posAndSizeAfter);
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void GivenDevice_WhenSetPositionAndSizeWithNull_ThenArgumentNullExceptionThrown()
+        {
+            using (var device = CreateDevice())
+            {
+                var result = device.SetImagePositionAndSize(null);
             }
         }
 

@@ -11,8 +11,6 @@ namespace ControllableDevice
     {
         private bool _disposed = false;
 
-        private PasswordAuthenticationMethod _authMethod;
-        private ConnectionInfo _connectionInfo;
         private SshClient _sshClient;
         private ShellStream _shellStream;
 
@@ -50,11 +48,6 @@ namespace ControllableDevice
 
         private void Connect()
         {
-            Connect(_host, _port, _username, _password, _terminalPrompt);
-        }
-
-        private void Connect(string host, int port, string username, string password, string terminalPrompt)
-        {
             lock (_lock)
             {
                 if (Connected)
@@ -64,39 +57,29 @@ namespace ControllableDevice
 
                 try
                 {
-                    _authMethod = new PasswordAuthenticationMethod(_username, _password);
-                    _connectionInfo = new ConnectionInfo(_host, _port, _username, _authMethod);
+                    using (var authMethod = new PasswordAuthenticationMethod(_username, _password))
+                    {
+                        var connectionInfo = new ConnectionInfo(_host, _port, _username, authMethod);
 
-                    _sshClient = new SshClient(_connectionInfo);
-                    _sshClient.Connect();
-                    _shellStream = _sshClient.CreateShellStream("xterm", 80, 24, 800, 600, 1024);
+                        _sshClient = new SshClient(connectionInfo);
+                        _sshClient.Connect();
+                        _shellStream = _sshClient.CreateShellStream("xterm", 80, 24, 800, 600, 1024);
 
-                    // This will pull the initial login prompt off the stream
-                    _shellStream.Expect(new Regex(_terminalPrompt));
+                        // This will pull the initial login prompt off the stream
+                        _shellStream.Expect(new Regex(_terminalPrompt));
+                    }
 
                     _connectionValid = true;
                 }
                 catch (Exception)
                 {
-                    if (_shellStream != null)
-                    {
-                        _shellStream.Close();
-                        _shellStream = null;
-                    }
-
-                    if (_sshClient != null)
-                    {
-                        if (_sshClient.IsConnected)
-                        {
-                            _sshClient.Disconnect();
-                        }
-                        _sshClient = null;
-                    }
-
-                    _connectionInfo = null;
-                    _authMethod = null;
-
                     _connectionValid = false;
+
+                    _shellStream?.Close();
+                    _shellStream = null;
+
+                    _sshClient?.Disconnect();
+                    _sshClient = null;
 
                     throw;
                 }
@@ -109,12 +92,12 @@ namespace ControllableDevice
             {
                 if (Connected)
                 {
-                    _shellStream.Close();
-                    _sshClient.Disconnect();
-                }
+                    _shellStream?.Close();
+                    _shellStream = null;
 
-                _shellStream = null;
-                _sshClient = null;
+                    _sshClient?.Disconnect();
+                    _sshClient = null;
+                }
 
                 _connectionValid = false;
             }
@@ -133,10 +116,11 @@ namespace ControllableDevice
 
             if (disposing)
             {
-                lock (_lock)
-                {
-                    Disconnect();
-                }
+                _shellStream?.Dispose();
+                _shellStream = null;
+
+                _sshClient?.Dispose();
+                _sshClient = null;
             }
 
             _disposed = true;
