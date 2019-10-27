@@ -12,6 +12,11 @@ using ControllableDeviceTypes.OSSCTypes;
 
 namespace ControlAVP.Pages.Devices
 {
+    public class OSSCDeviceInfo
+    {
+        public bool Available { get; set; }
+    }
+
     public class OSSCModel : PageModel
     {
         private readonly IConfiguration _configuration;
@@ -22,11 +27,7 @@ namespace ControlAVP.Pages.Devices
         private ServiceClient _serviceClient;
         private OSSC _device;
 
-        public class DeviceInfo
-        {
-            public bool Available;
-        }
-        public DeviceInfo DeviceInfoCache { get; private set; } = new DeviceInfo();
+        public OSSCDeviceInfo DeviceInfoCache { get; private set; } = new OSSCDeviceInfo();
 
         public OSSCModel(IConfiguration configuration, IWebHostEnvironment environment)
         {

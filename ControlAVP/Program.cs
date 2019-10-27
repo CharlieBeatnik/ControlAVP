@@ -13,7 +13,7 @@ using Microsoft.Extensions.Logging;
 
 namespace ControlAVP
 {
-    public class Program
+    public static class Program
     {
         public static void Main(string[] args)
         {

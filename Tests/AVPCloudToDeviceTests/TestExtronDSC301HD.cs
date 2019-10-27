@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace Tests
 {
-    class TestExtronDSC301HD
+    public class TestExtronDSC301HD
     {
         private dynamic _settings;
         private readonly string _settingsFile = "settings.json";
@@ -57,6 +57,12 @@ namespace Tests
         public void GivenDevice_WhenSetOutputRate_ThenResultIsTrue()
         {
             Assert.IsTrue(_device.SetOutputRate(Edid.GetEdid(1280, 720, 50.0f)));
+        }
+
+        [Test]
+        public void GivenDevice_WhenSetOutputRateWithNullEdid_ThenArgumentNullExceptionThrown()
+        {
+            Assert.Throws<ArgumentNullException>(() => _device.SetOutputRate(null));
         }
 
         [Test]

@@ -12,6 +12,13 @@ using ControllableDeviceTypes.ExtronMVX44VGATypes;
 
 namespace ControlAVP.Pages.Devices
 {
+    public class ExtronMVX44VGADeviceInfo
+    {
+        public bool Available { get; set; }
+        public Version Firmware { get; set; }
+        public TieState TieState { get; set; }
+    }
+
     public class ExtronMVX44VGAModel : PageModel
     {
         private readonly IConfiguration _configuration;
@@ -22,13 +29,7 @@ namespace ControlAVP.Pages.Devices
         private ServiceClient _serviceClient;
         private ExtronMVX44VGA _device;
 
-        public class DeviceInfo
-        {
-            public bool Available;
-            public Version Firmware;
-            public TieState TieState;
-        }
-        public DeviceInfo DeviceInfoCache { get; private set; } = new DeviceInfo();
+        public ExtronMVX44VGADeviceInfo DeviceInfoCache { get; private set; } = new ExtronMVX44VGADeviceInfo();
 
         public ExtronMVX44VGAModel(IConfiguration configuration, IWebHostEnvironment environment)
         {

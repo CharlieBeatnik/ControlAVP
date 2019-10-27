@@ -74,8 +74,8 @@ namespace ControllableDeviceTypes
 
         public class TieState
         {
-            public Dictionary<OutputPort, InputPort> Video = new Dictionary<OutputPort, InputPort>();
-            public Dictionary<OutputPort, InputPort> Audio = new Dictionary<OutputPort, InputPort>();
+            public Dictionary<OutputPort, InputPort> Video { get; } = new Dictionary<OutputPort, InputPort>();
+            public Dictionary<OutputPort, InputPort> Audio { get; } = new Dictionary<OutputPort, InputPort>();
 
         }
     }

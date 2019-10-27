@@ -6,13 +6,13 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Wedding
+namespace ControlAVP.Pages
 {
     public class LogoutModel : PageModel
     {
         public async Task<ActionResult> OnGet()
         {
-            await HttpContext.SignOutAsync();
+            await HttpContext.SignOutAsync().ConfigureAwait(false);
             return RedirectToPage("Index");
         }
     }

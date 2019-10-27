@@ -12,7 +12,7 @@ namespace AVPCloudToDevice
         {
             try
             {
-                var result = await serviceClient.InvokeDeviceMethodAsync(deviceId, cloudToDeviceMethod);
+                var result = await serviceClient.InvokeDeviceMethodAsync(deviceId, cloudToDeviceMethod).ConfigureAwait(false);
                 return result;
             }
 
@@ -32,7 +32,7 @@ namespace AVPCloudToDevice
             methodInvocation.SetPayloadJson(payloadString);
 
             // Invoke the direct method asynchronously and get the response from the device.
-            var response = Task.Run(async () => await InvokeDeviceMethodAsync(serviceClient, deviceId, methodInvocation)).Result;
+            var response = Task.Run(async () => await InvokeDeviceMethodAsync(serviceClient, deviceId, methodInvocation).ConfigureAwait(false)).Result;
 
             if (response == null)
             {

@@ -10,8 +10,16 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Configuration;
 
-namespace Wedding.Pages
+namespace ControlAVP.Pages
 {
+    public class LoginData
+    {
+        [Required, DataType(DataType.Password)]
+        public string Password { get; set; }
+
+        public bool RememberMe { get; set; } = true;
+    }
+
     public class LoginModel : PageModel
     {
         private readonly IConfiguration _configuration;
@@ -24,6 +32,7 @@ namespace Wedding.Pages
             _configuration = configuration;
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1054:Uri parameters should not be strings", Justification = "OnPostAsync requires parameter to be a string.")]
         public async Task<IActionResult> OnPostAsync(string returnUrl)
         {
             if (ModelState.IsValid)
@@ -43,7 +52,7 @@ namespace Wedding.Pages
                 identity.AddClaim(new Claim(ClaimTypes.Name, username));
                 // Authenticate using the identity
                 var principal = new ClaimsPrincipal(identity);
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, new AuthenticationProperties { IsPersistent = loginData.RememberMe });
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, new AuthenticationProperties { IsPersistent = loginData.RememberMe }).ConfigureAwait(false);
 
                 if (string.IsNullOrWhiteSpace(returnUrl) || returnUrl == @"/")
                 {
@@ -60,15 +69,7 @@ namespace Wedding.Pages
             }
         }
 
-        public class LoginData
-        {
-            [Required, DataType(DataType.Password)]
-            public string Password { get; set; }
-
-            public bool RememberMe { get; set; } = true;
-        }
-
-        public void OnGet()
+        public static void OnGet()
         {
         }
     }

@@ -12,6 +12,12 @@ using ControllableDeviceTypes.SonyKDL60W855Types;
 
 namespace ControlAVP.Pages.Devices
 {
+    public class SonyKDL60W855DeviceInfo
+    {
+        public PowerStatus? PowerStatus { get; set; }
+        public InputPort? InputPort { get; set; }
+    }
+
     public class SonyKDL60W855Model : PageModel
     {
         private readonly IConfiguration _configuration;
@@ -22,12 +28,7 @@ namespace ControlAVP.Pages.Devices
         private ServiceClient _serviceClient;
         private SonyKDL60W855 _device;
 
-        public class DeviceInfo
-        {
-            public PowerStatus? PowerStatus;
-            public InputPort? InputPort;
-        }
-        public DeviceInfo DeviceInfoCache { get; private set; } = new DeviceInfo();
+        public SonyKDL60W855DeviceInfo DeviceInfoCache { get; private set; } = new SonyKDL60W855DeviceInfo();
 
         public SonyKDL60W855Model(IConfiguration configuration, IWebHostEnvironment environment)
         {

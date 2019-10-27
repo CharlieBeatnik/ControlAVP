@@ -13,6 +13,12 @@ using System.Diagnostics;
 
 namespace ControlAVP.Pages.Devices
 {
+    public class AtenVS0801HDeviceInfo
+    {
+        public bool Available { get; set; }
+        public State State { get; set; }
+    }
+
     public class AtenVS0801HModel : PageModel
     {
         private readonly IConfiguration _configuration;
@@ -25,12 +31,7 @@ namespace ControlAVP.Pages.Devices
         private const uint _numHdmiSwitches = 2;
         private List<AtenVS0801H> _devices = new List<AtenVS0801H>();
 
-        public class DeviceInfo
-        {
-            public bool Available;
-            public State State;
-        }
-        public List<DeviceInfo> DeviceInfoCaches { get; private set; } = new List<DeviceInfo>();
+        public List<AtenVS0801HDeviceInfo> DeviceInfoCaches { get; private set; } = new List<AtenVS0801HDeviceInfo>();
 
         public AtenVS0801HModel(IConfiguration configuration, IWebHostEnvironment environment)
         {
@@ -45,7 +46,7 @@ namespace ControlAVP.Pages.Devices
             for(uint deviceIdx = 0; deviceIdx < _numHdmiSwitches; ++deviceIdx)
             {
                 _devices.Add(new AtenVS0801H(_serviceClient, _deviceId, deviceIdx));
-                DeviceInfoCaches.Add(new DeviceInfo());
+                DeviceInfoCaches.Add(new AtenVS0801HDeviceInfo());
             }
         }
 

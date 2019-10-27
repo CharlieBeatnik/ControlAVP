@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace Tests
 {
-    class TestSonyKDL60W855
+    public class TestSonyKDL60W855
     {
         private dynamic _settings;
         private readonly string _settingsFile = "settings.json";

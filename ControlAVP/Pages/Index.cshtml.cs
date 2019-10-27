@@ -14,6 +14,13 @@ using AVPCloudToDevice;
 
 namespace ControlAVP.Pages
 {
+    public class OutletTableViewModel
+    {
+        public IEnumerable<Outlet> Outlets { get; set; }
+        public string WebRootPath { get; set; }
+        public IEnumerable<string> OutletConfirmation { get; set; }
+    }
+
     public class IndexModel : PageModel
     {
         private readonly IConfiguration _configuration;
@@ -23,13 +30,6 @@ namespace ControlAVP.Pages
         private string _deviceId;
         private ServiceClient _serviceClient;
         private ApcAP8959EU3 _pdu;
-
-        public class OutletTableViewModel
-        {
-            public IEnumerable<Outlet> Outlets { get; set; }
-            public string WebRootPath { get; set; }
-            public IEnumerable<string> OutletConfirmation { get; set; }
-        }
 
         public IndexModel(IConfiguration configuration, IWebHostEnvironment environment)
         {
@@ -43,7 +43,7 @@ namespace ControlAVP.Pages
             _pdu = new ApcAP8959EU3(_serviceClient, _deviceId);
         }
 
-        public void OnGet()
+        public static void OnGet()
         {
 
         }

@@ -184,11 +184,11 @@ namespace ControllableDeviceTypes
                 Interlaced
             }
 
-            public int Id;
-            public int Width;
-            public int Height;
-            public float RefreshRate;
-            public ScanMode Scan;
+            public int Id { get; set; }
+            public int Width { get; set; }
+            public int Height { get; set; }
+            public float RefreshRate { get; set; }
+            public ScanMode Scan { get; set; }
 
             private Edid(int id, int width, int height, float refreshRate, ScanMode scan = ScanMode.Progressive)
             {

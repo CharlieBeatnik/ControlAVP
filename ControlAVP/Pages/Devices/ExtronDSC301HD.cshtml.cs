@@ -12,6 +12,14 @@ using ControllableDeviceTypes.ExtronDSC301HDTypes;
 
 namespace ControlAVP.Pages.Devices
 {
+    public class ExtronDSC301HDDeviceInfo
+    {
+        public bool Available { get; set; }
+        public Version Firmware { get; set; }
+        public InputPort? InputPort { get; set; }
+        public float? Temperature { get; set; }
+    }
+
     public class ExtronDSC301HDModel : PageModel
     {
         private readonly IConfiguration _configuration;
@@ -22,14 +30,8 @@ namespace ControlAVP.Pages.Devices
         private ServiceClient _serviceClient;
         private ExtronDSC301HD _device;
 
-        public class DeviceInfo
-        {
-            public bool Available;
-            public Version Firmware;
-            public InputPort? InputPort;
-            public float? Temperature;
-        }
-        public DeviceInfo DeviceInfoCache { get; private set; } = new DeviceInfo();
+
+        public ExtronDSC301HDDeviceInfo DeviceInfoCache { get; private set; } = new ExtronDSC301HDDeviceInfo();
 
         public ExtronDSC301HDModel(IConfiguration configuration, IWebHostEnvironment environment)
         {
