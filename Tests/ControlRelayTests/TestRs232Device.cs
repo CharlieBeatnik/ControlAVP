@@ -199,7 +199,7 @@ namespace Tests
 
         [TestMethod]
         [Ignore("Requires manual intervention.")]
-        public void GivenDevice_WhenPrintMessageAskingToBeDisconnectedAndWaitForReconnect_ThenResponseIsNotNully()
+        public void GivenDevice_WhenPrintMessageAskingToBeDisconnectedAndWaitForReconnect_ThenResponseIsNotNull()
         {
             using (var device = CreateDevice())
             {

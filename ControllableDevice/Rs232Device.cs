@@ -233,6 +233,8 @@ namespace ControllableDevice
                         }
                     }
 #pragma warning disable CA1031 // Do not catch general exception types
+                    //ANDRWEDENN_TODO: Get a list of the actual exceptions we can encounter
+                    //instead of relying on a catch all Exception type
                     catch (Exception)
 #pragma warning restore CA1031 // Do not catch general exception types
                     {
@@ -309,12 +311,15 @@ namespace ControllableDevice
             }
             catch(AggregateException ae)
             {
+                //These are the exception we expect to see when Read() fails
                 foreach (var ie in ae.InnerExceptions)
                 {
-                    if (!(ie is TaskCanceledException) && !(ie is OperationCanceledException))
-                    {
-                        throw;
-                    }
+                    if (
+                        (ie is TaskCanceledException) ||
+                        (ie is OperationCanceledException) ||
+                        (ie is Exception && (uint)ie.HResult == 0x800703E3) //https://www.hresult.info/FACILITY_WIN32/0x800703E3
+                    ){}
+                    else throw;
                 }
             }
         }
