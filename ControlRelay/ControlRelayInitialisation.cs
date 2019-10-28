@@ -76,7 +76,7 @@ namespace ControlRelay
                         switch (type)
                         {
                             case Type _ when type == typeof(SerialBlaster):
-                                Debug.Assert(serialBlaster != null, $"SerialBlaster has not been initialised but is required for construciton of {deviceType.Name}.");
+                                Debug.Assert(serialBlaster != null, $"SerialBlaster has not been initialised but is required for construction of {deviceType.Name}.");
                                 parameters.Add(serialBlaster);
                                 break;
                             case Type _ when type == typeof(IPAddress):

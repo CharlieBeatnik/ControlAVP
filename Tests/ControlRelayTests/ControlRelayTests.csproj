@@ -134,7 +134,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="ControlRelayTests_TemporaryKey.pfx" />
-    <None Include="TestAssets\commandbatch1.json" />
+    <Content Include="TestAssets\commandbatch1.json" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Properties\UnitTestApp.rd.xml" />
@@ -176,6 +176,10 @@
     <ProjectReference Include="..\..\ControllableDevice\ControllableDevice.csproj">
       <Project>{b9beb0f1-3db8-4cf0-a567-6354e7c23691}</Project>
       <Name>ControllableDevice</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ControlRelay\ControlRelay.csproj">
+      <Project>{e98566e4-cac9-4460-9baf-105d172124a4}</Project>
+      <Name>ControlRelay</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\SSH.NET\src\Renci.SshNet.NETCore\Renci.SshNet.NETCore.csproj">
       <Project>{d006ea14-4740-4b9d-bc8b-c1e909eeaed1}</Project>

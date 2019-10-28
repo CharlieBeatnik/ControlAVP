@@ -1,23 +1,21 @@
 {
-  "CommandBatch": [
+  "Commands": [
     {
-      "AtenVS0801H": {
-        "DeviceIndex": 0,
-        "Function": "SetMode",
-        "Parameters": {
-          "mode": "Auto",
-          "inputPort": "Port1"
-        }
+      "DeviceType": "AtenVS0801H",
+      "DeviceIndex": 0,
+      "Function": "SetInputPort",
+      "Parameters": {
+        "inputPort": "InputPort.Port8"
       }
     },
     {
-      "ExtronDSC301HD": {
-        "Function": "Scale",
-        "Parameters": {
-          "scaleType": "PixelPerfect",
-          "positionType": "Centre"
-        }
+      "DeviceType": "AtenVS0801H",
+      "DeviceIndex": 1,
+      "Function": "SetInputPort",
+      "Parameters": {
+        "inputPort": "InputPort.Port8"
       }
     }
-  ]
+  ],
+  "MetaData": "TheData"
 }
