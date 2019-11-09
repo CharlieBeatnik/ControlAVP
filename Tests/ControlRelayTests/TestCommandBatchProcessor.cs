@@ -34,27 +34,38 @@ namespace Tests
                 jsonParsed = JObject.Parse(json);
             }
 
-            _deviceSettings = jsonParsed["Devices"]["AtenVS0801H"][0];
+            _deviceSettings = jsonParsed["Devices"]["ApcAP8959EU3"][0];
         }
 
-        public static AtenVS0801H CreateDevice()
+        public static ApcAP8959EU3 CreateDevice()
         {
-            return new AtenVS0801H(_deviceSettings["portId"].ToString());
-        }
+            string host = _deviceSettings["host"].ToString();
+            int port = int.Parse(_deviceSettings["port"].ToString());
+            string username = _deviceSettings["username"].ToString();
+            string password = _deviceSettings["password"].ToString();
 
+            return new ApcAP8959EU3(host, port, username, password);
+        }
 
         [TestMethod]
         public void SimpleCommandBatchProcessorTest()
         {
-            using (StreamReader r = new StreamReader(@".\TestAssets\commandbatch1.json"))
+            for (int i = 0; i < 10; ++i)
             {
-                string json = r.ReadToEnd();
-
-                using(var device = CreateDevice())
+                using (StreamReader r = new StreamReader(@".\TestAssets\commandbatch1.json"))
                 {
-                    var devices = new List<object>();
-                    devices.Add(device);
-                    ControlRelay.CommandBatchProcessor.ProcessBatch(devices, json);
+                    string json = r.ReadToEnd();
+
+                    using (var device = CreateDevice())
+                    {
+                        var devices = new List<object>();
+                        devices.Add(device);
+
+                        foreach (var result in ControlRelay.CommandBatchProcessor.ProcessBatch(devices, json))
+                        {
+                            //Assert.IsTrue(result.Item2);
+                        }
+                    }
                 }
             }
         }

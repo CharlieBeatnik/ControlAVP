@@ -16,6 +16,7 @@ namespace ControllableDeviceTypes
             Port6 = 6,
             Port7 = 7,
             Port8 = 8
+
         }
 
         public static class InputPortExtensions
