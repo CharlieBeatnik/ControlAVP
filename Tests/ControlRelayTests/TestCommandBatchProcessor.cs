@@ -1,4 +1,5 @@
 ﻿using ControllableDevice;
+using CommandProcessor;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -61,7 +62,7 @@ namespace Tests
                         var devices = new List<object>();
                         devices.Add(device);
 
-                        foreach (var result in ControlRelay.CommandBatchProcessor.ProcessBatch(devices, json))
+                        foreach (var result in CommandProcessorUtils.ProcessBatch(devices, json))
                         {
                             //Assert.IsTrue(result.Item2);
                         }
