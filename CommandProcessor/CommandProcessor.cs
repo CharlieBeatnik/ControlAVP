@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using Newtonsoft.Json.Linq;
 
 namespace CommandProcessor
@@ -14,18 +15,23 @@ namespace CommandProcessor
 
     public static class CommandProcessorUtils
     {
-        public static IEnumerable<CommandResult> ProcessBatch(IEnumerable<object> devices, string json)
+        public static IEnumerable<CommandResult> ProcessBatch(IEnumerable<object> devices, string jsonCommands)
         {
             if (devices == null)
             {
                 throw new ArgumentNullException(nameof(devices));
             }
 
-            dynamic commandBatch = JObject.Parse(json);
+            //Pull the json schema out of the assembly resources
+            var bytes = Properties.Resources.command_processor_schema;
+            string jsonSchema = Encoding.UTF8.GetString(bytes, 0, bytes.Length);
+
+            dynamic commandBatch = JObject.Parse(jsonCommands);
 
             foreach (dynamic command in commandBatch.Commands)
             {
-                Type deviceType = Type.GetType($"ControllableDevice.{(string)command.DeviceType}, ControllableDevice");
+                string assembly = (string)command.Assembly;
+                Type deviceType = Type.GetType($"{assembly}.{(string)command.DeviceType}, {assembly}");
                 List<object> filteredDevices = devices.Where(i => i.GetType() == deviceType).ToList();
 
                 var device = filteredDevices[(int)command.DeviceIndex];

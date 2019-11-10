@@ -104,7 +104,7 @@
   <ItemGroup>
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="TestCommandBatchProcessor.cs" />
+    <Compile Include="TestCommandProcessor.cs" />
     <Compile Include="TestExtronMVX44VGA.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestApcAP8959EU3.cs" />

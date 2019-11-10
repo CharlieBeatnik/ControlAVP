@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 namespace Tests
 {
     [TestClass]
-    public class TestCommandBatchProcessor
+    public class TestCommandProcessor
     {
         private const string _settingsFile = "settings.json";
         private static JToken _deviceSettings;
@@ -49,7 +49,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void SimpleCommandBatchProcessorTest()
+        public void SimpleCommandProcessorTest()
         {
             for (int i = 0; i < 10; ++i)
             {
