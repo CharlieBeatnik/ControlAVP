@@ -107,7 +107,6 @@ namespace ControllableDevice
             // Added asserts as ExecuteCommand has been oberved to return null
             Debug.Assert(olStatusAll != null);
 
-
             // Initially populate Outlet dictionary with information parsed from olStatus all
             foreach (string line in olStatusAll)
             {
