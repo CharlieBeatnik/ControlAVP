@@ -28,7 +28,7 @@
     <AppInstallerUri>http://test</AppInstallerUri>
     <AppInstallerUpdateFrequency>1</AppInstallerUpdateFrequency>
     <AppInstallerCheckForUpdateFrequency>OnApplicationRun</AppInstallerCheckForUpdateFrequency>
-    <PackageCertificateThumbprint>9DF1AE9159F9C6567AD3D5E19D43AC4BBA8A59C7</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>036C422890886300D19EA334450E6E3BD95FA920</PackageCertificateThumbprint>
     <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
@@ -111,7 +111,6 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="CommandBatchProcessor.cs" />
     <Compile Include="ControlRelayInitialisation.cs" />
     <Compile Include="DeviceCloudInterfaceManager.cs" />
     <Compile Include="DeviceCloudInterface\ApcAP8959EU3CloudInterface.cs" />
@@ -165,7 +164,7 @@
       <Version>1.21.1</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers">
-      <Version>2.9.6</Version>
+      <Version>2.9.7</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
@@ -173,7 +172,7 @@
       <Version>6.2.9</Version>
     </PackageReference>
     <PackageReference Include="NLog">
-      <Version>4.6.7</Version>
+      <Version>4.6.8</Version>
     </PackageReference>
     <PackageReference Include="Polly">
       <Version>7.1.1</Version>
