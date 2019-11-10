@@ -49,27 +49,46 @@ namespace Tests
         }
 
         [TestMethod]
-        public void SimpleCommandProcessorTest()
+        [ExpectedException(typeof(ArgumentException))]
+        public void GivenJsonIsInvalid_WhenRunCommandeProcessor_ThenArgumentExceptionIsThrown()
         {
-            for (int i = 0; i < 10; ++i)
+            using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-should-fail-validation.json"))
             {
-                using (StreamReader r = new StreamReader(@".\TestAssets\commandbatch1.json"))
+                string json = r.ReadToEnd();
+                using (var device = CreateDevice())
                 {
-                    string json = r.ReadToEnd();
+                    var devices = new List<object>();
+                    devices.Add(device);
 
-                    using (var device = CreateDevice())
+                    foreach (var result in CommandProcessorUtils.Process(devices, json))
                     {
-                        var devices = new List<object>();
-                        devices.Add(device);
-
-                        foreach (var result in CommandProcessorUtils.ProcessBatch(devices, json))
-                        {
-                            //Assert.IsTrue(result.Item2);
-                        }
                     }
                 }
             }
         }
+
+        //[TestMethod]
+        //public void GivenJsonIsInvalid_WhenRunCommandeProcessor_ThenArgumentExceptionIsThrown()
+        //{
+        //    for (int i = 0; i < 10; ++i)
+        //    {
+        //        using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-should-fail-validation.json"))
+        //        {
+        //            string json = r.ReadToEnd();
+
+        //            using (var device = CreateDevice())
+        //            {
+        //                var devices = new List<object>();
+        //                devices.Add(device);
+
+        //                foreach (var result in CommandProcessorUtils.Process(devices, json))
+        //                {
+        //                    //Assert.IsTrue(result.Item2);
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
     }
 
 }

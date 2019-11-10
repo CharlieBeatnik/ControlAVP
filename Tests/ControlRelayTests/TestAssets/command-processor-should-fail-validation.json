@@ -3,13 +3,12 @@
     {
       "Assembly": "ControllableDevice",
       "DeviceType": "ApcAP8959EU3",
-      "DeviceIndex": 0,
+      "DeviceIndex": "0", //Schema Fail - String not Integer
       "Function": "GetOutlets",
       "Parameters": {
         "getPower": "true",
         "getCurrent": "true"
       }
     }
-  ],
-  "MetaData": "TheData"
+  ]
 }

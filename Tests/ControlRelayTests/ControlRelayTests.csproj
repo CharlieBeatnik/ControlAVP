@@ -134,7 +134,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="ControlRelayTests_TemporaryKey.pfx" />
-    <Content Include="TestAssets\commandbatch1.json" />
+    <Content Include="TestAssets\command-processor-should-fail-validation.json" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Properties\UnitTestApp.rd.xml" />
@@ -190,7 +190,6 @@
       <Name>Renci.SshNet.NETCore</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

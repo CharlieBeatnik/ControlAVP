@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Schema;
 
 namespace CommandProcessor
 {
@@ -15,19 +16,29 @@ namespace CommandProcessor
 
     public static class CommandProcessorUtils
     {
-        public static IEnumerable<CommandResult> ProcessBatch(IEnumerable<object> devices, string jsonCommands)
+        public static IEnumerable<CommandResult> Process(IEnumerable<object> devices, string jsonCommands)
         {
             if (devices == null)
             {
                 throw new ArgumentNullException(nameof(devices));
             }
 
-            //Pull the json schema out of the assembly resources
-            var bytes = Properties.Resources.command_processor_schema;
-            string jsonSchema = Encoding.UTF8.GetString(bytes, 0, bytes.Length);
+            //Pull the json schema out of the assembly resources and created it
+            var jsonSchemaBytes = Properties.Resources.command_processor_schema;
+            string jsonSchemaString = Encoding.UTF8.GetString(jsonSchemaBytes, 0, jsonSchemaBytes.Length);
+            JSchema schema = JSchema.Parse(jsonSchemaString);
 
-            dynamic commandBatch = JObject.Parse(jsonCommands);
+            //Parse the json passed in and validate it, throw exception if it fails
+            IList<string> errorMessages;
+            JObject parsed = JObject.Parse(jsonCommands);
+            bool valid = parsed.IsValid(schema, out errorMessages);
 
+            if(!valid)
+            {
+                throw new ArgumentException("JSON commands failed schema validation.");
+            }
+
+            dynamic commandBatch = parsed;
             foreach (dynamic command in commandBatch.Commands)
             {
                 string assembly = (string)command.Assembly;
