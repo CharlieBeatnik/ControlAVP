@@ -100,18 +100,24 @@ namespace ControllableDevice
                         vSize = edid.Height;
                         hSize = (int)(vSize * inputRatio);
 
-                        float scale = (float)edid.Width / (float)hSize;
-                        hSize = (int)((float)hSize * scale);
-                        vSize = (int)((float)vSize * scale);
+                        if (hSize > edid.Width)
+                        {
+                            float scale = (float)edid.Width / (float)hSize;
+                            hSize = (int)((float)hSize * scale);
+                            vSize = (int)((float)vSize * scale);
+                        }
                     }
                     else //Landscape or Square
                     {
                         hSize = edid.Width;
                         vSize = (int)(hSize * (1 / inputRatio));
 
-                        float scale = (float)edid.Height / (float)vSize;
-                        hSize = (int)((float)hSize * scale);
-                        vSize = (int)((float)vSize * scale);
+                        if (vSize > edid.Height)
+                        {
+                            float scale = (float)edid.Height / (float)vSize;
+                            hSize = (int)((float)hSize * scale);
+                            vSize = (int)((float)vSize * scale);
+                        }
                     }
                     break;
             }
