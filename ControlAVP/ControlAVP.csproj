@@ -19,9 +19,9 @@
 
   <ItemGroup>
     <PackageReference Include="AspNetCore.KeyVault" Version="1.0.6" />
-    <PackageReference Include="Microsoft.Azure.Devices" Version="1.18.1" />
+    <PackageReference Include="Microsoft.Azure.Devices" Version="1.18.2" />
     <PackageReference Include="Microsoft.Azure.KeyVault.Core" Version="3.0.4" />
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.6">
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.7">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
