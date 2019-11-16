@@ -1,0 +1,15 @@
+{
+  "Commands": [
+    {
+      "Assembly": "Tests",
+      "DeviceType": "DummyDevice",
+      "DeviceIndex": 0,
+      "Function": "SetSomething",
+      "Parameters": {
+        "x": "x",
+        "y": 1,
+        "z": 1.1
+      }
+    }
+  ]
+}

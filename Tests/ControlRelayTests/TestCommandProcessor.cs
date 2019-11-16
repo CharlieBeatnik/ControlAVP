@@ -17,9 +17,6 @@ namespace Tests
     [TestClass]
     public class TestCommandProcessor
     {
-        private const string _settingsFile = "settings.json";
-        private static JToken _deviceSettings;
-
         [ClassInitialize]
         public static void ClassInitialize(TestContext tc)
         {
@@ -27,32 +24,23 @@ namespace Tests
             {
                 throw new ArgumentNullException(nameof(tc));
             }
-
-            JObject jsonParsed;
-            using (StreamReader r = new StreamReader(_settingsFile))
-            {
-                string json = r.ReadToEnd();
-                jsonParsed = JObject.Parse(json);
-            }
-
-            _deviceSettings = jsonParsed["Devices"]["ApcAP8959EU3"][0];
         }
 
-        public static ApcAP8959EU3 CreateDevice()
+        public static DummyDevice CreateDevice()
         {
-            string host = _deviceSettings["host"].ToString();
-            int port = int.Parse(_deviceSettings["port"].ToString());
-            string username = _deviceSettings["username"].ToString();
-            string password = _deviceSettings["password"].ToString();
+            return new DummyDevice();
+        }
 
-            return new ApcAP8959EU3(host, port, username, password);
+        public static DummyDevice CreateInvalidDevice()
+        {
+            return new DummyDevice(true);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void GivenJsonIsInvalid_WhenRunCommandeProcessor_ThenArgumentExceptionIsThrown()
         {
-            using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-should-fail-validation.json"))
+            using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-fail-validation.json"))
             {
                 string json = r.ReadToEnd();
                 using (var device = CreateDevice())
@@ -67,28 +55,24 @@ namespace Tests
             }
         }
 
-        //[TestMethod]
-        //public void GivenJsonIsInvalid_WhenRunCommandeProcessor_ThenArgumentExceptionIsThrown()
-        //{
-        //    for (int i = 0; i < 10; ++i)
-        //    {
-        //        using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-should-fail-validation.json"))
-        //        {
-        //            string json = r.ReadToEnd();
+        [TestMethod]
+        public void GivenJsonAndDevice_WhenCallSetFunction_ThenResultIsTrue()
+        {
+            using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-call-set-function.json"))
+            {
+                string json = r.ReadToEnd();
+                using (var device = CreateDevice())
+                {
+                    var devices = new List<object>();
+                    devices.Add(device);
 
-        //            using (var device = CreateDevice())
-        //            {
-        //                var devices = new List<object>();
-        //                devices.Add(device);
-
-        //                foreach (var result in CommandProcessorUtils.Process(devices, json))
-        //                {
-        //                    //Assert.IsTrue(result.Item2);
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
+                    foreach (var commandResult in CommandProcessorUtils.Process(devices, json))
+                    {
+                        Assert.IsTrue(commandResult.Success);
+                        Assert.IsNotNull(commandResult.Result);
+                    }
+                }
+            }
+        }
     }
-
 }

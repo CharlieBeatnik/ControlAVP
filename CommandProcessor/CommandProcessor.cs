@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -11,7 +12,8 @@ namespace CommandProcessor
     public sealed class CommandResult
     {
         public string FunctionName { get; set; }
-        public object Result { get; set; }
+        public bool Success { get; set; }
+        public object Result { get; set;  }
     }
 
     public static class CommandProcessorUtils
@@ -56,8 +58,30 @@ namespace CommandProcessor
                         })
                         .ToArray();
 
-                var result = methodInfo.Invoke(device, parameters);
-                yield return new CommandResult() { FunctionName = command.Function, Result = result };
+                Type returnType = methodInfo.ReturnType;
+                bool success;
+                object result;
+
+                if(returnType == typeof(bool))
+                {
+                    bool resultBool = (bool)methodInfo.Invoke(device, parameters);
+                    result = resultBool;
+                    success = resultBool;
+                }
+                else if (Nullable.GetUnderlyingType(returnType) != null) //Type is nullable
+                {
+                    object nullableResult = methodInfo.Invoke(device, parameters);
+                    result = nullableResult;
+                    success = nullableResult != null;
+                }
+                else
+                {
+                    Debug.Assert(true, "JSON commands failed schema validation.");
+                    result = null;
+                    success = false;
+                }
+
+                yield return new CommandResult() { FunctionName = command.Function, Success = success, Result = result };
             }
 
         }
