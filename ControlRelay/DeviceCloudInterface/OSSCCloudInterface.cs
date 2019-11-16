@@ -21,6 +21,7 @@ namespace ControlRelay
         {
             yield return new MethodHandlerInfo("OSSCGetAvailable", GetAvailable);
             yield return new MethodHandlerInfo("OSSCSendCommand", SendCommand);
+            yield return new MethodHandlerInfo("OSSCLoadProfile", LoadProfile);
         }
 
         private Task<MethodResponse> GetAvailable(MethodRequest methodRequest, object userContext)
@@ -43,6 +44,24 @@ namespace ControlRelay
             if (payload.commandName.Valid())
             {
                 success = _device.SendCommand(payload.commandName);
+            }
+
+            return methodRequest.GetMethodResponse(success);
+        }
+
+        private Task<MethodResponse> LoadProfile(MethodRequest methodRequest, object userContext)
+        {
+            bool success = false;
+            var payloadDefintion = new
+            {
+                profileName = (ProfileName)(-1),
+            };
+
+            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
+
+            if (payload.profileName.Valid())
+            {
+                success = _device.LoadProfile(payload.profileName);
             }
 
             return methodRequest.GetMethodResponse(success);

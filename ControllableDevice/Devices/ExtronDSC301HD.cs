@@ -125,7 +125,6 @@ namespace ControllableDevice
             switch (positionType)
             {
                 case PositionType.Centre:
-
                     hPos = ((edid.Width - hSize) / 2);
                     vPos = ((edid.Height - vSize) / 2);
                     break;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -106,6 +107,51 @@ namespace ControllableDevice
             }
 
             return _serialBlaster.SendCommand(SerialBlaster.Protocol.Nec, _commands[commandName].CodeWithChecksum);
+        }
+
+        public bool LoadProfile(ProfileName profileName)
+        {
+            bool result = true;
+
+            //Access load profile menu
+            result &= SendCommand(CommandName.Number10);
+
+            //Loading profiles 10-14 require an additional send of the load profile command
+            if ((int)profileName >= 10)
+            {
+                result &= SendCommand(CommandName.Number10);
+            }
+
+            CommandName numberCommand = ConvertProfieNameToCommandName(profileName);
+            result &= SendCommand(numberCommand);
+
+            return result;
+        }
+
+        private static CommandName ConvertProfieNameToCommandName(ProfileName profileName)
+        {
+            switch(profileName)
+            {
+                case ProfileName.Profile0: return CommandName.Number0;
+                case ProfileName.Profile1: return CommandName.Number1;
+                case ProfileName.Profile2: return CommandName.Number2;
+                case ProfileName.Profile3: return CommandName.Number3;
+                case ProfileName.Profile4: return CommandName.Number4;
+                case ProfileName.Profile5: return CommandName.Number5;
+                case ProfileName.Profile6: return CommandName.Number6;
+                case ProfileName.Profile7: return CommandName.Number7;
+                case ProfileName.Profile8: return CommandName.Number8;
+                case ProfileName.Profile9: return CommandName.Number9;
+                case ProfileName.Profile10: return CommandName.Number0;
+                case ProfileName.Profile11: return CommandName.Number1;
+                case ProfileName.Profile12: return CommandName.Number2;
+                case ProfileName.Profile13: return CommandName.Number3;
+                case ProfileName.Profile14: return CommandName.Number4;
+
+                default:
+                    Debug.Assert(false, $"Unknown ProfileName {profileName}");
+                    return CommandName.Number0;
+            }
         }
     }
 }

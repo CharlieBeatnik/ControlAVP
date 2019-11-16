@@ -4,6 +4,33 @@ namespace ControllableDeviceTypes
 {
     namespace OSSCTypes
     {
+        public enum ProfileName
+        {
+            Profile0 = 0,
+            Profile1 = 1,
+            Profile2 = 2,
+            Profile3 = 3,
+            Profile4 = 4,
+            Profile5 = 5,
+            Profile6 = 6,
+            Profile7 = 7,
+            Profile8 = 8,
+            Profile9 = 9,
+            Profile10 = 10,
+            Profile11 = 11,
+            Profile12 = 12,
+            Profile13 = 13,
+            Profile14 = 14
+        };
+
+        public static class ProfileNameExtensions
+        {
+            public static bool Valid(this ProfileName profileName)
+            {
+                return Enum.IsDefined(typeof(ProfileName), profileName);
+            }
+        }
+
         //http://junkerhq.net/xrgb/index.php?title=OSSC_L336
         public enum CommandName
         {

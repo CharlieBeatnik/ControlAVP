@@ -60,6 +60,17 @@ namespace Tests
         }
 
         [TestMethod]
+        public void GivenDevice_WhenLoadProfile_ThenRespondsIsTrue()
+        {
+            using (var serialBlaster = CreateSerialBlaster())
+            using (var device = CreateDevice(serialBlaster))
+            {
+                var result = device.LoadProfile(ProfileName.Profile0);
+                Assert.IsTrue(result);
+            }
+        }
+
+        [TestMethod]
         public void GivenDeviceAndCommandSentAndDeviceDisposed_WhenCreateDeviceAndSendCommand_ThenResponseIsTrue()
         {
             using (var serialBlaster = CreateSerialBlaster())
