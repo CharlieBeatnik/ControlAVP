@@ -30,6 +30,20 @@ namespace AVPCloudToDevice
             }
         }
 
+        public bool LoadProfile(ProfileName profileName)
+        {
+            try
+            {
+                var payload = new { profileName };
+                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "OSSCLoadProfile", payload);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         public bool GetAvailable()
         {
             try

@@ -20,6 +20,18 @@
                 <div class="col-sm-6">
                     <table class="table table-sm table-borderless">
                         <tr>
+                            <td class="align-middle text-right" width="1%">Load Profile</td>
+                            <td>
+                                <div class="btn-group">
+                                    @for (int i = 0; i < Enum.GetValues(typeof(ProfileName)).Length; ++i)
+                                    {
+                                        var profileName = (ProfileName)Enum.GetValues(typeof(ProfileName)).GetValue(i);
+                                        <button type="submit" asp-page-handler="LoadProfile" asp-route-profilename=@profileName class="btn btn-light border">@i</button>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
                             <td class="align-middle text-right" width="1%">AV1</td>
                             <td>
                                 <div class="btn-group">
