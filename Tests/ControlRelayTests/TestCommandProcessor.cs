@@ -70,7 +70,8 @@ namespace Tests
                     {
                         Assert.IsTrue(commandResult.Success);
                         Assert.IsNotNull(commandResult.Result);
-                        Assert.IsTrue(commandResult.FunctionName == "SetSomething");
+                        Assert.IsTrue(commandResult.Function == "SetSomething");
+                        Assert.IsTrue(commandResult.Description == "Example description.");
                     }
                 }
             }
@@ -92,7 +93,8 @@ namespace Tests
                         Assert.IsTrue(commandResult.Success);
                         Assert.IsNotNull(commandResult.Result);
                         Assert.IsTrue((int?)commandResult.Result == 0);
-                        Assert.IsTrue(commandResult.FunctionName == "GetSomething");
+                        Assert.IsTrue(commandResult.Function == "GetSomething");
+                        Assert.IsTrue(commandResult.Description == "Example description.");
                     }
                 }
             }
@@ -113,10 +115,6 @@ namespace Tests
                     foreach (var commandResult in CommandProcessorUtils.Process(devices, json))
                     {
                         functionCallCount++;
-                        Assert.IsTrue(commandResult.Success);
-                        Assert.IsNotNull(commandResult.Result);
-                        Assert.IsTrue((int?)commandResult.Result == 0);
-                        Assert.IsTrue(commandResult.FunctionName != null);
                     }
 
                     Assert.IsTrue(functionCallCount == 2);

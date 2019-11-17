@@ -11,9 +11,10 @@ namespace CommandProcessor
 {
     public sealed class CommandResult
     {
-        public string FunctionName { get; set; }
+        public string Function { get; set; }
         public bool Success { get; set; }
         public object Result { get; set;  }
+        public string Description { get; set; }
     }
 
     public static class CommandProcessorUtils
@@ -81,7 +82,13 @@ namespace CommandProcessor
                     success = false;
                 }
 
-                yield return new CommandResult() { FunctionName = command.Function.Value, Success = success, Result = result };
+                yield return new CommandResult()
+                {
+                    Function = (string)command.Function,
+                    Success = success,
+                    Result = result,
+                    Description = (string)command.Description
+                };
             }
 
         }
