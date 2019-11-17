@@ -56,7 +56,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GivenJsonAndDevice_WhenCallSetFunction_ThenSuccessIsTrueAndResultIsNotNull()
+        public void GivenJsonAndDevice_WhenCallSetFunction_ThenCommandResultIsCorrect()
         {
             using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-call-set-function.json"))
             {
@@ -70,13 +70,14 @@ namespace Tests
                     {
                         Assert.IsTrue(commandResult.Success);
                         Assert.IsNotNull(commandResult.Result);
+                        Assert.IsTrue(commandResult.FunctionName == "SetSomething");
                     }
                 }
             }
         }
 
         [TestMethod]
-        public void GivenJsonAndDevice_WhenCallGetFunction_ThenSuccessIsTrueAndResultIs0()
+        public void GivenJsonAndDevice_WhenCallGetFunction_ThenCommandResultIsCorrect()
         {
             using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-call-get-function.json"))
             {
@@ -91,7 +92,34 @@ namespace Tests
                         Assert.IsTrue(commandResult.Success);
                         Assert.IsNotNull(commandResult.Result);
                         Assert.IsTrue((int?)commandResult.Result == 0);
+                        Assert.IsTrue(commandResult.FunctionName == "GetSomething");
                     }
+                }
+            }
+        }
+
+        [TestMethod]
+        public void GivenJsonAndDevice_WhenCall2Functions_ThenFunctionCallCountIs2()
+        {
+            using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-call-2-functions.json"))
+            {
+                string json = r.ReadToEnd();
+                using (var device = CreateDevice())
+                {
+                    var devices = new List<object>();
+                    devices.Add(device);
+
+                    int functionCallCount = 0;
+                    foreach (var commandResult in CommandProcessorUtils.Process(devices, json))
+                    {
+                        functionCallCount++;
+                        Assert.IsTrue(commandResult.Success);
+                        Assert.IsNotNull(commandResult.Result);
+                        Assert.IsTrue((int?)commandResult.Result == 0);
+                        Assert.IsTrue(commandResult.FunctionName != null);
+                    }
+
+                    Assert.IsTrue(functionCallCount == 2);
                 }
             }
         }

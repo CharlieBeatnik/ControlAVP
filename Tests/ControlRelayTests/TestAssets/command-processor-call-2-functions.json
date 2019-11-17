@@ -1,0 +1,28 @@
+{
+  "Commands": [
+    {
+      "Assembly": "Tests",
+      "Description": "Example description.",
+      "DeviceType": "DummyDevice",
+      "DeviceIndex": 0,
+      "Function": "GetSomething",
+      "Parameters": {
+        "x": "call1",
+        "y": 1,
+        "z": 1.1
+      }
+    },
+    {
+      "Assembly": "Tests",
+      "Description": "Example description.",
+      "DeviceType": "DummyDevice",
+      "DeviceIndex": 0,
+      "Function": "GetSomething",
+      "Parameters": {
+        "x": "call2",
+        "y": 2,
+        "z": 2.2
+      }
+    }
+  ]
+}

@@ -81,7 +81,7 @@ namespace CommandProcessor
                     success = false;
                 }
 
-                yield return new CommandResult() { FunctionName = command.Function, Success = success, Result = result };
+                yield return new CommandResult() { FunctionName = command.Function.Value, Success = success, Result = result };
             }
 
         }

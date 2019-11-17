@@ -2,6 +2,7 @@
   "Commands": [
     {
       "Assembly": "Tests",
+      "Description": "Example description.",
       "DeviceType": "DummyDevice",
       "DeviceIndex": 0,
       "Function": "GetSomething",

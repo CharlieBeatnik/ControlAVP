@@ -22,13 +22,17 @@
           },
           "Parameters": {
             "type": "object"
+          },
+          "Description": {
+            "type":  "string"
           }
         },
         "required": [
           "Assembly",
           "DeviceType",
           "DeviceIndex",
-          "Function"
+          "Function",
+          "Description"
         ]
       }
     }

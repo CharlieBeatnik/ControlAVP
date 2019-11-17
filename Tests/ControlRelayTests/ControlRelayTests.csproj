@@ -138,6 +138,7 @@
     <Content Include="TestAssets\command-processor-call-set-function.json" />
     <Content Include="TestAssets\command-processor-fail-validation.json" />
     <Content Include="TestAssets\command-processor-call-get-function.json" />
+    <Content Include="TestAssets\command-processor-call-2-functions.json" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Properties\UnitTestApp.rd.xml" />
