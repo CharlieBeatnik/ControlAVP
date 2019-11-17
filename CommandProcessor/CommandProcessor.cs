@@ -77,7 +77,7 @@ namespace CommandProcessor
                 }
                 else
                 {
-                    Debug.Assert(true, "JSON commands failed schema validation.");
+                    Debug.Fail("JSON commands failed schema validation.");
                     result = null;
                     success = false;
                 }

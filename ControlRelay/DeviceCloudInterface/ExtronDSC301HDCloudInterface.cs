@@ -64,7 +64,7 @@ namespace ControlRelay
 
             if(payload.ScaleType.Valid() && payload.PositionType.Valid())
             {
-                success = _device.Scale(payload.ScaleType, payload.PositionType);
+                success = _device.Scale(payload.ScaleType, payload.PositionType, AspectRatio.RatioPreserve);
             }
 
             return methodRequest.GetMethodResponse(success);

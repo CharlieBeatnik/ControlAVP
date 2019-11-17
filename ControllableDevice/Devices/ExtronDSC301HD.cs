@@ -70,7 +70,7 @@ namespace ControllableDevice
             return null;
         }
 
-        public bool Scale(ScaleType scaleType, PositionType positionType = PositionType.Centre)
+        public bool Scale(ScaleType scaleType, PositionType positionType, AspectRatio aspectRatio)
         {
             if (!_rs232Device.Enabled) return false;
 
@@ -86,6 +86,16 @@ namespace ControllableDevice
 
             float edidRatio = (float)edid.Width / (float)edid.Height;
             float inputRatio = (float)inputWidth / (float)inputHeight;
+
+            float outputRatio;
+            if(aspectRatio == AspectRatio.RatioPreserve)
+            {
+                outputRatio = inputRatio;
+            }
+            else
+            {
+                outputRatio = aspectRatio.GetRatio();
+            }
 
             switch (scaleType)
             {

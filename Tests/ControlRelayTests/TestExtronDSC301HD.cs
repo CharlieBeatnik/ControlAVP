@@ -296,7 +296,7 @@ namespace Tests
         {
             using (var device = CreateInvalidDevice())
             {
-                Assert.IsFalse(device.Scale(ScaleType.Fit));
+                Assert.IsFalse(device.Scale(ScaleType.Fit, PositionType.Centre, AspectRatio.RatioPreserve));
             }
         }
 

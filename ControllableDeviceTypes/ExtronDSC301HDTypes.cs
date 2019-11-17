@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -252,6 +253,33 @@ namespace ControllableDeviceTypes
             public static bool Valid(this PositionType positionType)
             {
                 return Enum.IsDefined(typeof(PositionType), positionType);
+            }
+        }
+
+        public enum AspectRatio
+        {
+            RatioPreserve,
+            Ratio4x3,
+            Ratio16x9
+        }
+
+        public static class AspectRatioExtensions
+        {
+            public static bool Valid(this AspectRatio aspectRatio)
+            {
+                return Enum.IsDefined(typeof(AspectRatio), aspectRatio);
+            }
+
+            public static float GetRatio(this AspectRatio aspectRatio)
+            {
+                switch(aspectRatio)
+                {
+                    case AspectRatio.Ratio4x3:  return  4.0f / 3.0f;
+                    case AspectRatio.Ratio16x9: return 16.0f / 9.0f;
+                    default:
+                        Debug.Fail($"No aspect ratio exists for {aspectRatio}");
+                        return 0.0f;
+                }
             }
         }
 
