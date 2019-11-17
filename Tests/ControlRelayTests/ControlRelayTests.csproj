@@ -137,7 +137,7 @@
     <None Include="ControlRelayTests_TemporaryKey.pfx" />
     <Content Include="TestAssets\command-processor-call-set-function.json" />
     <Content Include="TestAssets\command-processor-fail-validation.json" />
-    <None Include="TestAssets\command-processor-call-get-function.json" />
+    <Content Include="TestAssets\command-processor-call-get-function.json" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Properties\UnitTestApp.rd.xml" />

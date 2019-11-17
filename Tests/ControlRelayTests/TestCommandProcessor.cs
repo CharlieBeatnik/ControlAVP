@@ -56,7 +56,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GivenJsonAndDevice_WhenCallSetFunction_ThenResultIsTrue()
+        public void GivenJsonAndDevice_WhenCallSetFunction_ThenSuccessIsTrueAndResultIsNotNull()
         {
             using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-call-set-function.json"))
             {
@@ -70,6 +70,27 @@ namespace Tests
                     {
                         Assert.IsTrue(commandResult.Success);
                         Assert.IsNotNull(commandResult.Result);
+                    }
+                }
+            }
+        }
+
+        [TestMethod]
+        public void GivenJsonAndDevice_WhenCallGetFunction_ThenSuccessIsTrueAndResultIs0()
+        {
+            using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-call-get-function.json"))
+            {
+                string json = r.ReadToEnd();
+                using (var device = CreateDevice())
+                {
+                    var devices = new List<object>();
+                    devices.Add(device);
+
+                    foreach (var commandResult in CommandProcessorUtils.Process(devices, json))
+                    {
+                        Assert.IsTrue(commandResult.Success);
+                        Assert.IsNotNull(commandResult.Result);
+                        Assert.IsTrue((int?)commandResult.Result == 0);
                     }
                 }
             }
