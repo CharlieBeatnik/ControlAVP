@@ -40,5 +40,11 @@ namespace Tests
             Assert.IsTrue(_device.SendCommand(CommandName.Menu));
         }
 
+        [Test]
+        public void GivenDevice_WhenLoadProfile_ThenSuccessIsTrue()
+        {
+            Assert.IsTrue(_device.LoadProfile(ProfileName.Profile0));
+        }
+
     }
 }

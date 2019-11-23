@@ -71,6 +71,18 @@ namespace Tests
         }
 
         [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void GivenDevice_WhenLoadProfileUsingInvalidEnum_ThenExceptionThrown()
+        {
+            using (var serialBlaster = CreateSerialBlaster())
+            using (var device = CreateDevice(serialBlaster))
+            {
+                var result = device.LoadProfile((ProfileName)int.MaxValue);
+                Assert.IsTrue(result);
+            }
+        }
+
+        [TestMethod]
         public void GivenDeviceAndCommandSentAndDeviceDisposed_WhenCreateDeviceAndSendCommand_ThenResponseIsTrue()
         {
             using (var serialBlaster = CreateSerialBlaster())

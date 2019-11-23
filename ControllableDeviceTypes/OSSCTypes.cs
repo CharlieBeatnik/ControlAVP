@@ -32,7 +32,7 @@ namespace ControllableDeviceTypes
         }
 
         //http://junkerhq.net/xrgb/index.php?title=OSSC_L336
-        public enum CommandName
+        public enum GenericCommandName
         {
             Number1,
             Number2,
@@ -76,6 +76,37 @@ namespace ControllableDeviceTypes
             TonePlus
         };
 
+        public static class GenericCommandNameExtensions
+        {
+            public static bool Valid(this GenericCommandName genericCommandName)
+            {
+                return Enum.IsDefined(typeof(GenericCommandName), genericCommandName);
+            }
+        }
+
+        public enum CommandName
+        {
+            AV1RGBS,
+            AV1RGsB,
+            AV1YPbPr,
+            AV2YPbPr,
+            AV2RGsB,
+            AV3RGBHV,
+            AV3RGBS,
+            AV3RGsB,
+            Menu,
+            Back,
+            LineX,
+            PhaseMinus,
+            PhasePlus,
+            ScanlineType,
+            ScanlineMode,
+            ScanlineSizeMinus,
+            ScanlineSizePlus,
+            LCDBacklightToggle,
+            SourceInfo
+        };
+
         public static class CommandNameExtensions
         {
             public static bool Valid(this CommandName commandName)
@@ -83,6 +114,5 @@ namespace ControllableDeviceTypes
                 return Enum.IsDefined(typeof(CommandName), commandName);
             }
         }
-
     }
 }
