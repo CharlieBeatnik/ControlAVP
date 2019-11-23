@@ -121,5 +121,25 @@ namespace Tests
                 }
             }
         }
+
+        [TestMethod]
+        public void GivenJsonAndDevice_WhenCallFunctionWithEnumParameter_ThenCommandResultIsCorrect()
+        {
+            using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-call-function-with-enum-parameter.json"))
+            {
+                string json = r.ReadToEnd();
+                using (var device = CreateDevice())
+                {
+                    var devices = new List<object>();
+                    devices.Add(device);
+
+                    foreach (var commandResult in CommandProcessorUtils.Process(devices, json))
+                    {
+                        Assert.IsTrue(commandResult.Success);
+                        Assert.IsTrue((DummyDeviceSetting)commandResult.Result == DummyDeviceSetting.Setting2);
+                    }
+                }
+            }
+        }
     }
 }

@@ -18,7 +18,7 @@
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <PackageCertificateKeyFile>ControlRelayTests_TemporaryKey.pfx</PackageCertificateKeyFile>
     <UnitTestPlatformVersion Condition="'$(UnitTestPlatformVersion)' == ''">$(VisualStudioVersion)</UnitTestPlatformVersion>
-    <PackageCertificateThumbprint>5475AAED6D1BF7FF2B846863864C32F186D2089A</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>CD1E3BBD370A963EEB4FEA741D87F7C2EA5F9146</PackageCertificateThumbprint>
     <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
@@ -139,6 +139,7 @@
     <Content Include="TestAssets\command-processor-fail-validation.json" />
     <Content Include="TestAssets\command-processor-call-get-function.json" />
     <Content Include="TestAssets\command-processor-call-2-functions.json" />
+    <Content Include="TestAssets\command-processor-call-function-with-enum-parameter.json" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Properties\UnitTestApp.rd.xml" />

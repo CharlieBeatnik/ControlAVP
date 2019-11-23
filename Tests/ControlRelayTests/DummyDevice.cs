@@ -8,6 +8,12 @@ using System.Threading.Tasks;
 
 namespace Tests
 {
+    public enum DummyDeviceSetting
+    {
+        Setting1,
+        Setting2
+    }
+
     public class DummyDevice : IControllableDevice
     {
         private bool _disposed = false;
@@ -70,6 +76,15 @@ namespace Tests
                 return null;
             }
             else return 0;
+        }
+
+        public DummyDeviceSetting? GetEnum(DummyDeviceSetting dummyDeviceSetting)
+        {
+            if (_invalid)
+            {
+                return null;
+            }
+            else return dummyDeviceSetting;
         }
     }
 }
