@@ -181,7 +181,7 @@ namespace Tests
         {
             using (var device = CreateDevice())
             {
-                Assert.IsTrue(device.SetOutputRate(1280, 720, 60.0f));
+                Assert.IsTrue(device.SetOutputRateWithoutEdid(1280, 720, 60.0f));
             }
         }
 
@@ -190,7 +190,7 @@ namespace Tests
         {
             using (var device = CreateInvalidDevice())
             {
-                Assert.IsFalse(device.SetOutputRate(0, 0, 0.0f));
+                Assert.IsFalse(device.SetOutputRateWithoutEdid(0, 0, 0.0f));
             }
         }
 
@@ -433,7 +433,7 @@ namespace Tests
         {
             using (var device = CreateInvalidDevice())
             {
-                Assert.IsFalse(device.SetOutputRate(1280, 720, 60.0f));
+                Assert.IsFalse(device.SetOutputRateWithoutEdid(1280, 720, 60.0f));
             }
         }
 

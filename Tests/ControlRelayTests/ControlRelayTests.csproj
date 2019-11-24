@@ -140,6 +140,7 @@
     <Content Include="TestAssets\command-processor-call-get-function.json" />
     <Content Include="TestAssets\command-processor-call-2-functions.json" />
     <Content Include="TestAssets\command-processor-call-function-with-enum-parameter.json" />
+    <Content Include="TestAssets\command-processor-post-wait.json" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Properties\UnitTestApp.rd.xml" />

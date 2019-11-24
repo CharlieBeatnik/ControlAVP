@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace Tests
 {
@@ -138,6 +139,30 @@ namespace Tests
                         Assert.IsTrue(commandResult.Success);
                         Assert.IsTrue((DummyDeviceSetting)commandResult.Result == DummyDeviceSetting.Setting2);
                     }
+                }
+            }
+        }
+
+        [TestMethod]
+        public void GivenJsonAndDevice_WhenCallCommandWith5SecondsPostWait_ThenExecuteTimeGreaterThan5Seconds()
+        {
+            using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-post-wait.json"))
+            {
+                string json = r.ReadToEnd();
+                using (var device = CreateDevice())
+                {
+                    var devices = new List<object>();
+                    devices.Add(device);
+
+                    var sw = new Stopwatch();
+                    sw.Start();
+
+                    foreach (var commandResult in CommandProcessorUtils.Execute(devices, json))
+                    {
+                    }
+
+                    sw.Stop();
+                    Assert.IsTrue(sw.ElapsedMilliseconds >= 5000);
                 }
             }
         }

@@ -295,7 +295,7 @@ namespace ControllableDevice
             return (result != null);
         }
 
-        public bool SetOutputRate(int width, int height, float refreshRate)
+        public bool SetOutputRateWithoutEdid(int width, int height, float refreshRate)
         {
             var edid = Edid.GetEdid(width, height, refreshRate);
            

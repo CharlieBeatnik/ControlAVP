@@ -24,7 +24,10 @@
             "type": "object"
           },
           "Description": {
-            "type":  "string"
+            "type": "string"
+          },
+          "PostWait": {
+            "type": "number"
           }
         },
         "required": [

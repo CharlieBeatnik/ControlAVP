@@ -78,10 +78,10 @@ namespace Tests
 
                 //Read back and verify
                 var hdmiDevice0State = _hdmiDevice0.GetState();
-                Assert.That(hdmiDevice0State.InputPort == InputPort.Port8);
+                Assert.IsTrue(hdmiDevice0State.InputPort == InputPort.Port8);
 
                 var hdmiDevice1State = _hdmiDevice1.GetState();
-                Assert.That(hdmiDevice1State.InputPort == InputPort.Port8);
+                Assert.IsTrue(hdmiDevice1State.InputPort == InputPort.Port8);
             }
         }
 

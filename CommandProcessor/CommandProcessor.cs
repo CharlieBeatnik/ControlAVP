@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
 
@@ -80,6 +81,11 @@ namespace CommandProcessor
                     Debug.Fail("Return type must be bool or nullable");
                     result = null;
                     success = false;
+                }
+
+                if(command.PostWait != null)
+                {
+                    Thread.Sleep(TimeSpan.FromSeconds((double)command.PostWait));
                 }
 
                 yield return new CommandResult()
