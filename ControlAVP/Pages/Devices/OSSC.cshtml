@@ -22,7 +22,7 @@
                         <tr>
                             <td class="align-middle text-right" width="1%">Load Profile</td>
                             <td>
-                                <div class="btn-group">
+                                <div class="btn-group flex-wrap">
                                     @for (int i = 0; i < Enum.GetValues(typeof(ProfileName)).Length; ++i)
                                     {
                                         var profileName = (ProfileName)Enum.GetValues(typeof(ProfileName)).GetValue(i);

@@ -1,0 +1,24 @@
+{
+  "Commands": [
+    {
+      "Assembly": "ControllableDevice",
+      "Description": "Chanage HDMI switch 0 to input 8.",
+      "DeviceType": "AtenVS0801H",
+      "DeviceIndex": 0,
+      "Function": "SetInputPort",
+      "Parameters": {
+        "inputPort": "Port8"
+      }
+    },
+    {
+      "Assembly": "ControllableDevice",
+      "Description": "Chanage HDMI switch 1 to input 8.",
+      "DeviceType": "AtenVS0801H",
+      "DeviceIndex": 1,
+      "Function": "SetInputPort",
+      "Parameters": {
+        "inputPort": "Port8"
+      }
+    }
+  ]
+}
