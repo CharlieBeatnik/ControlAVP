@@ -295,6 +295,18 @@ namespace ControllableDevice
             return (result != null);
         }
 
+        public bool SetOutputRate(int width, int height, float refreshRate)
+        {
+            var edid = Edid.GetEdid(width, height, refreshRate);
+           
+            //Handle null Edid gracefully, just return false
+            if (edid != null)
+            {
+                return SetOutputRate(edid);
+            }
+            else return false;           
+        }
+
         public PositionAndSize GetImagePositionAndSize()
         {
             if (!_rs232Device.Enabled) return null;

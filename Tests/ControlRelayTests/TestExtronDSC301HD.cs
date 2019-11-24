@@ -177,6 +177,24 @@ namespace Tests
         }
 
         [TestMethod]
+        public void GivenDevice_WhenSetOutputRateWithValues_ThenResultsIsTrue()
+        {
+            using (var device = CreateDevice())
+            {
+                Assert.IsTrue(device.SetOutputRate(1280, 720, 60.0f));
+            }
+        }
+
+        [TestMethod]
+        public void GivenDevice_WhenSetOutputRateWithInvalidValues_ThenResultsIsFalse()
+        {
+            using (var device = CreateInvalidDevice())
+            {
+                Assert.IsFalse(device.SetOutputRate(0, 0, 0.0f));
+            }
+        }
+
+        [TestMethod]
         public void GivenDevice_WhenCreateAnotherDeviceWithSameID_ThenSecondDeviceIsNotAvailable()
         {
             using (var device1 = CreateDevice())
@@ -407,6 +425,15 @@ namespace Tests
                 var edid = Edid.GetEdid(1280, 720, 60.0f);
                 Assert.IsNotNull(edid);
                 Assert.IsFalse(device.SetOutputRate(edid));
+            }
+        }
+
+        [TestMethod]
+        public void GivenInvalidDevice_WhenSetOutputRateWithValues_ThenResultsIsFalse()
+        {
+            using (var device = CreateInvalidDevice())
+            {
+                Assert.IsFalse(device.SetOutputRate(1280, 720, 60.0f));
             }
         }
 

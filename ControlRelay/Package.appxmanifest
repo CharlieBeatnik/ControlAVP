@@ -9,14 +9,14 @@
 
   <Identity
     Name="ControlRelay-uwp"
-    Publisher="CN=andy"
+    Publisher="CN=AndrewDennison"
     Version="1.0.0.0" />
 
   <mp:PhoneIdentity PhoneProductId="78a47e1f-47ff-4dd5-9a66-a8ae3d2d136e" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>ControlRelay</DisplayName>
-    <PublisherDisplayName>andy</PublisherDisplayName>
+    <PublisherDisplayName>AndrewDennison</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 
