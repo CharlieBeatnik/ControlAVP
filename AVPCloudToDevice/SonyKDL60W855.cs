@@ -19,7 +19,7 @@ namespace AVPCloudToDevice
         {
             try
             {
-                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "TVTurnOn", null);
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "TVTurnOn", null);
                 return true;
             }
             catch
@@ -32,7 +32,7 @@ namespace AVPCloudToDevice
         {
             try
             {
-                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "TVTurnOff", null);
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "TVTurnOff", null);
                 return true;
             }
             catch
@@ -45,7 +45,7 @@ namespace AVPCloudToDevice
         {
             try
             {
-                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "TVGetInputPort", null);
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "TVGetInputPort", null);
                 string json = response.GetPayloadAsJson();
                 return JsonConvert.DeserializeObject<InputPort>(json);
             }
@@ -60,7 +60,7 @@ namespace AVPCloudToDevice
             try
             {
                 var payload = new { inputPort };
-                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "TVSetInputPort", payload);
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "TVSetInputPort", payload);
                 return true;
             }
             catch
@@ -73,7 +73,7 @@ namespace AVPCloudToDevice
         {
             try
             {
-                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "TVGetPowerStatus", null);
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "TVGetPowerStatus", null);
                 string json = response.GetPayloadAsJson();
                 return JsonConvert.DeserializeObject<PowerStatus>(json);
             }

@@ -20,7 +20,7 @@ namespace AVPCloudToDevice
         {
             try
             {
-                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "PDUGetOutlets", null);
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "PDUGetOutlets", null);
                 string json = response.GetPayloadAsJson();
                 return JsonConvert.DeserializeObject<List<Outlet>>(json);
             }
@@ -34,7 +34,7 @@ namespace AVPCloudToDevice
         {
             try
             {
-                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "PDUGetOutletsWaitForPending", null);
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "PDUGetOutletsWaitForPending", null);
                 string json = response.GetPayloadAsJson();
                 return JsonConvert.DeserializeObject<List<Outlet>>(json);
             }
@@ -53,7 +53,7 @@ namespace AVPCloudToDevice
                     outletId
                 };
 
-                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "PDUTurnOutletOn", payload);
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "PDUTurnOutletOn", payload);
                 return true;
             }
             catch
@@ -71,7 +71,7 @@ namespace AVPCloudToDevice
                     outletId
                 };
 
-                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "PDUTurnOutletOff", payload);
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "PDUTurnOutletOff", payload);
                 return true;
             }
             catch
@@ -84,7 +84,7 @@ namespace AVPCloudToDevice
         {
             try
             {
-                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "PDUGetAvailable", null);
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "PDUGetAvailable", null);
                 string json = response.GetPayloadAsJson();
                 return JsonConvert.DeserializeObject<bool>(json);
             }

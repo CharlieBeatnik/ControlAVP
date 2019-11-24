@@ -24,7 +24,7 @@ namespace AVPCloudToDevice
             {
                 var payload = new { _hdmiSwitchId };
 
-                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "HDMISwitchGoToNextInput", payload);
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "HDMISwitchGoToNextInput", payload);
                 return true;
             }
             catch
@@ -39,7 +39,7 @@ namespace AVPCloudToDevice
             {
                 var payload = new { _hdmiSwitchId };
 
-                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "HDMISwitchGoToPreviousInput", payload);
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "HDMISwitchGoToPreviousInput", payload);
                 return true;
             }
             catch
@@ -54,7 +54,7 @@ namespace AVPCloudToDevice
             {
                 var payload = new { _hdmiSwitchId };
 
-                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "HDMISwitchGetState", payload);
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "HDMISwitchGetState", payload);
                 string json = response.GetPayloadAsJson();
                 return JsonConvert.DeserializeObject<State>(json);
             }
@@ -74,7 +74,7 @@ namespace AVPCloudToDevice
                     inputPort
                 };
 
-                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "HDMISwitchSetInputPort", payload);
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "HDMISwitchSetInputPort", payload);
                 return true;
             }
             catch
@@ -89,7 +89,7 @@ namespace AVPCloudToDevice
             {
                 var payload = new { _hdmiSwitchId };
 
-                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "HDMISwitchGetAvailable", payload);
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "HDMISwitchGetAvailable", payload);
                 string json = response.GetPayloadAsJson();
                 return JsonConvert.DeserializeObject<bool>(json);
             }

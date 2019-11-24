@@ -21,7 +21,7 @@ namespace AVPCloudToDevice
             try
             {
                 var payload = new { commandName };
-                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "OSSCSendCommand", payload);
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "OSSCSendCommand", payload);
                 return true;
             }
             catch
@@ -35,7 +35,7 @@ namespace AVPCloudToDevice
             try
             {
                 var payload = new { profileName };
-                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "OSSCLoadProfile", payload);
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "OSSCLoadProfile", payload);
                 return true;
             }
             catch
@@ -48,7 +48,7 @@ namespace AVPCloudToDevice
         {
             try
             {
-                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "OSSCGetAvailable", null);
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "OSSCGetAvailable", null);
                 string json = response.GetPayloadAsJson();
                 return JsonConvert.DeserializeObject<bool>(json);
             }

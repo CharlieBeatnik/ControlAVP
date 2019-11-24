@@ -20,11 +20,26 @@
 
   <ItemGroup>
     <None Remove="settings.json" />
+    <None Remove="TestAssets\command-processor-call-2-functions.json" />
+    <None Remove="TestAssets\command-processor-call-function-with-enum-parameter.json" />
+    <None Remove="TestAssets\command-processor-call-function.json" />
+    <None Remove="TestAssets\command-processor-call-get-function.json" />
+    <None Remove="TestAssets\command-processor-call-set-function.json" />
+    <None Remove="TestAssets\command-processor-fail-validation.json" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="settings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestAssets\command-processor-call-function.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestAssets\command-processor-change-hdmi-input.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestAssets\command-processor-fail-validation.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 

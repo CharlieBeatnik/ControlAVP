@@ -48,7 +48,7 @@ namespace Tests
                     var devices = new List<object>();
                     devices.Add(device);
 
-                    foreach (var result in CommandProcessorUtils.Process(devices, json))
+                    foreach (var result in CommandProcessorUtils.Execute(devices, json))
                     {
                     }
                 }
@@ -66,7 +66,7 @@ namespace Tests
                     var devices = new List<object>();
                     devices.Add(device);
 
-                    foreach (var commandResult in CommandProcessorUtils.Process(devices, json))
+                    foreach (var commandResult in CommandProcessorUtils.Execute(devices, json))
                     {
                         Assert.IsTrue(commandResult.Success);
                         Assert.IsNotNull(commandResult.Result);
@@ -88,7 +88,7 @@ namespace Tests
                     var devices = new List<object>();
                     devices.Add(device);
 
-                    foreach (var commandResult in CommandProcessorUtils.Process(devices, json))
+                    foreach (var commandResult in CommandProcessorUtils.Execute(devices, json))
                     {
                         Assert.IsTrue(commandResult.Success);
                         Assert.IsNotNull(commandResult.Result);
@@ -112,7 +112,7 @@ namespace Tests
                     devices.Add(device);
 
                     int functionCallCount = 0;
-                    foreach (var commandResult in CommandProcessorUtils.Process(devices, json))
+                    foreach (var commandResult in CommandProcessorUtils.Execute(devices, json))
                     {
                         functionCallCount++;
                     }
@@ -133,7 +133,7 @@ namespace Tests
                     var devices = new List<object>();
                     devices.Add(device);
 
-                    foreach (var commandResult in CommandProcessorUtils.Process(devices, json))
+                    foreach (var commandResult in CommandProcessorUtils.Execute(devices, json))
                     {
                         Assert.IsTrue(commandResult.Success);
                         Assert.IsTrue((DummyDeviceSetting)commandResult.Result == DummyDeviceSetting.Setting2);

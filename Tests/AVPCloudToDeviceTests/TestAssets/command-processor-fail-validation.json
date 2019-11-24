@@ -1,0 +1,16 @@
+{
+  "Commands": [
+    {
+      "Assembly": "Tests",
+      "Description": "Example description.",
+      "DeviceType": "DummyDevice",
+      "DeviceIndex": "0", //Schema Fail - String not Integer
+      "Function": "SetSomething",
+      "Parameters": {
+        "x": "x",
+        "y": 1,
+        "z": 1.1
+      }
+    }
+  ]
+}

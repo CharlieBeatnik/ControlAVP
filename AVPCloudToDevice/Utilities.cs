@@ -24,12 +24,15 @@ namespace AVPCloudToDevice
             return null;
         }
 
-        public static CloudToDeviceMethodResult InvokeMethod(ServiceClient serviceClient, string deviceId, string methodName, object payload)
+        public static CloudToDeviceMethodResult InvokeMethodWithObjectPayload(ServiceClient serviceClient, string deviceId, string methodName, object payload)
+        {
+            return InvokeMethodWithJsonPayload(serviceClient, deviceId, methodName, JsonConvert.SerializeObject(payload));
+        }
+
+        public static CloudToDeviceMethodResult InvokeMethodWithJsonPayload(ServiceClient serviceClient, string deviceId, string methodName, string json)
         {
             var methodInvocation = new CloudToDeviceMethod(methodName) { ResponseTimeout = TimeSpan.FromSeconds(300) };
-
-            var payloadString = JsonConvert.SerializeObject(payload);
-            methodInvocation.SetPayloadJson(payloadString);
+            methodInvocation.SetPayloadJson(json);
 
             // Invoke the direct method asynchronously and get the response from the device.
             var response = Task.Run(async () => await InvokeDeviceMethodAsync(serviceClient, deviceId, methodInvocation).ConfigureAwait(false)).Result;

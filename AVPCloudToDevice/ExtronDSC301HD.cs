@@ -21,7 +21,7 @@ namespace AVPCloudToDevice
         {
             try
             {
-                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "ScalerGetFirmware", null);
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "ScalerGetFirmware", null);
                 string json = response.GetPayloadAsJson();
                 return JsonConvert.DeserializeObject<Version>(json, new VersionConverter());
             }
@@ -35,7 +35,7 @@ namespace AVPCloudToDevice
         {
             try
             {
-                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "ScalerGetAvailable", null);
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "ScalerGetAvailable", null);
                 string json = response.GetPayloadAsJson();
                 return JsonConvert.DeserializeObject<bool>(json);
             }
@@ -49,7 +49,7 @@ namespace AVPCloudToDevice
             try
             {
                 var payload = new { scaleType, positionType };
-                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "ScalerSetScale", payload);
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "ScalerSetScale", payload);
                 return true;
             }
             catch
@@ -68,7 +68,7 @@ namespace AVPCloudToDevice
             try
             {
                 var payload = new { outputRate.Id };
-                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "ScalerSetOutputRate", payload);
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "ScalerSetOutputRate", payload);
                 return true;
             }
             catch
@@ -81,7 +81,7 @@ namespace AVPCloudToDevice
         {
             try
             {
-                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "ScalerGetInputPort", null);
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "ScalerGetInputPort", null);
                 string json = response.GetPayloadAsJson();
                 return JsonConvert.DeserializeObject<InputPort>(json);
             }
@@ -96,7 +96,7 @@ namespace AVPCloudToDevice
             try
             {
                 var payload = new { inputPort };
-                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "ScalerSetInputPort", payload);
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "ScalerSetInputPort", payload);
                 return true;
             }
             catch
@@ -109,7 +109,7 @@ namespace AVPCloudToDevice
         {
             try
             {
-                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "ScalerGetTemperature", null);
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "ScalerGetTemperature", null);
                 string json = response.GetPayloadAsJson();
                 return JsonConvert.DeserializeObject<float>(json);
             }

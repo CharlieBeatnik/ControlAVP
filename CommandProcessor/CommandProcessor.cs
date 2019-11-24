@@ -19,7 +19,7 @@ namespace CommandProcessor
 
     public static class CommandProcessorUtils
     {
-        public static IEnumerable<CommandResult> Process(IEnumerable<object> devices, string jsonCommands)
+        public static IEnumerable<CommandResult> Execute(IEnumerable<object> devices, string jsonCommands)
         {
             if (devices == null)
             {
@@ -77,7 +77,7 @@ namespace CommandProcessor
                 }
                 else
                 {
-                    Debug.Fail("JSON commands failed schema validation.");
+                    Debug.Fail("Return type must be bool or nullable");
                     result = null;
                     success = false;
                 }

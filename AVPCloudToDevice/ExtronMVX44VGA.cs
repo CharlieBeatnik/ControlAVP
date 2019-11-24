@@ -21,7 +21,7 @@ namespace AVPCloudToDevice
         {
             try
             {
-                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "VGAMatrixGetFirmware", null);
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "VGAMatrixGetFirmware", null);
                 string json = response.GetPayloadAsJson();
                 return JsonConvert.DeserializeObject<Version>(json, new VersionConverter());
             }
@@ -35,7 +35,7 @@ namespace AVPCloudToDevice
         {
             try
             {
-                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "VGAMatrixGetAvailable", null);
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "VGAMatrixGetAvailable", null);
                 string json = response.GetPayloadAsJson();
                 return JsonConvert.DeserializeObject<bool>(json);
             }
@@ -49,7 +49,7 @@ namespace AVPCloudToDevice
         {
             try
             {
-                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "VGAMatrixGetTieState", null);
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "VGAMatrixGetTieState", null);
                 string json = response.GetPayloadAsJson();
                 return JsonConvert.DeserializeObject<TieState>(json);
             }
@@ -64,7 +64,7 @@ namespace AVPCloudToDevice
             try
             {
                 var payload = new { inputPort, tieType };
-                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "VGAMatrixTieInputPortToAllOutputPorts", payload);
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "VGAMatrixTieInputPortToAllOutputPorts", payload);
                 return true;
             }
             catch
@@ -78,7 +78,7 @@ namespace AVPCloudToDevice
             try
             {
                 var payload = new { inputPort, outputPort, tieType };
-                var response = Utilities.InvokeMethod(_serviceClient, _deviceId, "VGAMatrixTieInputPortToOutputPort", payload);
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "VGAMatrixTieInputPortToOutputPort", payload);
                 return true;
             }
             catch
