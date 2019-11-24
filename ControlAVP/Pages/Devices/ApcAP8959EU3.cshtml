@@ -1,0 +1,74 @@
+﻿@page
+@model ControlAVP.Pages.Devices.ApcAP8959EU3Model
+@{
+    ViewData["Title"] = "ApcAP8959EU3";
+}
+
+@Html.AntiForgeryToken()
+
+<div id="outlet-table">
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript" language="JavaScript">
+
+        $(document).ready(function () {
+
+            var toggleOutputState = function (context) {
+                var parameters = {
+                    id: $(context).data('outlet'),
+                    currentPowerState: $(context).data('currentpowerstate')
+                };
+
+                //Disable the button and add a spinner
+                $(context).prop('disabled', true);
+                $(context).html("<i class='fa fa-spinner fa-spin'></i>");
+
+                $.ajax({
+                    type: "GET",
+                    url: "/Devices/ApcAP8959EU3?handler=ToggleOutletState",
+                    data: parameters,
+                }).done(function (response) {
+                    setupOutletTable(response);
+                });
+            }
+
+            var btnClassClick = function () {
+                var confirmation = $(this).data('confirmation');
+                var message = $(this).data('message');
+                var image = $(this).data('image');
+
+                $("#modal-btn-yes").unbind('click').click({ context: this }, function (event) {
+                    $("#confirmation-modal").modal('hide');
+                    toggleOutputState(event.data.context);
+                });
+
+                $("#modal-btn-no").unbind('click').click({ context: this }, function (event) {
+                    $("#confirmation-modal").modal('hide');
+                });
+
+                if (confirmation == "True") {
+                    $("#modal-title").html(message);
+                    $("#modal-image").attr('src', image);
+                    $("#confirmation-modal").modal('show');
+                }
+                else {
+                    toggleOutputState(this);
+                }
+            }
+
+            var setupOutletTable = function (response) {
+                $("#outlet-table").html(response);
+                $('.btn-click-action').unbind('click').on('click', btnClassClick);
+            }
+
+            $.ajax({
+                type: "GET",
+                url: "/Devices/ApcAP8959EU3?handler=OutletTable"
+            }).done(function (response) {
+                setupOutletTable(response);
+            });
+        });
+    </script>
+}

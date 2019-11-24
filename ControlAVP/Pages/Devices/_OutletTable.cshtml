@@ -1,5 +1,5 @@
 ﻿@using ControllableDeviceTypes.ApcAP8959EU3Types
-@model OutletTableViewModel
+@model ControlAVP.Pages.Devices.OutletTableViewModel
 
 
 <div class="modal fade" tabindex="-1" role="dialog" id="confirmation-modal">
@@ -32,14 +32,16 @@
     <tbody>
         @foreach (var outlet in Model.Outlets.OrderBy(o => o.Name).Where(o => !o.Name.Contains("Outlet")))
         {
-            string relativeImagePath = string.Format("images/outlets/{0}.png", outlet.Name);
-            string absoluteImagePath = System.IO.Path.Combine(Model.WebRootPath, @"images\outlets", outlet.Name + ".png");
+            string relativeImagePath = string.Format("../images/outlets/small/{0}.png", outlet.Name);
+            string absoluteImagePath = System.IO.Path.Combine(Model.WebRootPath, @"images\outlets\small", outlet.Name + ".png");
+
+            string relativeLargeImagePath = string.Format("../images/outlets/large/{0}.png", outlet.Name);
 
             <tr class="@(@outlet.State == Outlet.PowerState.On ? "table-success" : "")">
                 <td class="align-middle">
                     @if (!System.IO.File.Exists(absoluteImagePath))
                     {
-                        relativeImagePath = "images/outlets/empty.png";
+                        relativeImagePath = "../images/outlets/small/empty.png";
                     }
                     <img src="@relativeImagePath" class="img-fluid"/>
                 </td>
@@ -50,11 +52,11 @@
                     {
                         case Outlet.PowerState.On:
                             var messageOff = string.Format("Turn the {0} off?", outlet.Name);
-                            <button data-outlet="@outlet.Id" data-currentpowerstate="@outlet.State" data-confirmation="@confirmation" data-message="@messageOff" data-image="@relativeImagePath" class="btn border btn-danger btn-sm btn-click-action btn-block">Turn Off</button>
+                            <button data-outlet="@outlet.Id" data-currentpowerstate="@outlet.State" data-confirmation="@confirmation" data-message="@messageOff" data-image="@relativeLargeImagePath" class="btn border btn-danger btn-sm btn-click-action btn-block">Turn Off</button>
                             break;
                         case Outlet.PowerState.Off:
                             var messageOn = string.Format("Turn the {0} on?", outlet.Name);
-                            <button data-outlet="@outlet.Id" data-currentpowerstate="@outlet.State" data-confirmation="@false" data-message="@messageOn" data-image="@relativeImagePath" class="btn border btn-success btn-sm btn-click-action btn-block">Turn On</button>
+                            <button data-outlet="@outlet.Id" data-currentpowerstate="@outlet.State" data-confirmation="@false" data-message="@messageOn" data-image="@relativeLargeImagePath" class="btn border btn-success btn-sm btn-click-action btn-block">Turn On</button>
                             break;
                     }
                 </td>
