@@ -1,0 +1,31 @@
+{
+  "Commands": [
+    {
+      "Assembly": "ControllableDevice",
+      "Description": "TV On",
+      "DeviceType": "SonyKDL60W855",
+      "DeviceIndex": 0,
+      "Function": "TurnOn"
+    },
+    {
+      "Assembly": "ControllableDevice",
+      "Description": "XboxOne On",
+      "DeviceType": "ApcAP8959EU3",
+      "DeviceIndex": 0,
+      "Function": "TurnOutletOn",
+      "Parameters": {
+        "id": 21
+      }
+    },
+    {
+      "Assembly": "ControllableDevice",
+      "Description": "TV HDMI3 for Xbox One",
+      "DeviceType": "SonyKDL60W855",
+      "DeviceIndex": 0,
+      "Function": "SetInputPort",
+      "Parameters": {
+        "inputPort": "Hdmi3"
+      }
+    }
+  ]
+}

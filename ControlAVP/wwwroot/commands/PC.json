@@ -2,22 +2,142 @@
   "Commands": [
     {
       "Assembly": "ControllableDevice",
-      "Description": "Chanage HDMI switch 0 to input 8.",
-      "DeviceType": "AtenVS0801H",
+      "Description": "TV On",
+      "DeviceType": "SonyKDL60W855",
       "DeviceIndex": 0,
-      "Function": "SetInputPort",
+      "Function": "TurnOn"
+    },
+    {
+      "Assembly": "ControllableDevice",
+      "Description": "Rack On",
+      "DeviceType": "ApcAP8959EU3",
+      "DeviceIndex": 0,
+      "Function": "TurnOutletOn",
       "Parameters": {
-        "inputPort": "Port8"
+        "id": 24
+      },
+      "PostWait": 3.0
+    },
+    {
+      "Assembly": "ControllableDevice",
+      "Description": "PC On",
+      "DeviceType": "ApcAP8959EU3",
+      "DeviceIndex": 0,
+      "Function": "TurnOutletOn",
+      "Parameters": {
+        "id": 18
       }
     },
     {
       "Assembly": "ControllableDevice",
-      "Description": "Chanage HDMI switch 1 to input 8.",
+      "Description": "Switch VGA Matrix to PC",
+      "DeviceType": "ExtronMVX44VGA",
+      "DeviceIndex": 0,
+      "Function": "TieInputPortToAllOutputPorts",
+      "Parameters": {
+        "inputPort": "Port3",
+        "tieType": "AudioVideo"
+      }
+    },
+    {
+      "Assembly": "ControllableDevice",
+      "Description": "Scaler to HDMI",
+      "DeviceType": "ExtronDSC301HD",
+      "DeviceIndex": 0,
+      "Function": "SetInputPort",
+      "Parameters": {
+        "inputPort": "HDMI"
+      }
+    },
+    {
+      "Assembly": "ControllableDevice",
+      "Description": "Reset HDMI Switch 0",
+      "DeviceType": "AtenVS0801H",
+      "DeviceIndex": 0,
+      "Function": "GoToNextInput"
+    },
+    {
+      "Assembly": "ControllableDevice",
+      "Description": "Reset HDMI Switch 1",
+      "DeviceType": "AtenVS0801H",
+      "DeviceIndex": 1,
+      "Function": "GoToNextInput"
+    },
+    {
+      "Assembly": "ControllableDevice",
+      "Description": "HDMI Switch to Scaler",
+      "DeviceType": "AtenVS0801H",
+      "DeviceIndex": 0,
+      "Function": "SetInputPort",
+      "Parameters": {
+        "inputPort": "Port2"
+      }
+    },
+    {
+      "Assembly": "ControllableDevice",
+      "Description": "HDMI Switcher Passthrough",
       "DeviceType": "AtenVS0801H",
       "DeviceIndex": 1,
       "Function": "SetInputPort",
       "Parameters": {
-        "inputPort": "Port8"
+        "inputPort": "Port1"
+      }
+    },
+    {
+      "Assembly": "ControllableDevice",
+      "Description": "TV HDMI4 for Rack",
+      "DeviceType": "SonyKDL60W855",
+      "DeviceIndex": 0,
+      "Function": "SetInputPort",
+      "Parameters": {
+        "inputPort": "Hdmi4"
+      },
+      "PostWait": 2.0
+    },
+    {
+      "Assembly": "ControllableDevice",
+      "Description": "Load OSSC Profile for PC",
+      "DeviceType": "OSSC",
+      "DeviceIndex": 0,
+      "Function": "LoadProfile",
+      "Parameters": {
+        "profileName": "Profile8"
+      },
+      "PostWait": 2.0
+    },
+    {
+      "Assembly": "ControllableDevice",
+      "Description": "Change OSSC to RGBHV",
+      "DeviceType": "OSSC",
+      "DeviceIndex": 0,
+      "Function": "SendCommand",
+      "Parameters": {
+        "commandName": "AV3RGBHV"
+      }
+    },
+    {
+      "Assembly": "ControllableDevice",
+      "Description": "Scaler to Output Rate for PC",
+      "DeviceType": "ExtronDSC301HD",
+      "DeviceIndex": 0,
+      "Function": "SetOutputRateWithoutEdid",
+      "Parameters": {
+        "width": 1920,
+        "height": 1080,
+        "refreshRate": 60.0
+      },
+      "PostWait": 4.0
+    },
+    {
+      "Assembly": "ControllableDevice",
+      "Description": "Scale to Pixel Perfect",
+      "DeviceType": "ExtronDSC301HD",
+      "DeviceIndex": 0,
+      "Function": "Scale",
+      "Parameters": {
+        "scaleType": "PixelPerfect",
+        "positionType": "Centre",
+        "aspectRatio": "RatioPreserve"
       }
     }
   ]

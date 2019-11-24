@@ -11,7 +11,7 @@
         @foreach (var commandInfo in Model.CommandInfos.OrderBy(o => o.Name))
         {
             <button type="submit" asp-page-handler="CommandProcessorExecute" asp-route-fileFullName=@commandInfo.JsonPath class="btn btn-light border">
-                <img src=@commandInfo.ImagePath width="150" height="150"/>
+                <img src="@commandInfo.ImagePath" width="150" height="150"/>
             </button>
         }
     </div>

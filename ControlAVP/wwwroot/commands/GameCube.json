@@ -115,7 +115,7 @@
         "height": 1080,
         "refreshRate": 59.94
       },
-      "PostWait": 2.0
+      "PostWait": 4.0
     },
     {
       "Assembly": "ControllableDevice",

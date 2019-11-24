@@ -1,0 +1,31 @@
+{
+  "Commands": [
+    {
+      "Assembly": "ControllableDevice",
+      "Description": "TV On",
+      "DeviceType": "SonyKDL60W855",
+      "DeviceIndex": 0,
+      "Function": "TurnOn"
+    },
+    {
+      "Assembly": "ControllableDevice",
+      "Description": "Nintendo Switch On",
+      "DeviceType": "ApcAP8959EU3",
+      "DeviceIndex": 0,
+      "Function": "TurnOutletOn",
+      "Parameters": {
+        "id": 1
+      }
+    },
+    {
+      "Assembly": "ControllableDevice",
+      "Description": "TV HDMI2 for Nintendo Switch",
+      "DeviceType": "SonyKDL60W855",
+      "DeviceIndex": 0,
+      "Function": "SetInputPort",
+      "Parameters": {
+        "inputPort": "Hdmi2"
+      }
+    }
+  ]
+}

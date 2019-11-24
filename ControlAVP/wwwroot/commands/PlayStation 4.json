@@ -1,0 +1,31 @@
+{
+  "Commands": [
+    {
+      "Assembly": "ControllableDevice",
+      "Description": "TV On",
+      "DeviceType": "SonyKDL60W855",
+      "DeviceIndex": 0,
+      "Function": "TurnOn"
+    },
+    {
+      "Assembly": "ControllableDevice",
+      "Description": "PlayStation 4 On",
+      "DeviceType": "ApcAP8959EU3",
+      "DeviceIndex": 0,
+      "Function": "TurnOutletOn",
+      "Parameters": {
+        "id": 21
+      }
+    },
+    {
+      "Assembly": "ControllableDevice",
+      "Description": "TV HDMI1 for PlayStation 4",
+      "DeviceType": "SonyKDL60W855",
+      "DeviceIndex": 0,
+      "Function": "SetInputPort",
+      "Parameters": {
+        "inputPort": "Hdmi1"
+      }
+    }
+  ]
+}
