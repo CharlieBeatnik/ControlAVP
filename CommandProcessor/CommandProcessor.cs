@@ -34,31 +34,71 @@ namespace CommandProcessor
 
             //Parse the json passed in and validate it, throw exception if it fails
             IList<string> errorMessages;
-            JObject parsed = JObject.Parse(jsonCommands);
-            bool valid = parsed.IsValid(schema, out errorMessages);
+            JObject commandBatch = JObject.Parse(jsonCommands);
+            bool valid = commandBatch.IsValid(schema, out errorMessages);
 
             if(!valid)
             {
                 throw new ArgumentException("JSON commands failed schema validation.");
             }
 
-            dynamic commandBatch = parsed;
-            foreach (dynamic command in commandBatch.Commands)
+            int? defaultDeviceIndex = (int?)commandBatch["DefaultDeviceIndex"];
+            string defaultAssembly = (string)commandBatch["DefaultAssembly"];
+
+            foreach (JObject command in commandBatch["Commands"])
             {
-                string assembly = (string)command.Assembly;
-                Type deviceType = Type.GetType($"{assembly}.{(string)command.DeviceType}, {assembly}");
+                string assembly = (command["Assembly"] == null) ? defaultAssembly : (string)command["Assembly"];
+                int? deviceIndex = (command["DeviceIndex"] == null) ? defaultDeviceIndex : (int?)command["DeviceIndex"];
+
+                //If assembly/defaultAssembly or deviceIndex/defaultDeviceIndex are not provided
+                //then return a failure for this command
+                if(assembly == null || deviceIndex == null)
+                {
+                    yield return new CommandResult()
+                    {
+                        Function = (string)command["Function"],
+                        Success = false,
+                        Result = null,
+                        Description = (string)command["Description"]
+                    };
+                    break;
+                }
+
+                Type deviceType = Type.GetType($"{assembly}.{(string)command["DeviceType"]}, {assembly}");
                 List<object> filteredDevices = devices.Where(i => i.GetType() == deviceType).ToList();
 
-                var device = filteredDevices[(int)command.DeviceIndex];
-                MethodInfo methodInfo = deviceType.GetMethod((string)command.Function);
+                var device = filteredDevices[(int)deviceIndex];
+                MethodInfo methodInfo = deviceType.GetMethod((string)command["Function"]);
 
-                var parameters = methodInfo.GetParameters()
-                        .Select(p => {
-                            string paramValue = (string)command.Parameters[p.Name];
-                            Type paramType = p.ParameterType;
-                            return paramType.IsEnum ? Enum.Parse(paramType, paramValue) : Convert.ChangeType(paramValue, paramType);
-                        })
-                        .ToArray();
+                ParameterInfo[] parameterInfos = methodInfo.GetParameters();
+
+                //If no parameters are provided, but parameters are required
+                //Or, if parameter count does not match required parameter count
+                if((command["Parameters"] == null && parameterInfos.Length != 0) ||
+                   (command["Parameters"] != null && (command["Parameters"].Count() != parameterInfos.Length)))
+                {
+                    yield return new CommandResult()
+                    {
+                        Function = (string)command["Function"],
+                        Success = false,
+                        Result = null,
+                        Description = (string)command["Description"]
+                    };
+                    break;
+                }
+
+                //Build parameter array if necessary
+                object[] parameters = null;
+                if (parameterInfos.Length > 0)
+                {
+                    parameters = parameterInfos.Select(p =>
+                    {
+                        string paramValue = (string)command["Parameters"][p.Name];
+                        Type paramType = p.ParameterType;
+                        return paramType.IsEnum ? Enum.Parse(paramType, paramValue) : Convert.ChangeType(paramValue, paramType);
+                    })
+                    .ToArray();
+                }
 
                 Type returnType = methodInfo.ReturnType;
                 bool success;
@@ -83,17 +123,17 @@ namespace CommandProcessor
                     success = false;
                 }
 
-                if(command.PostWait != null)
+                if(command["PostWait"] != null)
                 {
-                    Thread.Sleep(TimeSpan.FromSeconds((double)command.PostWait));
+                    Thread.Sleep(TimeSpan.FromSeconds((double)command["PostWait"]));
                 }
 
                 yield return new CommandResult()
                 {
-                    Function = (string)command.Function,
+                    Function = (string)command["Function"],
                     Success = success,
                     Result = result,
-                    Description = (string)command.Description
+                    Description = (string)command["Description"]
                 };
             }
 

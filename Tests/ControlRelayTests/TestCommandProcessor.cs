@@ -166,5 +166,45 @@ namespace Tests
                 }
             }
         }
+
+        [TestMethod]
+        public void GivenCommandsWithNoDeviceIndexorAssembly_WhenExecuteCommands_ThenSuccessIsFalseAndResultIsNull()
+        {
+            using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-no-device-index-or-assembly.json"))
+            {
+                string json = r.ReadToEnd();
+                using (var device = CreateDevice())
+                {
+                    var devices = new List<object>();
+                    devices.Add(device);
+
+                    foreach (var commandResult in CommandProcessorUtils.Execute(devices, json))
+                    {
+                        Assert.IsFalse(commandResult.Success);
+                        Assert.IsNull(commandResult.Result);
+                    }
+                }
+            }
+        }
+
+        [TestMethod]
+        public void GivenCommandsWithNoDeviceIndexOrAssemblyWithDefaults_WhenExecuteCommands_ThenSuccessIsTrue()
+        {
+            using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-default-device-index-and-assembly.json"))
+            {
+                string json = r.ReadToEnd();
+                using (var device = CreateDevice())
+                {
+                    var devices = new List<object>();
+                    devices.Add(device);
+
+                    foreach (var commandResult in CommandProcessorUtils.Execute(devices, json))
+                    {
+                        Assert.IsTrue(commandResult.Success);
+                        Assert.IsNotNull(commandResult.Result);
+                    }
+                }
+            }
+        }
     }
 }

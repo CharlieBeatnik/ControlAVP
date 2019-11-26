@@ -1,0 +1,16 @@
+{
+  "Commands": [
+    {
+      "Assembly": "Tests",
+      "Description": "This will fail because it doesn't have a device index and no default device index is provided.",
+      "DeviceType": "DummyDevice",
+      "Function": "SetSomethingNoParameters"
+    },
+    {
+      "Description": "This will fail because it doesn't have an assembly and no default assembly is provided.",
+      "DeviceType": "DummyDevice",
+      "DeviceIndex": 0,
+      "Function": "SetSomethingNoParameters"
+    }
+  ]
+}

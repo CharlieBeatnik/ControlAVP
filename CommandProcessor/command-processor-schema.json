@@ -3,6 +3,12 @@
   "title": "Command Processor Schema",
   "type": "object",
   "properties": {
+    "DefaultAssembly": {
+      "type": "string"
+    },
+    "DefaultDeviceIndex": {
+      "type": "integer"
+    },
     "Commands": {
       "type": "array",
       "items": {
@@ -31,9 +37,7 @@
           }
         },
         "required": [
-          "Assembly",
           "DeviceType",
-          "DeviceIndex",
           "Function",
           "Description"
         ]

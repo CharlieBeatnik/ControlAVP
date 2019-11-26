@@ -78,6 +78,15 @@ namespace Tests
             else return 0;
         }
 
+        public bool SetSomethingNoParameters()
+        {
+            if (_invalid)
+            {
+                return false;
+            }
+            else return true;
+        }
+
         public DummyDeviceSetting? GetEnum(DummyDeviceSetting dummyDeviceSetting)
         {
             if (_invalid)

@@ -1,0 +1,46 @@
+{
+  "Commands": [
+    {
+      "Assembly": "ControllableDevice",
+      "Description": "Set Port",
+      "DeviceType": "AtenVS0801H",
+      "DeviceIndex": 0,
+      "Function": "SetInputPort",
+      "Parameters": {
+        "inputPort": "Port8"
+      }
+    },
+    {
+      "Assembly": "ControllableDevice",
+      "Description": "HDMI Switch Enabled",
+      "DeviceType": "AtenVS0801H",
+      "DeviceIndex": 0,
+      "Function": "SetOutput",
+      "Parameters": {
+        "enable": "false"
+      },
+      "PostWait": 2.0
+    },
+    {
+      "Assembly": "ControllableDevice",
+      "Description": "Set Port",
+      "DeviceType": "AtenVS0801H",
+      "DeviceIndex": 0,
+      "Function": "SetInputPort",
+      "Parameters": {
+        "inputPort": "Port1"
+      }
+    },
+    {
+      "Assembly": "ControllableDevice",
+      "Description": "HDMI Switch Enabled",
+      "DeviceType": "AtenVS0801H",
+      "DeviceIndex": 0,
+      "Function": "SetOutput",
+      "Parameters": {
+        "enable": "true"
+      },
+      "PostWait": 2.0
+    }
+  ]
+}

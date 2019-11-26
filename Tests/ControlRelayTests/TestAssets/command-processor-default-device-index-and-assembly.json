@@ -1,0 +1,18 @@
+{
+  "DefaultDeviceIndex": 0,
+  "DefaultAssembly": "Tests",
+  "Commands": [
+    {
+      "Assembly": "Tests",
+      "Description": "This will succeed because a default device index is provided.",
+      "DeviceType": "DummyDevice",
+      "Function": "SetSomethingNoParameters"
+    },
+    {
+      "Description": "This will succeed because a default assembly is provided.",
+      "DeviceType": "DummyDevice",
+      "DeviceIndex": 0,
+      "Function": "SetSomethingNoParameters"
+    }
+  ]
+}
