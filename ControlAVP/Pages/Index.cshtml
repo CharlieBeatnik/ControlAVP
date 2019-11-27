@@ -8,28 +8,15 @@
 
 <form method="post">
     <div class="container-fluid">
-        @{
-            int commandInfosCount = Model.CommandInfos.Count;
-            const int numColumns = 3;
-        }
-
-        @for (int i = 0; i < commandInfosCount; ++i)
+        <div class="row">
+        @foreach(var commandInfo in Model.CommandInfos)
         {
-            if (i % numColumns == 0)
-            {
-                @:<div class="row">
-            }
-
-            <div class="col-4 p-1 m-0">
-                <button type="submit" asp-page-handler="CommandProcessorExecute" asp-route-fileFullName=@Model.CommandInfos[i].JsonPath class="btn btn-light border btn-block m-0 p-2">
-                    <img src="@Model.CommandInfos[i].ImagePath" class="w-100"/>
+            <div class="col-4 col-md-2 p-1 m-0">
+                <button type="submit" asp-page-handler="CommandProcessorExecute" asp-route-fileFullName=@commandInfo.JsonPath class="btn btn-light border btn-block m-0 p-2">
+                    <img src="@commandInfo.ImagePath" class="w-100"/>
                 </button>
             </div>
-
-            if (i % numColumns == numColumns-1)
-            {
-                @:</div>
-            }
         }
+        </div>
     </div>
 </form>
