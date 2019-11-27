@@ -43,7 +43,7 @@ namespace ControlAVP
                 options.Conventions.AuthorizeFolder("/");
                 options.Conventions.AllowAnonymousToPage("/Login");
                 options.Conventions.AllowAnonymousToPage("/Error");
-            });
+            }).AddRazorRuntimeCompilation();
 
             services.Configure<CookiePolicyOptions>(options =>
             {
