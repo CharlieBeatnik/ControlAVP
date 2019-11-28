@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Diagnostics.Contracts;
 using Microsoft.AspNetCore.Mvc;
+using ControllableDeviceTypes.ExtronDSC301HDTypes;
 
 namespace ControlAVP.Pages
 {
@@ -26,10 +27,12 @@ namespace ControlAVP.Pages
         private string _deviceId;
         private ServiceClient _serviceClient;
         private CommandProcessor _cp;
+        private ExtronDSC301HD _extronDSC301HD;
 
         private string _commandDirectory;
 
         public List<CommandInfo> CommandInfos { get; private set; }
+        public bool ExtronDSC301HDAvailable { get; private set; }
 
         public IndexModel(IConfiguration configuration, IWebHostEnvironment environment)
         {
@@ -44,6 +47,7 @@ namespace ControlAVP.Pages
 
             _serviceClient = ServiceClient.CreateFromConnectionString(_connectionString);
             _cp = new CommandProcessor(_serviceClient, _deviceId);
+            _extronDSC301HD = new ExtronDSC301HD(_serviceClient, _deviceId);
 
             _commandDirectory = Path.Combine(_environment.WebRootPath, "commands");
         }
@@ -72,6 +76,8 @@ namespace ControlAVP.Pages
                     ImagePath = relativeImagePath
                 });
             }
+
+            ExtronDSC301HDAvailable = _extronDSC301HD.GetAvailable();
         }
 
         public IActionResult OnPostCommandProcessorExecute(string fileFullName)
@@ -82,6 +88,12 @@ namespace ControlAVP.Pages
                 _cp.Execute(json);
             }
             
+            return RedirectToPage();
+        }
+
+        public IActionResult OnPostScale(ScaleType scaleType, PositionType positionType)
+        {
+            _extronDSC301HD.SetScale(scaleType, positionType);
             return RedirectToPage();
         }
     }
