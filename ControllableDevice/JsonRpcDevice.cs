@@ -14,14 +14,15 @@ namespace ControllableDevice
         private bool _disposed = false;
         private IPAddress _host;
         private string _preSharedKey;
-        private WebClient _webClient;
+        private WebClientEx _webClient;
 
-        public JsonRpcDevice(IPAddress host, string preSharedKey)
+        public JsonRpcDevice(IPAddress host, string preSharedKey, TimeSpan webRequestTimeout)
         {
             _host = host;
             _preSharedKey = preSharedKey;
-            _webClient = new WebClient();
+            _webClient = new WebClientEx();
             _webClient.Headers.Add("X-Auth-PSK", _preSharedKey);
+            _webClient.WebRequestTimeout = webRequestTimeout;
         }
 
         public JObject Post(JObject json, string path)

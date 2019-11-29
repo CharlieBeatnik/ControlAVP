@@ -59,21 +59,18 @@ namespace ControlAVP.Pages.Devices
         public IActionResult OnPostTurnOn()
         {
             _device.TurnOn();
-            DeviceInfoCache.PowerStatus = _device.GetPowerStatus();
             return RedirectToPage();
         }
 
         public IActionResult OnPostTurnOff()
         {
             _device.TurnOff();
-            DeviceInfoCache.PowerStatus = _device.GetPowerStatus();
             return RedirectToPage();
         }
 
         public IActionResult OnPostSetInput(InputPort inputPort)
         {
             _device.SetInputPort(inputPort);
-            DeviceInfoCache.InputPort = _device.GetInputPort();
             return RedirectToPage();
         }
     }

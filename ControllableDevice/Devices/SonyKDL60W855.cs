@@ -1,6 +1,7 @@
 ﻿using ControllableDeviceTypes.SonyKDL60W855Types;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Diagnostics;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Text.RegularExpressions;
@@ -17,7 +18,8 @@ namespace ControllableDevice
         private  PhysicalAddress _physicalAddress;
         private string _preSharedKey;
 
-        private readonly TimeSpan _fromColdBootToOnWait = TimeSpan.FromSeconds(20);
+        private readonly TimeSpan _jsonWebRequestTimeout = TimeSpan.FromSeconds(3.5);
+        private readonly TimeSpan _fromColdBootToOnTimeout = TimeSpan.FromSeconds(30);
         private readonly TimeSpan _fromStandbyToOnWait = TimeSpan.FromSeconds(1);
         private readonly TimeSpan _fromOnToStandbyWait = TimeSpan.FromSeconds(1);
 
@@ -27,7 +29,7 @@ namespace ControllableDevice
             _physicalAddress = physicalAddress;
             _preSharedKey = preSharedKey;
 
-            _jsonRpcDevice = new JsonRpcDevice(host, preSharedKey);
+            _jsonRpcDevice = new JsonRpcDevice(host, preSharedKey, _jsonWebRequestTimeout);
         }
 
         public void Dispose()
@@ -108,19 +110,29 @@ namespace ControllableDevice
 
         public bool TurnOn()
         {
+            //Regardless of state, issue the WakeOnLan as cold boots take the most time
+            WakeOnLan.WakeUp(_physicalAddress.ToString());
+
             var powerStatus = GetPowerStatus();
 
             switch(powerStatus)
             {
                 case PowerStatus.Off:
                     {
-                        WakeOnLan.WakeUp(_physicalAddress.ToString());
+                        //Loop until the TV has booted from cold or we hit a timeout
+                        var sw = new Stopwatch();
+                        sw.Start();
+                        while(sw.ElapsedMilliseconds < _fromColdBootToOnTimeout.TotalMilliseconds)
+                        {
+                            powerStatus = GetPowerStatus();
+                            if(powerStatus == PowerStatus.On)
+                            {
+                                return true;
+                            }
+                        }
+                        sw.Stop();
 
-                        //TV takes a long time to boot from cold, so wait for it to become responsive
-                        Thread.Sleep(_fromColdBootToOnWait);
-
-                        powerStatus = GetPowerStatus();
-                        return (powerStatus == PowerStatus.On);
+                        return false;
                     }
                 case PowerStatus.Standby:
                     {
