@@ -144,7 +144,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GivenJsonAndDevice_WhenCallCommandWith5SecondsPostWait_ThenExecuteTimeGreaterThan5Seconds()
+        public void GivenJsonAndDevice_WhenExecuteCommandWith5SecondsPostWait_ThenExecuteTimeGreaterThan5Seconds()
         {
             using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-post-wait.json"))
             {
@@ -154,15 +154,10 @@ namespace Tests
                     var devices = new List<object>();
                     devices.Add(device);
 
-                    var sw = new Stopwatch();
-                    sw.Start();
-
                     foreach (var commandResult in CommandProcessorUtils.Execute(devices, json))
                     {
+                        Assert.IsTrue(commandResult.ExecutionTime.TotalSeconds >= 5);
                     }
-
-                    sw.Stop();
-                    Assert.IsTrue(sw.ElapsedMilliseconds >= 5000);
                 }
             }
         }
@@ -202,6 +197,25 @@ namespace Tests
                     {
                         Assert.IsTrue(commandResult.Success);
                         Assert.IsNotNull(commandResult.Result);
+                    }
+                }
+            }
+        }
+
+        [TestMethod]
+        public void GivenJsonAndDevice_WhenExecuteCommandWithExecuteAfter5Seconds_ThenStartTimeGreaterThan5Seconds()
+        {
+            using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-execute-after.json"))
+            {
+                string json = r.ReadToEnd();
+                using (var device = CreateDevice())
+                {
+                    var devices = new List<object>();
+                    devices.Add(device);
+
+                    foreach (var commandResult in CommandProcessorUtils.Execute(devices, json))
+                    {
+                        Assert.IsTrue(commandResult.StartTime.TotalSeconds > 5);
                     }
                 }
             }

@@ -18,7 +18,6 @@ namespace ControllableDevice
         private  PhysicalAddress _physicalAddress;
         private string _preSharedKey;
 
-        private readonly TimeSpan _jsonWebRequestTimeout = TimeSpan.FromSeconds(3.5);
         private readonly TimeSpan _fromColdBootToOnTimeout = TimeSpan.FromSeconds(30);
         private readonly TimeSpan _fromStandbyToOnWait = TimeSpan.FromSeconds(1);
         private readonly TimeSpan _fromOnToStandbyWait = TimeSpan.FromSeconds(1);
@@ -29,7 +28,7 @@ namespace ControllableDevice
             _physicalAddress = physicalAddress;
             _preSharedKey = preSharedKey;
 
-            _jsonRpcDevice = new JsonRpcDevice(host, preSharedKey, _jsonWebRequestTimeout);
+            _jsonRpcDevice = new JsonRpcDevice(host, preSharedKey, TimeSpan.MaxValue);
         }
 
         public void Dispose()
@@ -108,7 +107,7 @@ namespace ControllableDevice
             return true;
         }
 
-        public bool TurnOn()
+        public bool TurnOn(bool wait = true)
         {
             //Regardless of state, issue the WakeOnLan as cold boots take the most time
             WakeOnLan.WakeUp(_physicalAddress.ToString());
@@ -119,20 +118,24 @@ namespace ControllableDevice
             {
                 case PowerStatus.Off:
                     {
-                        //Loop until the TV has booted from cold or we hit a timeout
-                        var sw = new Stopwatch();
-                        sw.Start();
-                        while(sw.ElapsedMilliseconds < _fromColdBootToOnTimeout.TotalMilliseconds)
+                        if (wait)
                         {
-                            powerStatus = GetPowerStatus();
-                            if(powerStatus == PowerStatus.On)
+                            //Loop until the TV has booted from cold or we hit a timeout
+                            var sw = new Stopwatch();
+                            sw.Start();
+                            while (sw.ElapsedMilliseconds < _fromColdBootToOnTimeout.TotalMilliseconds)
                             {
-                                return true;
+                                powerStatus = GetPowerStatus();
+                                if (powerStatus == PowerStatus.On)
+                                {
+                                    return true;
+                                }
                             }
-                        }
-                        sw.Stop();
+                            sw.Stop();
 
-                        return false;
+                            return false;
+                        }
+                        else return true;
                     }
                 case PowerStatus.Standby:
                     {
@@ -143,7 +146,11 @@ namespace ControllableDevice
                         );
 
                         var result = CallMethod("setPowerStatus", "sony/system", parameters);
-                        Thread.Sleep(_fromStandbyToOnWait);
+
+                        if(wait)
+                        {
+                            Thread.Sleep(_fromStandbyToOnWait);
+                        }
                         return ResultIsSuccessful(result);
                     }
             }

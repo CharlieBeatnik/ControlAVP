@@ -16,6 +16,9 @@ namespace CommandProcessor
         public bool Success { get; set; }
         public object Result { get; set;  }
         public string Description { get; set; }
+        public TimeSpan StartTime { get; set; }
+        public TimeSpan EndTime { get; set; }
+        public TimeSpan ExecutionTime => EndTime - StartTime;
     }
 
     public static class CommandProcessorUtils
@@ -26,6 +29,9 @@ namespace CommandProcessor
             {
                 throw new ArgumentNullException(nameof(devices));
             }
+
+            var sw = new Stopwatch();
+            sw.Start();
 
             //Pull the json schema out of the assembly resources and created it
             var jsonSchemaBytes = Properties.Resources.command_processor_schema;
@@ -47,6 +53,17 @@ namespace CommandProcessor
 
             foreach (JObject command in commandBatch["Commands"])
             {
+                TimeSpan startTime = sw.Elapsed;
+                double? executeAfterSeconds = (double?)command["ExecuteAfter"];
+
+                //Wait if ExecuteAfter is specified and the time to start execution after hasn't yet been reached
+                if((executeAfterSeconds != null) && (executeAfterSeconds > startTime.TotalSeconds))
+                {
+                    int timeToWaitMilliseconds = (int)((executeAfterSeconds - startTime.TotalSeconds) * 1000);
+                    Thread.Sleep(timeToWaitMilliseconds);
+                    startTime = sw.Elapsed;
+                }
+
                 string assembly = (command["Assembly"] == null) ? defaultAssembly : (string)command["Assembly"];
                 int? deviceIndex = (command["DeviceIndex"] == null) ? defaultDeviceIndex : (int?)command["DeviceIndex"];
 
@@ -59,7 +76,9 @@ namespace CommandProcessor
                         Function = (string)command["Function"],
                         Success = false,
                         Result = null,
-                        Description = (string)command["Description"]
+                        Description = (string)command["Description"],
+                        StartTime = startTime,
+                        EndTime = sw.Elapsed
                     };
                     break;
                 }
@@ -82,7 +101,9 @@ namespace CommandProcessor
                         Function = (string)command["Function"],
                         Success = false,
                         Result = null,
-                        Description = (string)command["Description"]
+                        Description = (string)command["Description"],
+                        StartTime = startTime,
+                        EndTime = sw.Elapsed
                     };
                     break;
                 }
@@ -133,7 +154,9 @@ namespace CommandProcessor
                     Function = (string)command["Function"],
                     Success = success,
                     Result = result,
-                    Description = (string)command["Description"]
+                    Description = (string)command["Description"],
+                    StartTime = startTime,
+                    EndTime = sw.Elapsed
                 };
             }
 

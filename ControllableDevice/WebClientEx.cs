@@ -12,19 +12,19 @@ namespace ControllableDevice
     [System.ComponentModel.DesignerCategory("")] 
     public class WebClientEx : WebClient
     {
-        public TimeSpan? WebRequestTimeout { get; set; }
+        public TimeSpan WebRequestTimeout { get; set; }
 
         protected override WebRequest GetWebRequest(Uri address)
         {
             var request = base.GetWebRequest(address);
 
-            if (WebRequestTimeout == null)
+            if (WebRequestTimeout == TimeSpan.MaxValue)
             {
                 request.Timeout = Timeout.Infinite;
             }
             else
             {
-                request.Timeout = (int)WebRequestTimeout.Value.TotalMilliseconds;
+                request.Timeout = (int)WebRequestTimeout.TotalMilliseconds;
             }
 
             return request;

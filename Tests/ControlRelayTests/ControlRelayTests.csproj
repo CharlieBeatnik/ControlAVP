@@ -143,6 +143,7 @@
     <Content Include="TestAssets\command-processor-post-wait.json" />
     <Content Include="TestAssets\command-processor-no-device-index-or-assembly.json" />
     <Content Include="TestAssets\command-processor-default-device-index-and-assembly.json" />
+    <Content Include="TestAssets\command-processor-execute-after.json" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Properties\UnitTestApp.rd.xml" />
