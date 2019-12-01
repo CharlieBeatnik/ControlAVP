@@ -5,7 +5,10 @@
     {
       "Description": "TV On",
       "DeviceType": "SonyKDL60W855",
-      "Function": "TurnOn"
+      "Function": "TurnOn",
+      "Parameters": {
+        "wait": "false"
+      }
     },
     {
       "Description": "Rack On",
@@ -48,15 +51,6 @@
       "Parameters": {
         "inputPort": "HDMI"
       }
-    },
-    {
-      "Description": "TV HDMI4 for Rack",
-      "DeviceType": "SonyKDL60W855",
-      "Function": "SetInputPort",
-      "Parameters": {
-        "inputPort": "Hdmi4"
-      },
-      "PostWait": 2.0
     },
     {
       "Description": "Load OSSC Profile for GameCube",
@@ -127,6 +121,15 @@
       "Function": "SetInputPort",
       "Parameters": {
         "inputPort": "Port1"
+      }
+    },
+    {
+      "ExecuteAfter": 35.0,
+      "Description": "TV HDMI4 for Rack",
+      "DeviceType": "SonyKDL60W855",
+      "Function": "SetInputPort",
+      "Parameters": {
+        "inputPort": "Hdmi4"
       }
     }
   ]
