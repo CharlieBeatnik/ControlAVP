@@ -58,13 +58,14 @@ namespace ControlRelay
             {
                 ScaleType = (ScaleType)(-1),
                 PositionType = (PositionType)(-1),
+                AspectRatio = (AspectRatio)(-1)
             };
 
             var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
 
             if(payload.ScaleType.Valid() && payload.PositionType.Valid())
             {
-                success = _device.Scale(payload.ScaleType, payload.PositionType, AspectRatio.RatioPreserve);
+                success = _device.Scale(payload.ScaleType, payload.PositionType, payload.AspectRatio);
             }
 
             return methodRequest.GetMethodResponse(success);

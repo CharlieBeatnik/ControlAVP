@@ -53,9 +53,9 @@ namespace ControlAVP.Pages.Devices
             DeviceInfoCache.Temperature = _device.GetTemperature();
         }
 
-        public IActionResult OnPostScale(ScaleType scaleType, PositionType positionType)
+        public IActionResult OnPostScale(ScaleType scaleType, PositionType positionType, AspectRatio aspectRatio)
         {
-            _device.SetScale(scaleType, positionType);
+            _device.SetScale(scaleType, positionType, aspectRatio);
             return RedirectToPage();
         }
 

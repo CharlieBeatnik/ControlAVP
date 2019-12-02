@@ -44,11 +44,11 @@ namespace AVPCloudToDevice
                 return false;
             }
         }
-        public bool SetScale(ScaleType scaleType, PositionType positionType)
+        public bool SetScale(ScaleType scaleType, PositionType positionType, AspectRatio aspectRatio = AspectRatio.RatioPreserve)
         {
             try
             {
-                var payload = new { scaleType, positionType };
+                var payload = new { scaleType, positionType, aspectRatio};
                 var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "ScalerSetScale", payload);
                 return true;
             }

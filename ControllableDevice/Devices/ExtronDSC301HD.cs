@@ -74,28 +74,23 @@ namespace ControllableDevice
         {
             if (!_rs232Device.Enabled) return false;
 
-            var edid = GetOutputRate();
+            var outputEdid = GetOutputRate();
 
             int inputWidth = (int)GetActivePixels();
             int inputHeight = (int)GetActiveLines();
+
+            if (aspectRatio != AspectRatio.RatioPreserve)
+            {
+                inputHeight = (int)(inputWidth * (1.0f / aspectRatio.GetRatio()));
+            }
 
             int vSize = 0;
             int hSize = 0;
             int vPos = 0;
             int hPos = 0;
 
-            float edidRatio = (float)edid.Width / (float)edid.Height;
+            float edidRatio = (float)outputEdid.Width / (float)outputEdid.Height;
             float inputRatio = (float)inputWidth / (float)inputHeight;
-
-            float outputRatio;
-            if(aspectRatio == AspectRatio.RatioPreserve)
-            {
-                outputRatio = inputRatio;
-            }
-            else
-            {
-                outputRatio = aspectRatio.GetRatio();
-            }
 
             switch (scaleType)
             {
@@ -107,24 +102,24 @@ namespace ControllableDevice
                 case ScaleType.Fit:
                     if (inputHeight > inputWidth) //Portrait
                     {
-                        vSize = edid.Height;
+                        vSize = outputEdid.Height;
                         hSize = (int)(vSize * inputRatio);
 
-                        if (hSize > edid.Width)
+                        if (hSize > outputEdid.Width)
                         {
-                            float scale = (float)edid.Width / (float)hSize;
+                            float scale = (float)outputEdid.Width / (float)hSize;
                             hSize = (int)((float)hSize * scale);
                             vSize = (int)((float)vSize * scale);
                         }
                     }
                     else //Landscape or Square
                     {
-                        hSize = edid.Width;
+                        hSize = outputEdid.Width;
                         vSize = (int)(hSize * (1 / inputRatio));
 
-                        if (vSize > edid.Height)
+                        if (vSize > outputEdid.Height)
                         {
-                            float scale = (float)edid.Height / (float)vSize;
+                            float scale = (float)outputEdid.Height / (float)vSize;
                             hSize = (int)((float)hSize * scale);
                             vSize = (int)((float)vSize * scale);
                         }
@@ -135,8 +130,8 @@ namespace ControllableDevice
             switch (positionType)
             {
                 case PositionType.Centre:
-                    hPos = ((edid.Width - hSize) / 2);
-                    vPos = ((edid.Height - vSize) / 2);
+                    hPos = ((outputEdid.Width - hSize) / 2);
+                    vPos = ((outputEdid.Height - vSize) / 2);
                     break;
             }
 
