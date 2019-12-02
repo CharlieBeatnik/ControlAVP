@@ -76,7 +76,8 @@
       "Function": "SendCommand",
       "Parameters": {
         "commandName": "AV1YPbPr"
-      }
+      },
+      "PostWait": 0.5
     },
     {
       "Description": "Change OSSC to RGBHV",
@@ -85,7 +86,7 @@
       "Parameters": {
         "commandName": "AV3RGBHV"
       },
-      "PostWait": 2.0
+      "PostWait": 0.5
     },
     {
       "Description": "Scaler to Output Rate for PC",
