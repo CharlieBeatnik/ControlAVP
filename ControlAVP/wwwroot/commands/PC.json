@@ -77,7 +77,7 @@
       "Parameters": {
         "commandName": "AV1YPbPr"
       },
-      "PostWait": 0.5
+      "PostWait": 1.0
     },
     {
       "Description": "Change OSSC to RGBHV",
@@ -86,7 +86,7 @@
       "Parameters": {
         "commandName": "AV3RGBHV"
       },
-      "PostWait": 0.5
+      "PostWait": 1.0
     },
     {
       "Description": "Scaler to Output Rate for PC",

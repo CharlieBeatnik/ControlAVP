@@ -68,7 +68,7 @@
       "Parameters": {
         "commandName": "AV1YPbPr"
       },
-      "PostWait": 0.5
+      "PostWait": 1.0
     },
     {
       "Description": "Change OSSC to RGBHV",
@@ -77,7 +77,7 @@
       "Parameters": {
         "commandName": "AV2YPbPr"
       },
-      "PostWait": 0.5
+      "PostWait": 1.0
     },
     {
       "Description": "Scaler to Output Rate for GameCube",
