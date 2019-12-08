@@ -392,10 +392,9 @@ namespace ControllableDevice
         public bool SetDetailFilter(int value)
         {
             if (!_rs232Device.Enabled) return false;
+            if (value < _pictureAdjustmentMin || value > _pictureAdjustmentMax) return false;
 
-            int newValue = Math.Clamp(value, _pictureAdjustmentMin, _pictureAdjustmentMax);
-
-            var result = _rs232Device.WriteWithResponse($"{_cmdEsc}{newValue}HDET{_cmdCr}", $@"^Hdet[123]\*{value:000}$");
+            var result = _rs232Device.WriteWithResponse($"{_cmdEsc}{value}HDET{_cmdCr}", $@"^Hdet[123]\*{value:000}$");
             return (result != null);
         }
 

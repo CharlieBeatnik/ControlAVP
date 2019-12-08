@@ -497,6 +497,16 @@ namespace Tests
         }
 
         [TestMethod]
+        public void GivenDevice_WhenSetDetailFilterToInvalidValue_ThenResultIsFalse()
+        {
+            using (var device = CreateDevice())
+            {
+                bool success = device.SetDetailFilter(-1);
+                Assert.IsFalse(success);
+            }
+        }
+
+        [TestMethod]
         public void GivenDevice_WhenGetDetailFilter_ThenResultIsNull()
         {
             using (var device = CreateInvalidDevice())

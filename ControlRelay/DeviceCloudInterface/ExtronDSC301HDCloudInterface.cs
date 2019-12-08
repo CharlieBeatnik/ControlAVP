@@ -28,6 +28,8 @@ namespace ControlRelay
             yield return new MethodHandlerInfo("ScalerGetInputPort", GetInputPort);
             yield return new MethodHandlerInfo("ScalerSetInputPort", SetInputPort);
             yield return new MethodHandlerInfo("ScalerGetTemperature", GetTemperature);
+            yield return new MethodHandlerInfo("ScalerSetDetailFilter", SetDetailFilter);
+            yield return new MethodHandlerInfo("ScalerGetDetailFilter", GetDetailFilter);
         }
 
         private Task<MethodResponse> GetFirmware(MethodRequest methodRequest, object userContext)
@@ -115,6 +117,25 @@ namespace ControlRelay
         private Task<MethodResponse> GetTemperature(MethodRequest methodRequest, object userContext)
         {
             return methodRequest.Get(() => _device.GetTemperature());
+        }
+
+        private Task<MethodResponse> SetDetailFilter(MethodRequest methodRequest, object userContext)
+        {
+            bool success = false;
+            var payloadDefintion = new
+            {
+                Value = -1,
+            };
+
+            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
+            success = _device.SetDetailFilter(payload.Value);
+
+            return methodRequest.GetMethodResponse(success);
+        }
+
+        private Task<MethodResponse> GetDetailFilter(MethodRequest methodRequest, object userContext)
+        {
+            return methodRequest.Get(() => _device.GetDetailFilter());
         }
 
     }
