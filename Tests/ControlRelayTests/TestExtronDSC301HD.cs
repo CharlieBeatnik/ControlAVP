@@ -482,5 +482,28 @@ namespace Tests
                 Assert.IsNull(device.GetTemperature());
             }
         }
+
+        [TestMethod]
+        public void GivenDevice_WhenSetDetailFilterTo32_ThenResultIs32()
+        {
+            using(var device = CreateDevice())
+            {
+                bool success = device.SetDetailFilter(32);
+                Assert.IsTrue(success);
+                var result = device.GetDetailFilter();
+                Assert.IsTrue(result == 32);
+                device.SetDetailFilterDefault();
+            }
+        }
+
+        [TestMethod]
+        public void GivenDevice_WhenGetDetailFilter_ThenResultIsNull()
+        {
+            using (var device = CreateInvalidDevice())
+            {
+                var result = device.GetDetailFilter();
+                Assert.IsNull(result);
+            }
+        }
     }
 }

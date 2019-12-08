@@ -17,6 +17,10 @@ namespace ControllableDevice
         private readonly string _patternNumberLine = @"^[+-]*[0-9]+$";
         private readonly string _patternNumber = $@"[+-]*[0-9]+";
 
+        private readonly int _pictureAdjustmentMin = 0;
+        private readonly int _pictureAdjustmentMax = 127;
+        private readonly int _pictureAdjustmentDefault = 64;
+
         public ExtronDSC301HD(string portId)
         {
             _rs232Device = new Rs232Device(portId);
@@ -373,6 +377,31 @@ namespace ControllableDevice
             }
 
             return null;
+        }
+
+        public int? GetDetailFilter()
+        {
+            if (!_rs232Device.Enabled) return null;
+
+            var result = _rs232Device.WriteWithResponse($"{_cmdEsc}HDET{_cmdCr}", _patternNumberLine);
+            Debug.Assert(result != null);
+            if (result == null) return 0;
+            return int.Parse(result);
+        }
+
+        public bool SetDetailFilter(int value)
+        {
+            if (!_rs232Device.Enabled) return false;
+
+            int newValue = Math.Clamp(value, _pictureAdjustmentMin, _pictureAdjustmentMax);
+
+            var result = _rs232Device.WriteWithResponse($"{_cmdEsc}{newValue}HDET{_cmdCr}", $@"^Hdet[123]\*{value:000}$");
+            return (result != null);
+        }
+
+        public bool SetDetailFilterDefault()
+        {
+            return SetDetailFilter(_pictureAdjustmentDefault);
         }
     }
 }
