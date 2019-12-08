@@ -484,7 +484,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GivenDevice_WhenSetDetailFilterTo32_ThenResultIs32()
+        public void GivenDevice_WhenSetDetailFilterTo32_ThenDetailFilterIs32()
         {
             using(var device = CreateDevice())
             {
