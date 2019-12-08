@@ -18,6 +18,7 @@ namespace ControlAVP.Pages.Devices
         public Version Firmware { get; set; }
         public InputPort? InputPort { get; set; }
         public float? Temperature { get; set; }
+        public int? DetailFilter { get; set; }
     }
 
     public class ExtronDSC301HDModel : PageModel
@@ -51,15 +52,16 @@ namespace ControlAVP.Pages.Devices
             DeviceInfoCache.Firmware = _device.GetFirmware();
             DeviceInfoCache.InputPort = _device.GetInputPort();
             DeviceInfoCache.Temperature = _device.GetTemperature();
+            DeviceInfoCache.DetailFilter = _device.GetDetailFilter();
         }
 
-        public IActionResult OnPostScale(ScaleType scaleType, PositionType positionType, AspectRatio aspectRatio)
+        public IActionResult OnPostSetScale(ScaleType scaleType, PositionType positionType, AspectRatio aspectRatio)
         {
             _device.SetScale(scaleType, positionType, aspectRatio);
             return RedirectToPage();
         }
 
-        public IActionResult OnPostOutputRate(int width, int height, float refreshRate)
+        public IActionResult OnPostSetOutputRate(int width, int height, float refreshRate)
         {
             var edid = Edid.GetEdid(width, height, refreshRate);
             _device.SetOutputRate(edid);
@@ -68,8 +70,31 @@ namespace ControlAVP.Pages.Devices
 
         public IActionResult OnPostSetInput(InputPort inputPort)
         {
-            _device.SetInputPort(inputPort);
-            DeviceInfoCache.InputPort = _device.GetInputPort();
+            var success = _device.SetInputPort(inputPort);
+            if (success)
+            {
+                DeviceInfoCache.InputPort = inputPort;
+            }
+            else
+            {
+                DeviceInfoCache.InputPort = _device.GetInputPort();
+            }
+
+            return RedirectToPage();
+        }
+
+        public IActionResult OnPostSetDetailFilter(int value)
+        {
+            var success = _device.SetDetailFilter(value);
+            if(success)
+            {
+                DeviceInfoCache.DetailFilter = value;
+            }
+            else
+            {
+                DeviceInfoCache.DetailFilter = _device.GetDetailFilter();
+            }
+
             return RedirectToPage();
         }
     }
