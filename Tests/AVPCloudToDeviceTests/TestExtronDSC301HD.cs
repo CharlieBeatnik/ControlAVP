@@ -99,5 +99,25 @@ namespace Tests
             var temperature = _device.GetTemperature();
             Assert.IsNotNull(temperature);
         }
+
+        [Test]
+        public void GivenDevice_WhenSetDetailFilterTo32_ThenDetailFilterIs32()
+        {
+            bool success = _device.SetDetailFilter(32);
+            Assert.IsTrue(success);
+
+            var value = _device.GetDetailFilter();
+            Assert.IsTrue(value == 32);
+
+            _device.SetDetailFilter(64);
+        }
+
+        [Test]
+        public void GivenDevice_WhenSetDetailFilterToInvalidValue_ThenResultIsFalse()
+        {
+            bool success = _device.SetDetailFilter(-1);
+            Assert.IsFalse(success);
+        }
+
     }
 }

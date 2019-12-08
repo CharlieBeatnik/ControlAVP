@@ -507,7 +507,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GivenDevice_WhenGetDetailFilter_ThenResultIsNull()
+        public void GivenInvalidDevice_WhenGetDetailFilter_ThenResultIsNull()
         {
             using (var device = CreateInvalidDevice())
             {

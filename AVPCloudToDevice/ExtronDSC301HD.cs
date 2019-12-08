@@ -118,5 +118,33 @@ namespace AVPCloudToDevice
                 return null;
             }
         }
+
+        public int? GetDetailFilter()
+        {
+            try
+            {
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "ScalerGetDetailFilter", null);
+                string json = response.GetPayloadAsJson();
+                return JsonConvert.DeserializeObject<int>(json);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public bool SetDetailFilter(int value)
+        {
+            try
+            {
+                var payload = new { value };
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "ScalerSetDetailFilter", payload);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }
