@@ -91,9 +91,15 @@ namespace ControlAVP.Pages
             return RedirectToPage();
         }
 
-        public IActionResult OnPostScale(ScaleType scaleType, PositionType positionType)
+        public IActionResult OnPostSetScale(ScaleType scaleType, PositionType positionType)
         {
             _extronDSC301HD.SetScale(scaleType, positionType);
+            return RedirectToPage();
+        }
+
+        public IActionResult OnPostSetDetailFilter(int value)
+        {
+            _extronDSC301HD.SetDetailFilter(value);
             return RedirectToPage();
         }
     }

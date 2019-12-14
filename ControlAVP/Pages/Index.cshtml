@@ -7,19 +7,53 @@
 
 @Html.AntiForgeryToken()
 
+<div class="p-1 m-0">
+    @if (Model.ExtronDSC301HDAvailable)
+    {
+        <button data-toggle="collapse" data-target="#scalerCollapse" class="btn border btn-secondary">Scaler</button>
+    }
+</div>
+
+
 <form method="post">
-    <div class="container-fluid">
-        @if (Model.ExtronDSC301HDAvailable)
-        {
-        <div class="row">
-            <div class="col-6 col-md-2 p-1 m-0">
-                <button type="submit" asp-page-handler="Scale" asp-route-scaletype=@ScaleType.PixelPerfect asp-route-positiontype=@PositionType.Centre class="btn btn-secondary border btn-block text-center" style="text-align: left;">Pixel Perfect</button>
-            </div>
-            <div class="col-6 col-md-2 p-1 m-0">
-                <button type="submit" asp-page-handler="Scale" asp-route-scaletype=@ScaleType.Fit asp-route-positiontype=@PositionType.Centre class="btn btn-secondary border btn-block text-center" style="text-align: left;">Fit</button>
+    @if (Model.ExtronDSC301HDAvailable)
+    {
+        <div class="collapse p-1 m-0" id="scalerCollapse">
+            <div class="card card-body p-2">
+                <table class="table table-sm table-responsive table-borderless mb-0">
+                    <tr>
+                        <td class="align-middle text-right">Pixel Perfect</td>
+                        <td>
+                            <div class="btn-group">
+                                <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.PixelPerfect asp-route-positiontype=@PositionType.Centre class="btn btn-light border text-center">Preserve Aspect</button>
+                                <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.PixelPerfect asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.Ratio4x3 class="btn btn-light border text-center">4:3</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="align-middle text-right">Fit</td>
+                        <td>
+                            <div class="btn-group">
+                                <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.Fit asp-route-positiontype=@PositionType.Centre class="btn btn-light border text-center">Preserve Aspect</button>
+                                <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.Fit asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.Ratio4x3 class="btn btn-light border text-center">4:3</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="align-middle text-right">Detail Filter</td>
+                        <td>
+                            <div class="btn-group">
+                                <button type="submit" asp-page-handler="SetDetailFilter" asp-route-value="40" class="btn border btn-light">40</button>
+                                <button type="submit" asp-page-handler="SetDetailFilter" asp-route-value="64" class="btn border btn-light">64*</button>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
             </div>
         </div>
-        }
+    }
+
+    <div class="container-fluid">
         <div class="row">
             @foreach (var commandInfo in Model.CommandInfos)
             {
