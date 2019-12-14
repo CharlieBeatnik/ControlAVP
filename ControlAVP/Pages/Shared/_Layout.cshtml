@@ -23,6 +23,8 @@
         <nav class="navbar fixed-top navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3 navbar-dark bg-dark">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-page="/Index">ControlAVP</a>
+                @if (User.Identity.IsAuthenticated)
+                {
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -44,6 +46,7 @@
                         </li>
                     </ul>
                 </div>
+                }
             </div>
         </nav>
     </header>
