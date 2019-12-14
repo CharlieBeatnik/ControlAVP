@@ -35,27 +35,30 @@
                                 <div class="btn-group">
                                     @foreach (InputPort inputPort in Enum.GetValues(typeof(InputPort)))
                                     {
-                                        <button type="submit"
-                                                asp-page-handler="SetInput"
-                                                asp-route-inputport=@inputPort
-                                                class="btn border @(inputPort == Model.DeviceInfoCache.InputPort ? "btn-success" : "btn-default")">
-                                            @(inputPort.ToString())
-                                        </button>
+                                    <button type="submit"
+                                            asp-page-handler="SetInput"
+                                            asp-route-inputport=@inputPort
+                                            class="btn border @(inputPort == Model.DeviceInfoCache.InputPort ? "btn-success" : "btn-light")">
+                                        @(inputPort.ToString())
+                                    </button>
                                     }
                                 </div>
                             </td>
                         </tr>
                         <tr>
-                            <td class="align-middle text-right">Scaling</td>
+                            <td class="align-middle text-right" rowspan="2">Scaling</td>
                             <td>
-                                <div class="btn-group-vertical">
-                                    <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.PixelPerfect asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.RatioPreserve class="btn btn-default border" style="text-align: left;">Pixel Perfect</button>
-                                    <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.Fit asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.RatioPreserve class="btn btn-default border" style="text-align: left;">Fit</button>
+                                <div class="btn-group">
+                                    <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.PixelPerfect asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.RatioPreserve class="btn btn-light border" style="text-align: left;">Pixel Perfect</button>
+                                    <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.PixelPerfect asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.Ratio4x3 class="btn btn-light border" style="text-align: left;">4:3</button>
                                 </div>
-
-                                <div class="btn-group-vertical">
-                                    <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.PixelPerfect asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.Ratio4x3 class="btn btn-default border" style="text-align: left;">Pixel Perfect (4:3)</button>
-                                    <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.Fit asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.Ratio4x3 class="btn btn-default border" style="text-align: left;">Fit (4:3)</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="btn-group">
+                                    <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.Fit asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.RatioPreserve class="btn btn-light border" style="text-align: left;">Fit</button>
+                                    <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.Fit asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.Ratio4x3 class="btn btn-light border" style="text-align: left;">4:3</button>
                                 </div>
                             </td>
                         </tr>
@@ -63,28 +66,26 @@
                             <td class="align-middle text-right">Refresh</td>
                             <td>
                                 <div class="btn-group-vertical">
-                                    <button type="submit" asp-page-handler="SetOutputRate" asp-route-width="1920" asp-route-height="1080" asp-route-refreshRate="50" class="btn btn-default border" style="text-align: left;">1080p 50Hz</button>
-                                    <button type="submit" asp-page-handler="SetOutputRate" asp-route-width="1920" asp-route-height="1080" asp-route-refreshRate="59.94" class="btn btn-default border" style="text-align: left;">1080p 59.94Hz</button>
-                                    <button type="submit" asp-page-handler="SetOutputRate" asp-route-width="1920" asp-route-height="1080" asp-route-refreshRate="60" class="btn btn-default border" style="text-align: left;">1080p 60Hz</button>
+                                    <button type="submit" asp-page-handler="SetOutputRate" asp-route-width="1920" asp-route-height="1080" asp-route-refreshRate="50" class="btn btn-light border" style="text-align: left;">1080p 50Hz</button>
+                                    <button type="submit" asp-page-handler="SetOutputRate" asp-route-width="1920" asp-route-height="1080" asp-route-refreshRate="59.94" class="btn btn-light border" style="text-align: left;">1080p 59.94Hz</button>
+                                    <button type="submit" asp-page-handler="SetOutputRate" asp-route-width="1920" asp-route-height="1080" asp-route-refreshRate="60" class="btn btn-light border" style="text-align: left;">1080p 60Hz</button>
                                 </div>
                             </td>
                         </tr>
                         <tr>
-                            <td class="align-middle text-right">Detail Filter</td>
+                            <td class="align-middle text-right" rowspan="3">Detail Filter</td>
                             <td><span class="badge badge-secondary">@Model.DeviceInfoCache.DetailFilter</span></td>
                         </tr>
                         <tr>
-                            <td class="align-middle text-right"></td>
                             <td>
                                 <div class="btn-group">
-                                    <button type="submit" id="setDetailFilterButton" class="btn border btn-default" style="text-align: left;" formaction="/Devices/ExtronDSC301HD?handler=SetDetailFilter&value=@Model.DeviceInfoCache.DetailFilter">Set @Model.DeviceInfoCache.DetailFilter</button>
-                                    <button type="submit" asp-page-handler="SetDetailFilter" asp-route-value="64" class="btn border btn-default" style="text-align: left;">Set 48</button>
-                                    <button type="submit" asp-page-handler="SetDetailFilter" asp-route-value="64" class="btn border btn-default" style="text-align: left;">Set 64*</button>
+                                    <button type="submit" id="setDetailFilterButton" class="btn border btn-light" style="text-align: left;" formaction="/Devices/ExtronDSC301HD?handler=SetDetailFilter&value=@Model.DeviceInfoCache.DetailFilter">Set @Model.DeviceInfoCache.DetailFilter</button>
+                                    <button type="submit" asp-page-handler="SetDetailFilter" asp-route-value="64" class="btn border btn-light" style="text-align: left;">Set 48</button>
+                                    <button type="submit" asp-page-handler="SetDetailFilter" asp-route-value="64" class="btn border btn-light" style="text-align: left;">Set 64*</button>
                                 </div>
                             </td>
                         </tr>
                         <tr>
-                        <td class="align-middle text-right"></td>
                             <td><input type="range" class="w-100" min="0" value="@Model.DeviceInfoCache.DetailFilter" max="127" id="detailFilterSlider" oninput="detailFilterChanged(this.value)" /></td>
                         </tr>
                         <tr>
