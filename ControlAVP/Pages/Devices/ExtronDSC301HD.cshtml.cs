@@ -31,7 +31,6 @@ namespace ControlAVP.Pages.Devices
         private ServiceClient _serviceClient;
         private ExtronDSC301HD _device;
 
-
         public ExtronDSC301HDDeviceInfo DeviceInfoCache { get; private set; } = new ExtronDSC301HDDeviceInfo();
 
         public ExtronDSC301HDModel(IConfiguration configuration, IWebHostEnvironment environment)
@@ -70,31 +69,13 @@ namespace ControlAVP.Pages.Devices
 
         public IActionResult OnPostSetInput(InputPort inputPort)
         {
-            var success = _device.SetInputPort(inputPort);
-            if (success)
-            {
-                DeviceInfoCache.InputPort = inputPort;
-            }
-            else
-            {
-                DeviceInfoCache.InputPort = _device.GetInputPort();
-            }
-
+            _device.SetInputPort(inputPort);
             return RedirectToPage();
         }
 
         public IActionResult OnPostSetDetailFilter(int value)
         {
-            var success = _device.SetDetailFilter(value);
-            if(success)
-            {
-                DeviceInfoCache.DetailFilter = value;
-            }
-            else
-            {
-                DeviceInfoCache.DetailFilter = _device.GetDetailFilter();
-            }
-
+            _device.SetDetailFilter(value);
             return RedirectToPage();
         }
     }

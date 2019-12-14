@@ -5,6 +5,18 @@
 @{
     ViewData["Title"] = "Extron DSC301HD";
 }
+
+<script type="text/javascript">
+    function detailFilterChanged(s)
+    {
+        var val = document.getElementById("detailFilterSlider").value;
+
+        var formaction = "/Devices/ExtronDSC301HD?handler=SetDetailFilter&value=" + val;
+        document.getElementById("setDetailFilterButton").setAttribute("formaction", formaction);
+        document.getElementById("setDetailFilterButton").innerHTML = "Set " + val;
+    }
+</script>
+
 <h2></h2>
 
 <div class="card">
@@ -64,14 +76,16 @@
                         <tr>
                             <td class="align-middle text-right"></td>
                             <td>
-                                <div class="btn-group flex-wrap">
-                                    @for (int value = 0; value <= 128; value += 16)
-                                    {
-                                        int newValue = Math.Clamp(value, 0, 127);
-                                        <button type="submit" asp-page-handler="SetDetailFilter" asp-route-value="@newValue" class="btn border @(newValue == Model.DeviceInfoCache.DetailFilter ? "btn-success" : "btn-default")" style="text-align: left;">@newValue</button>
-                                    }
+                                <div class="btn-group">
+                                    <button type="submit" id="setDetailFilterButton" class="btn border btn-default" style="text-align: left;" formaction="/Devices/ExtronDSC301HD?handler=SetDetailFilter&value=@Model.DeviceInfoCache.DetailFilter">Set @Model.DeviceInfoCache.DetailFilter</button>
+                                    <button type="submit" asp-page-handler="SetDetailFilter" asp-route-value="64" class="btn border btn-default" style="text-align: left;">Set 48</button>
+                                    <button type="submit" asp-page-handler="SetDetailFilter" asp-route-value="64" class="btn border btn-default" style="text-align: left;">Set 64*</button>
                                 </div>
                             </td>
+                        </tr>
+                        <tr>
+                        <td class="align-middle text-right"></td>
+                            <td><input type="range" class="w-100" min="0" value="@Model.DeviceInfoCache.DetailFilter" max="127" id="detailFilterSlider" oninput="detailFilterChanged(this.value)" /></td>
                         </tr>
                         <tr>
                             <td class="align-middle text-right">Firmware</td>
