@@ -91,9 +91,9 @@ namespace ControlAVP.Pages
             return RedirectToPage();
         }
 
-        public IActionResult OnPostSetScale(ScaleType scaleType, PositionType positionType)
+        public IActionResult OnPostSetScale(ScaleType scaleType, PositionType positionType, AspectRatio aspectRatio)
         {
-            _extronDSC301HD.SetScale(scaleType, positionType);
+            _extronDSC301HD.SetScale(scaleType, positionType, aspectRatio);
             return RedirectToPage();
         }
 

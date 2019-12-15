@@ -27,6 +27,7 @@
                             <div class="btn-group">
                                 <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.PixelPerfect asp-route-positiontype=@PositionType.Centre class="btn btn-light border text-center">Preserve Aspect</button>
                                 <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.PixelPerfect asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.Ratio4x3 class="btn btn-light border text-center">4:3</button>
+                                <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.PixelPerfect asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.Ratio16x9 class="btn btn-light border text-center">16:9</button>
                             </div>
                         </td>
                     </tr>
@@ -34,8 +35,9 @@
                         <td class="align-middle text-right">Fit</td>
                         <td>
                             <div class="btn-group">
-                                <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.Fit asp-route-positiontype=@PositionType.Centre class="btn btn-light border text-center">Preserve Aspect</button>
+                                <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.Fit asp-route-positiontype=@PositionType.Centre class="btn btn-success border text-center">Preserve Aspect</button>
                                 <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.Fit asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.Ratio4x3 class="btn btn-light border text-center">4:3</button>
+                                <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.Fit asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.Ratio16x9 class="btn btn-light border text-center">16:9</button>
                             </div>
                         </td>
                     </tr>

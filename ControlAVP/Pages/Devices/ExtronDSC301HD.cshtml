@@ -35,30 +35,33 @@
                                 <div class="btn-group">
                                     @foreach (InputPort inputPort in Enum.GetValues(typeof(InputPort)))
                                     {
-                                    <button type="submit"
-                                            asp-page-handler="SetInput"
-                                            asp-route-inputport=@inputPort
-                                            class="btn border @(inputPort == Model.DeviceInfoCache.InputPort ? "btn-success" : "btn-light")">
-                                        @(inputPort.ToString())
-                                    </button>
+                                        <button type="submit"
+                                                asp-page-handler="SetInput"
+                                                asp-route-inputport=@inputPort
+                                                class="btn border @(inputPort == Model.DeviceInfoCache.InputPort ? "btn-success" : "btn-light")">
+                                            @(inputPort.ToString())
+                                        </button>
                                     }
                                 </div>
                             </td>
                         </tr>
                         <tr>
-                            <td class="align-middle text-right" rowspan="2">Scaling</td>
+                            <td class="align-middle text-right">Pixel Perfect</td>
                             <td>
                                 <div class="btn-group">
-                                    <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.PixelPerfect asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.RatioPreserve class="btn btn-light border" style="text-align: left;">Pixel Perfect</button>
-                                    <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.PixelPerfect asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.Ratio4x3 class="btn btn-light border" style="text-align: left;">4:3</button>
+                                    <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.PixelPerfect asp-route-positiontype=@PositionType.Centre class="btn btn-light border text-center">Preserve Aspect</button>
+                                    <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.PixelPerfect asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.Ratio4x3 class="btn btn-light border text-center">4:3</button>
+                                    <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.PixelPerfect asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.Ratio16x9 class="btn btn-light border text-center">16:9</button>
                                 </div>
                             </td>
                         </tr>
                         <tr>
+                            <td class="align-middle text-right">Fit</td>
                             <td>
                                 <div class="btn-group">
-                                    <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.Fit asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.RatioPreserve class="btn btn-light border" style="text-align: left;">Fit</button>
-                                    <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.Fit asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.Ratio4x3 class="btn btn-light border" style="text-align: left;">4:3</button>
+                                    <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.Fit asp-route-positiontype=@PositionType.Centre class="btn btn-light border text-center">Preserve Aspect</button>
+                                    <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.Fit asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.Ratio4x3 class="btn btn-light border text-center">4:3</button>
+                                    <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.Fit asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.Ratio16x9 class="btn btn-light border text-center">16:9</button>
                                 </div>
                             </td>
                         </tr>
