@@ -71,7 +71,7 @@
       "PostWait": 2.0
     },
     {
-      "Description": "Change OSSC to RGBHV",
+      "Description": "Change OSSC to YPbPr",
       "DeviceType": "OSSC",
       "Function": "SendCommand",
       "Parameters": {

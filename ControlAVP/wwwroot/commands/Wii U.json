@@ -20,11 +20,11 @@
       "PostWait": 5.0
     },
     {
-      "Description": "PlayStation 2 On",
+      "Description": "Wii U On",
       "DeviceType": "ApcAP8959EU3",
       "Function": "TurnOutletOn",
       "Parameters": {
-        "id": 4
+        "id": 5
       }
     },
     {
@@ -45,61 +45,6 @@
       }
     },
     {
-      "Description": "Switch VGA Matrix to PlayStation 2",
-      "DeviceType": "ExtronMVX44VGA",
-      "Function": "TieInputPortToAllOutputPorts",
-      "Parameters": {
-        "inputPort": "Port2",
-        "tieType": "AudioVideo"
-      }
-    },
-    {
-      "Description": "Scaler to HDMI",
-      "DeviceType": "ExtronDSC301HD",
-      "Function": "SetInputPort",
-      "Parameters": {
-        "inputPort": "HDMI"
-      }
-    },
-    {
-      "Description": "Load OSSC Profile for PlayStation 2",
-      "DeviceType": "OSSC",
-      "Function": "LoadProfile",
-      "Parameters": {
-        "profileName": "Profile7"
-      },
-      "PostWait": 2.0
-    },
-    {
-      "Description": "Change OSSC to AV1YPbPr (Dummy Change to Act Like Reset)",
-      "DeviceType": "OSSC",
-      "Function": "SendCommand",
-      "Parameters": {
-        "commandName": "AV1YPbPr"
-      },
-      "PostWait": 2.0
-    },
-    {
-      "Description": "Change OSSC to RGBHV",
-      "DeviceType": "OSSC",
-      "Function": "SendCommand",
-      "Parameters": {
-        "commandName": "AV3RGBHV"
-      },
-      "PostWait": 1.0
-    },
-    {
-      "Description": "Scaler to Output Rate for PlayStation 2",
-      "DeviceType": "ExtronDSC301HD",
-      "Function": "SetOutputRateWithoutEdid",
-      "Parameters": {
-        "width": 1920,
-        "height": 1080,
-        "refreshRate": 59.94
-      },
-      "PostWait": 2.0
-    },
-    {
       "Description": "Enable HDMI Switch 0 Output",
       "DeviceType": "AtenVS0801H",
       "Function": "SetOutput",
@@ -117,20 +62,20 @@
       }
     },
     {
-      "Description": "HDMI Switch 0 to Scaler",
+      "Description": "HDMI Switch 0 Not Used",
       "DeviceType": "AtenVS0801H",
       "Function": "SetInputPort",
       "Parameters": {
-        "inputPort": "Port2"
+        "inputPort": "Port1"
       }
     },
     {
-      "Description": "HDMI Switch 1 Passthrough",
+      "Description": "HDMI Switch 1 to Wii U",
       "DeviceType": "AtenVS0801H",
       "DeviceIndex": 1,
       "Function": "SetInputPort",
       "Parameters": {
-        "inputPort": "Port1"
+        "inputPort": "Port6"
       }
     },
     {

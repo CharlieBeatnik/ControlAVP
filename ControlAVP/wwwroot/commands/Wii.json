@@ -20,11 +20,11 @@
       "PostWait": 5.0
     },
     {
-      "Description": "PlayStation 2 On",
+      "Description": "Wii On",
       "DeviceType": "ApcAP8959EU3",
       "Function": "TurnOutletOn",
       "Parameters": {
-        "id": 4
+        "id": 6
       }
     },
     {
@@ -45,15 +45,6 @@
       }
     },
     {
-      "Description": "Switch VGA Matrix to PlayStation 2",
-      "DeviceType": "ExtronMVX44VGA",
-      "Function": "TieInputPortToAllOutputPorts",
-      "Parameters": {
-        "inputPort": "Port2",
-        "tieType": "AudioVideo"
-      }
-    },
-    {
       "Description": "Scaler to HDMI",
       "DeviceType": "ExtronDSC301HD",
       "Function": "SetInputPort",
@@ -62,11 +53,11 @@
       }
     },
     {
-      "Description": "Load OSSC Profile for PlayStation 2",
+      "Description": "Load OSSC Profile for Wii",
       "DeviceType": "OSSC",
       "Function": "LoadProfile",
       "Parameters": {
-        "profileName": "Profile7"
+        "profileName": "Profile9"
       },
       "PostWait": 2.0
     },
@@ -80,22 +71,22 @@
       "PostWait": 2.0
     },
     {
-      "Description": "Change OSSC to RGBHV",
+      "Description": "Change OSSC to YPbPr",
       "DeviceType": "OSSC",
       "Function": "SendCommand",
       "Parameters": {
-        "commandName": "AV3RGBHV"
+        "commandName": "AV2YPbPr"
       },
       "PostWait": 1.0
     },
     {
-      "Description": "Scaler to Output Rate for PlayStation 2",
+      "Description": "Scaler to Output Rate for Wii",
       "DeviceType": "ExtronDSC301HD",
       "Function": "SetOutputRateWithoutEdid",
       "Parameters": {
         "width": 1920,
         "height": 1080,
-        "refreshRate": 59.94
+        "refreshRate": 50.0
       },
       "PostWait": 2.0
     },
