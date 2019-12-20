@@ -8,6 +8,7 @@ using System.IO;
 using System.Diagnostics.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using ControllableDeviceTypes.ExtronDSC301HDTypes;
+using ControllableDeviceTypes.OSSCTypes;
 
 namespace ControlAVP.Pages
 {
@@ -28,6 +29,7 @@ namespace ControlAVP.Pages
         private ServiceClient _serviceClient;
         private CommandProcessor _cp;
         private ExtronDSC301HD _extronDSC301HD;
+        private OSSC _ossc;
 
         private string _commandDirectory;
 
@@ -48,6 +50,7 @@ namespace ControlAVP.Pages
             _serviceClient = ServiceClient.CreateFromConnectionString(_connectionString);
             _cp = new CommandProcessor(_serviceClient, _deviceId);
             _extronDSC301HD = new ExtronDSC301HD(_serviceClient, _deviceId);
+            _ossc = new OSSC(_serviceClient, _deviceId);
 
             _commandDirectory = Path.Combine(_environment.WebRootPath, "commands");
         }
@@ -100,6 +103,12 @@ namespace ControlAVP.Pages
         public IActionResult OnPostSetDetailFilter(int value)
         {
             _extronDSC301HD.SetDetailFilter(value);
+            return RedirectToPage();
+        }
+
+        public IActionResult OnPostOSSCSendCommand(CommandName commandName)
+        {
+            _ossc.SendCommand(commandName);
             return RedirectToPage();
         }
     }
