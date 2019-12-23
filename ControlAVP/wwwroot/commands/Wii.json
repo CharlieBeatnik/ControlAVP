@@ -1,6 +1,7 @@
 {
   "DefaultAssembly": "ControllableDevice",
   "DefaultDeviceIndex": 0,
+  "DisplayName": "Wii",
   "Commands": [
     {
       "Description": "TV On",

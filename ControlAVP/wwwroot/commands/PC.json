@@ -1,6 +1,7 @@
 {
   "DefaultAssembly": "ControllableDevice",
-  "DefaultDeviceIndex":  0,
+  "DefaultDeviceIndex": 0,
+  "DisplayName": "PC",
   "Commands": [
     {
       "Description": "TV On",

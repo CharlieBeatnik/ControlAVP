@@ -50,6 +50,7 @@ namespace CommandProcessor
 
             int? defaultDeviceIndex = (int?)commandBatch["DefaultDeviceIndex"];
             string defaultAssembly = (string)commandBatch["DefaultAssembly"];
+            string displayName = (string)commandBatch["DisplatName"];
 
             foreach (JObject command in commandBatch["Commands"])
             {

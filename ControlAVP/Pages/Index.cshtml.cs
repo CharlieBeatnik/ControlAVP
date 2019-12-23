@@ -9,6 +9,7 @@ using System.Diagnostics.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using ControllableDeviceTypes.ExtronDSC301HDTypes;
 using ControllableDeviceTypes.OSSCTypes;
+using Newtonsoft.Json;
 
 namespace ControlAVP.Pages
 {
@@ -16,7 +17,8 @@ namespace ControlAVP.Pages
     {
         public string Name { get; set; }
         public string JsonPath { get; set; }
-        public string ImagePath { get; set;  }
+        public string ImagePath { get; set; }
+        public string DisplayName { get; set; }
     }
 
     public class IndexModel : PageModel
@@ -62,21 +64,31 @@ namespace ControlAVP.Pages
             CommandInfos = new List<CommandInfo>();
             foreach (var file in directoryInfo.GetFiles("*.json"))
             {
-                string name = Path.GetFileNameWithoutExtension(file.Name);
+                string fileNameNoExtension = Path.GetFileNameWithoutExtension(file.Name);
 
-                string relativeImagePath = string.Format("../images/outlets/large/{0}.png", name);
-                string absoluteImagePath = Path.Combine(_environment.WebRootPath, @"images\outlets\large", name + ".png");
+                string relativeImagePath = string.Format("../images/outlets/large/{0}.png", fileNameNoExtension);
+                string absoluteImagePath = Path.Combine(_environment.WebRootPath, @"images\outlets\large", fileNameNoExtension + ".png");
 
                 if(!System.IO.File.Exists(absoluteImagePath))
                 {
                     relativeImagePath = "../images/outlets/large/empty.png";
                 }
 
+                //Get display name from Json instead of replying on the file name
+                string displayName = string.Empty;
+                using (StreamReader r = new StreamReader(file.FullName))
+                {
+                    string json = r.ReadToEnd();
+                    dynamic parsed = JsonConvert.DeserializeObject(json);
+                    displayName = parsed.DisplayName;
+                }
+
                 CommandInfos.Add(new CommandInfo
                 {
-                    Name = name,
+                    Name = fileNameNoExtension,
                     JsonPath = file.FullName,
-                    ImagePath = relativeImagePath
+                    ImagePath = relativeImagePath,
+                    DisplayName = displayName
                 });
             }
 

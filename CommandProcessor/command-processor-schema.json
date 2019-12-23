@@ -9,6 +9,9 @@
     "DefaultDeviceIndex": {
       "type": "integer"
     },
+    "DisplayName": {
+      "type": "string"
+    },
     "Commands": {
       "type": "array",
       "items": {
@@ -48,6 +51,7 @@
     }
   },
   "required": [
-    "Commands"
+    "Commands",
+    "DisplayName"
   ]
 }

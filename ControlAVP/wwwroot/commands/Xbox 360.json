@@ -1,6 +1,7 @@
 {
   "DefaultAssembly": "ControllableDevice",
   "DefaultDeviceIndex": 0,
+  "DisplayName": "Xbox 360",
   "Commands": [
     {
       "Description": "TV On",
