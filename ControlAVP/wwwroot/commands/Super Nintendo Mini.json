@@ -1,0 +1,83 @@
+{
+  "DefaultAssembly": "ControllableDevice",
+  "DefaultDeviceIndex": 0,
+  "Commands": [
+    {
+      "Description": "TV On",
+      "DeviceType": "SonyKDL60W855",
+      "Function": "TurnOn",
+      "Parameters": {
+        "wait": "false"
+      }
+    },
+    {
+      "Description": "Rack On",
+      "DeviceType": "ApcAP8959EU3",
+      "Function": "TurnOutletOn",
+      "Parameters": {
+        "id": 24
+      },
+      "PostWait": 5.0
+    },
+    {
+      "Description": "Disable HDMI Switch 0 Output",
+      "DeviceType": "AtenVS0801H",
+      "Function": "SetOutput",
+      "Parameters": {
+        "enable": "false"
+      }
+    },
+    {
+      "Description": "Disable HDMI Switch 1 Output",
+      "DeviceType": "AtenVS0801H",
+      "DeviceIndex": 1,
+      "Function": "SetOutput",
+      "Parameters": {
+        "enable": "false"
+      }
+    },
+    {
+      "Description": "Enable HDMI Switch 0 Output",
+      "DeviceType": "AtenVS0801H",
+      "Function": "SetOutput",
+      "Parameters": {
+        "enable": "true"
+      }
+    },
+    {
+      "Description": "Enable HDMI Switch 1 Output",
+      "DeviceType": "AtenVS0801H",
+      "DeviceIndex": 1,
+      "Function": "SetOutput",
+      "Parameters": {
+        "enable": "true"
+      }
+    },
+    {
+      "Description": "HDMI Switch 0 Not Used",
+      "DeviceType": "AtenVS0801H",
+      "Function": "SetInputPort",
+      "Parameters": {
+        "inputPort": "Port1"
+      }
+    },
+    {
+      "Description": "HDMI Switch 1 to Super Nintendo Mini",
+      "DeviceType": "AtenVS0801H",
+      "DeviceIndex": 1,
+      "Function": "SetInputPort",
+      "Parameters": {
+        "inputPort": "Port2"
+      }
+    },
+    {
+      "ExecuteAfter": 35.0,
+      "Description": "TV HDMI4 for Rack",
+      "DeviceType": "SonyKDL60W855",
+      "Function": "SetInputPort",
+      "Parameters": {
+        "inputPort": "Hdmi4"
+      }
+    }
+  ]
+}
