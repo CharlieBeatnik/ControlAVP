@@ -21,6 +21,7 @@ namespace ControlAVP.Pages.Devices
         public int? DetailFilter { get; set; }
         public int? Brightness { get; set; }
         public int? Contrast { get; set; }
+        public bool? Freeze { get; set; }
     }
 
     public class ExtronDSC301HDModel : PageModel
@@ -56,6 +57,7 @@ namespace ControlAVP.Pages.Devices
             DeviceInfoCache.DetailFilter = _device.GetDetailFilter();
             DeviceInfoCache.Brightness = _device.GetBrightness();
             DeviceInfoCache.Contrast = _device.GetContrast();
+            DeviceInfoCache.Freeze = _device.GetFreeze();
         }
 
         public IActionResult OnPostSetScale(ScaleType scaleType, PositionType positionType, AspectRatio aspectRatio)
@@ -92,6 +94,12 @@ namespace ControlAVP.Pages.Devices
         public IActionResult OnPostSetContrast(int value)
         {
             _device.SetContrast(value);
+            return RedirectToPage();
+        }
+
+        public IActionResult OnPostSetFreeze(bool freeze)
+        {
+            _device.SetFreeze(freeze);
             return RedirectToPage();
         }
     }

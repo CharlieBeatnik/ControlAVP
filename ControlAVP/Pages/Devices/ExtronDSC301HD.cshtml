@@ -33,12 +33,12 @@
                                 <div class="btn-group">
                                     @foreach (InputPort inputPort in Enum.GetValues(typeof(InputPort)))
                                     {
-                                        <button type="submit"
-                                                asp-page-handler="SetInput"
-                                                asp-route-inputport=@inputPort
-                                                class="btn border @(inputPort == Model.DeviceInfoCache.InputPort ? "btn-success" : "btn-light")">
-                                            @(inputPort.ToString())
-                                        </button>
+                                    <button type="submit"
+                                            asp-page-handler="SetInput"
+                                            asp-route-inputport=@inputPort
+                                            class="btn border @(inputPort == Model.DeviceInfoCache.InputPort ? "btn-success" : "btn-light")">
+                                        @(inputPort.ToString())
+                                    </button>
                                     }
                                 </div>
                             </td>
@@ -70,6 +70,25 @@
                                     <button type="submit" asp-page-handler="SetOutputRate" asp-route-width="1920" asp-route-height="1080" asp-route-refreshRate="50" class="btn btn-light border" style="text-align: left;">1080p 50Hz</button>
                                     <button type="submit" asp-page-handler="SetOutputRate" asp-route-width="1920" asp-route-height="1080" asp-route-refreshRate="59.94" class="btn btn-light border" style="text-align: left;">1080p 59.94Hz</button>
                                     <button type="submit" asp-page-handler="SetOutputRate" asp-route-width="1920" asp-route-height="1080" asp-route-refreshRate="60" class="btn btn-light border" style="text-align: left;">1080p 60Hz</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                        <td class="align-middle text-right">Freeze</td>
+                            <td>
+                                <div class="btn-group">
+                                    @switch (Model.DeviceInfoCache.Freeze)
+                                    {
+                                        case true:
+                                            <button class="btn btn-success border disabled text-center" disabled>Freeze</button>
+                                            <button type="submit" asp-page-handler="SetFreeze" asp-route-freeze=@false class="btn btn-light border text-center">Unfreeze</button>
+                                            break;
+
+                                        case false:
+                                            <button type="submit" asp-page-handler="SetFreeze" asp-route-freeze=@true class="btn btn-light border text-center">Freeze</button>
+                                            <button class="btn btn-success border disabled text-center" disabled>Unfreeze</button>
+                                            break;
+                                    }
                                 </div>
                             </td>
                         </tr>
