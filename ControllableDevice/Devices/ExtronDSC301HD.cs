@@ -402,5 +402,53 @@ namespace ControllableDevice
         {
             return SetDetailFilter(_pictureAdjustmentDefault);
         }
+
+        public int? GetBrightness()
+        {
+            if (!_rs232Device.Enabled) return null;
+
+            var result = _rs232Device.WriteWithResponse($"{_cmdEsc}BRIT{_cmdCr}", _patternNumberLine);
+            Debug.Assert(result != null);
+            if (result == null) return 0;
+            return int.Parse(result);
+        }
+
+        public bool SetBrightness(int value)
+        {
+            if (!_rs232Device.Enabled) return false;
+            if (value < _pictureAdjustmentMin || value > _pictureAdjustmentMax) return false;
+
+            var result = _rs232Device.WriteWithResponse($"{_cmdEsc}{value}BRIT{_cmdCr}", $@"^Brit[123]\*{value:000}$");
+            return (result != null);
+        }
+
+        public bool SetBrightnessDefault()
+        {
+            return SetBrightness(_pictureAdjustmentDefault);
+        }
+
+        public int? GetContrast()
+        {
+            if (!_rs232Device.Enabled) return null;
+
+            var result = _rs232Device.WriteWithResponse($"{_cmdEsc}CONT{_cmdCr}", _patternNumberLine);
+            Debug.Assert(result != null);
+            if (result == null) return 0;
+            return int.Parse(result);
+        }
+
+        public bool SetContrast(int value)
+        {
+            if (!_rs232Device.Enabled) return false;
+            if (value < _pictureAdjustmentMin || value > _pictureAdjustmentMax) return false;
+
+            var result = _rs232Device.WriteWithResponse($"{_cmdEsc}{value}CONT{_cmdCr}", $@"^Cont[123]\*{value:000}$");
+            return (result != null);
+        }
+
+        public bool SetContrastDefault()
+        {
+            return SetContrast(_pictureAdjustmentDefault);
+        }
     }
 }

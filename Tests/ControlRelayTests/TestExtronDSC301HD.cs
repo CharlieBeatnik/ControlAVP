@@ -515,5 +515,72 @@ namespace Tests
                 Assert.IsNull(result);
             }
         }
+
+        [TestMethod]
+        public void GivenDevice_WhenSetBrightnessTo32_ThenBrightnessIs32()
+        {
+            using (var device = CreateDevice())
+            {
+                bool success = device.SetBrightness(32);
+                Assert.IsTrue(success);
+                var result = device.GetBrightness();
+                Assert.IsTrue(result == 32);
+                device.SetBrightnessDefault();
+            }
+        }
+
+        [TestMethod]
+        public void GivenDevice_WhenSetBrightnessToInvalidValue_ThenResultIsFalse()
+        {
+            using (var device = CreateDevice())
+            {
+                bool success = device.SetBrightness(-1);
+                Assert.IsFalse(success);
+            }
+        }
+
+        [TestMethod]
+        public void GivenInvalidDevice_WhenGetBrightness_ThenResultIsNull()
+        {
+            using (var device = CreateInvalidDevice())
+            {
+                var result = device.GetBrightness();
+                Assert.IsNull(result);
+            }
+        }
+
+
+        [TestMethod]
+        public void GivenDevice_WhenSetContrastTo32_ThenContrastIs32()
+        {
+            using (var device = CreateDevice())
+            {
+                bool success = device.SetContrast(32);
+                Assert.IsTrue(success);
+                var result = device.GetContrast();
+                Assert.IsTrue(result == 32);
+                device.SetContrastDefault();
+            }
+        }
+
+        [TestMethod]
+        public void GivenDevice_WhenSetContrastToInvalidValue_ThenResultIsFalse()
+        {
+            using (var device = CreateDevice())
+            {
+                bool success = device.SetContrast(-1);
+                Assert.IsFalse(success);
+            }
+        }
+
+        [TestMethod]
+        public void GivenInvalidDevice_WhenGetContrast_ThenResultIsNull()
+        {
+            using (var device = CreateInvalidDevice())
+            {
+                var result = device.GetContrast();
+                Assert.IsNull(result);
+            }
+        }
     }
 }

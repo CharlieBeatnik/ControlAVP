@@ -1,4 +1,5 @@
 {
+  "DisplayName": "Test",
   "DefaultDeviceIndex": 0,
   "DefaultAssembly": "Tests",
   "Commands": [
