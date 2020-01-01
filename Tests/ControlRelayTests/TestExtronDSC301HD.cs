@@ -517,6 +517,16 @@ namespace Tests
         }
 
         [TestMethod]
+        public void GivenInvalidDevice_WhenSetDetailFilter_ThenResultIsFalse()
+        {
+            using (var device = CreateInvalidDevice())
+            {
+                var result = device.SetDetailFilter(64);
+                Assert.IsFalse(result);
+            }
+        }
+
+        [TestMethod]
         public void GivenDevice_WhenSetBrightnessTo32_ThenBrightnessIs32()
         {
             using (var device = CreateDevice())
@@ -549,6 +559,15 @@ namespace Tests
             }
         }
 
+        [TestMethod]
+        public void GivenInvalidDevice_WhenSetBrightness_ThenResultIsFalse()
+        {
+            using (var device = CreateInvalidDevice())
+            {
+                var result = device.SetBrightness(64);
+                Assert.IsFalse(result);
+            }
+        }
 
         [TestMethod]
         public void GivenDevice_WhenSetContrastTo32_ThenContrastIs32()
@@ -578,7 +597,63 @@ namespace Tests
         {
             using (var device = CreateInvalidDevice())
             {
-                var result = device.GetContrast();
+                var result1 = device.GetContrast();
+                Assert.IsNull(result1);
+            }
+        }
+
+        [TestMethod]
+        public void GivenInvalidDevice_WhenSetContrast_ThenResultIsFalse()
+        {
+            using (var device = CreateInvalidDevice())
+            {
+                var result = device.SetContrast(64);
+                Assert.IsFalse(result);
+            }
+        }
+
+        [TestMethod]
+        public void GivenDeviceAndSetFreezeFalse_WhenSetFreezeTrue_ThenFreezeIsTrue()
+        {
+            using (var device = CreateDevice())
+            {
+                //Given
+                bool success = device.SetFreeze(false);
+                Assert.IsTrue(success);
+
+                var result = device.GetFreeze();
+                Assert.IsFalse((bool)result);
+
+                //When
+                success = device.SetFreeze(true);
+                Assert.IsTrue(success);
+
+                //Then
+                result = device.GetFreeze();
+                Assert.IsTrue((bool)result);
+
+                //Default
+                success = device.SetFreeze(false);
+                Assert.IsTrue(success);
+            }
+        }
+
+        [TestMethod]
+        public void GivenInvalidDevice_WhenSetFreeze_ThenResultIsFalse()
+        {
+            using (var device = CreateInvalidDevice())
+            {
+                var result = device.SetFreeze(true);
+                Assert.IsFalse(result);
+            }
+        }
+
+        [TestMethod]
+        public void GivenInvalidDevice_WhenGetFreeze_ThenResultIsNull()
+        {
+            using (var device = CreateInvalidDevice())
+            {
+                var result = device.GetFreeze();
                 Assert.IsNull(result);
             }
         }

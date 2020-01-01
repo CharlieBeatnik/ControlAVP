@@ -34,6 +34,8 @@ namespace ControlRelay
             yield return new MethodHandlerInfo("ScalerGetBrightness", GetBrightness);
             yield return new MethodHandlerInfo("ScalerSetContrast", SetContrast);
             yield return new MethodHandlerInfo("ScalerGetContrast", GetContrast);
+            yield return new MethodHandlerInfo("ScalerSetFreeze", SetFreeze);
+            yield return new MethodHandlerInfo("ScalerGetFreeze", GetFreeze);
         }
 
         private Task<MethodResponse> GetFirmware(MethodRequest methodRequest, object userContext)
@@ -178,6 +180,25 @@ namespace ControlRelay
         private Task<MethodResponse> GetContrast(MethodRequest methodRequest, object userContext)
         {
             return methodRequest.Get(() => _device.GetContrast());
+        }
+
+        private Task<MethodResponse> SetFreeze(MethodRequest methodRequest, object userContext)
+        {
+            bool success = false;
+            var payloadDefintion = new
+            {
+                Freeze = false,
+            };
+
+            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
+            success = _device.SetFreeze(payload.Freeze);
+
+            return methodRequest.GetMethodResponse(success);
+        }
+
+        private Task<MethodResponse> GetFreeze(MethodRequest methodRequest, object userContext)
+        {
+            return methodRequest.Get(() => _device.GetFreeze());
         }
     }
 }

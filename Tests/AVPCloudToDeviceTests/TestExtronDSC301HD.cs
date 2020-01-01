@@ -156,5 +156,28 @@ namespace Tests
             bool success = _device.SetContrast(-1);
             Assert.IsFalse(success);
         }
+
+        [Test]
+        public void GivenDeviceAndSetFreezeFalse_WhenSetFreezeTrue_ThenFreezeIsTrue()
+        {
+            //Given
+            bool success = _device.SetFreeze(false);
+            Assert.IsTrue(success);
+
+            var result = _device.GetFreeze();
+            Assert.IsFalse((bool)result);
+
+            //When
+            success = _device.SetFreeze(true);
+            Assert.IsTrue(success);
+
+            //Then
+            result = _device.GetFreeze();
+            Assert.IsTrue((bool)result);
+
+            //Default
+            success = _device.SetFreeze(false);
+            Assert.IsTrue(success);
+        }
     }
 }

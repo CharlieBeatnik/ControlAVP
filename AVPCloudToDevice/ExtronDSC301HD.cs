@@ -202,5 +202,33 @@ namespace AVPCloudToDevice
                 return false;
             }
         }
+
+        public bool? GetFreeze()
+        {
+            try
+            {
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "ScalerGetFreeze", null);
+                string json = response.GetPayloadAsJson();
+                return JsonConvert.DeserializeObject<bool>(json);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public bool SetFreeze(bool freeze)
+        {
+            try
+            {
+                var payload = new { freeze };
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "ScalerSetFreeze", payload);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }

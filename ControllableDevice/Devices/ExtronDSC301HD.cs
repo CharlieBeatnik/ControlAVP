@@ -450,5 +450,23 @@ namespace ControllableDevice
         {
             return SetContrast(_pictureAdjustmentDefault);
         }
+
+        public bool? GetFreeze()
+        {
+            if (!_rs232Device.Enabled) return null;
+
+            var result = _rs232Device.WriteWithResponse($"F", $@"^[01]$");
+            Debug.Assert(result != null);
+            if (result == null) return false;
+            return result == "1";
+        }
+
+        public bool SetFreeze(bool freeze)
+        {
+            if (!_rs232Device.Enabled) return false;
+
+            var result = _rs232Device.WriteWithResponse($"{(freeze ? "1" : "0")}F", $@"^Frz{(freeze ? "1" : "0")}$");
+            return (result != null);
+        }
     }
 }
