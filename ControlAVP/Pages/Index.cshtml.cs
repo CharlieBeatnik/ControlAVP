@@ -118,6 +118,12 @@ namespace ControlAVP.Pages
             return RedirectToPage();
         }
 
+        public IActionResult OnPostSetContrast(int value)
+        {
+            _extronDSC301HD.SetContrast(value);
+            return RedirectToPage();
+        }
+
         public IActionResult OnPostOSSCSendCommand(CommandName commandName)
         {
             _ossc.SendCommand(commandName);
