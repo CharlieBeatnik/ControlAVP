@@ -1,4 +1,5 @@
 {
+  "DisplayName": "Test",
   "Commands": [
     {
       "Assembly": "ControllableDevice",
