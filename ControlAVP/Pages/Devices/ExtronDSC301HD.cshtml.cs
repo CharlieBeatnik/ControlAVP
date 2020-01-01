@@ -19,6 +19,8 @@ namespace ControlAVP.Pages.Devices
         public InputPort? InputPort { get; set; }
         public float? Temperature { get; set; }
         public int? DetailFilter { get; set; }
+        public int? Brightness { get; set; }
+        public int? Contrast { get; set; }
     }
 
     public class ExtronDSC301HDModel : PageModel
@@ -52,6 +54,8 @@ namespace ControlAVP.Pages.Devices
             DeviceInfoCache.InputPort = _device.GetInputPort();
             DeviceInfoCache.Temperature = _device.GetTemperature();
             DeviceInfoCache.DetailFilter = _device.GetDetailFilter();
+            DeviceInfoCache.Brightness = _device.GetBrightness();
+            DeviceInfoCache.Contrast = _device.GetContrast();
         }
 
         public IActionResult OnPostSetScale(ScaleType scaleType, PositionType positionType, AspectRatio aspectRatio)
@@ -76,6 +80,18 @@ namespace ControlAVP.Pages.Devices
         public IActionResult OnPostSetDetailFilter(int value)
         {
             _device.SetDetailFilter(value);
+            return RedirectToPage();
+        }
+
+        public IActionResult OnPostSetBrightness(int value)
+        {
+            _device.SetBrightness(value);
+            return RedirectToPage();
+        }
+
+        public IActionResult OnPostSetContrast(int value)
+        {
+            _device.SetContrast(value);
             return RedirectToPage();
         }
     }

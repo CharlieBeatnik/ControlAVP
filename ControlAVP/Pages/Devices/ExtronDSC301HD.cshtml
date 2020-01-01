@@ -7,13 +7,11 @@
 }
 
 <script type="text/javascript">
-    function detailFilterChanged(s)
+    function sliderChanged(value, linkedButtonId, handlerName)
     {
-        var val = document.getElementById("detailFilterSlider").value;
-
-        var formaction = "/Devices/ExtronDSC301HD?handler=SetDetailFilter&value=" + val;
-        document.getElementById("setDetailFilterButton").setAttribute("formaction", formaction);
-        document.getElementById("setDetailFilterButton").innerHTML = "Set " + val;
+        var formaction = "/Devices/ExtronDSC301HD?handler=" + handlerName + "&value=" + value;
+        document.getElementById(linkedButtonId).setAttribute("formaction", formaction);
+        document.getElementById(linkedButtonId).innerHTML = "Set " + value;
     }
 </script>
 
@@ -89,7 +87,37 @@
                             </td>
                         </tr>
                         <tr>
-                            <td><input type="range" class="w-100" min="0" value="@Model.DeviceInfoCache.DetailFilter" max="127" id="detailFilterSlider" oninput="detailFilterChanged(this.value)" /></td>
+                            <td><input type="range" class="w-100" min="0" value="@Model.DeviceInfoCache.DetailFilter" max="127" id="detailFilterSlider" oninput="sliderChanged(this.value, 'setDetailFilterButton', 'SetDetailFilter')" /></td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle text-right" rowspan="3">Brightness</td>
+                            <td><span class="badge badge-secondary">@Model.DeviceInfoCache.Brightness</span></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="btn-group">
+                                    <button type="submit" id="setBrightnessButton" class="btn border btn-light" style="text-align: left;" formaction="/Devices/ExtronDSC301HD?handler=SetBrightness&value=@Model.DeviceInfoCache.Brightness">Set @Model.DeviceInfoCache.Brightness</button>
+                                    <button type="submit" asp-page-handler="SetBrightness" asp-route-value="64" class="btn border btn-light" style="text-align: left;">Set 64*</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="range" class="w-100" min="0" value="@Model.DeviceInfoCache.Brightness" max="127" id="brightnessSlider" oninput="sliderChanged(this.value, 'setBrightnessButton', 'SetBrightness')" /></td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle text-right" rowspan="3">Contrast</td>
+                            <td><span class="badge badge-secondary">@Model.DeviceInfoCache.Contrast</span></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="btn-group">
+                                    <button type="submit" id="setContrastButton" class="btn border btn-light" style="text-align: left;" formaction="/Devices/ExtronDSC301HD?handler=SetContrast&value=@Model.DeviceInfoCache.Contrast">Set @Model.DeviceInfoCache.Contrast</button>
+                                    <button type="submit" asp-page-handler="SetContrast" asp-route-value="64" class="btn border btn-light" style="text-align: left;">Set 64*</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="range" class="w-100" min="0" value="@Model.DeviceInfoCache.Brightness" max="127" id="brightnessSlider" oninput="sliderChanged(this.value, 'setContrastButton', 'SetContrast')" /></td>
                         </tr>
                         <tr>
                             <td class="align-middle text-right">Firmware</td>
