@@ -119,5 +119,42 @@ namespace Tests
             Assert.IsFalse(success);
         }
 
+        [Test]
+        public void GivenDevice_WhenSetBrightnessTo32_ThenBrightnessIs32()
+        {
+            bool success = _device.SetBrightness(32);
+            Assert.IsTrue(success);
+
+            var value = _device.GetBrightness();
+            Assert.IsTrue(value == 32);
+
+            _device.SetBrightness(64);
+        }
+
+        [Test]
+        public void GivenDevice_WhenSetBrightnessToInvalidValue_ThenResultIsFalse()
+        {
+            bool success = _device.SetBrightness(-1);
+            Assert.IsFalse(success);
+        }
+
+        [Test]
+        public void GivenDevice_WhenSetContrastTo32_ThenContrastIs32()
+        {
+            bool success = _device.SetContrast(32);
+            Assert.IsTrue(success);
+
+            var value = _device.GetContrast();
+            Assert.IsTrue(value == 32);
+
+            _device.SetContrast(64);
+        }
+
+        [Test]
+        public void GivenDevice_WhenSetContrastToInvalidValue_ThenResultIsFalse()
+        {
+            bool success = _device.SetContrast(-1);
+            Assert.IsFalse(success);
+        }
     }
 }

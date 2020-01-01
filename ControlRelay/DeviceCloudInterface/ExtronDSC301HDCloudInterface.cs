@@ -30,6 +30,10 @@ namespace ControlRelay
             yield return new MethodHandlerInfo("ScalerGetTemperature", GetTemperature);
             yield return new MethodHandlerInfo("ScalerSetDetailFilter", SetDetailFilter);
             yield return new MethodHandlerInfo("ScalerGetDetailFilter", GetDetailFilter);
+            yield return new MethodHandlerInfo("ScalerSetBrightness", SetBrightness);
+            yield return new MethodHandlerInfo("ScalerGetBrightness", GetBrightness);
+            yield return new MethodHandlerInfo("ScalerSetContrast", SetContrast);
+            yield return new MethodHandlerInfo("ScalerGetContrast", GetContrast);
         }
 
         private Task<MethodResponse> GetFirmware(MethodRequest methodRequest, object userContext)
@@ -138,5 +142,42 @@ namespace ControlRelay
             return methodRequest.Get(() => _device.GetDetailFilter());
         }
 
+        private Task<MethodResponse> SetBrightness(MethodRequest methodRequest, object userContext)
+        {
+            bool success = false;
+            var payloadDefintion = new
+            {
+                Value = -1,
+            };
+
+            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
+            success = _device.SetBrightness(payload.Value);
+
+            return methodRequest.GetMethodResponse(success);
+        }
+
+        private Task<MethodResponse> GetBrightness(MethodRequest methodRequest, object userContext)
+        {
+            return methodRequest.Get(() => _device.GetBrightness());
+        }
+
+        private Task<MethodResponse> SetContrast(MethodRequest methodRequest, object userContext)
+        {
+            bool success = false;
+            var payloadDefintion = new
+            {
+                Value = -1,
+            };
+
+            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
+            success = _device.SetContrast(payload.Value);
+
+            return methodRequest.GetMethodResponse(success);
+        }
+
+        private Task<MethodResponse> GetContrast(MethodRequest methodRequest, object userContext)
+        {
+            return methodRequest.Get(() => _device.GetContrast());
+        }
     }
 }

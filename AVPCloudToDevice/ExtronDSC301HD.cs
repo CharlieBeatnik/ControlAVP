@@ -146,5 +146,61 @@ namespace AVPCloudToDevice
                 return false;
             }
         }
+
+        public int? GetBrightness()
+        {
+            try
+            {
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "ScalerGetBrightness", null);
+                string json = response.GetPayloadAsJson();
+                return JsonConvert.DeserializeObject<int>(json);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public bool SetBrightness(int value)
+        {
+            try
+            {
+                var payload = new { value };
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "ScalerSetBrightness", payload);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public int? GetContrast()
+        {
+            try
+            {
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "ScalerGetContrast", null);
+                string json = response.GetPayloadAsJson();
+                return JsonConvert.DeserializeObject<int>(json);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public bool SetContrast(int value)
+        {
+            try
+            {
+                var payload = new { value };
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "ScalerSetContrast", payload);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }
