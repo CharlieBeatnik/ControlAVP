@@ -76,7 +76,7 @@
       "DeviceIndex": 1,
       "Function": "SetInputPort",
       "Parameters": {
-        "inputPort": "Port7"
+        "inputPort": "Port5"
       }
     },
     {
