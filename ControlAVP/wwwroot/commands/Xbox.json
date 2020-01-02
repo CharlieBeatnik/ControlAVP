@@ -1,0 +1,138 @@
+{
+  "DefaultAssembly": "ControllableDevice",
+  "DefaultDeviceIndex": 0,
+  "DisplayName": "Xbox",
+  "Commands": [
+    {
+      "Description": "TV On",
+      "DeviceType": "SonyKDL60W855",
+      "Function": "TurnOn",
+      "Parameters": {
+        "wait": "false"
+      }
+    },
+    {
+      "Description": "Rack On",
+      "DeviceType": "ApcAP8959EU3",
+      "Function": "TurnOutletOn",
+      "Parameters": {
+        "id": 24
+      },
+      "PostWait": 5.0
+    },
+    {
+      "Description": "Xbox On",
+      "DeviceType": "ApcAP8959EU3",
+      "Function": "TurnOutletOn",
+      "Parameters": {
+        "id": 13
+      }
+    },
+    {
+      "Description": "Disable HDMI Switch 0 Output",
+      "DeviceType": "AtenVS0801H",
+      "Function": "SetOutput",
+      "Parameters": {
+        "enable": "false"
+      }
+    },
+    {
+      "Description": "Disable HDMI Switch 1 Output",
+      "DeviceType": "AtenVS0801H",
+      "DeviceIndex": 1,
+      "Function": "SetOutput",
+      "Parameters": {
+        "enable": "false"
+      }
+    },
+    {
+      "Description": "Scaler to HDMI",
+      "DeviceType": "ExtronDSC301HD",
+      "Function": "SetInputPort",
+      "Parameters": {
+        "inputPort": "HDMI"
+      }
+    },
+    {
+      "Description": "Load OSSC Profile for Xbox",
+      "DeviceType": "OSSC",
+      "Function": "LoadProfile",
+      "Parameters": {
+        "profileName": "Profile12"
+      },
+      "PostWait": 2.0
+    },
+    {
+      "Description": "Change OSSC to AV1YPbPr (Dummy Change to Act Like Reset)",
+      "DeviceType": "OSSC",
+      "Function": "SendCommand",
+      "Parameters": {
+        "commandName": "AV1YPbPr"
+      },
+      "PostWait": 2.0
+    },
+    {
+      "Description": "Change OSSC to YPbPr",
+      "DeviceType": "OSSC",
+      "Function": "SendCommand",
+      "Parameters": {
+        "commandName": "AV2YPbPr"
+      },
+      "PostWait": 1.0
+    },
+    {
+      "Description": "Scaler to Output Rate for Xbox",
+      "DeviceType": "ExtronDSC301HD",
+      "Function": "SetOutputRateWithoutEdid",
+      "Parameters": {
+        "width": 1920,
+        "height": 1080,
+        "refreshRate": 50.0
+      },
+      "PostWait": 2.0
+    },
+    {
+      "Description": "Enable HDMI Switch 0 Output",
+      "DeviceType": "AtenVS0801H",
+      "Function": "SetOutput",
+      "Parameters": {
+        "enable": "true"
+      }
+    },
+    {
+      "Description": "Enable HDMI Switch 1 Output",
+      "DeviceType": "AtenVS0801H",
+      "DeviceIndex": 1,
+      "Function": "SetOutput",
+      "Parameters": {
+        "enable": "true"
+      }
+    },
+    {
+      "Description": "HDMI Switch 0 to Scaler",
+      "DeviceType": "AtenVS0801H",
+      "Function": "SetInputPort",
+      "Parameters": {
+        "inputPort": "Port2"
+      }
+    },
+    {
+      "Description": "HDMI Switch 1 Passthrough",
+      "DeviceType": "AtenVS0801H",
+      "DeviceIndex": 1,
+      "Function": "SetInputPort",
+      "Parameters": {
+        "inputPort": "Port1"
+      }
+    },
+    {
+      "ExecuteAfter": 35.0,
+      "Description": "TV HDMI4 for Rack",
+      "DeviceType": "SonyKDL60W855",
+      "Function": "SetInputPort",
+      "Parameters": {
+        "inputPort": "Hdmi4"
+      }
+    }
+  ]
+}
