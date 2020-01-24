@@ -31,7 +31,7 @@ namespace AVPCloudToDevice
 
         public static CloudToDeviceMethodResult InvokeMethodWithJsonPayload(ServiceClient serviceClient, string deviceId, string methodName, string json)
         {
-            var methodInvocation = new CloudToDeviceMethod(methodName) { ResponseTimeout = TimeSpan.FromSeconds(300) };
+            var methodInvocation = new CloudToDeviceMethod(methodName) { ResponseTimeout = TimeSpan.FromSeconds(10) };
             methodInvocation.SetPayloadJson(json);
 
             // Invoke the direct method asynchronously and get the response from the device.
