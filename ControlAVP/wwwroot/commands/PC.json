@@ -142,6 +142,16 @@
       "Parameters": {
         "inputPort": "Hdmi4"
       }
+    },
+    {
+      "Description": "Scale Fit 4:3",
+      "DeviceType": "ExtronDSC301HD",
+      "Function": "Scale",
+      "Parameters": {
+        "scaleType": "Fit",
+        "positionType": "Centre",
+        "aspectRatio": "Ratio4x3"
+      }
     }
   ]
 }
