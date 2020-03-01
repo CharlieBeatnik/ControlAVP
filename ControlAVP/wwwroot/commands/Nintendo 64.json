@@ -1,7 +1,7 @@
 {
   "DefaultAssembly": "ControllableDevice",
   "DefaultDeviceIndex": 0,
-  "DisplayName": "i486 DX2",
+  "DisplayName": "Nintendo 64",
   "Commands": [
     {
       "Description": "TV On",
@@ -21,11 +21,11 @@
       "PostWait": 5.0
     },
     {
-      "Description": "PC On",
+      "Description": "Nintendo 64 On",
       "DeviceType": "ApcAP8959EU3",
       "Function": "TurnOutletOn",
       "Parameters": {
-        "id": 18
+        "id": 9
       }
     },
     {
@@ -46,15 +46,6 @@
       }
     },
     {
-      "Description": "Switch VGA Matrix to PC",
-      "DeviceType": "ExtronMVX44VGA",
-      "Function": "TieInputPortToAllOutputPorts",
-      "Parameters": {
-        "inputPort": "Port3",
-        "tieType": "AudioVideo"
-      }
-    },
-    {
       "Description": "Scaler to HDMI",
       "DeviceType": "ExtronDSC301HD",
       "Function": "SetInputPort",
@@ -63,11 +54,11 @@
       }
     },
     {
-      "Description": "Load OSSC Profile for PC",
+      "Description": "Load OSSC Profile for Nintendo 64",
       "DeviceType": "OSSC",
       "Function": "LoadProfile",
       "Parameters": {
-        "profileName": "Profile8"
+        "profileName": "Profile13"
       },
       "PostWait": 2.0
     },
@@ -81,22 +72,22 @@
       "PostWait": 2.0
     },
     {
-      "Description": "Change OSSC to RGBHV",
+      "Description": "Change OSSC to RGBS",
       "DeviceType": "OSSC",
       "Function": "SendCommand",
       "Parameters": {
-        "commandName": "AV3RGBHV"
+        "commandName": "AV1RGBS"
       },
       "PostWait": 1.0
     },
     {
-      "Description": "Scaler to Output Rate for PC",
+      "Description": "Scaler to Output Rate for Nintendo 64",
       "DeviceType": "ExtronDSC301HD",
       "Function": "SetOutputRateWithoutEdid",
       "Parameters": {
         "width": 1920,
         "height": 1080,
-        "refreshRate": 60.0
+        "refreshRate": 59.94
       },
       "PostWait": 2.0
     },
@@ -141,16 +132,6 @@
       "Function": "SetInputPort",
       "Parameters": {
         "inputPort": "Hdmi4"
-      }
-    },
-    {
-      "Description": "Scale Fit 4:3",
-      "DeviceType": "ExtronDSC301HD",
-      "Function": "Scale",
-      "Parameters": {
-        "scaleType": "Fit",
-        "positionType": "Centre",
-        "aspectRatio": "Ratio4x3"
       }
     }
   ]
