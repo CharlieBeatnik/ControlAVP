@@ -34,6 +34,8 @@ namespace Tests
         [SetUp]
         public void Setup()
         {
+            _devices.Clear();
+
             _serviceClient = ServiceClient.CreateFromConnectionString(_settings.ConnectionString);
 
             uint deviceCount = (uint)_settings.DeviceCount;
