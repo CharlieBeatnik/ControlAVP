@@ -1,6 +1,7 @@
 ﻿using Microsoft.Azure.Devices;
 using ControllableDeviceTypes.SonyKDL60W855Types;
 using Newtonsoft.Json;
+using System;
 
 namespace AVPCloudToDevice
 {
@@ -19,7 +20,10 @@ namespace AVPCloudToDevice
         {
             try
             {
-                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "TVTurnOn", null);
+                // The timeout for this particular call uses a longer timeout as the TV takes a while to boot. The theory with the APIs is
+                // that a user can make a call and guarantee that the device is now in that state when it returns, hence we increase the 
+                // timeout to make sure it can succeed.
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "TVTurnOn", null, TimeSpan.FromSeconds(60));
                 return true;
             }
             catch
