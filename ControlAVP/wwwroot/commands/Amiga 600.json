@@ -1,0 +1,157 @@
+{
+  "DefaultAssembly": "ControllableDevice",
+  "DefaultDeviceIndex": 0,
+  "DisplayName":  "Amiga 600",
+  "Commands": [
+    {
+      "Description": "TV On",
+      "DeviceType": "SonyKDL60W855",
+      "Function": "TurnOn",
+      "Parameters": {
+        "wait": "false"
+      }
+    },
+    {
+      "Description": "Rack On",
+      "DeviceType": "ApcAP8959EU3",
+      "Function": "TurnOutletOn",
+      "Parameters": {
+        "id": 24
+      },
+      "PostWait": 5.0
+    },
+    {
+      "Description": "Amiga 600 On",
+      "DeviceType": "ApcAP8959EU3",
+      "Function": "TurnOutletOn",
+      "Parameters": {
+        "id": 19
+      }
+    },
+    {
+      "Description": "Disable HDMI Switch 0 Output",
+      "DeviceType": "AtenVS0801H",
+      "Function": "SetOutput",
+      "Parameters": {
+        "enable": "false"
+      }
+    },
+    {
+      "Description": "Disable HDMI Switch 1 Output",
+      "DeviceType": "AtenVS0801H",
+      "DeviceIndex": 1,
+      "Function": "SetOutput",
+      "Parameters": {
+        "enable": "false"
+      }
+    },
+    {
+      "Description": "Switch VGA Matrix to not the Amiga 600",
+      "DeviceType": "ExtronMVX44VGA",
+      "Function": "TieInputPortToAllOutputPorts",
+      "Parameters": {
+        "inputPort": "Port1",
+        "tieType": "AudioVideo"
+      }
+    },
+    {
+      "Description": "Switch input 4 to output 1 for the Amiga 600",
+      "DeviceType": "ExtronMVX44VGA",
+      "Function": "TieInputPortToOutputPort",
+      "Parameters": {
+        "inputPort": "Port4",
+        "outputPort":  "Port1",
+        "tieType": "AudioVideo"
+      }
+    },
+    {
+      "Description": "Scaler to HDMI",
+      "DeviceType": "ExtronDSC301HD",
+      "Function": "SetInputPort",
+      "Parameters": {
+        "inputPort": "HDMI"
+      }
+    },
+    {
+      "Description": "Load OSSC Profile for Amiga 600",
+      "DeviceType": "OSSC",
+      "Function": "LoadProfile",
+      "Parameters": {
+        "profileName": "Profile3"
+      },
+      "PostWait": 2.0
+    },
+    {
+      "Description": "Change OSSC to AV1YPbPr (Dummy Change to Act Like Reset)",
+      "DeviceType": "OSSC",
+      "Function": "SendCommand",
+      "Parameters": {
+        "commandName": "AV1YPbPr"
+      },
+      "PostWait": 2.0
+    },
+    {
+      "Description": "Change OSSC to RGBHV",
+      "DeviceType": "OSSC",
+      "Function": "SendCommand",
+      "Parameters": {
+        "commandName": "AV3RGBHV"
+      },
+      "PostWait": 1.0
+    },
+    {
+      "Description": "Scaler to Output Rate for Amiga 600",
+      "DeviceType": "ExtronDSC301HD",
+      "Function": "SetOutputRateWithoutEdid",
+      "Parameters": {
+        "width": 1920,
+        "height": 1080,
+        "refreshRate": 59.94
+      },
+      "PostWait": 2.0
+    },
+    {
+      "Description": "Enable HDMI Switch 0 Output",
+      "DeviceType": "AtenVS0801H",
+      "Function": "SetOutput",
+      "Parameters": {
+        "enable": "true"
+      }
+    },
+    {
+      "Description": "Enable HDMI Switch 1 Output",
+      "DeviceType": "AtenVS0801H",
+      "DeviceIndex": 1,
+      "Function": "SetOutput",
+      "Parameters": {
+        "enable": "true"
+      }
+    },
+    {
+      "Description": "HDMI Switch 0 to Scaler",
+      "DeviceType": "AtenVS0801H",
+      "Function": "SetInputPort",
+      "Parameters": {
+        "inputPort": "Port2"
+      }
+    },
+    {
+      "Description": "HDMI Switch 1 Passthrough",
+      "DeviceType": "AtenVS0801H",
+      "DeviceIndex": 1,
+      "Function": "SetInputPort",
+      "Parameters": {
+        "inputPort": "Port1"
+      }
+    },
+    {
+      "ExecuteAfter": 35.0,
+      "Description": "TV HDMI4 for Rack",
+      "DeviceType": "SonyKDL60W855",
+      "Function": "SetInputPort",
+      "Parameters": {
+        "inputPort": "Hdmi4"
+      }
+    }
+  ]
+}
