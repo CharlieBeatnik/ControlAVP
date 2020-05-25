@@ -284,6 +284,23 @@ namespace Tests
                 Assert.IsFalse(device.TieInputPortToOutputPort(InputPort.Port1, OutputPort.Port1, TieType.Audio));
             }
         }
-        
+
+        [TestMethod]
+        public void GivenDevice_WhenTieOutputPortToNoTie_ThenNothingIsTiedToOutputPort()
+        {
+            using (var device = CreateDevice())
+            {
+                var result = device.TieInputPortToOutputPort(InputPort.Port1, OutputPort.Port1, TieType.AudioVideo);
+                Assert.IsNotNull(result);
+                Assert.AreEqual(device.GetInputPortForOutputPort(OutputPort.Port1, TieType.Video), InputPort.Port1);
+                Assert.AreEqual(device.GetInputPortForOutputPort(OutputPort.Port1, TieType.Audio), InputPort.Port1);
+
+                device.TieInputPortToOutputPort(InputPort.NoTie, OutputPort.Port1, TieType.AudioVideo);
+
+                Assert.AreEqual(device.GetInputPortForOutputPort(OutputPort.Port1, TieType.Video), InputPort.NoTie);
+                Assert.AreEqual(device.GetInputPortForOutputPort(OutputPort.Port1, TieType.Audio), InputPort.NoTie);
+            }
+        }
+
     }
 }
