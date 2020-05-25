@@ -28,7 +28,7 @@ namespace Tests
             }
         }
 
-        private Rs232Device CreateDevice()
+        private static Rs232Device CreateDevice()
         {
             var device = new Rs232Device(_settings["Devices"]["SerialBlaster"][0]["portId"].ToString());
             device.BaudRate = 115200;

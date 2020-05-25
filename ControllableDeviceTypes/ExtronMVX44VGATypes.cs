@@ -78,5 +78,34 @@ namespace ControllableDeviceTypes
             public Dictionary<OutputPort, InputPort> Audio { get; } = new Dictionary<OutputPort, InputPort>();
 
         }
+
+        public enum TiePreset
+        {
+            CurrentConfiguration = 0,
+            Preset1 = 1,
+            Preset2 = 2,
+            Preset3 = 3,
+            Preset4 = 4,
+            Preset5 = 5,
+            Preset6 = 6,
+            Preset7 = 7,
+            Preset8 = 8,
+            Preset9 = 9,
+            Preset10 = 10,
+            Preset11 = 11,
+            Preset12 = 12,
+            Preset13 = 13,
+            Preset14 = 14,
+            Preset15 = 15,
+            Preset16 = 16
+        }
+
+        public static class TiePresetExtensions
+        {
+            public static bool Valid(this TiePreset tiePreset)
+            {
+                return Enum.IsDefined(typeof(TiePreset), tiePreset);
+            }
+        }
     }
 }
