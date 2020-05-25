@@ -46,11 +46,11 @@
       }
     },
     {
-      "Description": "Switch VGA Matrix to not the Amiga 600",
+      "Description": "Untie all VGA Matrix outputs",
       "DeviceType": "ExtronMVX44VGA",
       "Function": "TieInputPortToAllOutputPorts",
       "Parameters": {
-        "inputPort": "Port1",
+        "inputPort": "NoTie",
         "tieType": "AudioVideo"
       }
     },
