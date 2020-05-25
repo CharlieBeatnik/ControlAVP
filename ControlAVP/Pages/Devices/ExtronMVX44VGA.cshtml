@@ -16,7 +16,7 @@
         <div class="card-body pb-0">
             @if (Model.DeviceInfoCache.Available)
             {
-                <div class="col-sm-6">
+                <div class="col-lg-6">
                     <table class="table table-sm table-borderless">
                         <tr>
                             <td class="align-middle text-right" width="1%">Matrix</td>
@@ -30,7 +30,7 @@
                                         }
                                     </tr>
 
-                                    @foreach (InputPort inputPort in Enum.GetValues(typeof(InputPort)).OfType<InputPort>().Skip(1))
+                                    @foreach (InputPort inputPort in Enum.GetValues(typeof(InputPort)).OfType<InputPort>())
                                     {
                                         <tr>
                                             <td>
@@ -38,8 +38,8 @@
                                                         asp-page-handler="TieInputPortToAllOutputPorts"
                                                         asp-route-inputport=@inputPort
                                                         asp-route-tietype=@TieType.AudioVideo
-                                                        class="btn border btn-block btn-primary">
-                                                    Input @((int)inputPort)
+                                                        class="btn border btn-block @(inputPort == InputPort.NoTie ? "btn-secondary" : "btn-primary") ">
+                                                    @(inputPort == InputPort.NoTie ? "No Tie" : $"Input {(int)inputPort}")
                                                 </button>
                                             </td>
 
@@ -52,7 +52,7 @@
                                                             asp-route-inputport=@inputPort
                                                             asp-route-outputport=@outputPort
                                                             asp-route-tietype=@TieType.AudioVideo
-                                                            class="btn border btn-block @((inputPortActual == inputPort) ? "btn-success" : "btn-light")">
+                                                            class="btn border btn-block @((inputPortActual == inputPort) ? (inputPort == InputPort.NoTie ? "btn-secondary" : "btn-success") : "btn-light")">
                                                         &#8205;
                                                     </button>
                                                 </td>
