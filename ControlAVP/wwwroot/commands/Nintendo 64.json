@@ -87,7 +87,7 @@
       "Parameters": {
         "width": 1920,
         "height": 1080,
-        "refreshRate": 59.94
+        "refreshRate": 60.0
       },
       "PostWait": 2.0
     },
