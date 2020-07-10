@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Net;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using ControllableDevice;
@@ -66,14 +67,15 @@ namespace ControlRelay
             {
                 ScaleType = (ScaleType)(-1),
                 PositionType = (PositionType)(-1),
-                AspectRatio = (AspectRatio)(-1)
+                AspectRatio = (AspectRatio)(-1),
+                Padding = new Vector2(-1)
             };
 
             var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
 
             if(payload.ScaleType.Valid() && payload.PositionType.Valid())
             {
-                success = _device.Scale(payload.ScaleType, payload.PositionType, payload.AspectRatio);
+                success = _device.Scale(payload.ScaleType, payload.PositionType, payload.AspectRatio, payload.Padding);
             }
 
             return methodRequest.GetMethodResponse(success);

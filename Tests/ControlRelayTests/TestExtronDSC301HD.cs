@@ -5,6 +5,7 @@ using System.IO;
 using Newtonsoft.Json.Linq;
 using ControllableDeviceTypes.ExtronDSC301HDTypes;
 using System.Threading;
+using System.Numerics;
 
 namespace Tests
 {
@@ -314,7 +315,7 @@ namespace Tests
         {
             using (var device = CreateInvalidDevice())
             {
-                Assert.IsFalse(device.Scale(ScaleType.Fit, PositionType.Centre, AspectRatio.RatioPreserve));
+                Assert.IsFalse(device.Scale(ScaleType.Fit, PositionType.Centre, AspectRatio.RatioPreserve, new Vector2(0)));
             }
         }
 

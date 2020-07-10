@@ -6,11 +6,11 @@
       "Description": "Example description.",
       "DeviceType": "DummyDevice",
       "DeviceIndex": 0,
-      "Function": "GetSomething",
+      "Function": "SumValuesAndReturnAnswer",
       "Parameters": {
-        "x": "call1",
-        "y": 1,
-        "z": 1.1
+        "a": "5",
+        "b": 7,
+        "c": 30.0
       }
     },
     {
@@ -18,11 +18,11 @@
       "Description": "Example description.",
       "DeviceType": "DummyDevice",
       "DeviceIndex": 0,
-      "Function": "GetSomething",
+      "Function": "SumValuesAndReturnAnswer",
       "Parameters": {
-        "x": "call2",
-        "y": 2,
-        "z": 2.2
+        "a": "5",
+        "b": 7,
+        "c": 30.0
       }
     }
   ]

@@ -150,7 +150,11 @@
       "Parameters": {
         "scaleType": "Fit",
         "positionType": "Centre",
-        "aspectRatio": "Ratio4x3"
+        "aspectRatio": "Ratio4x3",
+        "padding": {
+          "X": 0,
+          "Y": 0
+        }
       }
     }
   ]

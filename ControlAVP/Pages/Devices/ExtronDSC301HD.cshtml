@@ -1,14 +1,14 @@
 ﻿@page
 @model ControlAVP.Pages.Devices.ExtronDSC301HDModel
 @using ControllableDeviceTypes.ExtronDSC301HDTypes;
+@using System.Numerics;
 
 @{
     ViewData["Title"] = "Extron DSC301HD";
 }
 
 <script type="text/javascript">
-    function sliderChanged(value, linkedButtonId, handlerName)
-    {
+    function sliderChanged(value, linkedButtonId, handlerName) {
         var formaction = "/Devices/ExtronDSC301HD?handler=" + handlerName + "&value=" + value;
         document.getElementById(linkedButtonId).setAttribute("formaction", formaction);
         document.getElementById(linkedButtonId).innerHTML = "Set " + value;
@@ -33,12 +33,12 @@
                                 <div class="btn-group">
                                     @foreach (InputPort inputPort in Enum.GetValues(typeof(InputPort)))
                                     {
-                                    <button type="submit"
-                                            asp-page-handler="SetInput"
-                                            asp-route-inputport=@inputPort
-                                            class="btn border @(inputPort == Model.DeviceInfoCache.InputPort ? "btn-success" : "btn-light")">
-                                        @(inputPort.ToString())
-                                    </button>
+                                        <button type="submit"
+                                                asp-page-handler="SetInput"
+                                                asp-route-inputport=@inputPort
+                                                class="btn border @(inputPort == Model.DeviceInfoCache.InputPort ? "btn-success" : "btn-light")">
+                                            @(inputPort.ToString())
+                                        </button>
                                     }
                                 </div>
                             </td>
@@ -47,9 +47,9 @@
                             <td class="align-middle text-right">Pixel Perfect</td>
                             <td>
                                 <div class="btn-group">
-                                    <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.PixelPerfect asp-route-positiontype=@PositionType.Centre class="btn btn-light border text-center">Preserve Aspect</button>
-                                    <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.PixelPerfect asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.Ratio4x3 class="btn btn-light border text-center">4:3</button>
-                                    <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.PixelPerfect asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.Ratio16x9 class="btn btn-light border text-center">16:9</button>
+                                    <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.PixelPerfect asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.RatioPreserve asp-route-padding=@(new Vector2(0)) class="btn btn-light border text-center">Preserve Aspect</button>
+                                    <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.PixelPerfect asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.Ratio4x3 asp-route-padding=@(new Vector2(0)) class="btn btn-light border text-center">4:3</button>
+                                    <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.PixelPerfect asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.Ratio16x9 asp-route-padding=@(new Vector2(0)) class="btn btn-light border text-center">16:9</button>
                                 </div>
                             </td>
                         </tr>
@@ -57,9 +57,19 @@
                             <td class="align-middle text-right">Fit</td>
                             <td>
                                 <div class="btn-group">
-                                    <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.Fit asp-route-positiontype=@PositionType.Centre class="btn btn-light border text-center">Preserve Aspect</button>
-                                    <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.Fit asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.Ratio4x3 class="btn btn-light border text-center">4:3</button>
-                                    <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.Fit asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.Ratio16x9 class="btn btn-light border text-center">16:9</button>
+                                    <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.Fit asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.RatioPreserve asp-route-padding=@(new Vector2(0)) class="btn btn-light border text-center">Preserve Aspect</button>
+                                    <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.Fit asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.Ratio4x3 asp-route-padding=@(new Vector2(0)) class="btn btn-light border text-center">4:3</button>
+                                    <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.Fit asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.Ratio16x9 asp-route-padding=@(new Vector2(0)) class="btn btn-light border text-center">16:9</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle text-right">Fit Width</td>
+                            <td>
+                                <div class="btn-group">
+                                    <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.FitWidth asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.RatioPreserve asp-route-padding=@(new Vector2(0)) class="btn btn-light border text-center">Preserve Aspect</button>
+                                    <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.FitWidth asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.Ratio4x3 asp-route-padding=@(new Vector2(0)) class="btn btn-light border text-center">4:3</button>
+                                    <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.FitWidth asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.Ratio16x9 asp-route-padding=@(new Vector2(0)) class="btn btn-light border text-center">16:9</button>
                                 </div>
                             </td>
                         </tr>
@@ -74,7 +84,7 @@
                             </td>
                         </tr>
                         <tr>
-                        <td class="align-middle text-right">Freeze</td>
+                            <td class="align-middle text-right">Freeze</td>
                             <td>
                                 <div class="btn-group">
                                     @switch (Model.DeviceInfoCache.Freeze)
@@ -162,7 +172,7 @@
                                          aria-valuenow="@Model.DeviceInfoCache.Temperature"
                                          aria-valuemin="0"
                                          aria-valuemax="100"
-                                         style="width: @Model.DeviceInfoCache.Temperature%">
+                                         style="width: @((int)Model.DeviceInfoCache.Temperature)%;">
                                     </div>
                                     <small class="justify-content-center d-flex position-absolute w-100" style="padding-top: 2px;">@Model.DeviceInfoCache.Temperature&#176;</small>
                                 </div>

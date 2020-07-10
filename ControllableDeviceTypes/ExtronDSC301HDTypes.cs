@@ -232,7 +232,8 @@ namespace ControllableDeviceTypes
         public enum ScaleType
         {
             Fit,
-            PixelPerfect
+            PixelPerfect,
+            FitWidth
         }
 
         public static class ScaleTypeExtensions

@@ -7,13 +7,13 @@
       "Assembly": "Tests",
       "Description": "This will succeed because a default device index is provided.",
       "DeviceType": "DummyDevice",
-      "Function": "SetSomethingNoParameters"
+      "Function": "NoParameters"
     },
     {
       "Description": "This will succeed because a default assembly is provided.",
       "DeviceType": "DummyDevice",
       "DeviceIndex": 0,
-      "Function": "SetSomethingNoParameters"
+      "Function": "NoParameters"
     }
   ]
 }

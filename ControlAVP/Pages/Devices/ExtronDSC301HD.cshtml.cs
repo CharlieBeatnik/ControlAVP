@@ -9,6 +9,7 @@ using Microsoft.Azure.Devices;
 using Microsoft.Extensions.Configuration;
 using AVPCloudToDevice;
 using ControllableDeviceTypes.ExtronDSC301HDTypes;
+using System.Numerics;
 
 namespace ControlAVP.Pages.Devices
 {
@@ -60,9 +61,9 @@ namespace ControlAVP.Pages.Devices
             DeviceInfoCache.Freeze = _device.GetFreeze();
         }
 
-        public IActionResult OnPostSetScale(ScaleType scaleType, PositionType positionType, AspectRatio aspectRatio)
+        public IActionResult OnPostSetScale(ScaleType scaleType, PositionType positionType, AspectRatio aspectRatio, Vector2 padding)
         {
-            _device.SetScale(scaleType, positionType, aspectRatio);
+            _device.SetScale(scaleType, positionType, aspectRatio, padding);
             return RedirectToPage();
         }
 

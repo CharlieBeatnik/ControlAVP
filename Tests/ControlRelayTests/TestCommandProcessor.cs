@@ -15,6 +15,9 @@ using System.Diagnostics;
 
 namespace Tests
 {
+    //TODO - Need to write these tests
+    // Duplicate method names
+
     [TestClass]
     public class TestCommandProcessor
     {
@@ -57,9 +60,9 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GivenJsonAndDevice_WhenCallSetFunction_ThenCommandResultIsCorrect()
+        public void GivenJsonAndDevice_WhenCallSumValuesAndReturnEquality_ThenCommandResultIsTrue()
         {
-            using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-call-set-function.json"))
+            using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-call-sumvaluesandreturnequality.json"))
             {
                 string json = r.ReadToEnd();
                 using (var device = CreateDevice())
@@ -69,9 +72,14 @@ namespace Tests
 
                     foreach (var commandResult in CommandProcessorUtils.Execute(devices, json))
                     {
-                        Assert.IsTrue(commandResult.Success);
                         Assert.IsNotNull(commandResult.Result);
-                        Assert.IsTrue(commandResult.Function == "SetSomething");
+                        Assert.IsTrue(commandResult.Result.GetType() == typeof(bool));
+                        Assert.IsTrue((bool)commandResult.Result);
+
+                        Assert.IsTrue(commandResult.Success);
+
+                        //Only time we need to check this, no need in any other tests
+                        Assert.IsTrue(commandResult.Function == "SumValuesAndReturnEquality");
                         Assert.IsTrue(commandResult.Description == "Example description.");
                     }
                 }
@@ -79,9 +87,9 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GivenJsonAndDevice_WhenCallGetFunction_ThenCommandResultIsCorrect()
+        public void GivenJsonAndDevice_WhenCallSetFunctionWithAFieldTypeParameter_ThenCommandResultIsCorrect()
         {
-            using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-call-get-function.json"))
+            using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-call-function-with-a-field-type-parameter.json"))
             {
                 string json = r.ReadToEnd();
                 using (var device = CreateDevice())
@@ -93,9 +101,51 @@ namespace Tests
                     {
                         Assert.IsTrue(commandResult.Success);
                         Assert.IsNotNull(commandResult.Result);
-                        Assert.IsTrue((int?)commandResult.Result == 0);
-                        Assert.IsTrue(commandResult.Function == "GetSomething");
-                        Assert.IsTrue(commandResult.Description == "Example description.");
+                        Assert.IsTrue(commandResult.Result.GetType() == typeof(bool));
+                        Assert.IsTrue((bool)commandResult.Result);
+                    }
+                }
+            }
+        }
+
+        [TestMethod]
+        public void GivenJsonAndDevice_WhenCallSetFunctionWithAPropertyTypeParameter_ThenCommandResultIsCorrect()
+        {
+            using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-call-function-with-a-property-type-parameter.json"))
+            {
+                string json = r.ReadToEnd();
+                using (var device = CreateDevice())
+                {
+                    var devices = new List<object>();
+                    devices.Add(device);
+
+                    foreach (var commandResult in CommandProcessorUtils.Execute(devices, json))
+                    {
+                        Assert.IsTrue(commandResult.Success);
+                        Assert.IsNotNull(commandResult.Result);
+                        Assert.IsTrue(commandResult.Result.GetType() == typeof(bool));
+                        Assert.IsTrue((bool)commandResult.Result);
+                    }
+                }
+            }
+        }
+
+        [TestMethod]
+        public void GivenJsonAndDevice_WhenCallGetSumValuesAndReturnAnswer_ThenCommandResultIsCorrect()
+        {
+            using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-call-sumvaluesandreturnanswer.json"))
+            {
+                string json = r.ReadToEnd();
+                using (var device = CreateDevice())
+                {
+                    var devices = new List<object>();
+                    devices.Add(device);
+
+                    foreach (var commandResult in CommandProcessorUtils.Execute(devices, json))
+                    {
+                        Assert.IsTrue(commandResult.Success);
+                        Assert.IsNotNull(commandResult.Result);
+                        Assert.IsTrue((int?)commandResult.Result == 42);
                     }
                 }
             }
@@ -216,6 +266,66 @@ namespace Tests
                     foreach (var commandResult in CommandProcessorUtils.Execute(devices, json))
                     {
                         Assert.IsTrue(commandResult.StartTime.TotalSeconds > 5);
+                    }
+                }
+            }
+        }
+
+        [TestMethod]
+        public void GivenJsonAndDevice_WhenCallFunctionThatDoesNotExist_ThenSuccessIsFalesAndResultIsNull()
+        {
+            using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-call-function-that-does-not-exist.json"))
+            {
+                string json = r.ReadToEnd();
+                using (var device = CreateDevice())
+                {
+                    var devices = new List<object>();
+                    devices.Add(device);
+
+                    foreach (var commandResult in CommandProcessorUtils.Execute(devices, json))
+                    {
+                        Assert.IsFalse(commandResult.Success);
+                        Assert.IsNull(commandResult.Result);
+                    }
+                }
+            }
+        }
+
+        [TestMethod]
+        public void GivenJsonAndDevice_WhenCallFunctionWithMissingParameters_ThenSuccessIsFalesAndResultIsNull()
+        {
+            using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-call-function-with-missing-parameters.json"))
+            {
+                string json = r.ReadToEnd();
+                using (var device = CreateDevice())
+                {
+                    var devices = new List<object>();
+                    devices.Add(device);
+
+                    foreach (var commandResult in CommandProcessorUtils.Execute(devices, json))
+                    {
+                        Assert.IsFalse(commandResult.Success);
+                        Assert.IsNull(commandResult.Result);
+                    }
+                }
+            }
+        }
+
+        [TestMethod]
+        public void GivenJsonAndDevice_WhenCallFunctionWithIncorrectlyNamedParameters_ThenSuccessIsFalesAndResultIsNull()
+        {
+            using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-call-function-with-incorrectly-named-parameters.json"))
+            {
+                string json = r.ReadToEnd();
+                using (var device = CreateDevice())
+                {
+                    var devices = new List<object>();
+                    devices.Add(device);
+
+                    foreach (var commandResult in CommandProcessorUtils.Execute(devices, json))
+                    {
+                        Assert.IsFalse(commandResult.Success);
+                        Assert.IsNull(commandResult.Result);
                     }
                 }
             }

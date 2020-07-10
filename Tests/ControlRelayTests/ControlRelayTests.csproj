@@ -135,15 +135,20 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="ControlRelayTests_TemporaryKey.pfx" />
-    <Content Include="TestAssets\command-processor-call-set-function.json" />
+    <Content Include="TestAssets\command-processor-call-sumvaluesandreturnequality.json" />
     <Content Include="TestAssets\command-processor-fail-validation.json" />
-    <Content Include="TestAssets\command-processor-call-get-function.json" />
+    <Content Include="TestAssets\command-processor-call-sumvaluesandreturnanswer.json" />
     <Content Include="TestAssets\command-processor-call-2-functions.json" />
     <Content Include="TestAssets\command-processor-call-function-with-enum-parameter.json" />
     <Content Include="TestAssets\command-processor-post-wait.json" />
     <Content Include="TestAssets\command-processor-no-device-index-or-assembly.json" />
     <Content Include="TestAssets\command-processor-default-device-index-and-assembly.json" />
     <Content Include="TestAssets\command-processor-execute-after.json" />
+    <Content Include="TestAssets\command-processor-call-function-with-a-field-type-parameter.json" />
+    <Content Include="TestAssets\command-processor-call-function-with-a-property-type-parameter.json" />
+    <Content Include="TestAssets\command-processor-call-function-that-does-not-exist.json" />
+    <Content Include="TestAssets\command-processor-call-function-with-incorrectly-named-parameters.json" />
+    <Content Include="TestAssets\command-processor-call-function-with-missing-parameters.json" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Properties\UnitTestApp.rd.xml" />
@@ -165,10 +170,10 @@
       <Version>6.2.10</Version>
     </PackageReference>
     <PackageReference Include="MSTest.TestAdapter">
-      <Version>2.1.1</Version>
+      <Version>2.1.2</Version>
     </PackageReference>
     <PackageReference Include="MSTest.TestFramework">
-      <Version>2.1.1</Version>
+      <Version>2.1.2</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.NET.Test.Sdk">
       <Version>16.6.1</Version>

@@ -5,13 +5,11 @@
       "Assembly": "Tests",
       "Description": "Example description.",
       "DeviceType": "DummyDevice",
-      "DeviceIndex": "0", //Schema Fail - String not Integer
-      "Function": "SumValuesAndReturnEquality",
+      "DeviceIndex": 0,
+      "Function": "SumValuesAndReturnAnswer",
       "Parameters": {
         "a": "5",
-        "b": 7,
-        "c": 30.0,
-        "answer": 42
+        "b": 7
       }
     }
   ]

@@ -8,6 +8,7 @@ using System;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 
 namespace Tests
 {
@@ -68,19 +69,19 @@ namespace Tests
         [Test]
         public void GivenDevice_WhenSetScale_ThenSuccessIsTrue()
         {
-            Assert.IsTrue(_device.SetScale(ScaleType.Fit, PositionType.Centre));
+            Assert.IsTrue(_device.SetScale(ScaleType.Fit, PositionType.Centre, AspectRatio.RatioPreserve, new Vector2(42,7)));
         }
 
         [Test]
         public void GivenDevice_WhenSetScaleWithInvalidPositionType_ThenSuccessIsFalse()
         {
-            Assert.IsFalse(_device.SetScale(ScaleType.Fit, (PositionType)_invalidPositionType));
+            Assert.IsFalse(_device.SetScale(ScaleType.Fit, (PositionType)_invalidPositionType, AspectRatio.RatioPreserve, new Vector2(0)));
         }
 
         [Test]
         public void GivenDevice_WhenSetScaleWithInvalidScaleType_ThenSuccessIsFalse()
         {
-            Assert.IsFalse(_device.SetScale((ScaleType)_invalidScaleType, PositionType.Centre));
+            Assert.IsFalse(_device.SetScale((ScaleType)_invalidScaleType, PositionType.Centre, AspectRatio.RatioPreserve, new Vector2(0)));
         }
 
         [Test]

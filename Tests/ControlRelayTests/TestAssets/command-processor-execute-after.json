@@ -7,11 +7,12 @@
       "Description": "Example description.",
       "DeviceType": "DummyDevice",
       "DeviceIndex": 0,
-      "Function": "SetSomething",
+      "Function": "SumValuesAndReturnEquality",
       "Parameters": {
-        "x": "x",
-        "y": 1,
-        "z": 1.1
+        "a": "5",
+        "b": 7,
+        "c": 30.0,
+        "answer": 42
       }
     }
   ]

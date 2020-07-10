@@ -3,6 +3,7 @@ using Microsoft.Azure.Devices;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
+using System.Numerics;
 
 namespace AVPCloudToDevice
 {
@@ -44,11 +45,12 @@ namespace AVPCloudToDevice
                 return false;
             }
         }
-        public bool SetScale(ScaleType scaleType, PositionType positionType, AspectRatio aspectRatio = AspectRatio.RatioPreserve)
+
+        public bool SetScale(ScaleType scaleType, PositionType positionType, AspectRatio aspectRatio, Vector2 padding)
         {
             try
             {
-                var payload = new { scaleType, positionType, aspectRatio};
+                var payload = new { scaleType, positionType, aspectRatio, padding};
                 var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "ScalerSetScale", payload);
                 return true;
             }

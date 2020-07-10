@@ -84,7 +84,5 @@ namespace Tests
                 Assert.IsTrue(hdmiDevice1State.InputPort == InputPort.Port8);
             }
         }
-
-
     }
 }

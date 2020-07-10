@@ -6,14 +6,15 @@
       "Description": "Example description.",
       "DeviceType": "DummyDevice",
       "DeviceIndex": 0,
-      "Function": "SumValuesAndReturnEquality",
+      "Function": "PassFieldTypeAndReturnEquality",
       "Parameters": {
-        "a": "5",
-        "b": 7,
-        "c": 30.0,
-        "answer": 42
-      },
-      "PostWait": 5.0
+        "fieldType": {
+          "fI": 42,
+          "fE": "Setting1"
+        },
+        "i": 42,
+        "e": "Setting1"
+      }
     }
   ]
 }

@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using ControllableDeviceTypes.ExtronDSC301HDTypes;
 using ControllableDeviceTypes.OSSCTypes;
 using Newtonsoft.Json;
+using System.Numerics;
 
 namespace ControlAVP.Pages
 {
@@ -106,9 +107,9 @@ namespace ControlAVP.Pages
             return RedirectToPage();
         }
 
-        public IActionResult OnPostSetScale(ScaleType scaleType, PositionType positionType, AspectRatio aspectRatio)
+        public IActionResult OnPostSetScale(ScaleType scaleType, PositionType positionType, AspectRatio aspectRatio, Vector2 padding)
         {
-            _extronDSC301HD.SetScale(scaleType, positionType, aspectRatio);
+            _extronDSC301HD.SetScale(scaleType, positionType, aspectRatio, padding);
             return RedirectToPage();
         }
 

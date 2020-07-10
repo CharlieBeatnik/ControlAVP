@@ -6,14 +6,7 @@
       "Description": "Example description.",
       "DeviceType": "DummyDevice",
       "DeviceIndex": 0,
-      "Function": "SumValuesAndReturnEquality",
-      "Parameters": {
-        "a": "5",
-        "b": 7,
-        "c": 30.0,
-        "answer": 42
-      },
-      "PostWait": 5.0
+      "Function": "DoesNotExist"
     }
   ]
 }

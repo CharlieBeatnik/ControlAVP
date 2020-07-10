@@ -2,7 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,8 +12,23 @@ namespace Tests
 {
     public enum DummyDeviceSetting
     {
-        Setting1,
-        Setting2
+        Setting1 = 1,
+        Setting2 = 2
+    }
+
+    public class DummyDeviceFieldType
+    {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1051:Do not declare visible instance fields", Justification = "Test setting public fields")]
+        public int fI;
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1051:Do not declare visible instance fields", Justification = "Test setting public fields")]
+        public DummyDeviceSetting fE;
+    }
+
+    public class DummyDevicePropertyType
+    {
+        public int pI { get; set; }
+        public DummyDeviceSetting pE { get; set; }
     }
 
     public class DummyDevice : IControllableDevice
@@ -19,10 +36,6 @@ namespace Tests
         private bool _disposed = false;
 
         private bool _invalid = false;
-
-        private string _x;
-        private int _y;
-        private float _z;
 
         public DummyDevice(bool invalid = false)
         {
@@ -56,29 +69,43 @@ namespace Tests
             else return true;
         }
 
-        public bool SetSomething(string x, int y, float z)
+        public bool SumValuesAndReturnEquality(string a, int b, float c, float answer)
         {
-            _x = x; _y = y; _z = z;
-
             if (_invalid)
             {
                 return false;
             }
-            else return true;
+            else return(float.Parse(a) + b + c) == answer;
         }
 
-        public int? GetSomething(string x, int y, float z)
+        public int? SumValuesAndReturnAnswer(string a, int b, float c)
         {
-            _x = x; _y = y; _z = z;
-
             if (_invalid)
             {
                 return null;
             }
-            else return 0;
+            else return (int)(float.Parse(a) + b + c);
         }
 
-        public bool SetSomethingNoParameters()
+        public bool PassFieldTypeAndReturnEquality(DummyDeviceFieldType fieldType, int i, DummyDeviceSetting e)
+        {
+            if (_invalid)
+            {
+                return false;
+            }
+            else return fieldType?.fI == i && fieldType.fE == e;
+        }
+
+        public bool PassPropertyTypeAndReturnEquality(DummyDevicePropertyType propertyType, int i, DummyDeviceSetting e)
+        {
+            if (_invalid)
+            {
+                return false;
+            }
+            else return propertyType?.pI == i && propertyType.pE == e;
+        }
+
+        public bool NoParameters()
         {
             if (_invalid)
             {

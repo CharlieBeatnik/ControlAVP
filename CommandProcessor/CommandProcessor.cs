@@ -16,6 +16,7 @@ namespace CommandProcessor
         public bool Success { get; set; }
         public object Result { get; set;  }
         public string Description { get; set; }
+        public string ErrorMessage { get; set; }
         public TimeSpan StartTime { get; set; }
         public TimeSpan EndTime { get; set; }
         public TimeSpan ExecutionTime => EndTime - StartTime;
@@ -79,7 +80,8 @@ namespace CommandProcessor
                         Result = null,
                         Description = (string)command["Description"],
                         StartTime = startTime,
-                        EndTime = sw.Elapsed
+                        EndTime = sw.Elapsed,
+                        ErrorMessage = "Assembly or Device Index is missing."
                     };
                     break;
                 }
@@ -89,6 +91,21 @@ namespace CommandProcessor
 
                 var device = filteredDevices[(int)deviceIndex];
                 MethodInfo methodInfo = deviceType.GetMethod((string)command["Function"]);
+
+                if (methodInfo == null)
+                {
+                    yield return new CommandResult()
+                    {
+                        Function = (string)command["Function"],
+                        Success = false,
+                        Result = null,
+                        Description = (string)command["Description"],
+                        StartTime = startTime,
+                        EndTime = sw.Elapsed,
+                        ErrorMessage = $"Method {(string)command["Function"]} could not be found."
+                    };
+                    break;
+                }
 
                 ParameterInfo[] parameterInfos = methodInfo.GetParameters();
 
@@ -104,27 +121,89 @@ namespace CommandProcessor
                         Result = null,
                         Description = (string)command["Description"],
                         StartTime = startTime,
-                        EndTime = sw.Elapsed
+                        EndTime = sw.Elapsed,
+                        ErrorMessage = "The wrong number of parameters have been provided."
                     };
                     break;
                 }
 
                 //Build parameter array if necessary
                 object[] parameters = null;
+                bool allParametersProvided = true;
                 if (parameterInfos.Length > 0)
                 {
                     parameters = parameterInfos.Select(p =>
                     {
-                        string paramValue = (string)command["Parameters"][p.Name];
-                        Type paramType = p.ParameterType;
-                        return paramType.IsEnum ? Enum.Parse(paramType, paramValue) : Convert.ChangeType(paramValue, paramType);
+                        switch (command["Parameters"][p.Name])
+                        {
+                            case JValue v:
+                                {
+                                    string paramValue = (string)command["Parameters"][p.Name];
+                                    Type paramType = p.ParameterType;
+                                    return paramType.IsEnum ? Enum.Parse(paramType, paramValue) : Convert.ChangeType(paramValue, paramType);
+                                }
+
+                            case JObject o:
+                                {
+                                    Type paramType = p.ParameterType;
+                                    object param = Activator.CreateInstance(paramType);
+
+                                    #if DEBUG
+                                    var fields = paramType.GetFields();
+                                    var properties = paramType.GetProperties();
+                                    #endif
+
+                                    foreach (JProperty jProperty in command["Parameters"][p.Name])
+                                    {
+
+                                        var field = paramType.GetField(jProperty.Name);
+                                        if (field != null)
+                                        {
+                                            object value = field.FieldType.IsEnum ? Enum.Parse(field.FieldType, (string)jProperty.Value) : Convert.ChangeType(jProperty.Value, field.FieldType);
+                                            field.SetValue(param, value);
+                                        }
+                                        else
+                                        {
+                                            var property = paramType.GetProperty(jProperty.Name);
+                                            if (property != null)
+                                            {
+                                                object value = property.PropertyType.IsEnum ? Enum.Parse(property.PropertyType, (string)jProperty.Value) : Convert.ChangeType(jProperty.Value, property.PropertyType);
+                                                property.SetValue(param, value);
+                                            }
+                                        }
+                                    }
+
+                                    return param;
+                                }
+
+                            default:
+                            case null:
+                                allParametersProvided = false;
+                                return null;
+                        }
                     })
                     .ToArray();
+                }
+
+                if(!allParametersProvided)
+                {
+                    yield return new CommandResult()
+                    {
+                        Function = (string)command["Function"],
+                        Success = false,
+                        Result = null,
+                        Description = (string)command["Description"],
+                        StartTime = startTime,
+                        EndTime = sw.Elapsed,
+                        ErrorMessage = "The correct number of parameters were provides but there was a problem with at least 1, is the name correct?"
+                    };
+                    break;
                 }
 
                 Type returnType = methodInfo.ReturnType;
                 bool success;
                 object result;
+                string errorMessage;
 
                 if(returnType == typeof(bool))
                 {
@@ -140,7 +219,7 @@ namespace CommandProcessor
                 }
                 else
                 {
-                    Debug.Fail("Return type must be bool or nullable");
+                    errorMessage = $"Return type of function {(string)command["Function"]} must be bool or nullable";
                     result = null;
                     success = false;
                 }

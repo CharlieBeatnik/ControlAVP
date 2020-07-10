@@ -6,11 +6,14 @@
       "Description": "Example description.",
       "DeviceType": "DummyDevice",
       "DeviceIndex": 0,
-      "Function": "GetSomething",
+      "Function": "PassPropertyTypeAndReturnEquality",
       "Parameters": {
-        "x": "x",
-        "y": 1,
-        "z": 1.1
+        "propertyType": {
+          "pI": 42,
+          "pE": "Setting1"
+        },
+        "i": 42,
+        "e": "Setting1"
       }
     }
   ]

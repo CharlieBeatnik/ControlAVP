@@ -2,6 +2,7 @@
 @model IndexModel
 @using ControllableDeviceTypes.ExtronDSC301HDTypes;
 @using ControllableDeviceTypes.OSSCTypes;
+@using System.Numerics;
 @{
     ViewData["Title"] = "ControlAVP";
 }
@@ -29,9 +30,9 @@
                         <td class="align-middle text-right">Pixel Perfect</td>
                         <td>
                             <div class="btn-group">
-                                <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.PixelPerfect asp-route-positiontype=@PositionType.Centre class="btn btn-light border text-center">Preserve Aspect</button>
-                                <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.PixelPerfect asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.Ratio4x3 class="btn btn-light border text-center">4:3</button>
-                                <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.PixelPerfect asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.Ratio16x9 class="btn btn-light border text-center">16:9</button>
+                                <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.PixelPerfect asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.RatioPreserve asp-route-padding=@(new Vector2(0)) class="btn btn-light border text-center">Preserve Aspect</button>
+                                <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.PixelPerfect asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.Ratio4x3 asp-route-padding=@(new Vector2(0)) class="btn btn-light border text-center">4:3</button>
+                                <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.PixelPerfect asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.Ratio16x9 asp-route-padding=@(new Vector2(0)) class="btn btn-light border text-center">16:9</button>
                             </div>
                         </td>
                     </tr>
@@ -39,9 +40,9 @@
                         <td class="align-middle text-right">Fit</td>
                         <td>
                             <div class="btn-group">
-                                <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.Fit asp-route-positiontype=@PositionType.Centre class="btn btn-success border text-center">Preserve Aspect</button>
-                                <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.Fit asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.Ratio4x3 class="btn btn-light border text-center">4:3</button>
-                                <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.Fit asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.Ratio16x9 class="btn btn-light border text-center">16:9</button>
+                                <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.Fit asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.RatioPreserve asp-route-padding=@(new Vector2(0)) class="btn btn-success border text-center">Preserve Aspect</button>
+                                <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.Fit asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.Ratio4x3 asp-route-padding=@(new Vector2(0)) class="btn btn-light border text-center">4:3</button>
+                                <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.Fit asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.Ratio16x9 asp-route-padding=@(new Vector2(0)) class="btn btn-light border text-center">16:9</button>
                             </div>
                         </td>
                     </tr>

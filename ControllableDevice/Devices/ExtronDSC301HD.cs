@@ -74,7 +74,7 @@ namespace ControllableDevice
             return null;
         }
 
-        public bool Scale(ScaleType scaleType, PositionType positionType, AspectRatio aspectRatio)
+        public bool Scale(ScaleType scaleType, PositionType positionType, AspectRatio aspectRatio, Vector2 padding)
         {
             if (!_rs232Device.Enabled) return false;
 
@@ -129,6 +129,20 @@ namespace ControllableDevice
                         }
                     }
                     break;
+
+                case ScaleType.FitWidth:
+                    {
+                        float scale = (float)outputEdid.Width / (float)inputWidth;
+                        hSize = outputEdid.Width;
+                        vSize = (int)(inputHeight * scale);
+                    }
+                    break;
+            }
+
+            if(padding != null)
+            {
+                hSize += (int)padding.X;
+                hSize += (int)padding.Y;
             }
 
             switch (positionType)
