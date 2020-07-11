@@ -78,23 +78,31 @@ namespace ControllableDevice
         {
             if (!_rs232Device.Enabled) return false;
 
+            if(padding == null)
+            {
+                padding = new Vector2();
+            }
+
             var outputEdid = GetOutputRate();
 
             int inputWidth = (int)GetActivePixels();
             int inputHeight = (int)GetActiveLines();
 
+            float edidRatio = (float)outputEdid.Width / (float)outputEdid.Height;
+            float inputRatio = (float)inputWidth / (float)inputHeight;
+
+            int inputWidthWithoutPadding = inputWidth - (int)Math.Round(padding.X * 2);
+            int inputHeightWithoutPadding = inputHeight - (int)Math.Round(padding.Y * 2);
+
             if (aspectRatio != AspectRatio.RatioPreserve)
             {
-                inputHeight = (int)(inputWidth * (1.0f / aspectRatio.GetRatio()));
+                inputHeightWithoutPadding = (int)(inputWidthWithoutPadding * (1.0f / aspectRatio.GetRatio()));
             }
 
             int vSize = 0;
             int hSize = 0;
             int vPos = 0;
             int hPos = 0;
-
-            float edidRatio = (float)outputEdid.Width / (float)outputEdid.Height;
-            float inputRatio = (float)inputWidth / (float)inputHeight;
 
             switch (scaleType)
             {
@@ -132,17 +140,12 @@ namespace ControllableDevice
 
                 case ScaleType.FitWidth:
                     {
-                        float scale = (float)outputEdid.Width / (float)inputWidth;
-                        hSize = outputEdid.Width;
-                        vSize = (int)(inputHeight * scale);
+                        var widthPaddingScale = (float)inputWidth / inputWidthWithoutPadding;
+
+                        hSize = (int)(outputEdid.Width * (float)widthPaddingScale);
+                        vSize = (int)(hSize * (1 / inputRatio));
                     }
                     break;
-            }
-
-            if(padding != null)
-            {
-                hSize += (int)padding.X;
-                hSize += (int)padding.Y;
             }
 
             switch (positionType)

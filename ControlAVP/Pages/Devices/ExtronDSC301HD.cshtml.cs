@@ -37,6 +37,9 @@ namespace ControlAVP.Pages.Devices
 
         public ExtronDSC301HDDeviceInfo DeviceInfoCache { get; private set; } = new ExtronDSC301HDDeviceInfo();
 
+        public float PaddingX { get; private set; } = 0;
+        public float PaddingY { get; private set; } = 0;
+
         public ExtronDSC301HDModel(IConfiguration configuration, IWebHostEnvironment environment)
         {
             _configuration = configuration;
@@ -49,7 +52,7 @@ namespace ControlAVP.Pages.Devices
             _device = new ExtronDSC301HD(_serviceClient, _deviceId);
         }
 
-        public void OnGet()
+        public void OnGet(float paddingX, float paddingY)
         {
             DeviceInfoCache.Available = _device.GetAvailable();
             DeviceInfoCache.Firmware = _device.GetFirmware();
@@ -59,12 +62,15 @@ namespace ControlAVP.Pages.Devices
             DeviceInfoCache.Brightness = _device.GetBrightness();
             DeviceInfoCache.Contrast = _device.GetContrast();
             DeviceInfoCache.Freeze = _device.GetFreeze();
+
+            PaddingX = paddingX;
+            PaddingY = paddingY;
         }
 
         public IActionResult OnPostSetScale(ScaleType scaleType, PositionType positionType, AspectRatio aspectRatio, float paddingX = 0, float paddingY = 0)
         {
             _device.SetScale(scaleType, positionType, aspectRatio, new Vector2() { X = paddingX, Y = paddingY });
-            return RedirectToPage();
+            return RedirectToPage(new { paddingX, paddingY });
         }
 
         public IActionResult OnPostSetOutputRate(int width, int height, float refreshRate)
