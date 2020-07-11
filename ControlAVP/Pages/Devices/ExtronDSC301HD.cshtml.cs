@@ -61,9 +61,9 @@ namespace ControlAVP.Pages.Devices
             DeviceInfoCache.Freeze = _device.GetFreeze();
         }
 
-        public IActionResult OnPostSetScale(ScaleType scaleType, PositionType positionType, AspectRatio aspectRatio, Vector2 padding)
+        public IActionResult OnPostSetScale(ScaleType scaleType, PositionType positionType, AspectRatio aspectRatio, float paddingX = 0, float paddingY = 0)
         {
-            _device.SetScale(scaleType, positionType, aspectRatio, padding);
+            _device.SetScale(scaleType, positionType, aspectRatio, new Vector2() { X = paddingX, Y = paddingY });
             return RedirectToPage();
         }
 

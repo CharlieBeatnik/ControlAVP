@@ -8,11 +8,26 @@
 }
 
 <script type="text/javascript">
-    function sliderChanged(value, linkedButtonId, handlerName) {
-        var formaction = "/Devices/ExtronDSC301HD?handler=" + handlerName + "&value=" + value;
-        document.getElementById(linkedButtonId).setAttribute("formaction", formaction);
-        document.getElementById(linkedButtonId).innerHTML = "Set " + value;
+    function updateParameterInURLAttribute(elementIdArray, attributeName, parameterName, value, labelId, labelPrefix) {
+
+        for (i = 0; i < elementIdArray.length; i++)
+        {
+            var elementId = elementIdArray[i];
+            var element = document.getElementById(elementId);
+            var url = element.getAttribute(attributeName);
+            var params = new URLSearchParams(url);
+            params.set(parameterName, value);
+            var modifiedUrl = decodeURIComponent(params.toString())
+            element.setAttribute(attributeName, modifiedUrl);
+        }
+
+        if (labelId != null)
+        {
+            document.getElementById(labelId).innerHTML = labelPrefix + value;
+        }
     }
+
+    var scaleButtonElementIds = ['scalePixelPerfectPreserve', 'scalePixelPerfect4x3', 'scalePixelPerfect16x9', 'scaleFitPreserve', 'scaleFit4x3', 'scaleFit16x9', 'scaleFitWidthPreserve', 'scaleFitWidth4x3', 'scaleFitWidth16x9' ];
 </script>
 
 <h2></h2>
@@ -47,9 +62,9 @@
                             <td class="align-middle text-right">Pixel Perfect</td>
                             <td>
                                 <div class="btn-group">
-                                    <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.PixelPerfect asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.RatioPreserve asp-route-padding=@(new Vector2(0)) class="btn btn-light border text-center">Preserve Aspect</button>
-                                    <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.PixelPerfect asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.Ratio4x3 asp-route-padding=@(new Vector2(0)) class="btn btn-light border text-center">4:3</button>
-                                    <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.PixelPerfect asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.Ratio16x9 asp-route-padding=@(new Vector2(0)) class="btn btn-light border text-center">16:9</button>
+                                    <button id="scalePixelPerfectPreserve" formaction="/Devices/ExtronDSC301HD?handler=SetScale&scaletype=@ScaleType.PixelPerfect&positiontype=@PositionType.Centre&aspectratio=@AspectRatio.RatioPreserve" type="submit" class="btn border btn-light" style="text-align: left;">Preserve Aspect</button>
+                                    <button id="scalePixelPerfect4x3" formaction="/Devices/ExtronDSC301HD?handler=SetScale&scaletype=@ScaleType.PixelPerfect&positiontype=@PositionType.Centre&aspectratio=@AspectRatio.Ratio4x3" type="submit" class="btn border btn-light" style="text-align: left;">4:3</button>
+                                    <button id="scalePixelPerfect16x9" formaction="/Devices/ExtronDSC301HD?handler=SetScale&scaletype=@ScaleType.PixelPerfect&positiontype=@PositionType.Centre&aspectratio=@AspectRatio.Ratio16x9" type="submit" class="btn border btn-light" style="text-align: left;">16:9</button>
                                 </div>
                             </td>
                         </tr>
@@ -57,9 +72,9 @@
                             <td class="align-middle text-right">Fit</td>
                             <td>
                                 <div class="btn-group">
-                                    <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.Fit asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.RatioPreserve asp-route-padding=@(new Vector2(0)) class="btn btn-light border text-center">Preserve Aspect</button>
-                                    <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.Fit asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.Ratio4x3 asp-route-padding=@(new Vector2(0)) class="btn btn-light border text-center">4:3</button>
-                                    <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.Fit asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.Ratio16x9 asp-route-padding=@(new Vector2(0)) class="btn btn-light border text-center">16:9</button>
+                                    <button id="scaleFitPreserve" formaction="/Devices/ExtronDSC301HD?handler=SetScale&scaletype=@ScaleType.Fit&positiontype=@PositionType.Centre&aspectratio=@AspectRatio.RatioPreserve" type="submit" class="btn border btn-light" style="text-align: left;">Preserve Aspect</button>
+                                    <button id="scaleFit4x3" formaction="/Devices/ExtronDSC301HD?handler=SetScale&scaletype=@ScaleType.Fit&positiontype=@PositionType.Centre&aspectratio=@AspectRatio.Ratio4x3" type="submit" class="btn border btn-light" style="text-align: left;">4:3</button>
+                                    <button id="scaleFit16x9" formaction="/Devices/ExtronDSC301HD?handler=SetScale&scaletype=@ScaleType.Fit&positiontype=@PositionType.Centre&aspectratio=@AspectRatio.Ratio16x9" type="submit" class="btn border btn-light" style="text-align: left;">16:9</button>
                                 </div>
                             </td>
                         </tr>
@@ -67,12 +82,28 @@
                             <td class="align-middle text-right">Fit Width</td>
                             <td>
                                 <div class="btn-group">
-                                    <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.FitWidth asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.RatioPreserve asp-route-padding=@(new Vector2(0)) class="btn btn-light border text-center">Preserve Aspect</button>
-                                    <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.FitWidth asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.Ratio4x3 asp-route-padding=@(new Vector2(0)) class="btn btn-light border text-center">4:3</button>
-                                    <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.FitWidth asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.Ratio16x9 asp-route-padding=@(new Vector2(0)) class="btn btn-light border text-center">16:9</button>
+                                    <button id="scaleFitWidthPreserve" formaction="/Devices/ExtronDSC301HD?handler=SetScale&scaletype=@ScaleType.FitWidth&positiontype=@PositionType.Centre&aspectratio=@AspectRatio.RatioPreserve" type="submit" class="btn border btn-light" style="text-align: left;">Preserve Aspect</button>
+                                    <button id="scaleFitWidth4x3" formaction="/Devices/ExtronDSC301HD?handler=SetScale&scaletype=@ScaleType.FitWidth&positiontype=@PositionType.Centre&aspectratio=@AspectRatio.Ratio4x3" type="submit" class="btn border btn-light" style="text-align: left;">4:3</button>
+                                    <button id="scaleFitWidth16x9" formaction="/Devices/ExtronDSC301HD?handler=SetScale&scaletype=@ScaleType.FitWidth&positiontype=@PositionType.Centre&aspectratio=@AspectRatio.Ratio16x9" type="submit" class="btn border btn-light" style="text-align: left;">16:9</button>
                                 </div>
                             </td>
                         </tr>
+
+                        <tr>
+                            <td class="align-middle text-right">Padding X</td>
+                            <td>
+                                <input type="range" class="align-middle w-75" min="0" value="0" max="64" id="scalePaddingX" oninput="updateParameterInURLAttribute(scaleButtonElementIds, 'formaction', 'paddingX', this.value, 'scalePaddingXLabel', '')" />
+                                <span class="badge badge-secondary align-middle" id="scalePaddingXLabel">0</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle text-right">Padding Y</td>
+                            <td>
+                                <input type="range" class="align-middle w-75" min="0" value="0" max="64" id="scalePaddingX" oninput="updateParameterInURLAttribute(scaleButtonElementIds, 'formaction', 'paddingY', this.value, 'scalePaddingYLabel', '')" />
+                                <span class="badge badge-secondary align-middle" id="scalePaddingYLabel">0</span>
+                            </td>
+                        </tr>
+
                         <tr>
                             <td class="align-middle text-right">Refresh</td>
                             <td>
@@ -116,7 +147,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td><input type="range" class="w-100" min="0" value="@Model.DeviceInfoCache.DetailFilter" max="127" id="detailFilterSlider" oninput="sliderChanged(this.value, 'setDetailFilterButton', 'SetDetailFilter')" /></td>
+                            <td><input type="range" class="w-100" min="0" value="@Model.DeviceInfoCache.DetailFilter" max="127" id="detailFilterSlider" oninput="updateParameterInURLAttribute(['setDetailFilterButton'], 'formaction', 'value', this.value, 'setDetailFilterButton', 'Set ')"/></td>
                         </tr>
                         <tr>
                             <td class="align-middle text-right" rowspan="3">Brightness</td>
@@ -131,7 +162,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td><input type="range" class="w-100" min="0" value="@Model.DeviceInfoCache.Brightness" max="127" id="brightnessSlider" oninput="sliderChanged(this.value, 'setBrightnessButton', 'SetBrightness')" /></td>
+                            <td><input type="range" class="w-100" min="0" value="@Model.DeviceInfoCache.Brightness" max="127" id="brightnessSlider" oninput="updateParameterInURLAttribute(['setBrightnessButton'], 'formaction', 'value', this.value, 'setBrightnessButton', 'Set ')"/></td>
                         </tr>
                         <tr>
                             <td class="align-middle text-right" rowspan="3">Contrast</td>
@@ -146,7 +177,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td><input type="range" class="w-100" min="0" value="@Model.DeviceInfoCache.Brightness" max="127" id="brightnessSlider" oninput="sliderChanged(this.value, 'setContrastButton', 'SetContrast')" /></td>
+                            <td><input type="range" class="w-100" min="0" value="@Model.DeviceInfoCache.Brightness" max="127" id="brightnessSlider" oninput="updateParameterInURLAttribute(['setContrastButton'], 'formaction', 'value', this.value, 'setContrastButton', 'Set ')" /></td>
                         </tr>
                         <tr>
                             <td class="align-middle text-right">Firmware</td>

@@ -107,9 +107,9 @@ namespace ControlAVP.Pages
             return RedirectToPage();
         }
 
-        public IActionResult OnPostSetScale(ScaleType scaleType, PositionType positionType, AspectRatio aspectRatio, Vector2 padding)
+        public IActionResult OnPostSetScale(ScaleType scaleType, PositionType positionType, AspectRatio aspectRatio, float paddingX = 0, float paddingY = 0)
         {
-            _extronDSC301HD.SetScale(scaleType, positionType, aspectRatio, padding);
+            _extronDSC301HD.SetScale(scaleType, positionType, aspectRatio, new Vector2() { X = paddingX, Y = paddingY });
             return RedirectToPage();
         }
 
