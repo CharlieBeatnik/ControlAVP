@@ -88,16 +88,17 @@ namespace ControllableDevice
             int inputWidth = (int)GetActivePixels();
             int inputHeight = (int)GetActiveLines();
 
-            float edidRatio = (float)outputEdid.Width / (float)outputEdid.Height;
-            float inputRatio = (float)inputWidth / (float)inputHeight;
-
             int inputWidthWithoutPadding = inputWidth - (int)Math.Round(padding.X * 2);
             int inputHeightWithoutPadding = inputHeight - (int)Math.Round(padding.Y * 2);
 
             if (aspectRatio != AspectRatio.RatioPreserve)
             {
                 inputHeightWithoutPadding = (int)(inputWidthWithoutPadding * (1.0f / aspectRatio.GetRatio()));
+                inputHeight = (int)(inputWidth * (1.0f / aspectRatio.GetRatio()));
             }
+
+            float edidRatio = (float)outputEdid.Width / (float)outputEdid.Height;
+            float inputRatio = (float)inputWidth / (float)inputHeight;
 
             int vSize = 0;
             int hSize = 0;
