@@ -8,7 +8,7 @@ namespace ControllableDevice
 {
     public class SerialBlaster : IDisposable
     {
-        private bool _disposed = false;
+        private bool _disposed;
         private Rs232Device _rs232Device;
 
         public enum Protocol

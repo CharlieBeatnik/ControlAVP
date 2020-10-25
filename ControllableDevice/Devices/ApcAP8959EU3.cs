@@ -9,11 +9,11 @@ namespace ControllableDevice
 {
     public class ApcAP8959EU3 : IControllableDevice
     {
-        private bool _disposed = false;
+        private bool _disposed;
         private SshDevice _sshDevice;
 
         private const int _outletCount = 24;
-        public static readonly string TerminalPrompt = "apc>";
+        public const string TerminalPrompt = "apc>";
 
         public ApcAP8959EU3(string host, int port, string username, string password)
         {

@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.Net;
 using System.Net.Sockets;
 
@@ -8,6 +9,11 @@ namespace ControllableDevice
     {
         public static void WakeUp(string macAddress)
         {
+            if (string.IsNullOrEmpty(macAddress))
+            {
+                throw new ArgumentException("Must not be Null or Empty.", nameof(macAddress));
+            }
+
             using (var sock = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp))
             {
                 sock.EnableBroadcast = true;

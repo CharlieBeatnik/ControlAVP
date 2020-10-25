@@ -9,12 +9,12 @@ namespace ControllableDevice
 {
     public class SshDevice : IDisposable
     {
-        private bool _disposed = false;
+        private bool _disposed;
 
         private SshClient _sshClient;
         private ShellStream _shellStream;
 
-        private bool _connectionValid = false;
+        private bool _connectionValid;
         private readonly Object _lock = new Object();
 
         private string _host;

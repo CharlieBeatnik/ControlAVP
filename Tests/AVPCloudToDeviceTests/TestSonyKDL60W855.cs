@@ -13,7 +13,7 @@ namespace Tests
     public class TestSonyKDL60W855
     {
         private dynamic _settings;
-        private readonly string _settingsFile = "settings.json";
+        private const string _settingsFile = "settings.json";
 
         private ServiceClient _serviceClient;
         private SonyKDL60W855 _device;

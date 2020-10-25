@@ -16,7 +16,7 @@ namespace ControllableDevice
 {
     public class Rs232Device : IDisposable
     {
-        private bool _disposed = false;
+        private bool _disposed;
 
         private string _partialId;
         private SerialDevice _serialDevice;
@@ -32,8 +32,8 @@ namespace ControllableDevice
         private CircularBuffer<TimestampedMessage> _messageStore;
         private string _unterminatedMessage = string.Empty;
 
-        private readonly int _messageStoreCapacity = 1024;
-        private readonly uint _readBufferLength = 1024;
+        private const int _messageStoreCapacity = 1024;
+        private const uint _readBufferLength = 1024;
 
         //Serial device defaults
         private TimeSpan _writeTimeout = TimeSpan.FromMilliseconds(50);
@@ -152,7 +152,7 @@ namespace ControllableDevice
             get { return _stopBits; }
         }
 
-        public bool Enabled { get; private set; } = false;
+        public bool Enabled { get; private set; }
 
         public Rs232Device(string partialId)
         {
@@ -336,7 +336,7 @@ namespace ControllableDevice
             {
                 // Create a task object to wait for data on the serialPort.InputStream
                 var loadAsyncTask = _dataReader.LoadAsync(_readBufferLength).AsTask(childCancellationTokenSource.Token);
-                loadAsyncTask.Wait();
+                loadAsyncTask.Wait(CancellationToken.None);
 
                 var numBytesRead = loadAsyncTask.Result;
                 if (numBytesRead > 0)

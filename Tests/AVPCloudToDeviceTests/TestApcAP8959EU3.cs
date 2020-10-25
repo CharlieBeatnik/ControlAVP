@@ -13,7 +13,7 @@ namespace Tests
     public class TestApcAP8959EU3
     {
         private dynamic _settings;
-        private readonly string _settingsFile = "settings.json";
+        private const string _settingsFile = "settings.json";
 
         private ServiceClient _serviceClient;
         private ApcAP8959EU3 _device;

@@ -15,7 +15,7 @@ namespace Tests
     public class TestExtronDSC301HD
     {
         private dynamic _settings;
-        private readonly string _settingsFile = "settings.json";
+        private const string _settingsFile = "settings.json";
 
         private ServiceClient _serviceClient;
         private ExtronDSC301HD _device;

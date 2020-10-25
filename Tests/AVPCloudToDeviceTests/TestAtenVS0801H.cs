@@ -13,7 +13,7 @@ namespace Tests
     public class TestAtenVS0801H
     {
         private dynamic _settings;
-        private readonly string _settingsFile = "settings.json";
+        private const string _settingsFile = "settings.json";
 
         private ServiceClient _serviceClient;
         private List<AtenVS0801H> _devices = new List<AtenVS0801H>();

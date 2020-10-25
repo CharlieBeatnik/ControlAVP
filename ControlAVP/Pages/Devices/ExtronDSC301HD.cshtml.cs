@@ -37,8 +37,8 @@ namespace ControlAVP.Pages.Devices
 
         public ExtronDSC301HDDeviceInfo DeviceInfoCache { get; private set; } = new ExtronDSC301HDDeviceInfo();
 
-        public float PaddingX { get; private set; } = 0;
-        public float PaddingY { get; private set; } = 0;
+        public float PaddingX { get; private set; }
+        public float PaddingY { get; private set; }
 
         public ExtronDSC301HDModel(IConfiguration configuration, IWebHostEnvironment environment)
         {

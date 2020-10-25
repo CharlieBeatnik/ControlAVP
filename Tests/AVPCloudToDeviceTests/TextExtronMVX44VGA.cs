@@ -14,7 +14,7 @@ namespace Tests
     public class TestExtronMVX44VGA
     {
         private dynamic _settings;
-        private readonly string _settingsFile = "settings.json";
+        private const string _settingsFile = "settings.json";
 
         private ServiceClient _serviceClient;
         private ExtronMVX44VGA _device;

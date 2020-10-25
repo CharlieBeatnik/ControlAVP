@@ -33,9 +33,8 @@ namespace Tests
 
     public class DummyDevice : IControllableDevice
     {
-        private bool _disposed = false;
-
-        private bool _invalid = false;
+        private bool _disposed;
+        private bool _invalid;
 
         public DummyDevice(bool invalid = false)
         {

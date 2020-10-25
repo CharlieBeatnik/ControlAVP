@@ -21,7 +21,7 @@ namespace ControlRelay
 {
     public sealed class StartupTask : IBackgroundTask
     {
-        private static BackgroundTaskDeferral _Deferral = null;
+        private static BackgroundTaskDeferral _Deferral;
 
         private List<object> _devices;
         private List<DeviceCloudInterface> _deviceCloudInterfaces;

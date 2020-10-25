@@ -11,7 +11,7 @@ namespace ControllableDevice
 {
     class JsonRpcDevice : IDisposable
     {
-        private bool _disposed = false;
+        private bool _disposed;
         private IPAddress _host;
         private string _preSharedKey;
         private WebClientEx _webClient;

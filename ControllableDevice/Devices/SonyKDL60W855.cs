@@ -11,7 +11,7 @@ namespace ControllableDevice
 {
     public class SonyKDL60W855 : IControllableDevice
     {
-        private bool _disposed = false;
+        private bool _disposed;
         private JsonRpcDevice _jsonRpcDevice;
 
         private IPAddress _host;

@@ -12,7 +12,7 @@ namespace Tests
     public class TestCommandProcessor
     {
         private dynamic _settings;
-        private readonly string _settingsFile = "settings.json";
+        private const string _settingsFile = "settings.json";
 
         private ServiceClient _serviceClient;
         private CommandProcessor _cp;

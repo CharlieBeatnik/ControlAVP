@@ -9,17 +9,17 @@ namespace ControllableDevice
 {
     public class ExtronDSC301HD : IControllableDevice
     {
-        private bool _disposed = false;
+        private bool _disposed;
         private Rs232Device _rs232Device;
 
         private readonly string _cmdEsc = ('\x1B').ToString();
-        private readonly string _cmdCr = "\r";
-        private readonly string _patternNumberLine = @"^[+-]*[0-9]+$";
-        private readonly string _patternNumber = $@"[+-]*[0-9]+";
+        private const string _cmdCr = "\r";
+        private const string _patternNumberLine = @"^[+-]*[0-9]+$";
+        private const string _patternNumber = @"[+-]*[0-9]+";
 
-        private readonly int _pictureAdjustmentMin = 0;
-        private readonly int _pictureAdjustmentMax = 127;
-        private readonly int _pictureAdjustmentDefault = 64;
+        private const int _pictureAdjustmentMin = 0;
+        private const int _pictureAdjustmentMax = 127;
+        private const int _pictureAdjustmentDefault = 64;
 
         public ExtronDSC301HD(string portId)
         {

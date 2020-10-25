@@ -9,11 +9,11 @@ namespace ControllableDevice
 {
     public class ExtronMVX44VGA : IControllableDevice
     {
-        private bool _disposed = false;
+        private bool _disposed;
         private Rs232Device _rs232Device;
 
         private readonly string _cmdEsc = ('\x1B').ToString();
-        private readonly string _cmdCr = "\r";
+        private const string _cmdCr = "\r";
 
         public ExtronMVX44VGA(string portId)
         {

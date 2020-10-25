@@ -286,15 +286,15 @@ namespace ControllableDeviceTypes
 
         public class PositionAndSize
         {
-            public static readonly int HPosMin = -2048;
-            public static readonly int HPosMax = 2048;
-            public static readonly int VPosMin = -1200;
-            public static readonly int VPosMax = 1200;
+            public const int HPosMin = -2048;
+            public const int HPosMax = 2048;
+            public const int VPosMin = -1200;
+            public const int VPosMax = 1200;
 
-            public static readonly int HSizeMin = 10;
-            public static readonly int HSizeMax = 4096;
-            public static readonly int VSizeMin = 10;
-            public static readonly int VSizeMax = 2400;
+            public const int HSizeMin = 10;
+            public const int HSizeMax = 4096;
+            public const int VSizeMin = 10;
+            public const int VSizeMax = 2400;
 
             public PositionAndSize(int hPos, int vPos, int hSize, int vSize)
             {

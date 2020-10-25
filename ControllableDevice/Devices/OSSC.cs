@@ -10,7 +10,7 @@ namespace ControllableDevice
 {
     public class OSSC : IControllableDevice
     {
-        private bool _disposed = false;
+        private bool _disposed;
         private SerialBlaster _serialBlaster;
 
         private class CommandCode
