@@ -39,6 +39,9 @@ namespace ControlAVP.Pages
         public List<CommandInfo> CommandInfos { get; private set; }
         public bool ExtronDSC301HDAvailable { get; private set; }
 
+        public bool ScalerCardVisible { get; private set; }
+        public bool OsscCardVisible { get; private set; }
+
         public IndexModel(IConfiguration configuration, IWebHostEnvironment environment)
         {
             Contract.Requires(configuration != null);
@@ -58,7 +61,7 @@ namespace ControlAVP.Pages
             _commandDirectory = Path.Combine(_environment.WebRootPath, "commands");
         }
 
-        public void OnGet()
+        public void OnGet(bool scalerCardVisible, bool osscCardVisible)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(_commandDirectory);
 
@@ -94,6 +97,28 @@ namespace ControlAVP.Pages
             }
 
             ExtronDSC301HDAvailable = _extronDSC301HD.GetAvailable();
+
+            ScalerCardVisible = scalerCardVisible;
+            OsscCardVisible = osscCardVisible;
+        }
+
+        //Override redirect to page to deal with common parameters
+        public override RedirectToPageResult RedirectToPage()
+        {
+            bool scalerCardVisible = false;
+            bool osscCardVisible = false;
+
+            if (Request.Query.TryGetValue("scalerCardVisible", out var scalerCardVisibleStr))
+            {
+                scalerCardVisible = bool.Parse(scalerCardVisibleStr);
+            }
+
+            if (Request.Query.TryGetValue("osscCardVisible", out var osscCardVisibleStr))
+            {
+                osscCardVisible = bool.Parse(osscCardVisibleStr);
+            }
+
+            return base.RedirectToPage(new { scalerCardVisible, osscCardVisible });
         }
 
         public IActionResult OnPostCommandProcessorExecute(string fileFullName)
@@ -103,7 +128,7 @@ namespace ControlAVP.Pages
                 string json = r.ReadToEnd();
                 _cp.Execute(json);
             }
-            
+
             return RedirectToPage();
         }
 

@@ -197,13 +197,15 @@
                                         {
                                             temperatureColour = "bg-danger";
                                         }
+
+                                        var styleWidth = $@"width: {Model.DeviceInfoCache.Temperature}%;";
                                     }
                                     <div class="progress-bar progress-bar-striped progress-bar-animated @temperatureColour"
                                          role="progressbar"
                                          aria-valuenow="@Model.DeviceInfoCache.Temperature"
                                          aria-valuemin="0"
                                          aria-valuemax="100"
-                                         style="width: @((int)Model.DeviceInfoCache.Temperature)%;">
+                                         style="@styleWidth">
                                     </div>
                                     <small class="justify-content-center d-flex position-absolute w-100" style="padding-top: 2px;">@Model.DeviceInfoCache.Temperature&#176;</small>
                                 </div>

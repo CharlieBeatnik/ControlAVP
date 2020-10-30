@@ -9,6 +9,52 @@
 
 @Html.AntiForgeryToken()
 
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript" language="JavaScript">
+
+        function updateParameterInURLAttributeOfButtons(attributeName, parameterName, value) {
+            var elementArray = document.getElementsByTagName('button');
+            for (i = 0; i < elementArray.length; i++) {
+                var element = elementArray[i];
+
+                //Only modify the URL of buttons that are going to submit
+                if (element.getAttribute('type') == 'submit') {
+                    var url = element.getAttribute(attributeName);
+                    var params = new URLSearchParams(url);
+                    params.set(parameterName, value);
+                    var modifiedUrl = decodeURIComponent(params.toString())
+                    element.setAttribute(attributeName, modifiedUrl);
+                }
+            }
+        }
+
+        $(document).ready(function ()
+        {
+            //Update URLs on page load
+            updateParameterInURLAttributeOfButtons('formaction', 'scalerCardVisible', '@Model.ScalerCardVisible');
+            updateParameterInURLAttributeOfButtons('formaction', 'osscCardVisible', '@Model.OsscCardVisible');
+
+            //Update URLs when cards are either collapsed or expanded
+            $('#scalerCollapse').on('show.bs.collapse', function () {
+                updateParameterInURLAttributeOfButtons('formaction', 'scalerCardVisible', 'true');
+            })
+
+            $('#scalerCollapse').on('hide.bs.collapse', function () {
+                updateParameterInURLAttributeOfButtons('formaction', 'scalerCardVisible', 'false');
+            })
+
+            $('#osscCollapse').on('show.bs.collapse', function () {
+                updateParameterInURLAttributeOfButtons('formaction', 'osscCardVisible', 'true');
+            })
+
+            $('#osscCollapse').on('hide.bs.collapse', function () {
+                updateParameterInURLAttributeOfButtons('formaction', 'osscCardVisible', 'false');
+            })
+        });
+    </script>
+}
+
 <div class="p-1 m-0">
     <div class="btn-group">
         @if (Model.ExtronDSC301HDAvailable)
@@ -23,7 +69,7 @@
 <form method="post">
     @if (Model.ExtronDSC301HDAvailable)
     {
-        <div class="collapse p-1 m-0" id="scalerCollapse">
+        <div class="@(Model.ScalerCardVisible ? "collapse show" : "collapse") p-1 m-0" id="scalerCollapse">
             <div class="card card-body p-2">
                 <table class="table table-sm table-responsive table-borderless mb-0">
                     <tr>
@@ -61,7 +107,7 @@
         </div>
     }
 
-    <div class="collapse p-1 m-0" id="osscCollapse">
+    <div class="@(Model.OsscCardVisible ? "collapse show" : "collapse") p-1 m-0" id="osscCollapse">
         <div class="card card-body p-2">
             <table class="table table-sm table-responsive table-borderless mb-0">
                 <tr>
