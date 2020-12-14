@@ -124,7 +124,7 @@
 
     <div class="container-fluid">
         <div class="row">
-            @foreach (var commandInfo in Model.CommandInfos)
+            @foreach (var commandInfo in Model.CommandInfos.OrderBy(i => i.DisplayName))
             {
                 <div class="col-4 col-md-2 p-1 m-0">
                     <button type="submit" asp-page-handler="CommandProcessorExecute" asp-route-fileFullName=@commandInfo.JsonPath class="btn btn-light border btn-block m-0 p-2">

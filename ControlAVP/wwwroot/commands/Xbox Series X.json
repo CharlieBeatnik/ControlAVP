@@ -1,7 +1,7 @@
 {
   "DefaultAssembly": "ControllableDevice",
   "DefaultDeviceIndex": 0,
-  "DisplayName": "Xbox One",
+  "DisplayName": "Xbox Series X",
   "Commands": [
     {
       "Description": "TV On",
@@ -20,7 +20,7 @@
       }
     },
     {
-      "Description": "TV HDMI3 for Xbox One",
+      "Description": "TV HDMI3 for Xbox Series X",
       "DeviceType": "SonyKDL60W855",
       "Function": "SetInputPort",
       "Parameters": {
