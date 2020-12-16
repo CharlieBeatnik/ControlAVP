@@ -41,11 +41,6 @@ namespace AVPCloudToDevice
 
         public static CloudToDeviceMethodResult InvokeMethodWithJsonPayload(ServiceClient serviceClient, string deviceId, string methodName, string json, TimeSpan responseTimeout)
         {
-            if(responseTimeout == null)
-            {
-                responseTimeout = TimeSpan.FromSeconds(10);
-            }
-
             var methodInvocation = new CloudToDeviceMethod(methodName) { ResponseTimeout = (TimeSpan)responseTimeout };
             methodInvocation.SetPayloadJson(json);
 
@@ -54,13 +49,13 @@ namespace AVPCloudToDevice
 
             if (response == null)
             {
-                throw new Exception($"Invoking method '{methodName}' resulted in a null response.");
+                throw new InvalidOperationException($"Invoking method '{methodName}' resulted in a null response.");
             }
             else
             {
                 if (response.Status != (int)HttpStatusCode.OK)
                 {
-                    throw new Exception($"Invoking method '{methodName}' resulted in a HTPP status code '{response.Status}'.");
+                    throw new InvalidOperationException($"Invoking method '{methodName}' resulted in a HTPP status code '{response.Status}'.");
                 }
             }
 

@@ -358,7 +358,7 @@ namespace ControllableDevice
 
             if (messages.Count > 0)
             {
-                if (!readData.EndsWith(ReceivedMessageTerminator))
+                if (!readData.EndsWith(ReceivedMessageTerminator, StringComparison.Ordinal))
                 {
                     _unterminatedMessage = messages.Last();
                     messages.RemoveAt(messages.Count - 1);

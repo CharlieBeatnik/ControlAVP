@@ -36,7 +36,7 @@ namespace ControlAVP.Pages
 
         private string _commandDirectory;
 
-        public List<CommandInfo> CommandInfos { get; private set; }
+        public IList<CommandInfo> CommandInfos { get; private set; }
         public bool ExtronDSC301HDAvailable { get; private set; }
 
         public bool ScalerCardVisible { get; private set; }

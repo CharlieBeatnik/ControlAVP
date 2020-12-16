@@ -31,7 +31,7 @@ namespace ControlAVP.Pages.Devices
         private const uint _numHdmiSwitches = 2;
         private List<AtenVS0801H> _devices = new List<AtenVS0801H>();
 
-        public List<AtenVS0801HDeviceInfo> DeviceInfoCaches { get; private set; } = new List<AtenVS0801HDeviceInfo>();
+        public IList<AtenVS0801HDeviceInfo> DeviceInfoCaches { get; private set; } = new List<AtenVS0801HDeviceInfo>();
 
         public AtenVS0801HModel(IConfiguration configuration, IWebHostEnvironment environment)
         {
