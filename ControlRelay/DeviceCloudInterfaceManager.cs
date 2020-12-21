@@ -70,7 +70,8 @@ namespace ControlRelay
                                             _logger.Debug($"Retry #{retryCount}: SetMethodHandlerAsync({methodHandlerInfo.Name})");
                                         });
 
-                        policy.Execute(() => _deviceClient.SetMethodHandlerAsync(methodHandlerInfo.Name, methodHandlerInfo.Handler, null).Wait());
+                        //ANDRWEDE_TODO - Had to remove the .Wait() as it wasn't returning on Desktop, what effect will this have?
+                        policy.Execute(() => _deviceClient.SetMethodHandlerAsync(methodHandlerInfo.Name, methodHandlerInfo.Handler, null));
                     }
                 }
             }

@@ -1,0 +1,17 @@
+{
+  "DisplayName":  "Test",
+  "Commands": [
+    {
+      "Assembly": "Tests",
+      "Description": "Example description.",
+      "DeviceType": "DummyDevice",
+      "DeviceIndex": 0,
+      "Function": "SumValuesAndReturnAnswer",
+      "Parameters": {
+        "a": "5",
+        "b": 7,
+        "c": 30.0
+      }
+    }
+  ]
+}

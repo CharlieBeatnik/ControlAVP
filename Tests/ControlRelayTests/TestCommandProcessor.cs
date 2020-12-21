@@ -41,8 +41,37 @@ namespace Tests
         }
 
         [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void GivenJsonIsNull_WhenRunCommandProcessor_ThenArgumentNullExceptionIsThrown()
+        {
+            using (var device = CreateDevice())
+            {
+                var devices = new List<object>();
+                devices.Add(device);
+
+                foreach (var result in CommandProcessorUtils.Execute(devices, null))
+                {
+                }
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void GivenDevicesIsNull_WhenRunCommandProcessor_ThenArgumentNullExceptionIsThrown()
+        {
+            using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-call-1-function.json"))
+            {
+                string json = r.ReadToEnd();
+                foreach (var result in CommandProcessorUtils.Execute(null, json))
+                {
+                }
+            }
+        }
+
+
+        [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void GivenJsonIsInvalid_WhenRunCommandeProcessor_ThenArgumentExceptionIsThrown()
+        public void GivenJsonIsInvalid_WhenRunCommandProcessor_ThenArgumentExceptionIsThrown()
         {
             using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-fail-validation.json"))
             {

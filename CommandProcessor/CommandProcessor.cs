@@ -24,30 +24,36 @@ namespace CommandProcessor
 
     public static class CommandProcessorUtils
     {
-        public static IEnumerable<CommandResult> Execute(IEnumerable<object> devices, string jsonCommands)
+        public static bool Valid(string jsonCommands, out JObject commandBatch)
         {
-            if (devices == null)
-            {
-                throw new ArgumentNullException(nameof(devices));
-            }
-
-            var sw = new Stopwatch();
-            sw.Start();
-
             //Pull the json schema out of the assembly resources and created it
             var jsonSchemaBytes = Properties.Resources.command_processor_schema;
             string jsonSchemaString = Encoding.UTF8.GetString(jsonSchemaBytes, 0, jsonSchemaBytes.Length);
             JSchema schema = JSchema.Parse(jsonSchemaString);
 
-            //Parse the json passed in and validate it, throw exception if it fails
+            //Parse the json passed in and validate it
             IList<string> errorMessages;
-            JObject commandBatch = JObject.Parse(jsonCommands);
-            bool valid = commandBatch.IsValid(schema, out errorMessages);
+            commandBatch = JObject.Parse(jsonCommands);
+            return commandBatch.IsValid(schema, out errorMessages);
+        }
 
-            if(!valid)
-            {
-                throw new ArgumentException("JSON commands failed schema validation.");
-            }
+        public static bool Valid(string jsonCommands)
+        {
+            JObject commandBatch;
+            return Valid(jsonCommands, out commandBatch);
+        }
+
+        public static IEnumerable<CommandResult> Execute(IEnumerable<object> devices, string jsonCommands)
+        {
+            if (devices is null) throw new ArgumentNullException(nameof(devices));
+            if (jsonCommands is null) throw new ArgumentNullException(nameof(jsonCommands));
+
+            var sw = new Stopwatch();
+            sw.Start();
+
+            JObject commandBatch;
+            bool jsonValid = Valid(jsonCommands, out commandBatch);
+            if (!jsonValid) throw new ArgumentException("JSON commands failed schema validation.");
 
             int? defaultDeviceIndex = (int?)commandBatch["DefaultDeviceIndex"];
             string defaultAssembly = (string)commandBatch["DefaultAssembly"];
