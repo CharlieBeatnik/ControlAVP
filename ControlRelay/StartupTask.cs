@@ -70,9 +70,9 @@ namespace ControlRelay
                 _devices = ControlRelayInitialisation.CreateControllableDevices(deviceTypesJson);
 
 
-                var connectionString = json["Azure"]["IoTHub"]["ConnectionString"].ToString();
+                var deviceClientConnectionString = json["Azure"]["IoTHub"]["DeviceClientConnectionString"].ToString();
                 _deviceCloudInterfaces = ControlRelayInitialisation.CreateDeviceCloudInterfaces(_devices);
-                _deviceCloudInterfaceManager = new DeviceCloudInterfaceManager(connectionString, _deviceCloudInterfaces);
+                _deviceCloudInterfaceManager = new DeviceCloudInterfaceManager(deviceClientConnectionString, _deviceCloudInterfaces);
             });
         }
     }

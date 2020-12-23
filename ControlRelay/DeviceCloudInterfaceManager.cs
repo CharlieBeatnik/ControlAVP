@@ -22,6 +22,11 @@ namespace ControlRelay
 
         private static Logger _logger = LogManager.GetCurrentClassLogger();
 
+        public DeviceClient DeviceClient
+        {
+            get { return _deviceClient; }
+        }
+
         public DeviceCloudInterfaceManager(string connectionString, List<DeviceCloudInterface> deviceCloudInterfaces)
         {
             _connectionString = connectionString;
@@ -51,6 +56,9 @@ namespace ControlRelay
 
                 foreach (var device in _deviceCloudInterfaces)
                 {
+                    _logger.Debug("Pos: Set DeviceClient on device");
+                    device.DeviceClient = _deviceClient;
+
                     _logger.Debug("Pos: SetMethodHandlers");
 
                     // SetMethodHandlerAsync has been observed to throw "System.TimeoutException: Operation timeout expired"
@@ -70,7 +78,7 @@ namespace ControlRelay
                                             _logger.Debug($"Retry #{retryCount}: SetMethodHandlerAsync({methodHandlerInfo.Name})");
                                         });
 
-                        //ANDRWEDE_TODO - Had to remove the .Wait() as it wasn't returning on Desktop, what effect will this have?
+                        //ANDREWDE_TODO - Had to remove the .Wait() as it wasn't returning on Desktop, what effect will this have?
                         policy.Execute(() => _deviceClient.SetMethodHandlerAsync(methodHandlerInfo.Name, methodHandlerInfo.Handler, null));
                     }
                 }

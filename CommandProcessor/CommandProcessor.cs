@@ -20,11 +20,13 @@ namespace CommandProcessor
         public TimeSpan StartTime { get; set; }
         public TimeSpan EndTime { get; set; }
         public TimeSpan ExecutionTime => EndTime - StartTime;
+        public bool Last { get; set; }
+        public Guid Id { get; set; }
     }
 
     public static class CommandProcessorUtils
     {
-        public static bool Valid(string jsonCommands, out JObject commandBatch)
+        public static bool Valid(string jsonCommands, out JObject parsedJsonCommands)
         {
             //Pull the json schema out of the assembly resources and created it
             var jsonSchemaBytes = Properties.Resources.command_processor_schema;
@@ -33,26 +35,30 @@ namespace CommandProcessor
 
             //Parse the json passed in and validate it
             IList<string> errorMessages;
-            commandBatch = JObject.Parse(jsonCommands);
-            return commandBatch.IsValid(schema, out errorMessages);
+            parsedJsonCommands = JObject.Parse(jsonCommands);
+            return parsedJsonCommands.IsValid(schema, out errorMessages);
         }
 
         public static bool Valid(string jsonCommands)
         {
-            JObject commandBatch;
-            return Valid(jsonCommands, out commandBatch);
+            return Valid(jsonCommands, out _);
         }
 
-        public static IEnumerable<CommandResult> Execute(IEnumerable<object> devices, string jsonCommands)
+        public static IEnumerable<CommandResult> Execute(IEnumerable<object> devices, string json)
+        {
+            return Execute(devices, json, Guid.NewGuid());
+        }
+
+        public static IEnumerable<CommandResult> Execute(IEnumerable<object> devices, string json, Guid id)
         {
             if (devices is null) throw new ArgumentNullException(nameof(devices));
-            if (jsonCommands is null) throw new ArgumentNullException(nameof(jsonCommands));
+            if (json is null) throw new ArgumentNullException(nameof(json));
 
             var sw = new Stopwatch();
             sw.Start();
 
             JObject commandBatch;
-            bool jsonValid = Valid(jsonCommands, out commandBatch);
+            bool jsonValid = Valid(json, out commandBatch);
             if (!jsonValid) throw new ArgumentException("JSON commands failed schema validation.");
 
             int? defaultDeviceIndex = (int?)commandBatch["DefaultDeviceIndex"];
@@ -62,6 +68,7 @@ namespace CommandProcessor
             foreach (JObject command in commandBatch["Commands"])
             {
                 TimeSpan startTime = sw.Elapsed;
+
                 double? executeAfterSeconds = (double?)command["ExecuteAfter"];
 
                 //Wait if ExecuteAfter is specified and the time to start execution after hasn't yet been reached
@@ -72,6 +79,15 @@ namespace CommandProcessor
                     startTime = sw.Elapsed;
                 }
 
+                //Create default CommandResult with common properties
+                var commandResult = new CommandResult()
+                {
+                    Function = (string)command["Function"],
+                    Description = (string)command["Description"],
+                    StartTime = startTime,
+                    Id = id
+                };
+
                 string assembly = (command["Assembly"] == null) ? defaultAssembly : (string)command["Assembly"];
                 int? deviceIndex = (command["DeviceIndex"] == null) ? defaultDeviceIndex : (int?)command["DeviceIndex"];
 
@@ -79,16 +95,10 @@ namespace CommandProcessor
                 //then return a failure for this command
                 if(assembly == null || deviceIndex == null)
                 {
-                    yield return new CommandResult()
-                    {
-                        Function = (string)command["Function"],
-                        Success = false,
-                        Result = null,
-                        Description = (string)command["Description"],
-                        StartTime = startTime,
-                        EndTime = sw.Elapsed,
-                        ErrorMessage = "Assembly or Device Index is missing."
-                    };
+                    commandResult.EndTime = sw.Elapsed;
+                    commandResult.ErrorMessage = "Assembly or Device Index is missing.";
+                    commandResult.Last = true;
+                    yield return commandResult;
                     break;
                 }
 
@@ -100,16 +110,10 @@ namespace CommandProcessor
 
                 if (methodInfo == null)
                 {
-                    yield return new CommandResult()
-                    {
-                        Function = (string)command["Function"],
-                        Success = false,
-                        Result = null,
-                        Description = (string)command["Description"],
-                        StartTime = startTime,
-                        EndTime = sw.Elapsed,
-                        ErrorMessage = $"Method {(string)command["Function"]} could not be found."
-                    };
+                    commandResult.EndTime = sw.Elapsed;
+                    commandResult.ErrorMessage = $"Method {(string)command["Function"]} could not be found.";
+                    commandResult.Last = true;
+                    yield return commandResult;
                     break;
                 }
 
@@ -120,16 +124,10 @@ namespace CommandProcessor
                 if((command["Parameters"] == null && parameterInfos.Length != 0) ||
                    (command["Parameters"] != null && (command["Parameters"].Count() != parameterInfos.Length)))
                 {
-                    yield return new CommandResult()
-                    {
-                        Function = (string)command["Function"],
-                        Success = false,
-                        Result = null,
-                        Description = (string)command["Description"],
-                        StartTime = startTime,
-                        EndTime = sw.Elapsed,
-                        ErrorMessage = "The wrong number of parameters have been provided."
-                    };
+                    commandResult.EndTime = sw.Elapsed;
+                    commandResult.ErrorMessage = "The wrong number of parameters have been provided.";
+                    commandResult.Last = true;
+                    yield return commandResult;
                     break;
                 }
 
@@ -193,41 +191,29 @@ namespace CommandProcessor
 
                 if(!allParametersProvided)
                 {
-                    yield return new CommandResult()
-                    {
-                        Function = (string)command["Function"],
-                        Success = false,
-                        Result = null,
-                        Description = (string)command["Description"],
-                        StartTime = startTime,
-                        EndTime = sw.Elapsed,
-                        ErrorMessage = "The correct number of parameters were provides but there was a problem with at least 1, is the name correct?"
-                    };
+                    commandResult.EndTime = sw.Elapsed;
+                    commandResult.ErrorMessage = "The correct number of parameters were provides but there was a problem with at least 1, is the name correct?";
+                    commandResult.Last = true;
+                    yield return commandResult;
                     break;
                 }
 
                 Type returnType = methodInfo.ReturnType;
-                bool success;
-                object result;
-                string errorMessage;
-
                 if(returnType == typeof(bool))
                 {
                     bool resultBool = (bool)methodInfo.Invoke(device, parameters);
-                    result = resultBool;
-                    success = resultBool;
+                    commandResult.Result = resultBool;
+                    commandResult.Success = resultBool;
                 }
                 else if (Nullable.GetUnderlyingType(returnType) != null) //Type is nullable
                 {
                     object nullableResult = methodInfo.Invoke(device, parameters);
-                    result = nullableResult;
-                    success = nullableResult != null;
+                    commandResult.Result = nullableResult;
+                    commandResult.Success = nullableResult != null;
                 }
                 else
                 {
-                    errorMessage = $"Return type of function {(string)command["Function"]} must be bool or nullable";
-                    result = null;
-                    success = false;
+                    commandResult.ErrorMessage = $"Return type of function {(string)command["Function"]} must be bool or nullable";
                 }
 
                 if(command["PostWait"] != null)
@@ -235,15 +221,9 @@ namespace CommandProcessor
                     Thread.Sleep(TimeSpan.FromSeconds((double)command["PostWait"]));
                 }
 
-                yield return new CommandResult()
-                {
-                    Function = (string)command["Function"],
-                    Success = success,
-                    Result = result,
-                    Description = (string)command["Description"],
-                    StartTime = startTime,
-                    EndTime = sw.Elapsed
-                };
+                commandResult.EndTime = sw.Elapsed;
+                commandResult.Last = (command == commandBatch["Commands"].Last());
+                yield return commandResult;
             }
 
         }

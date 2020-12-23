@@ -11,6 +11,8 @@ namespace ControlRelay
 {
     abstract class DeviceCloudInterface
     {
+        protected DeviceClient _deviceClient;
+
         public class MethodHandlerInfo
         {
             public MethodHandlerInfo(string name, MethodCallback handler)
@@ -24,5 +26,10 @@ namespace ControlRelay
         }
 
         public abstract IEnumerable<MethodHandlerInfo> GetMethodHandlerInfos(DeviceClient deviceClient);
+
+        public DeviceClient DeviceClient
+        {
+            set { _deviceClient = value; }
+        }
     }
 }

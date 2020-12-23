@@ -1,0 +1,23 @@
+<Playlist Version="2.0">
+  <Rule Name="Includes" Match="Any">
+    <Rule Match="All">
+      <Property Name="Solution" />
+      <Rule Match="Any">
+        <Rule Match="All">
+          <Property Name="Project" Value="ControlRelayTests" />
+          <Rule Match="Any">
+            <Rule Match="All">
+              <Property Name="Namespace" Value="Tests" />
+              <Rule Match="Any">
+                <Property Name="Class" Value="TestSshDevice" />
+                <Property Name="Class" Value="TestSonyKDL60W855" />
+                <Property Name="Class" Value="TestCommandProcessor" />
+                <Property Name="Class" Value="TestApcAP8959EU3" />
+              </Rule>
+            </Rule>
+          </Rule>
+        </Rule>
+      </Rule>
+    </Rule>
+  </Rule>
+</Playlist>

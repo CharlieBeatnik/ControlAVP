@@ -9,12 +9,13 @@ using ControllableDeviceTypes.OSSCTypes;
 using Microsoft.Azure.Devices.Client;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Linq;
 
 namespace ControlRelay
 {
     class CommandProcessorInterface : DeviceCloudInterface
     {
-        List<object> _devices;
+        private List<object> _devices;
 
         public CommandProcessorInterface(List<object> devices)
         {
@@ -28,18 +29,28 @@ namespace ControlRelay
 
         private Task<MethodResponse> CommandProcessorExecute(MethodRequest methodRequest, object userContext)
         {
-            bool jsonValid = CommandProcessorUtils.Valid(methodRequest.DataAsJson);
+            var jsonParsed = JObject.Parse(methodRequest.DataAsJson);
+            Guid id = (Guid)jsonParsed["Id"];
+            string jsonCommands = (string)jsonParsed["Commands"];
 
-            Task.Run(() => Execute(_devices, methodRequest.DataAsJson));
+            bool jsonValid = CommandProcessorUtils.Valid(jsonCommands);
+
+            Task.Run(() => Execute(_devices, jsonCommands, id));
 
             return methodRequest.GetMethodResponse(jsonValid); 
         }
 
-        private void Execute(IEnumerable<object> devices, string jsonCommands)
+        private void Execute(IEnumerable<object> devices, string json, Guid id)
         {
-            foreach (var commandResult in CommandProcessorUtils.Execute(devices, jsonCommands))
+            foreach (var commandResult in CommandProcessorUtils.Execute(devices, json, id))
             {
-                //ANDREWDE_TODO: Would like to send a partial method reponse to update on progress
+                if(_deviceClient != null)
+                {
+                    var serializeData = JsonConvert.SerializeObject(commandResult);
+                    var commandMessage = new Message(Encoding.ASCII.GetBytes(serializeData));
+
+                    _deviceClient.SendEventAsync(commandMessage).Wait();
+                }
             }
         }
     }
