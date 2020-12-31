@@ -97,8 +97,7 @@ namespace Tests
                 _hdmiDevice1.SetInputPort(InputPort.Port1);
 
                 //JSON commands should change both ports to 8
-                bool result = _cp.Execute(json);
-                Assert.IsTrue(result);
+                _cp.Execute(json);
 
                 //Read back and verify
                 var hdmiDevice0State = _hdmiDevice0.GetState();
@@ -110,20 +109,49 @@ namespace Tests
         }
 
         [Test]
-        public void GivenJsonThatCallsFunction_WhenCommandProcessorExecuteAndWaitForMessages_ThenResultConfirms1FunctionsWasExectued()
+        public void GivenJsonThatCalls2FunctionsWithPostWait_WhenGetMessages_ThenMessageCountIs2()
         {           
-            using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-call-function.json"))
+            using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-call-2-functions-with-post-wait.json"))
             {
-                Guid id;
-                string json = r.ReadToEnd();
-                bool result = _cp.Execute(json, out id);
-
+                Guid id = Guid.NewGuid();
+                bool result = _smartEventHubConsumer.RegisterEventQueue(id);
                 Assert.IsTrue(result);
 
-                //while(true)
-                //{
-                //    Thread.Sleep(1000);
-                //}
+                string json = r.ReadToEnd();
+
+                _cp.Execute(json, id);
+
+                int messageCount = 0;
+                foreach(var message in _smartEventHubConsumer.GetMessages(id))
+                {
+                    messageCount++;
+                }
+                Assert.AreEqual(2, messageCount);
+
+                _smartEventHubConsumer.DeregisterEventQueue(id);
+            }
+        }
+
+        [Test]
+        public void GivenJsonThatCalls2Functions_WhenDeregisterEventQueueDuringGetMessages_GetMessagesCompletesOnNextEnumeration()
+        {
+            using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-call-2-functions-with-post-wait.json"))
+            {
+                Guid id = Guid.NewGuid();
+                _smartEventHubConsumer.RegisterEventQueue(id);
+                string json = r.ReadToEnd();
+
+               _cp.Execute(json, id);
+
+                int messageCount = 0;
+                foreach (var message in _smartEventHubConsumer.GetMessages(id))
+                {
+                    messageCount++;
+                    bool result = _smartEventHubConsumer.DeregisterEventQueue(id);
+                    Assert.IsTrue(result);
+                }
+
+                Assert.AreEqual(1, messageCount);
             }
         }
 

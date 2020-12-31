@@ -20,7 +20,8 @@ namespace CommandProcessor
         public TimeSpan StartTime { get; set; }
         public TimeSpan EndTime { get; set; }
         public TimeSpan ExecutionTime => EndTime - StartTime;
-        public bool Last { get; set; }
+        public int Count { get; set; }
+        public int Index { get; set; }
         public Guid Id { get; set; }
     }
 
@@ -65,8 +66,11 @@ namespace CommandProcessor
             string defaultAssembly = (string)commandBatch["DefaultAssembly"];
             string displayName = (string)commandBatch["DisplatName"];
 
-            foreach (JObject command in commandBatch["Commands"])
+            //foreach with index 
+            //https://stackoverflow.com/questions/43021/how-do-you-get-the-index-of-the-current-iteration-of-a-foreach-loop
+            foreach (var item in commandBatch["Commands"].Select((value, i) => (value, i)))
             {
+                var command = item.value;
                 TimeSpan startTime = sw.Elapsed;
 
                 double? executeAfterSeconds = (double?)command["ExecuteAfter"];
@@ -85,7 +89,9 @@ namespace CommandProcessor
                     Function = (string)command["Function"],
                     Description = (string)command["Description"],
                     StartTime = startTime,
-                    Id = id
+                    Id = id,
+                    Count = commandBatch["Commands"].Count(),
+                    Index = item.i
                 };
 
                 string assembly = (command["Assembly"] == null) ? defaultAssembly : (string)command["Assembly"];
@@ -97,7 +103,6 @@ namespace CommandProcessor
                 {
                     commandResult.EndTime = sw.Elapsed;
                     commandResult.ErrorMessage = "Assembly or Device Index is missing.";
-                    commandResult.Last = true;
                     yield return commandResult;
                     break;
                 }
@@ -112,7 +117,6 @@ namespace CommandProcessor
                 {
                     commandResult.EndTime = sw.Elapsed;
                     commandResult.ErrorMessage = $"Method {(string)command["Function"]} could not be found.";
-                    commandResult.Last = true;
                     yield return commandResult;
                     break;
                 }
@@ -126,7 +130,6 @@ namespace CommandProcessor
                 {
                     commandResult.EndTime = sw.Elapsed;
                     commandResult.ErrorMessage = "The wrong number of parameters have been provided.";
-                    commandResult.Last = true;
                     yield return commandResult;
                     break;
                 }
@@ -193,7 +196,6 @@ namespace CommandProcessor
                 {
                     commandResult.EndTime = sw.Elapsed;
                     commandResult.ErrorMessage = "The correct number of parameters were provides but there was a problem with at least 1, is the name correct?";
-                    commandResult.Last = true;
                     yield return commandResult;
                     break;
                 }
@@ -222,7 +224,6 @@ namespace CommandProcessor
                 }
 
                 commandResult.EndTime = sw.Elapsed;
-                commandResult.Last = (command == commandBatch["Commands"].Last());
                 yield return commandResult;
             }
 

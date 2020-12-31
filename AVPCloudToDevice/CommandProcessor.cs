@@ -19,12 +19,11 @@ namespace AVPCloudToDevice
 
         public bool Execute(string json)
         {
-            return Execute(json, out _);
+            return Execute(json, Guid.NewGuid());
         }
 
-        public bool Execute(string json, out Guid id)
+        public bool Execute(string json, Guid id)
         {
-            id = Guid.NewGuid();
             var payload = new
             {
                 Id = id,

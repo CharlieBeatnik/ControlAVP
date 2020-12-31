@@ -35,8 +35,10 @@ namespace ControlRelay
 
             bool jsonValid = CommandProcessorUtils.Valid(jsonCommands);
 
+            //The potentially long running Execute function is run on its own thread 
             Task.Run(() => Execute(_devices, jsonCommands, id));
 
+            //Retrun success to indicate the json was valid, but not that the commands have been processed
             return methodRequest.GetMethodResponse(jsonValid); 
         }
 
@@ -48,6 +50,10 @@ namespace ControlRelay
                 {
                     var serializeData = JsonConvert.SerializeObject(commandResult);
                     var commandMessage = new Message(Encoding.ASCII.GetBytes(serializeData));
+                    commandMessage.Properties.Add("user-id", id.ToString());
+                    commandMessage.Properties.Add("user-success", commandResult.Success.ToString());
+                    commandMessage.Properties.Add("user-command-count", commandResult.Count.ToString());
+                    commandMessage.Properties.Add("user-command-index", commandResult.Index.ToString());
 
                     _deviceClient.SendEventAsync(commandMessage).Wait();
                 }
