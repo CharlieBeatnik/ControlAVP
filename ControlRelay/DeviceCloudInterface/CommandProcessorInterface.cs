@@ -23,7 +23,7 @@ namespace ControlRelay
             _devices = devices;
         }
 
-        public TimeSpan CancelExecuteAfter { get; set; } = TimeSpan.FromMinutes(120);
+        public TimeSpan CancelExecuteAfter { get; set; } = TimeSpan.FromMinutes(2);
 
         public override IEnumerable<MethodHandlerInfo> GetMethodHandlerInfos(DeviceClient deviceClient)
         {
