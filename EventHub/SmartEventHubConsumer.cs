@@ -41,7 +41,7 @@ namespace EventHub
         }
 
 
-        public IEnumerable<string> GetMessages(Guid id)
+        public IEnumerable<string> GetEvents(Guid id)
         {
             BlockingCollection<EventData> queue;
             int count = 0;
@@ -56,7 +56,7 @@ namespace EventHub
                     {
                         //Body has data, indicating this is the result of a command that has been executed
                         count++;
-                        yield return Encoding.UTF8.GetString(eventData.Body.ToArray());
+                        yield return Encoding.UTF8.GetString(eventData.Body.ToArray()); ;
 
                         object userCount;
                         if (eventData.Properties.TryGetValue("user-command-count", out userCount) && int.Parse((string)userCount) == count)
@@ -73,7 +73,7 @@ namespace EventHub
             yield break;
         }
 
-        public async Task ReceiveMessagesFromDeviceAsync(CancellationToken ct)
+        public async Task ReceiveEventsFromDeviceAsync(CancellationToken ct)
         {
             await using var consumer = new EventHubConsumerClient(
                 EventHubConsumerClient.DefaultConsumerGroupName,

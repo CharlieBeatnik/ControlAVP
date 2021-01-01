@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ControllableDevice
 {
-    //Visual Studio tries to navigate to a Design View is you inherit from WebClient, this prevents it <shrug>
+    //Visual Studio tries to navigate to a Design View if you inherit from WebClient, this prevents it <shrug>
     [System.ComponentModel.DesignerCategory("")] 
     public class WebClientEx : WebClient
     {

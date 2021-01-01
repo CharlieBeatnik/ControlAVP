@@ -6,23 +6,23 @@ using Newtonsoft.Json.Linq;
 
 namespace AVPCloudToDevice
 {
-    public class CommandProcessor
+    public class CommandDispatcher
     {
         private ServiceClient _serviceClient;
         private string _deviceId;
 
-        public CommandProcessor(ServiceClient serviceClient, string deviceId)
+        public CommandDispatcher(ServiceClient serviceClient, string deviceId)
         {
             _serviceClient = serviceClient;
             _deviceId = deviceId;
         }
 
-        public bool Execute(string json)
+        public bool Dispatch(string json)
         {
-            return Execute(json, Guid.NewGuid());
+            return Dispatch(json, Guid.NewGuid());
         }
 
-        public bool Execute(string json, Guid id)
+        public bool Dispatch(string json, Guid id)
         {
             var payload = new
             {

@@ -30,7 +30,7 @@ namespace ControlAVP.Pages
         private string _connectionString;
         private string _deviceId;
         private ServiceClient _serviceClient;
-        private CommandProcessor _cp;
+        private CommandDispatcher _cp;
         private ExtronDSC301HD _extronDSC301HD;
         private OSSC _ossc;
 
@@ -54,7 +54,7 @@ namespace ControlAVP.Pages
             _deviceId = _configuration.GetValue<string>("ControlAVPIoTHubDeviceId");
 
             _serviceClient = ServiceClient.CreateFromConnectionString(_connectionString);
-            _cp = new CommandProcessor(_serviceClient, _deviceId);
+            _cp = new CommandDispatcher(_serviceClient, _deviceId);
             _extronDSC301HD = new ExtronDSC301HD(_serviceClient, _deviceId);
             _ossc = new OSSC(_serviceClient, _deviceId);
 
@@ -126,7 +126,7 @@ namespace ControlAVP.Pages
             using (StreamReader r = new StreamReader(fileFullName))
             {
                 string json = r.ReadToEnd();
-                _cp.Execute(json);
+                _cp.Dispatch(json);
             }
 
             return RedirectToPage();

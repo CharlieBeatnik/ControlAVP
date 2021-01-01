@@ -37,6 +37,9 @@
     <Content Include="TestAssets\command-processor-call-2-functions-with-post-wait.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="TestAssets\command-processor-call-2-functions.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="TestAssets\command-processor-call-function-with-3-minute-post-wait.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -67,6 +70,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\AVPCloudToDevice\AVPCloudToDevice.csproj" />
+    <ProjectReference Include="..\..\CommandProcessor\CommandProcessor.csproj" />
     <ProjectReference Include="..\..\ControllableDeviceTypes\ControllableDeviceTypes.csproj" />
     <ProjectReference Include="..\..\EventHub\EventHub.csproj" />
   </ItemGroup>
