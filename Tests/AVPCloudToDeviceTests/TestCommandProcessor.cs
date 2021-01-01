@@ -86,6 +86,7 @@ namespace Tests
         }
 
         [Test]
+        [Ignore("Requries the rack to be on, so ignoring during development.")]
         public void GivenJsonTheChangesHDMIInputPortToPort8_WhenCommandProcessorExecute_ThenResultIsTrueAndInputPortIsPort8()
         {
             using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-change-hdmi-input.json"))
@@ -152,6 +153,32 @@ namespace Tests
                 }
 
                 Assert.AreEqual(1, messageCount);
+            }
+        }
+
+        [Test]
+        [Ignore("Takes 2 minutes, so only run this test when necessary.")]
+        public void GivenJsonThatCallsFunctionAndPostWaits3Minutes_WhenCommandProcessorExecute_ThenResultIsTrue()
+        {
+            using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-call-function-with-3-minute-post-wait.json"))
+            {
+                Guid id = Guid.NewGuid();
+                _smartEventHubConsumer.RegisterEventQueue(id);
+
+                string json = r.ReadToEnd();
+
+                _cp.Execute(json, id);
+
+                //Execute a very long running command batch that will force the command processor on the relay to timeout
+                //On timeout the command processor on the relay will send an error message, so this loop will exit            
+                int messageCount = 0;
+                foreach (var message in _smartEventHubConsumer.GetMessages(id))
+                {
+                    messageCount++;
+                }
+                Assert.AreEqual(0, messageCount);
+
+                _smartEventHubConsumer.DeregisterEventQueue(id);
             }
         }
 

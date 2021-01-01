@@ -22,6 +22,7 @@
     <None Remove="settings.json" />
     <None Remove="TestAssets\command-processor-call-2-functions-with-post-wait.json" />
     <None Remove="TestAssets\command-processor-call-2-functions.json" />
+    <None Remove="TestAssets\command-processor-call-function-with-3-minute-post-wait.json" />
     <None Remove="TestAssets\command-processor-call-function-with-enum-parameter.json" />
     <None Remove="TestAssets\command-processor-call-function.json" />
     <None Remove="TestAssets\command-processor-call-get-function.json" />
@@ -34,6 +35,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="TestAssets\command-processor-call-2-functions-with-post-wait.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestAssets\command-processor-call-function-with-3-minute-post-wait.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="TestAssets\command-processor-call-function.json">

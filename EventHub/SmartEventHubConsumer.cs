@@ -44,31 +44,33 @@ namespace EventHub
         public IEnumerable<string> GetMessages(Guid id)
         {
             BlockingCollection<EventData> queue;
-            bool endOfMessages = false;
-
             int count = 0;
 
-            do
+            while(true)
             {
                 if (_eventQueues.TryGetValue(id, out queue))
                 {
                     var eventData = queue.Take();
-                    count++;
 
-                    yield return Encoding.UTF8.GetString(eventData.Body.ToArray());
-
-                    int userCount = int.Parse((string)eventData.Properties["user-command-count"]);
-                    bool success = bool.Parse((string)eventData.Properties["user-success"]);
-
-                    if (userCount == count || !success)
+                    if(!eventData.Body.IsEmpty)
                     {
-                        endOfMessages = true;
+                        //Body has data, indicating this is the result of a command that has been executed
+                        count++;
+                        yield return Encoding.UTF8.GetString(eventData.Body.ToArray());
+
+                        object userCount;
+                        if (eventData.Properties.TryGetValue("user-command-count", out userCount) && int.Parse((string)userCount) == count)
+                            break;
                     }
+                    
+                    object success;
+                    if (eventData.Properties.TryGetValue("user-success", out success) && !bool.Parse((string)success))
+                        break;
                 }
                 else yield break;
             }
-            while (!endOfMessages);
 
+            yield break;
         }
 
         public async Task ReceiveMessagesFromDeviceAsync(CancellationToken ct)
