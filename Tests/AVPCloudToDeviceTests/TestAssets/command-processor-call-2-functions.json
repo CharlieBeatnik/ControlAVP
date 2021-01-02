@@ -11,7 +11,7 @@
     {
       "Assembly": "ControllableDevice",
       "Description": "Example description.",
-      "DeviceType": "OSSC",
+      "DeviceType": "ApcAP8959EU3",
       "DeviceIndex": 0,
       "Function": "GetAvailable"
     }

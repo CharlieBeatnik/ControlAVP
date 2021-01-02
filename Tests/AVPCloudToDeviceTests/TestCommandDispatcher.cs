@@ -111,9 +111,9 @@ namespace Tests
         }
 
         [Test]
-        public void GivenJsonThatCalls2FunctionsWithPostWait_WhenGetEvents_ThenEventCountIs2()
+        public void GivenJsonThatCalls2FunctionsWith2SecondPostWaitAfterFirst_WhenGetEvents_ThenEventCountIs2()
         {           
-            using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-call-2-functions-with-post-wait.json"))
+            using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-call-2-functions-with-2-second-post-wait.json"))
             {
                 Guid id = Guid.NewGuid();
                 bool result = _smartEventHubConsumer.RegisterEventQueue(id);
@@ -137,7 +137,7 @@ namespace Tests
         [Test]
         public void GivenJsonThatCalls2Functions_WhenDeregisterEventQueueDuringGetEvents_GetEventsCompletesOnNextEnumeration()
         {
-            using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-call-2-functions-with-post-wait.json"))
+            using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-call-2-functions.json"))
             {
                 Guid id = Guid.NewGuid();
                 _smartEventHubConsumer.RegisterEventQueue(id);
@@ -152,41 +152,44 @@ namespace Tests
                     bool result = _smartEventHubConsumer.DeregisterEventQueue(id);
                     Assert.IsTrue(result);
                 }
-
                 Assert.AreEqual(1, eventCount);
-            }
-        }
-
-        [Test]
-        [Ignore("Takes 2 minutes, so only run this test when necessary.")]
-        public void GivenJsonThatCallsFunctionAndPostWaits3Minutes_WhenCommandDispatcherDispatch_ThenResultIsTrue()
-        {
-            using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-call-function-with-3-minute-post-wait.json"))
-            {
-                Guid id = Guid.NewGuid();
-                _smartEventHubConsumer.RegisterEventQueue(id);
-
-                string json = r.ReadToEnd();
-
-                _cd.Dispatch(json, id);
-
-                //Execute a very long running command batch that will force the command processor on the relay to timeout
-                //On timeout the command processor on the relay will send an error message, so this loop will exit            
-                int eventCount = 0;
-                foreach (var eventJson in _smartEventHubConsumer.GetEvents(id))
-                {
-                    eventCount++;
-                }
-                Assert.AreEqual(0, eventCount);
 
                 _smartEventHubConsumer.DeregisterEventQueue(id);
             }
         }
 
+        //[Test]
+        //public void GivenJsonThatCalls10Functions_WhenGetEvents_ThenEventsAreReturnedInTheExpectedOrder()
+        //{
+        //    using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-call-10-functions.json"))
+        //    {
+        //        Guid id = Guid.NewGuid();
+        //        _smartEventHubConsumer.RegisterEventQueue(id);
+        //        string json = r.ReadToEnd();
+
+        //        _cd.Dispatch(json, id);
+
+        //        int i = 0;
+        //        foreach (var eventJson in _smartEventHubConsumer.GetEvents(id))
+        //        {
+        //            var parsedEventJson = JObject.Parse(eventJson);
+        //            var commandResult = parsedEventJson.ToObject<CommandProcessor.CommandResult>();
+
+        //            Assert.AreEqual(i, commandResult.Index);
+
+        //            i++;
+        //        }
+
+        //        Assert.AreEqual(10, i);
+
+        //        _smartEventHubConsumer.DeregisterEventQueue(id);
+        //    }
+        //}
+
         [Test]
-        public void GivenJsonThatCalls2Functions_WhenGetEvents_ThenEventsAreReturnedInTheExpectedOrder()
+        public void GivenJsonThatCallsFunctionThatWillFail_WhenGetEvents_ThenEventIsUnccessfulAndHasErrorMessage()
         {
-            using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-call-2-functions.json"))
+            using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-call-function-that-will-fail.json"))
             {
                 Guid id = Guid.NewGuid();
                 _smartEventHubConsumer.RegisterEventQueue(id);
@@ -200,17 +203,45 @@ namespace Tests
                     var parsedEventJson = JObject.Parse(eventJson);
                     var commandResult = parsedEventJson.ToObject<CommandProcessor.CommandResult>();
 
-                    Assert.AreEqual(i, commandResult.Index);
+                    Assert.AreEqual(false, commandResult.Success);
+                    Assert.AreNotEqual(null, commandResult.ErrorMessage);
+                    Assert.AreNotEqual(string.Empty, commandResult.ErrorMessage);
 
                     i++;
                 }
+
+                Assert.AreEqual(1, i);
 
                 _smartEventHubConsumer.DeregisterEventQueue(id);
             }
         }
 
         [Test]
-        public void GivenJsonThatCalls2Functions_WhenGetEvents_ThenCommandResultCountAndIdAreCorrect()
+        public void GivenJsonThatCalls2FunctionsWith2SecondPostWaitAfterFirst_WhenGetEventsWithMaxEventWaitTime1Second_ThenEventCountIs0()
+        {
+            using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-call-2-functions-with-2-second-post-wait.json"))
+            {
+                Guid id = Guid.NewGuid();
+                bool result = _smartEventHubConsumer.RegisterEventQueue(id);
+                Assert.IsTrue(result);
+
+                string json = r.ReadToEnd();
+
+                _cd.Dispatch(json, id);
+
+                int eventCount = 0;
+                foreach (var eventJson in _smartEventHubConsumer.GetEvents(id, TimeSpan.FromSeconds(1)))
+                {
+                    eventCount++;
+                }
+                Assert.AreEqual(0, eventCount);
+
+                _smartEventHubConsumer.DeregisterEventQueue(id);
+            }
+        }
+
+        [Test]
+        public void GivenJsonThatCallsFunction_WhenGetEvents_ThenCommandResultCountAndIdAreCorrect()
         {
             using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-call-function.json"))
             {

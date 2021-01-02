@@ -41,7 +41,7 @@ namespace EventHub
         }
 
 
-        public IEnumerable<string> GetEvents(Guid id)
+        public IEnumerable<string> GetEvents(Guid id, TimeSpan? maxEventWaitTime = null)
         {
             BlockingCollection<EventData> queue;
             int count = 0;
@@ -50,18 +50,33 @@ namespace EventHub
             {
                 if (_eventQueues.TryGetValue(id, out queue))
                 {
-                    var eventData = queue.Take();
-
-                    if(!eventData.Body.IsEmpty)
+                    EventData eventData;
+                    if (maxEventWaitTime != null)
                     {
-                        //Body has data, indicating this is the result of a command that has been executed
-                        count++;
-                        yield return Encoding.UTF8.GetString(eventData.Body.ToArray()); ;
-
-                        object userCount;
-                        if (eventData.Properties.TryGetValue("user-command-count", out userCount) && int.Parse((string)userCount) == count)
+                        try
+                        {
+                            using (var source = new CancellationTokenSource((TimeSpan)maxEventWaitTime))
+                            {
+                                eventData = queue.Take(source.Token);
+                            }
+                        }
+                        catch(OperationCanceledException)
+                        {
                             break;
+                        }
+
                     }
+                    else
+                    {
+                        eventData = queue.Take();
+                    }
+                    
+                    count++;
+                    yield return Encoding.UTF8.GetString(eventData.Body.ToArray());
+
+                    object userCount;
+                    if (eventData.Properties.TryGetValue("user-command-count", out userCount) && int.Parse((string)userCount) == count)
+                        break;
                     
                     object success;
                     if (eventData.Properties.TryGetValue("user-success", out success) && !bool.Parse((string)success))
@@ -93,7 +108,6 @@ namespace EventHub
 
                         if (_eventQueues.ContainsKey(id))
                         {
-                            Debug.WriteLine($"Adding from queue with ID {id}");
                             _eventQueues[id].Add(partitionEvent.Data);
                         }
                     }

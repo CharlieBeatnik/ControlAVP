@@ -69,7 +69,7 @@ namespace CommandProcessor
             //foreach with index 
             //https://stackoverflow.com/questions/43021/how-do-you-get-the-index-of-the-current-iteration-of-a-foreach-loop
             foreach (var item in commandBatch["Commands"].Select((value, i) => (value, i)))
-            {
+            {               
                 var command = item.value;
                 TimeSpan startTime = sw.Elapsed;
 
@@ -206,16 +206,27 @@ namespace CommandProcessor
                     bool resultBool = (bool)methodInfo.Invoke(device, parameters);
                     commandResult.Result = resultBool;
                     commandResult.Success = resultBool;
+
+                    if(!commandResult.Success)
+                    {
+                        commandResult.ErrorMessage = $"Method {(string)command["Function"]} was invoked successfully but returned false.";
+                    }
                 }
                 else if (Nullable.GetUnderlyingType(returnType) != null) //Type is nullable
                 {
                     object nullableResult = methodInfo.Invoke(device, parameters);
                     commandResult.Result = nullableResult;
                     commandResult.Success = nullableResult != null;
+
+                    if (!commandResult.Success)
+                    {
+                        commandResult.ErrorMessage = $"Method {(string)command["Function"]} was invoked successfully but returned null.";
+                    }
                 }
                 else
                 {
-                    commandResult.ErrorMessage = $"Return type of function {(string)command["Function"]} must be bool or nullable";
+                    commandResult.ErrorMessage = $"Return type of method {(string)command["Function"]} must be bool or nullable";
+                    commandResult.Success = false;
                 }
 
                 if(command["PostWait"] != null)

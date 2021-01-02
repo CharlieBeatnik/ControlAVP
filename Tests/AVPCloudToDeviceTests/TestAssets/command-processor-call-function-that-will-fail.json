@@ -4,10 +4,9 @@
     {
       "Assembly": "ControllableDevice",
       "Description": "Example description.",
-      "DeviceType": "ApcAP8959EU3",
+      "DeviceType": "OSSC",
       "DeviceIndex": 0,
-      "Function": "GetAvailable",
-      "PostWait":  180.0
+      "Function": "GetAvailable"
     }
   ]
 }
