@@ -31,6 +31,7 @@
     <None Remove="TestAssets\command-processor-call-get-function.json" />
     <None Remove="TestAssets\command-processor-call-set-function.json" />
     <None Remove="TestAssets\command-processor-fail-validation.json" />
+    <None Remove="TestAssets\command-processor-get-tv-power-state.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -56,6 +57,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="TestAssets\command-processor-fail-validation.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestAssets\command-processor-get-tv-power-state.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

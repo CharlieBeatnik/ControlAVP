@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AVPCloudToDeviceTests", "Te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ControllableDeviceTypes", "ControllableDeviceTypes\ControllableDeviceTypes.csproj", "{01B94969-F515-4114-8B54-18FF7AC54126}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventHub", "EventHub\EventHub.csproj", "{F763F294-060F-41CF-8336-1CB9DE6BDC45}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventHub", "EventHub\EventHub.csproj", "{F763F294-060F-41CF-8336-1CB9DE6BDC45}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandProcessor", "CommandProcessor\CommandProcessor.csproj", "{ECCEAC6F-EBFF-4074-930F-4CF6AA82D936}"
 EndProject

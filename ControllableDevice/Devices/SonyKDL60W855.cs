@@ -84,7 +84,7 @@ namespace ControllableDevice
             return CallMethod("getVolumeInformation", "sony/audio");
         }
 
-        public PowerStatus GetPowerStatus()
+        public PowerStatus? GetPowerStatus()
         {
             PowerStatus powerStatus = PowerStatus.Off;
             var result = CallMethod("getPowerStatus", "sony/system");

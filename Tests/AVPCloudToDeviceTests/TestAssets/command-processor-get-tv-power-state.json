@@ -1,0 +1,12 @@
+{
+  "DisplayName": "Test",
+  "Commands": [
+    {
+      "Assembly": "ControllableDevice",
+      "Description": "Check TV power status.",
+      "DeviceType": "SonyKDL60W855",
+      "DeviceIndex": 0,
+      "Function": "GetPowerStatus"
+    }
+  ]
+}

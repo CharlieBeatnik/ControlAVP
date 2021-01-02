@@ -36,7 +36,7 @@ namespace AVPCloudToDevice
 
         public static CloudToDeviceMethodResult InvokeMethodWithJsonPayload(ServiceClient serviceClient, string deviceId, string methodName, string json)
         {
-            return InvokeMethodWithJsonPayload(serviceClient, deviceId, methodName, json, TimeSpan.FromSeconds(10));
+            return InvokeMethodWithJsonPayload(serviceClient, deviceId, methodName, json, TimeSpan.FromSeconds(20));
         }
 
         public static CloudToDeviceMethodResult InvokeMethodWithJsonPayload(ServiceClient serviceClient, string deviceId, string methodName, string json, TimeSpan responseTimeout)

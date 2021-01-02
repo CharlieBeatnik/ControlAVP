@@ -9,8 +9,10 @@ using ControllableDeviceTypes.AtenVS0801HTypes;
 using EventHub;
 using System.Threading;
 using System;
-using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
+using System.Linq;
+using CommandProcessor;
+using ControllableDeviceTypes.SonyKDL60W855Types;
 
 namespace Tests
 {
@@ -23,6 +25,7 @@ namespace Tests
         private ServiceClient _serviceClient;
         private CommandDispatcher _cd;
         private AtenVS0801H _hdmiDevice0, _hdmiDevice1;
+        private SonyKDL60W855 _tvDevice;
         private SmartEventHubConsumer _smartEventHubConsumer;
         private CancellationTokenSource _cts;
 
@@ -60,6 +63,7 @@ namespace Tests
             _cd = new CommandDispatcher(_serviceClient, _commandExecuterSettings.DeviceId);
             _hdmiDevice0 = new AtenVS0801H(_serviceClient, _commandExecuterSettings.DeviceId, 0);
             _hdmiDevice1 = new AtenVS0801H(_serviceClient, _commandExecuterSettings.DeviceId, 1);
+            _tvDevice = new SonyKDL60W855(_serviceClient, _commandExecuterSettings.DeviceId);
         }
 
         [Test]
@@ -88,25 +92,51 @@ namespace Tests
 
         [Test]
         [Ignore("Requries the rack to be on, so ignoring during development.")]
-        public void GivenJsonTheChangesHDMIInputPortToPort8_WhenCommandDispatcherDispatch_ThenResultIsTrueAndInputPortIsPort8()
+        public void GivenJsonThetChangesHDMIInputPortToPort8_WhenCommandDispatcherDispatch_ThenResultIsTrueAndInputPortIsPort8()
         {
             using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-change-hdmi-input.json"))
             {
                 string json = r.ReadToEnd();
 
                 //Firstly, make sure HDMI ports on both switchers are set to 1
-                _hdmiDevice0.SetInputPort(InputPort.Port1);
-                _hdmiDevice1.SetInputPort(InputPort.Port1);
+                _hdmiDevice0.SetInputPort(ControllableDeviceTypes.AtenVS0801HTypes.InputPort.Port1);
+                _hdmiDevice1.SetInputPort(ControllableDeviceTypes.AtenVS0801HTypes.InputPort.Port1);
 
                 //JSON commands should change both ports to 8
                 _cd.Dispatch(json);
 
                 //Read back and verify
                 var hdmiDevice0State = _hdmiDevice0.GetState();
-                Assert.IsTrue(hdmiDevice0State.InputPort == InputPort.Port8);
+                Assert.IsTrue(hdmiDevice0State.InputPort == ControllableDeviceTypes.AtenVS0801HTypes.InputPort.Port8);
 
                 var hdmiDevice1State = _hdmiDevice1.GetState();
-                Assert.IsTrue(hdmiDevice1State.InputPort == InputPort.Port8);
+                Assert.IsTrue(hdmiDevice1State.InputPort == ControllableDeviceTypes.AtenVS0801HTypes.InputPort.Port8);
+            }
+        }
+
+        [Test]
+        public void GivenJsonThetGetsTVPowerState_WhenCommandDispatcherDispatch_ThenPowerStateMatches()
+        {
+            using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-get-tv-power-state.json"))
+            {
+                string json = r.ReadToEnd();
+
+                //Firstly, get the current TV power status directly from the TV device
+                PowerStatus? powerStatusDirect = _tvDevice.GetPowerStatus();
+
+                //Secondly, get the current TV power via a command processor json
+                Guid id = Guid.NewGuid();
+                bool result = _smartEventHubConsumer.RegisterEventQueue(id);
+
+                _cd.Dispatch(json, id);
+                var commandResult = _smartEventHubConsumer.GetEvents<CommandResult>(id).First();
+                PowerStatus? powerStatusCommandDispatcher = commandResult.Result == null ? (PowerStatus?)null : (PowerStatus)(long)commandResult.Result;
+
+                Assert.NotNull(powerStatusDirect);
+                Assert.NotNull(powerStatusCommandDispatcher);
+                Assert.AreEqual(powerStatusDirect, powerStatusCommandDispatcher);
+
+                _smartEventHubConsumer.DeregisterEventQueue(id);
             }
         }
 

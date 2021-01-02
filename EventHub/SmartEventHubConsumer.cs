@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Diagnostics;
+using Newtonsoft.Json.Linq;
 
 namespace EventHub
 {
@@ -40,6 +40,13 @@ namespace EventHub
             return result;
         }
 
+        public IEnumerable<T> GetEvents<T>(Guid id, TimeSpan? maxEventWaitTime = null)
+        {
+            foreach(var json in GetEvents(id, maxEventWaitTime))
+            { 
+                yield return JObject.Parse(json).ToObject<T>();
+            }
+        }
 
         public IEnumerable<string> GetEvents(Guid id, TimeSpan? maxEventWaitTime = null)
         {

@@ -36,6 +36,8 @@ namespace ControlAVP
                         builder.AddAzureKeyVault(
                             keyVaultEndpoint, keyVaultClient, new DefaultKeyVaultSecretManager());
                     }
+
+                    builder.AddCommandLine(Environment.GetCommandLineArgs());
                 })
                 .UseStartup<Startup>();
 

@@ -10,7 +10,9 @@
   "profiles": {
     "IIS Express": {
       "commandName": "IISExpress",
+      "commandLineArgs": "ControlAVPIoTHubDeviceId=testpi",
       "launchBrowser": true,
+      "launchUrl": "TailCommands",
       "environmentVariables": {
         "KEYVAULT_ENDPOINT": "https://andydennocokeyvault.vault.azure.net/",
         "ASPNETCORE_ENVIRONMENT": "Development"
