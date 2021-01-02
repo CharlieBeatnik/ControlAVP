@@ -242,7 +242,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GivenCommandsWithNoDeviceIndexorAssembly_WhenExecuteCommands_ThenSuccessIsFalseAndResultIsNull()
+        public void GivenCommandsWithNoDeviceIndexOrAssembly_WhenExecuteCommands_ThenSuccessIsFalseAndResultIsNullAndDeviceIndexIsNull()
         {
             using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-no-device-index-or-assembly.json"))
             {
@@ -256,13 +256,14 @@ namespace Tests
                     {
                         Assert.IsFalse(commandResult.Success);
                         Assert.IsNull(commandResult.Result);
+                        Assert.IsNull(commandResult.DeviceIndex);
                     }
                 }
             }
         }
 
         [TestMethod]
-        public void GivenCommandsWithNoDeviceIndexOrAssemblyWithDefaults_WhenExecuteCommands_ThenSuccessIsTrue()
+        public void GivenCommandsWithNoDeviceIndexOrAssemblyWithDefaults_WhenExecuteCommands_ThenSuccessIsTrueResultIsNotNullAndDeviceIndexIs0()
         {
             using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-default-device-index-and-assembly.json"))
             {
@@ -276,6 +277,7 @@ namespace Tests
                     {
                         Assert.IsTrue(commandResult.Success);
                         Assert.IsNotNull(commandResult.Result);
+                        Assert.AreEqual(0, commandResult.DeviceIndex);
                     }
                 }
             }

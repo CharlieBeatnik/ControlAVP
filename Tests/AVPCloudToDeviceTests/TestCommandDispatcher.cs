@@ -158,33 +158,33 @@ namespace Tests
             }
         }
 
-        //[Test]
-        //public void GivenJsonThatCalls10Functions_WhenGetEvents_ThenEventsAreReturnedInTheExpectedOrder()
-        //{
-        //    using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-call-10-functions.json"))
-        //    {
-        //        Guid id = Guid.NewGuid();
-        //        _smartEventHubConsumer.RegisterEventQueue(id);
-        //        string json = r.ReadToEnd();
+        [Test]
+        public void GivenJsonThatCalls10Functions_WhenGetEvents_ThenEventsAreReturnedInTheExpectedOrder()
+        {
+            using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-call-10-functions.json"))
+            {
+                Guid id = Guid.NewGuid();
+                _smartEventHubConsumer.RegisterEventQueue(id);
+                string json = r.ReadToEnd();
 
-        //        _cd.Dispatch(json, id);
+                _cd.Dispatch(json, id);
 
-        //        int i = 0;
-        //        foreach (var eventJson in _smartEventHubConsumer.GetEvents(id))
-        //        {
-        //            var parsedEventJson = JObject.Parse(eventJson);
-        //            var commandResult = parsedEventJson.ToObject<CommandProcessor.CommandResult>();
+                int i = 0;
+                foreach (var eventJson in _smartEventHubConsumer.GetEvents(id))
+                {
+                    var parsedEventJson = JObject.Parse(eventJson);
+                    var commandResult = parsedEventJson.ToObject<CommandProcessor.CommandResult>();
 
-        //            Assert.AreEqual(i, commandResult.Index);
+                    Assert.AreEqual(i, commandResult.Index);
 
-        //            i++;
-        //        }
+                    i++;
+                }
 
-        //        Assert.AreEqual(10, i);
+                Assert.AreEqual(10, i);
 
-        //        _smartEventHubConsumer.DeregisterEventQueue(id);
-        //    }
-        //}
+                _smartEventHubConsumer.DeregisterEventQueue(id);
+            }
+        }
 
         [Test]
         public void GivenJsonThatCallsFunctionThatWillFail_WhenGetEvents_ThenEventIsUnccessfulAndHasErrorMessage()

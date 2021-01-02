@@ -64,7 +64,6 @@ namespace EventHub
                         {
                             break;
                         }
-
                     }
                     else
                     {

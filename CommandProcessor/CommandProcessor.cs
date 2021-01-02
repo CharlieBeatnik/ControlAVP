@@ -12,6 +12,8 @@ namespace CommandProcessor
 {
     public sealed class CommandResult
     {
+        public string DeviceType { get; set; }
+        public int?  DeviceIndex { get; set; }
         public string Function { get; set; }
         public bool Success { get; set; }
         public object Result { get; set;  }
@@ -83,9 +85,14 @@ namespace CommandProcessor
                     startTime = sw.Elapsed;
                 }
 
+                string assembly = (command["Assembly"] == null) ? defaultAssembly : (string)command["Assembly"];
+                int? deviceIndex = (command["DeviceIndex"] == null) ? defaultDeviceIndex : (int?)command["DeviceIndex"];
+
                 //Create default CommandResult with common properties
                 var commandResult = new CommandResult()
                 {
+                    DeviceType = (string)command["DeviceType"],
+                    DeviceIndex = deviceIndex,
                     Function = (string)command["Function"],
                     Description = (string)command["Description"],
                     StartTime = startTime,
@@ -93,9 +100,6 @@ namespace CommandProcessor
                     Count = commandBatch["Commands"].Count(),
                     Index = item.i
                 };
-
-                string assembly = (command["Assembly"] == null) ? defaultAssembly : (string)command["Assembly"];
-                int? deviceIndex = (command["DeviceIndex"] == null) ? defaultDeviceIndex : (int?)command["DeviceIndex"];
 
                 //If assembly/defaultAssembly or deviceIndex/defaultDeviceIndex are not provided
                 //then return a failure for this command

@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ControlRelay
@@ -54,17 +55,16 @@ namespace ControlRelay
                 _logger.Debug("Pos: SetConnectionStatusChangesHandler");
                 _deviceClient.SetConnectionStatusChangesHandler(DeviceClientConnectionStatusChanged);
 
-                foreach (var device in _deviceCloudInterfaces)
+                foreach (var deviceCloudInterface in _deviceCloudInterfaces)
                 {
-                    _logger.Debug("Pos: Set DeviceClient on device");
-                    device.DeviceClient = _deviceClient;
+                    deviceCloudInterface.DeviceClient = _deviceClient;
 
-                    _logger.Debug("Pos: SetMethodHandlers");
+                    _logger.Debug($"Pos: SetMethodHandlers for {deviceCloudInterface.GetType().Name}");
 
                     // SetMethodHandlerAsync has been observed to throw "System.TimeoutException: Operation timeout expired"
                     // SetMethodHandlerAsync has been observed to throw "Microsoft.Azure.Devices.Client.Exceptions.UnauthorizedException: CONNECT failed: RefusedServerUnavailable"
                     // This allows this function to contain centralised logic to catch one of theses exceptions and retry.
-                    foreach (var methodHandlerInfo in device.GetMethodHandlerInfos(_deviceClient))
+                    foreach (var methodHandlerInfo in deviceCloudInterface.GetMethodHandlerInfos(_deviceClient))
                     {
                         // Use a retry as we know it's possible to encounter serveral different exceptions
                         var policy = Policy
@@ -78,9 +78,10 @@ namespace ControlRelay
                                             _logger.Debug($"Retry #{retryCount}: SetMethodHandlerAsync({methodHandlerInfo.Name})");
                                         });
 
-                        //ANDREWDE_TODO - Had to remove the .Wait() as it wasn't returning on Desktop, what effect will this have?
-                        policy.Execute(() => _deviceClient.SetMethodHandlerAsync(methodHandlerInfo.Name, methodHandlerInfo.Handler, null));
+                        policy.Execute(() => SetMethodHandler(methodHandlerInfo.Name, methodHandlerInfo.Handler, null));
                     }
+
+                    _logger.Debug($"Pos: SetMethodHandlers for {deviceCloudInterface.GetType().Name} complete");
                 }
             }
             catch(Exception exp)
@@ -88,6 +89,20 @@ namespace ControlRelay
                 _logger.Error(exp);
                 throw;
             }
+        }
+
+        private void SetMethodHandler(string methodName, MethodCallback methodHandler, object userContext)
+        {
+            var task = _deviceClient.SetMethodHandlerAsync(methodName, methodHandler, userContext);
+
+            //The Windows App version of the Control Relay (not the background task build that runs on the Raspberry Pi)
+            //waiting on the SetMethodHandlerAsync runs indefinitely. Even a cancellation token is unable to make the method
+            //complete. It seems that although it doesn't complete, it *does* sucessfilly set the method handler. As the 
+            //WINDOWS_UWP_APP build is only used for testing, removing the wait is a workaround that seems OK for now. The
+            //issue needs replicating in a smaller app and reporting to Microsoft.
+#if !WINDOWS_UWP_APP
+            task.Wait();
+#endif
         }
 
         private void DeviceClientConnectionStatusChanged(ConnectionStatus status, ConnectionStatusChangeReason reason)
