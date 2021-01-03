@@ -34,7 +34,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AVPCloudToDevice\AVPCloudToDevice.csproj" />
+    <ProjectReference Include="..\CommandProcessor\CommandProcessor.csproj" />
     <ProjectReference Include="..\ControllableDeviceTypes\ControllableDeviceTypes.csproj" />
+    <ProjectReference Include="..\EventHub\EventHub.csproj" />
   </ItemGroup>
 
   <ItemGroup>

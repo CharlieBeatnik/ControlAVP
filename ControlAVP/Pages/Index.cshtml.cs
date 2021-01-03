@@ -11,6 +11,7 @@ using ControllableDeviceTypes.ExtronDSC301HDTypes;
 using ControllableDeviceTypes.OSSCTypes;
 using Newtonsoft.Json;
 using System.Numerics;
+using System;
 
 namespace ControlAVP.Pages
 {
@@ -123,13 +124,14 @@ namespace ControlAVP.Pages
 
         public IActionResult OnPostCommandProcessorExecute(string fileFullName)
         {
+            Guid id = Guid.NewGuid();
             using (StreamReader r = new StreamReader(fileFullName))
             {
                 string json = r.ReadToEnd();
-                _cp.Dispatch(json);
+                _cp.Dispatch(json, id);
             }
 
-            return RedirectToPage();
+            return RedirectToPage("TailCommandProcessor", new { id });
         }
 
         public IActionResult OnPostSetScale(ScaleType scaleType, PositionType positionType, AspectRatio aspectRatio, float paddingX = 0, float paddingY = 0)

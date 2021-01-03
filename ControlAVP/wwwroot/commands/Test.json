@@ -1,0 +1,27 @@
+{
+  "DisplayName": "Aa Test",
+  "Commands": [
+    {
+      "Assembly": "ControllableDevice",
+      "Description": "Example description.",
+      "DeviceType": "ApcAP8959EU3",
+      "DeviceIndex": 0,
+      "Function": "GetAvailable"
+    },
+    {
+      "Assembly": "ControllableDevice",
+      "Description": "Example description.",
+      "DeviceType": "ApcAP8959EU3",
+      "DeviceIndex": 0,
+      "Function": "GetAvailable",
+      "PostWait": 5.0
+    },
+    {
+      "Assembly": "ControllableDevice",
+      "Description": "Example description.",
+      "DeviceType": "ApcAP8959EU3",
+      "DeviceIndex": 0,
+      "Function": "GetAvailable"
+    }
+  ]
+}
