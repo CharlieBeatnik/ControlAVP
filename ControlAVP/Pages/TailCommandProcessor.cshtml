@@ -6,30 +6,20 @@
 
 <h2>@ViewData["Title"]</h2>
 
-<span id="spnMessage"></span>
+<div id="commmand-processor-table"></div>
 
 <script type="text/javascript">
     var source = new EventSource('/api/tailcommandprocessor?id=' + '@Model.Id');
 
-    var output = "";
-
     source.onopen = function (event) {
-        output += "Opened";
-        $("#spnMessage").text(output);
-        output += " ";
     }
 
     source.onerror= function (event) {
-        output += "Closed";
-        $("#spnMessage").text(output);
-        output += " ";
         source.close();
     }
 
     source.onmessage = function (event) {
-        output += event.data;
-        $("#spnMessage").text(output);
-        output += " ";
+        var output = JSON.parse(event.data);
+        $("#commmand-processor-table").html(output);
     }
-
 </script>

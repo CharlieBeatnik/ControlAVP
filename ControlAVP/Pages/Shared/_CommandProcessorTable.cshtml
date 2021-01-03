@@ -1,0 +1,15 @@
+﻿@model ControlAVP.TailCommandProcessorModel
+
+<table class="table table-sm">
+    <thead>
+        <tr>
+            <th>Function Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var commandResult in Model.CommandResults)
+        {
+            <tr><td>@commandResult.Function</td></tr>
+        }
+    </tbody>
+</table>

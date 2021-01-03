@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
@@ -10,12 +8,18 @@ using Microsoft.AspNetCore.Hosting;
 using EventHub;
 using System.Threading;
 using CommandProcessor;
+using Newtonsoft.Json;
 
 namespace ControlAVP
 {
+    public class TailCommandProcessorModel
+    {
+        public IList<CommandResult> CommandResults { get; } = new List<CommandResult>();
+    }
+
     [Route("api/[controller]")]
     [ApiController]
-    public class TailCommandProcessor : ControllerBase, IDisposable
+    public class TailCommandProcessor : Controller
     {
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _environment;
@@ -25,6 +29,8 @@ namespace ControlAVP
 
         private SmartEventHubConsumer _smartEventHubConsumer;
         private CancellationTokenSource _cts;
+
+        private bool disposed;
 
         public TailCommandProcessor(IConfiguration configuration, IWebHostEnvironment environment)
         {
@@ -47,9 +53,17 @@ namespace ControlAVP
 
             _smartEventHubConsumer.RegisterEventQueue(id);
 
-            foreach(var result in _smartEventHubConsumer.GetEvents(id, TimeSpan.FromMinutes(5)))
+            var model = new TailCommandProcessorModel();
+
+            //5 minute timeout ensures that if an incorrect or out of date GUID is used that this Get function doesn't run forever
+            foreach (var commandResult in _smartEventHubConsumer.GetEvents<CommandResult>(id, TimeSpan.FromMinutes(5)))
             {
-                byte[] messageBytes = ASCIIEncoding.ASCII.GetBytes($"data:{result}\n\n");
+                model.CommandResults.Add(commandResult);
+
+                var partialViewHtml = await this.RenderViewAsync("_CommandProcessorTable", model, true).ConfigureAwait(false);
+
+                string json = JsonConvert.SerializeObject(partialViewHtml);
+                byte[] messageBytes = ASCIIEncoding.ASCII.GetBytes($"data:{json}\n\n");
                 await Response.Body.WriteAsync(messageBytes.AsMemory(0, messageBytes.Length)).ConfigureAwait(false);
                 await Response.Body.FlushAsync().ConfigureAwait(false);
             }
@@ -57,25 +71,26 @@ namespace ControlAVP
             _smartEventHubConsumer.DeregisterEventQueue(id);
         }
 
-        public void Dispose()
+        protected override void Dispose(bool disposing)
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
+            if (!disposed)
             {
-                if (_cts != null)
+                if (disposing)
                 {
-                    _cts.Cancel();
-                    _cts.Token.WaitHandle.WaitOne();
+                    if (_cts != null)
+                    {
+                        _cts.Cancel();
+                        _cts.Token.WaitHandle.WaitOne();
 
-                    _cts.Dispose();
-                    _cts = null;
+                        _cts.Dispose();
+                        _cts = null;
+                    }
+
                 }
+                disposed = true;
             }
+            base.Dispose(disposing);
         }
+
     }
 }
