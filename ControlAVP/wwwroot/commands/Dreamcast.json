@@ -72,7 +72,7 @@
       "PostWait": 2.0
     },
     {
-      "Description": "Change OSSC to AV1YPbPr (Dummy Change to Act Like Reset)",
+      "Description": "Change OSSC to AV1YPbPr (Dummy)",
       "DeviceType": "OSSC",
       "Function": "SendCommand",
       "Parameters": {
