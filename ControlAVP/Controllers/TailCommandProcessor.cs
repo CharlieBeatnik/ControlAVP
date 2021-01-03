@@ -9,12 +9,14 @@ using EventHub;
 using System.Threading;
 using CommandProcessor;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Http;
 
 namespace ControlAVP
 {
     public class TailCommandProcessorModel
     {
         public IList<CommandResult> CommandResults { get; } = new List<CommandResult>();
+        public bool Completed { get; set; }
     }
 
     [Route("api/[controller]")]
@@ -59,16 +61,24 @@ namespace ControlAVP
             foreach (var commandResult in _smartEventHubConsumer.GetEvents<CommandResult>(id, TimeSpan.FromMinutes(5)))
             {
                 model.CommandResults.Add(commandResult);
-
-                var partialViewHtml = await this.RenderViewAsync("_CommandProcessorTable", model, true).ConfigureAwait(false);
-
-                string json = JsonConvert.SerializeObject(partialViewHtml);
-                byte[] messageBytes = ASCIIEncoding.ASCII.GetBytes($"data:{json}\n\n");
-                await Response.Body.WriteAsync(messageBytes.AsMemory(0, messageBytes.Length)).ConfigureAwait(false);
-                await Response.Body.FlushAsync().ConfigureAwait(false);
+                await RenderCommandProcessorTableAndReturnResponse(this, model, Response).ConfigureAwait(false);
             }
 
+            model.Completed = true;
+            await RenderCommandProcessorTableAndReturnResponse(this, model, Response).ConfigureAwait(false);
+
             _smartEventHubConsumer.DeregisterEventQueue(id);
+        }
+
+        private static async Task RenderCommandProcessorTableAndReturnResponse(TailCommandProcessor controller, TailCommandProcessorModel model, HttpResponse response)
+        {
+            
+            var partialViewHtml = await controller.RenderViewAsync("_CommandProcessorTable", model, true).ConfigureAwait(false);
+
+            string json = JsonConvert.SerializeObject(partialViewHtml);
+            byte[] messageBytes = ASCIIEncoding.ASCII.GetBytes($"data:{json}\n\n");
+            await response.Body.WriteAsync(messageBytes.AsMemory(0, messageBytes.Length)).ConfigureAwait(false);
+            await response.Body.FlushAsync().ConfigureAwait(false);
         }
 
         protected override void Dispose(bool disposing)

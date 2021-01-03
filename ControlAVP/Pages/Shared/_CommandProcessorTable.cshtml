@@ -1,15 +1,38 @@
 ﻿@model ControlAVP.TailCommandProcessorModel
 
+@foreach (var commandResult in Model.CommandResults)
+{
+    if (!commandResult.Success)
+    {
+        <div class="alert alert-danger">
+            <strong>Error!</strong> @commandResult?.ErrorMessage
+        </div>
+    }
+}
+
 <table class="table table-sm">
     <thead>
         <tr>
-            <th>Function Name</th>
+            <th>Description</th>
+            <th>Time</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var commandResult in Model.CommandResults)
         {
-            <tr><td>@commandResult.Function</td></tr>
+            <tr class="@(commandResult.Success ? "" : "table-danger")">
+                <td>@commandResult.Description</td>
+                <td>@commandResult.ExecutionTime.TotalSeconds.ToString("0.00")s</td>
+            </tr>
         }
     </tbody>
 </table>
+
+<form method="post">
+@if (Model.Completed)
+{
+    <div class="text-center">
+        <a href="Index" class="btn btn-success active" role="button" aria-pressed="true">Return Home</a>
+    </div>
+}
+</form>

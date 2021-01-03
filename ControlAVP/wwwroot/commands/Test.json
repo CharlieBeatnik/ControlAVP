@@ -3,22 +3,22 @@
   "Commands": [
     {
       "Assembly": "ControllableDevice",
-      "Description": "Example description.",
+      "Description": "Check if PDU is available.",
       "DeviceType": "ApcAP8959EU3",
       "DeviceIndex": 0,
       "Function": "GetAvailable"
     },
     {
       "Assembly": "ControllableDevice",
-      "Description": "Example description.",
-      "DeviceType": "ApcAP8959EU3",
+      "Description": "Get TV power status.",
+      "DeviceType": "SonyKDL60W855",
       "DeviceIndex": 0,
-      "Function": "GetAvailable",
+      "Function": "GetPowerStatus",
       "PostWait": 5.0
     },
     {
       "Assembly": "ControllableDevice",
-      "Description": "Example description.",
+      "Description": "Check if PDU is available.",
       "DeviceType": "ApcAP8959EU3",
       "DeviceIndex": 0,
       "Function": "GetAvailable"
