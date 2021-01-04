@@ -139,6 +139,7 @@ namespace ControllableDevice
         {
             return _serialBlaster.Enabled;
         }
+
         private bool SendCommand(GenericCommandName genericCommandName)
         {
             if (!_genericCommandNameToCommandCode.ContainsKey(genericCommandName))

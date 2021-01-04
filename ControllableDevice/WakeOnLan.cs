@@ -44,7 +44,7 @@ namespace ControllableDevice
 
                 // Broadcast our packet
                 sock.SendTo(payload, new IPEndPoint(IPAddress.Parse("255.255.255.255"), 0));
-                sock.Close(10000);
+                sock.Close(500);
             }
         }
     }
