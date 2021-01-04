@@ -6,7 +6,10 @@
       "Description": "Example description.",
       "DeviceType": "OSSC",
       "DeviceIndex": 0,
-      "Function": "GetAvailable"
+      "Function": "SendCommand",
+      "Parameters": {
+        "CommandName":  "UnknownCommand"
+      }
     }
   ]
 }
