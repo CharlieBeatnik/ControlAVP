@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -27,20 +28,23 @@ namespace ControllableDevice
 
         public JObject Post(JObject json, string path)
         {
-            string address = $@"http://{_host.ToString()}/{path}";
-            string data = json.ToString(Formatting.None);
+            lock (_webClient)
+            {
+                string address = $@"http://{_host.ToString()}/{path}";
+                string data = json.ToString(Formatting.None);
 
-            try
-            {
-                var response = _webClient.UploadString(address, "POST", data);
-                return JObject.Parse(response);
-            }
-            catch(WebException)
-            {
-                //The URI formed by combining BaseAddress and address is invalid.
-                // or
-                //There was no response from the server hosting the resource.
-                return null;
+                try
+                {
+                    var response = _webClient.UploadString(address, "POST", data);
+                    return JObject.Parse(response);
+                }
+                catch (WebException)
+                {
+                    //The URI formed by combining BaseAddress and address is invalid.
+                    // or
+                    //There was no response from the server hosting the resource.
+                    return null;
+                }
             }
         }
 

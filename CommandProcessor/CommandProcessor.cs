@@ -80,7 +80,7 @@ namespace CommandProcessor
                 //Wait if ExecuteAfter is specified and the time to start execution after hasn't yet been reached
                 if((executeAfterSeconds != null) && (executeAfterSeconds > startTime.TotalSeconds))
                 {
-                    int timeToWaitMilliseconds = (int)((executeAfterSeconds - startTime.TotalSeconds) * 1000);
+                    int timeToWaitMilliseconds = (int)Math.Ceiling(((double)executeAfterSeconds - startTime.TotalSeconds) * 1000);
                     Thread.Sleep(timeToWaitMilliseconds);
                     startTime = sw.Elapsed;
                 }

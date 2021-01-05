@@ -19,8 +19,10 @@ namespace ControllableDevice
         private string _preSharedKey;
 
         private readonly TimeSpan _fromColdBootToOnTimeout = TimeSpan.FromSeconds(30);
+        private readonly TimeSpan _fromColdBootToOnPollInterval = TimeSpan.FromMilliseconds(500);
         private readonly TimeSpan _fromStandbyToOnWait = TimeSpan.FromSeconds(1);
         private readonly TimeSpan _fromOnToStandbyWait = TimeSpan.FromSeconds(1);
+        private readonly TimeSpan _jsonRpcDeviceWebRequestTimeout = TimeSpan.MaxValue;
 
         public SonyKDL60W855(IPAddress host, PhysicalAddress physicalAddress, string preSharedKey)
         {
@@ -28,7 +30,7 @@ namespace ControllableDevice
             _physicalAddress = physicalAddress;
             _preSharedKey = preSharedKey;
 
-            _jsonRpcDevice = new JsonRpcDevice(host, preSharedKey, TimeSpan.MaxValue);
+            _jsonRpcDevice = new JsonRpcDevice(host, preSharedKey, _jsonRpcDeviceWebRequestTimeout);
         }
 
         public void Dispose()
@@ -130,6 +132,7 @@ namespace ControllableDevice
                                 {
                                     return true;
                                 }
+                                Thread.Sleep(_fromColdBootToOnPollInterval);
                             }
                             sw.Stop();
 
