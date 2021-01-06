@@ -28,11 +28,16 @@
     </tbody>
 </table>
 
-<form method="post">
 @if (Model.Completed)
 {
-    <div class="text-center">
-        <a href="Index" class="btn btn-success active" role="button" aria-pressed="true">Return Home</a>
-    </div>
+    <p class="small">Total time running command list was <strong>@(Model.CommandResults.Last().EndTime.TotalSeconds.ToString("0.00"))s</strong></p>
 }
+
+<form method="post">
+    @if (Model.Completed)
+    {
+        <div class="text-center">
+            <a href="Index" class="btn btn-success active" role="button" aria-pressed="true">Return Home</a>
+        </div>
+    }
 </form>
