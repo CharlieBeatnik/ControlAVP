@@ -4,6 +4,14 @@
   "DisplayName": "Spectrum Next",
   "Commands": [
     {
+      "Description": "Rack On",
+      "DeviceType": "ApcAP8959EU3",
+      "Function": "TurnOutletOn",
+      "Parameters": {
+        "id": 24
+      }
+    },
+    {
       "Description": "TV On",
       "DeviceType": "SonyKDL60W855",
       "Function": "TurnOn",
@@ -12,15 +20,7 @@
       }
     },
     {
-      "Description": "Rack On",
-      "DeviceType": "ApcAP8959EU3",
-      "Function": "TurnOutletOn",
-      "Parameters": {
-        "id": 24
-      },
-      "PostWait": 11.0
-    },
-    {
+      "ExecuteAfter": 15.0,
       "Description": "Disable HDMI Switch 0 Output",
       "DeviceType": "AtenVS0801H",
       "Function": "SetOutput",
