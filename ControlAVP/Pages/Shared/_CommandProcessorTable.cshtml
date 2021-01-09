@@ -10,9 +10,10 @@
     }
 }
 
-<table class="table table-sm">
+<table class="table table-sm bg-light">
     <thead>
         <tr>
+            <th width="30px"></th>
             <th>Description</th>
             <th>Time</th>
         </tr>
@@ -20,9 +21,19 @@
     <tbody>
         @foreach (var commandResult in Model.CommandResults)
         {
+            string relativeImagePath = string.Format("../images/devices/small/{0}.png", commandResult.DeviceType);
+            string absoluteImagePath = System.IO.Path.Combine(Model.WebRootPath, @"images\devices\small", commandResult.DeviceType + ".png");
+
             <tr class="@(commandResult.Success ? "" : "table-danger")">
-                <td>@commandResult.Description</td>
-                <td>@commandResult.ExecutionTime.TotalSeconds.ToString("0.00")s</td>
+                <td class="align-middle">
+                @if (!System.IO.File.Exists(absoluteImagePath))
+                {
+                    relativeImagePath = "../images/devices/small/empty.png";
+                }
+                <img src="@relativeImagePath" class="img-fluid" />
+                </td>
+                <td class="align-middle">@commandResult.Description</td>
+                <td class="align-middle">@commandResult.ExecutionTime.TotalSeconds.ToString("0.00")s</td>
             </tr>
         }
     </tbody>

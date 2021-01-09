@@ -17,6 +17,7 @@ namespace ControlAVP
     {
         public IList<CommandResult> CommandResults { get; } = new List<CommandResult>();
         public bool Completed { get; set; }
+        public string WebRootPath { get; set; }
     }
 
     [Route("api/[controller]")]
@@ -56,6 +57,7 @@ namespace ControlAVP
             _smartEventHubConsumer.RegisterEventQueue(id);
 
             var model = new TailCommandProcessorModel();
+            model.WebRootPath = _environment.WebRootPath;
 
             //5 minute timeout ensures that if an incorrect or out of date GUID is used that this Get function doesn't run forever
             foreach (var commandResult in _smartEventHubConsumer.GetEvents<CommandResult>(id, TimeSpan.FromMinutes(5)))
