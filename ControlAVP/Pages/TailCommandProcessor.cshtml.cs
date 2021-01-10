@@ -10,9 +10,14 @@ namespace ControlAVP.Pages
     public class TailCommandProcessorModel : PageModel
     {
         public Guid Id { get; private set; }
-        public void OnGet(Guid id)
+        public string DisplayName { get; private set; }
+        public string ImagePath { get; private set; }
+
+        public void OnGet(Guid id, string displayName, string imagePath)
         {
             Id = id;
+            DisplayName = displayName;
+            ImagePath = imagePath;
         }
     }
 }

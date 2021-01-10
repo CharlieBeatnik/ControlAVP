@@ -127,7 +127,7 @@
             @foreach (var commandInfo in Model.CommandInfos.OrderBy(i => i.DisplayName))
             {
                 <div class="col-4 col-md-2 p-1 m-0">
-                    <button type="submit" asp-page-handler="CommandProcessorExecute" asp-route-fileFullName=@commandInfo.JsonPath class="btn btn-light border btn-block m-0 p-2">
+                    <button type="submit" asp-page-handler="CommandProcessorExecute" asp-route-filefullname=@commandInfo.JsonPath asp-route-displayname=@commandInfo.DisplayName asp-route-imagepath=@commandInfo.ImagePath class="btn btn-light border btn-block m-0 p-2">
                         <img src="@commandInfo.ImagePath" class="w-100" />
                         <span class="badge badge-secondary">@commandInfo.DisplayName</span>
                     </button>

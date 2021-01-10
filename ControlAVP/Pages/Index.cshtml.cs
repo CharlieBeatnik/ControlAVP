@@ -122,7 +122,7 @@ namespace ControlAVP.Pages
             return base.RedirectToPage(new { scalerCardVisible, osscCardVisible });
         }
 
-        public IActionResult OnPostCommandProcessorExecute(string fileFullName)
+        public IActionResult OnPostCommandProcessorExecute(string fileFullName, string displayName, string imagePath)
         {
             Guid id = Guid.NewGuid();
             using (StreamReader r = new StreamReader(fileFullName))
@@ -131,7 +131,7 @@ namespace ControlAVP.Pages
                 _cp.Dispatch(json, id);
             }
 
-            return RedirectToPage("TailCommandProcessor", new { id });
+            return RedirectToPage("TailCommandProcessor", new { id, displayName, imagePath });
         }
 
         public IActionResult OnPostSetScale(ScaleType scaleType, PositionType positionType, AspectRatio aspectRatio, float paddingX = 0, float paddingY = 0)
