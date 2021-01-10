@@ -59,6 +59,9 @@ namespace ControlAVP
             var model = new TailCommandProcessorModel();
             model.WebRootPath = _environment.WebRootPath;
 
+            //Send an empty table back for initial display
+            await RenderCommandProcessorTableAndReturnResponse(this, model, Response).ConfigureAwait(false);
+
             //5 minute timeout ensures that if an incorrect or out of date GUID is used that this Get function doesn't run forever
             foreach (var commandResult in _smartEventHubConsumer.GetEvents<CommandResult>(id, TimeSpan.FromMinutes(5)))
             {
@@ -74,11 +77,11 @@ namespace ControlAVP
 
         private static async Task RenderCommandProcessorTableAndReturnResponse(TailCommandProcessor controller, TailCommandProcessorModel model, HttpResponse response)
         {
-            
             var partialViewHtml = await controller.RenderViewAsync("_CommandProcessorTable", model, true).ConfigureAwait(false);
 
             string json = JsonConvert.SerializeObject(partialViewHtml);
             byte[] messageBytes = ASCIIEncoding.ASCII.GetBytes($"data:{json}\n\n");
+            
             await response.Body.WriteAsync(messageBytes.AsMemory(0, messageBytes.Length)).ConfigureAwait(false);
             await response.Body.FlushAsync().ConfigureAwait(false);
         }
