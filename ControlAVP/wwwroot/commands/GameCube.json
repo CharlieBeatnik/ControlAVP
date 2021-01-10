@@ -1,7 +1,7 @@
 {
   "DefaultAssembly": "ControllableDevice",
   "DefaultDeviceIndex": 0,
-  "DisplayName": "GameCube",
+  "DisplayName": "Game Cube",
   "Commands": [
     {
       "Description": "Rack On",
