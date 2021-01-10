@@ -57,17 +57,17 @@
 
 <div class="p-1 m-0">
     <div class="btn-group">
-        @if (Model.ExtronDSC301HDAvailable)
+        @if (Model.RackDevicesAvailable)
         {
             <button data-toggle="collapse" data-target="#scalerCollapse" class="btn border btn-secondary">Scaler</button>
+            <button data-toggle="collapse" data-target="#osscCollapse" class="btn border btn-secondary">OSSC</button>
         }
-        <button data-toggle="collapse" data-target="#osscCollapse" class="btn border btn-secondary">OSSC</button>
     </div>
 </div>
 
 
 <form method="post">
-    @if (Model.ExtronDSC301HDAvailable)
+    @if (Model.RackDevicesAvailable)
     {
         <div class="@(Model.ScalerCardVisible ? "collapse show" : "collapse") p-1 m-0" id="scalerCollapse">
             <div class="card card-body p-2">
@@ -105,22 +105,22 @@
                 </table>
             </div>
         </div>
-    }
 
-    <div class="@(Model.OsscCardVisible ? "collapse show" : "collapse") p-1 m-0" id="osscCollapse">
-        <div class="card card-body p-2">
-            <table class="table table-sm table-responsive table-borderless mb-0">
-                <tr>
-                    <td class="align-middle text-right">Scanlines</td>
-                    <td>
-                        <div class="btn-group">
-                            <button type="submit" asp-page-handler="OSSCSendCommand" asp-route-commandname=@CommandName.ScanlineMode asp-route-positiontype=@PositionType.Centre class="btn border btn-secondary">Toggle (On | Off | Auto)</button>
-                        </div>
-                    </td>
-                </tr>
-            </table>
+        <div class="@(Model.OsscCardVisible ? "collapse show" : "collapse") p-1 m-0" id="osscCollapse">
+            <div class="card card-body p-2">
+                <table class="table table-sm table-responsive table-borderless mb-0">
+                    <tr>
+                        <td class="align-middle text-right">Scanlines</td>
+                        <td>
+                            <div class="btn-group">
+                                <button type="submit" asp-page-handler="OSSCSendCommand" asp-route-commandname=@CommandName.ScanlineMode asp-route-positiontype=@PositionType.Centre class="btn border btn-secondary">Toggle (On | Off | Auto)</button>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
-    </div>
+    }
 
     <div class="container-fluid">
         <div class="row">

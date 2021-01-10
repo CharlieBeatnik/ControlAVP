@@ -8,7 +8,10 @@
 
 <div class="row">
     <div class="col-3 col-md-2 col-xl-1 pb-2"><img src="@Model.ImagePath" class="img-fluid" alt=""></div>
-    <div class="col-9 col-md-10 col-xl-11 align-self-center pl-0"><h4>@Model.DisplayName</h4></div>
+    <div class="col-9 col-md-10 col-xl-11 align-self-center pl-0">
+        <h4 class="mb-1">@Model.DisplayName</h4>
+        <p><span class="badge badge-secondary pl-2 pr-2 pt-1 pb-1">Executing Commands</span></p>
+    </div>
 </div>
 
 <div id="commmand-processor-table"></div>

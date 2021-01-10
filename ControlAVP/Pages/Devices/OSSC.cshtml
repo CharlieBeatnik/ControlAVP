@@ -17,8 +17,8 @@
         <div class="card-body">
             @if (Model.DeviceInfoCache.Available)
             {
-                <div class="col-sm-6">
-                    <table class="table table-sm table-borderless">
+                <div class="col-sm-6 pl-0 pr-0">
+                    <table class="table table-sm table-borderless text-nowrap">
                         <tr>
                             <td class="align-middle text-right" width="1%">Load Profile</td>
                             <td>
@@ -91,7 +91,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="align-middle text-right" width="1%">Miscellaneous</td>
+                            <td class="align-middle text-right" width="1%">Other</td>
                             <td>
                                 <div class="btn-group">
                                     <vc:ossc-button command-name=@CommandName.LCDBacklightToggle button-label="LCD" css-class=@defaultButtonCss />

@@ -9,9 +9,11 @@ using System.Diagnostics.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using ControllableDeviceTypes.ExtronDSC301HDTypes;
 using ControllableDeviceTypes.OSSCTypes;
+using ControllableDeviceTypes.ApcAP8959EU3Types;
 using Newtonsoft.Json;
 using System.Numerics;
 using System;
+using System.Linq;
 
 namespace ControlAVP.Pages
 {
@@ -33,12 +35,13 @@ namespace ControlAVP.Pages
         private ServiceClient _serviceClient;
         private CommandDispatcher _cp;
         private ExtronDSC301HD _extronDSC301HD;
+        private ApcAP8959EU3 _apcAP8959EU3;
         private OSSC _ossc;
 
         private string _commandDirectory;
 
         public IList<CommandInfo> CommandInfos { get; private set; }
-        public bool ExtronDSC301HDAvailable { get; private set; }
+        public bool RackDevicesAvailable { get; private set; }
 
         public bool ScalerCardVisible { get; private set; }
         public bool OsscCardVisible { get; private set; }
@@ -57,6 +60,7 @@ namespace ControlAVP.Pages
             _serviceClient = ServiceClient.CreateFromConnectionString(_connectionString);
             _cp = new CommandDispatcher(_serviceClient, _deviceId);
             _extronDSC301HD = new ExtronDSC301HD(_serviceClient, _deviceId);
+            _apcAP8959EU3 = new ApcAP8959EU3(_serviceClient, _deviceId);
             _ossc = new OSSC(_serviceClient, _deviceId);
 
             _commandDirectory = Path.Combine(_environment.WebRootPath, "commands");
@@ -97,7 +101,10 @@ namespace ControlAVP.Pages
                 });
             }
 
-            ExtronDSC301HDAvailable = _extronDSC301HD.GetAvailable();
+            //Get the status of the power outlet named "Rack" to determine if devices connected to the rack are available
+            var outlets = _apcAP8959EU3.GetOutlets();
+            var rackOutlet = outlets.FirstOrDefault(o => o.Name == "Rack");
+            RackDevicesAvailable = rackOutlet?.State == Outlet.PowerState.On;
 
             ScalerCardVisible = scalerCardVisible;
             OsscCardVisible = osscCardVisible;
