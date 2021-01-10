@@ -20,7 +20,7 @@
       }
     },
     {
-      "ExecuteAfter": 15.0,
+      "ExecuteAfter": 16.0,
       "Description": "Disable HDMI Switch 0 Output",
       "DeviceType": "AtenVS0801H",
       "Function": "SetOutput",
