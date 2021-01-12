@@ -23,6 +23,8 @@ namespace ControlAVP.Pages.Devices
         public int? Brightness { get; set; }
         public int? Contrast { get; set; }
         public bool? Freeze { get; set; }
+
+        public Vector2? InputResolution { get; set; }
     }
 
     public class ExtronDSC301HDModel : PageModel
@@ -62,6 +64,7 @@ namespace ControlAVP.Pages.Devices
             DeviceInfoCache.Brightness = _device.GetBrightness();
             DeviceInfoCache.Contrast = _device.GetContrast();
             DeviceInfoCache.Freeze = _device.GetFreeze();
+            DeviceInfoCache.InputResolution = _device.GetInputResolution();
 
             PaddingX = paddingX;
             PaddingY = paddingY;

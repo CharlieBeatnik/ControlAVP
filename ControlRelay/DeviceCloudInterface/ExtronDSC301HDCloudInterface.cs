@@ -37,6 +37,7 @@ namespace ControlRelay
             yield return new MethodHandlerInfo("ScalerGetContrast", GetContrast);
             yield return new MethodHandlerInfo("ScalerSetFreeze", SetFreeze);
             yield return new MethodHandlerInfo("ScalerGetFreeze", GetFreeze);
+            yield return new MethodHandlerInfo("ScalerGetInputResolution", GetInputResolution);
         }
 
         private Task<MethodResponse> GetFirmware(MethodRequest methodRequest, object userContext)
@@ -125,6 +126,16 @@ namespace ControlRelay
         private Task<MethodResponse> GetTemperature(MethodRequest methodRequest, object userContext)
         {
             return methodRequest.Get(() => _device.GetTemperature());
+        }
+
+        private Task<MethodResponse> GetInputResolution(MethodRequest methodRequest, object userContext)
+        {
+            var resolution = new Vector2();
+
+            resolution.X = (float)_device.GetActivePixels();
+            resolution.Y = (float)_device.GetActiveLines();
+
+            return methodRequest.Get(() => resolution);
         }
 
         private Task<MethodResponse> SetDetailFilter(MethodRequest methodRequest, object userContext)

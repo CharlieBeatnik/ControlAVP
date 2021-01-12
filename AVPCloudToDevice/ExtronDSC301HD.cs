@@ -32,6 +32,20 @@ namespace AVPCloudToDevice
             }
         }
 
+        public Vector2? GetInputResolution()
+        {
+            try
+            {
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "ScalerGetInputResolution", null);
+                string json = response.GetPayloadAsJson();
+                return JsonConvert.DeserializeObject<Vector2>(json);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         public bool GetAvailable()
         {
             try

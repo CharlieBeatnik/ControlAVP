@@ -59,6 +59,17 @@
                             </td>
                         </tr>
                         <tr>
+                            <td class="align-middle text-right">Resolution</td>
+                            @if (Model.DeviceInfoCache.InputResolution == null)
+                            {
+                                <td>Unknown</td>
+                            }
+                            else
+                            {
+                                <td>@Model.DeviceInfoCache.InputResolution.Value.X x @Model.DeviceInfoCache.InputResolution.Value.Y</td>
+                            }
+                        </tr>
+                        <tr>
                             <td class="align-middle text-right">Pixel Perfect</td>
                             <td>
                                 <div class="btn-group">
@@ -147,7 +158,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td><input type="range" class="w-100" min="0" value="@Model.DeviceInfoCache.DetailFilter" max="127" id="detailFilterSlider" oninput="updateParameterInURLAttribute(['setDetailFilterButton'], 'formaction', 'value', this.value, 'setDetailFilterButton', 'Set ')"/></td>
+                            <td><input type="range" class="w-100" min="0" value="@Model.DeviceInfoCache.DetailFilter" max="127" id="detailFilterSlider" oninput="updateParameterInURLAttribute(['setDetailFilterButton'], 'formaction', 'value', this.value, 'setDetailFilterButton', 'Set ')" /></td>
                         </tr>
                         <tr>
                             <td class="align-middle text-right" rowspan="3">Brightness</td>
@@ -162,7 +173,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td><input type="range" class="w-100" min="0" value="@Model.DeviceInfoCache.Brightness" max="127" id="brightnessSlider" oninput="updateParameterInURLAttribute(['setBrightnessButton'], 'formaction', 'value', this.value, 'setBrightnessButton', 'Set ')"/></td>
+                            <td><input type="range" class="w-100" min="0" value="@Model.DeviceInfoCache.Brightness" max="127" id="brightnessSlider" oninput="updateParameterInURLAttribute(['setBrightnessButton'], 'formaction', 'value', this.value, 'setBrightnessButton', 'Set ')" /></td>
                         </tr>
                         <tr>
                             <td class="align-middle text-right" rowspan="3">Contrast</td>
