@@ -25,10 +25,10 @@
       "Function": "TurnOutletOn",
       "Parameters": {
         "id": 8
-      }
+      },
+      "PostWait": 35.0
     },
     {
-      "ExecuteAfter": 16.0,
       "Description": "Disable HDMI Switch 0 Output",
       "DeviceType": "AtenVS0801H",
       "Function": "SetOutput",
@@ -46,30 +46,12 @@
       }
     },
     {
-      "Description": "Scaler to HDMI",
-      "DeviceType": "ExtronDSC301HD",
+      "Description": "TV HDMI4 for Rack",
+      "DeviceType": "SonyKDL60W855",
       "Function": "SetInputPort",
       "Parameters": {
-        "inputPort": "HDMI"
+        "inputPort": "Hdmi4"
       }
-    },
-    {
-      "Description": "Load OSSC Profile for GameCube",
-      "DeviceType": "OSSC",
-      "Function": "LoadProfile",
-      "Parameters": {
-        "profileName": "Profile1"
-      },
-      "PostWait": 2.0
-    },
-    {
-      "Description": "Change OSSC to AV1YPbPr (Dummy)",
-      "DeviceType": "OSSC",
-      "Function": "SendCommand",
-      "Parameters": {
-        "commandName": "AV1YPbPr"
-      },
-      "PostWait": 2.0
     },
     {
       "Description": "Change OSSC to YPbPr",
@@ -81,6 +63,32 @@
       "PostWait": 1.0
     },
     {
+      "Description": "Load OSSC Reset Profile",
+      "DeviceType": "OSSC",
+      "Function": "LoadProfile",
+      "Parameters": {
+        "profileName": "Profile2"
+      },
+      "PostWait": 4.0
+    },
+    {
+      "Description": "Load OSSC Profile for Game Cube",
+      "DeviceType": "OSSC",
+      "Function": "LoadProfile",
+      "Parameters": {
+        "profileName": "Profile1"
+      },
+      "PostWait": 4.0
+    },
+    {
+      "Description": "Scaler to HDMI",
+      "DeviceType": "ExtronDSC301HD",
+      "Function": "SetInputPort",
+      "Parameters": {
+        "inputPort": "HDMI"
+      }
+    },
+    {
       "Description": "Scaler to Output Rate for GameCube",
       "DeviceType": "ExtronDSC301HD",
       "Function": "SetOutputRateWithoutEdid",
@@ -90,6 +98,28 @@
         "refreshRate": 60.0
       },
       "PostWait": 2.0
+    },
+    {
+      "Description": "Scale Fit Preserve Ratio",
+      "DeviceType": "ExtronDSC301HD",
+      "Function": "Scale",
+      "Parameters": {
+        "scaleType": "Fit",
+        "positionType": "Centre",
+        "aspectRatio": "RatioPreserve",
+        "padding": {
+          "X": 0,
+          "Y": 0
+        }
+      }
+    },
+    {
+      "Description": "Set Brightness",
+      "DeviceType": "ExtronDSC301HD",
+      "Function": "SetBrightness",
+      "Parameters": {
+        "value": 60
+      }
     },
     {
       "Description": "Enable HDMI Switch 0 Output",
@@ -123,15 +153,6 @@
       "Function": "SetInputPort",
       "Parameters": {
         "inputPort": "Port1"
-      }
-    },
-    {
-      "ExecuteAfter": 35.0,
-      "Description": "TV HDMI4 for Rack",
-      "DeviceType": "SonyKDL60W855",
-      "Function": "SetInputPort",
-      "Parameters": {
-        "inputPort": "Hdmi4"
       }
     }
   ]
