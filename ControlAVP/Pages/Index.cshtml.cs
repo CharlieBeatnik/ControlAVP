@@ -168,7 +168,7 @@ namespace ControlAVP.Pages
         public IActionResult OnPostTVInputCycle(ControllableDeviceTypes.SonyKDL60W855Types.InputPort input1, ControllableDeviceTypes.SonyKDL60W855Types.InputPort input2)
         {
             _sonyKDL60W855.SetInputPort(input1);
-            Thread.Sleep(TimeSpan.FromSeconds(2));
+            Thread.Sleep(TimeSpan.FromSeconds(3));
             _sonyKDL60W855.SetInputPort(input2);
             return RedirectToPage();
         }
@@ -182,7 +182,7 @@ namespace ControlAVP.Pages
         public IActionResult OnPostOSSCProfileCycle(ProfileName profile1, ProfileName profile2)
         {
             _ossc.LoadProfile(profile1);
-            Thread.Sleep(TimeSpan.FromSeconds(2));
+            Thread.Sleep(TimeSpan.FromSeconds(3));
             _ossc.LoadProfile(profile2);
             return RedirectToPage();
         }
