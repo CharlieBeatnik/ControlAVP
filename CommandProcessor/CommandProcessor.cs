@@ -82,7 +82,6 @@ namespace CommandProcessor
                 {
                     int timeToWaitMilliseconds = (int)Math.Ceiling(((double)executeAfterSeconds - startTime.TotalSeconds) * 1000);
                     Thread.Sleep(timeToWaitMilliseconds);
-                    startTime = sw.Elapsed;
                 }
 
                 string assembly = (command["Assembly"] == null) ? defaultAssembly : (string)command["Assembly"];

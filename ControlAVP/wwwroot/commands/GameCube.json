@@ -54,33 +54,6 @@
       }
     },
     {
-      "Description": "Change OSSC to YPbPr",
-      "DeviceType": "OSSC",
-      "Function": "SendCommand",
-      "Parameters": {
-        "commandName": "AV2YPbPr"
-      },
-      "PostWait": 1.0
-    },
-    {
-      "Description": "Load OSSC Reset Profile",
-      "DeviceType": "OSSC",
-      "Function": "LoadProfile",
-      "Parameters": {
-        "profileName": "Profile2"
-      },
-      "PostWait": 4.0
-    },
-    {
-      "Description": "Load OSSC Profile for Game Cube",
-      "DeviceType": "OSSC",
-      "Function": "LoadProfile",
-      "Parameters": {
-        "profileName": "Profile1"
-      },
-      "PostWait": 4.0
-    },
-    {
       "Description": "Scaler to HDMI",
       "DeviceType": "ExtronDSC301HD",
       "Function": "SetInputPort",
@@ -98,6 +71,33 @@
         "refreshRate": 60.0
       },
       "PostWait": 2.0
+    },
+    {
+      "Description": "Change OSSC to YPbPr",
+      "DeviceType": "OSSC",
+      "Function": "SendCommand",
+      "Parameters": {
+        "commandName": "AV2YPbPr"
+      },
+      "PostWait": 1.0
+    },
+    {
+      "Description": "Load OSSC Reset Profile",
+      "DeviceType": "OSSC",
+      "Function": "LoadProfile",
+      "Parameters": {
+        "profileName": "Profile2"
+      },
+      "PostWait": 3.0
+    },
+    {
+      "Description": "Load OSSC Profile for Game Cube",
+      "DeviceType": "OSSC",
+      "Function": "LoadProfile",
+      "Parameters": {
+        "profileName": "Profile1"
+      },
+      "PostWait": 3.0
     },
     {
       "Description": "Scale Fit Preserve Ratio",
