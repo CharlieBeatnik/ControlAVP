@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using ControllableDeviceTypes.ExtronDSC301HDTypes;
 using ControllableDeviceTypes.OSSCTypes;
 using ControllableDeviceTypes.ApcAP8959EU3Types;
+using ControllableDeviceTypes.SonyKDL60W855Types;
 using Newtonsoft.Json;
 using System.Numerics;
 using System;
@@ -36,13 +37,14 @@ namespace ControlAVP.Pages
         private CommandDispatcher _cp;
         private ExtronDSC301HD _extronDSC301HD;
         private ApcAP8959EU3 _apcAP8959EU3;
+        private SonyKDL60W855 _sonyKDL60W855;
         private OSSC _ossc;
 
         private string _commandDirectory;
 
         public IList<CommandInfo> CommandInfos { get; private set; }
         public bool RackDevicesAvailable { get; private set; }
-
+        public bool TvAvailable { get; private set; }
         public bool ScalerCardVisible { get; private set; }
         public bool OsscCardVisible { get; private set; }
 
@@ -61,6 +63,7 @@ namespace ControlAVP.Pages
             _cp = new CommandDispatcher(_serviceClient, _deviceId);
             _extronDSC301HD = new ExtronDSC301HD(_serviceClient, _deviceId);
             _apcAP8959EU3 = new ApcAP8959EU3(_serviceClient, _deviceId);
+            _sonyKDL60W855 = new SonyKDL60W855(_serviceClient, _deviceId);
             _ossc = new OSSC(_serviceClient, _deviceId);
 
             _commandDirectory = Path.Combine(_environment.WebRootPath, "commands");
@@ -105,6 +108,8 @@ namespace ControlAVP.Pages
             var outlets = _apcAP8959EU3.GetOutlets();
             var rackOutlet = outlets.FirstOrDefault(o => o.Name == "Rack");
             RackDevicesAvailable = rackOutlet?.State == Outlet.PowerState.On;
+
+            TvAvailable = _sonyKDL60W855.GetPowerStatus() == PowerStatus.On;
 
             ScalerCardVisible = scalerCardVisible;
             OsscCardVisible = osscCardVisible;
@@ -156,6 +161,13 @@ namespace ControlAVP.Pages
         public IActionResult OnPostSetContrast(int value)
         {
             _extronDSC301HD.SetContrast(value);
+            return RedirectToPage();
+        }
+
+        public IActionResult OnPostTVReset()
+        {
+            _sonyKDL60W855.SetInputPort(ControllableDeviceTypes.SonyKDL60W855Types.InputPort.Hdmi1);
+            _sonyKDL60W855.SetInputPort(ControllableDeviceTypes.SonyKDL60W855Types.InputPort.Hdmi4);
             return RedirectToPage();
         }
 

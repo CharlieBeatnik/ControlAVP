@@ -46,14 +46,6 @@
       }
     },
     {
-      "Description": "TV HDMI4 for Rack",
-      "DeviceType": "SonyKDL60W855",
-      "Function": "SetInputPort",
-      "Parameters": {
-        "inputPort": "Hdmi4"
-      }
-    },
-    {
       "Description": "Scaler to HDMI",
       "DeviceType": "ExtronDSC301HD",
       "Function": "SetInputPort",
@@ -82,22 +74,13 @@
       "PostWait": 1.0
     },
     {
-      "Description": "Load OSSC Reset Profile",
-      "DeviceType": "OSSC",
-      "Function": "LoadProfile",
-      "Parameters": {
-        "profileName": "Profile2"
-      },
-      "PostWait": 3.0
-    },
-    {
       "Description": "Load OSSC Profile for Game Cube",
       "DeviceType": "OSSC",
       "Function": "LoadProfile",
       "Parameters": {
         "profileName": "Profile1"
       },
-      "PostWait": 3.0
+      "PostWait": 2.0
     },
     {
       "Description": "Scale Fit Preserve Ratio",
@@ -119,6 +102,14 @@
       "Function": "SetBrightness",
       "Parameters": {
         "value": 60
+      }
+    },
+    {
+      "Description": "TV HDMI1 for Not Rack",
+      "DeviceType": "SonyKDL60W855",
+      "Function": "SetInputPort",
+      "Parameters": {
+        "inputPort": "Hdmi1"
       }
     },
     {
@@ -153,6 +144,15 @@
       "Function": "SetInputPort",
       "Parameters": {
         "inputPort": "Port1"
+      },
+      "PostWait": 2.0
+    },
+    {
+      "Description": "TV HDMI4 for Rack",
+      "DeviceType": "SonyKDL60W855",
+      "Function": "SetInputPort",
+      "Parameters": {
+        "inputPort": "Hdmi4"
       }
     }
   ]
