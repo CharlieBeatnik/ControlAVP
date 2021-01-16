@@ -15,6 +15,7 @@ using Newtonsoft.Json;
 using System.Numerics;
 using System;
 using System.Linq;
+using System.Threading;
 
 namespace ControlAVP.Pages
 {
@@ -164,16 +165,25 @@ namespace ControlAVP.Pages
             return RedirectToPage();
         }
 
-        public IActionResult OnPostTVReset()
+        public IActionResult OnPostTVInputCycle(ControllableDeviceTypes.SonyKDL60W855Types.InputPort input1, ControllableDeviceTypes.SonyKDL60W855Types.InputPort input2)
         {
-            _sonyKDL60W855.SetInputPort(ControllableDeviceTypes.SonyKDL60W855Types.InputPort.Hdmi1);
-            _sonyKDL60W855.SetInputPort(ControllableDeviceTypes.SonyKDL60W855Types.InputPort.Hdmi4);
+            _sonyKDL60W855.SetInputPort(input1);
+            Thread.Sleep(TimeSpan.FromSeconds(2));
+            _sonyKDL60W855.SetInputPort(input2);
             return RedirectToPage();
         }
 
         public IActionResult OnPostOSSCSendCommand(CommandName commandName)
         {
             _ossc.SendCommand(commandName);
+            return RedirectToPage();
+        }
+
+        public IActionResult OnPostOSSCProfileCycle(ProfileName profile1, ProfileName profile2)
+        {
+            _ossc.LoadProfile(profile1);
+            Thread.Sleep(TimeSpan.FromSeconds(2));
+            _ossc.LoadProfile(profile2);
             return RedirectToPage();
         }
     }

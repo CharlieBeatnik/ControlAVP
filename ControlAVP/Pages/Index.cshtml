@@ -2,6 +2,7 @@
 @model IndexModel
 @using ControllableDeviceTypes.ExtronDSC301HDTypes;
 @using ControllableDeviceTypes.OSSCTypes;
+@using ControllableDeviceTypes.SonyKDL60W855Types;
 @using System.Numerics;
 @{
     ViewData["Title"] = "ControlAVP";
@@ -66,7 +67,7 @@
             }
             @if (Model.TvAvailable)
             {
-                <button type="submit" asp-page-handler="TVReset" class="btn border btn-secondary">TV Reset</button>
+                <button type="submit" asp-page-handler="TVInputCycle" asp-route-input1=@ControllableDeviceTypes.SonyKDL60W855Types.InputPort.Hdmi1 asp-route-input2=@ControllableDeviceTypes.SonyKDL60W855Types.InputPort.Hdmi4 class="btn border btn-secondary">Cycle TV for Rack</button>
             }
 
         </div>
@@ -122,6 +123,14 @@
                         <td>
                             <div class="btn-group">
                                 <button type="submit" asp-page-handler="OSSCSendCommand" asp-route-commandname=@CommandName.ScanlineMode asp-route-positiontype=@PositionType.Centre class="btn border btn-secondary">Toggle (On | Off | Auto)</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="align-middle text-right">Reset</td>
+                        <td>
+                            <div class="btn-group">
+                                <button type="submit" asp-page-handler="OSSCProfileCycle" asp-route-profile1=@ProfileName.Profile2 asp-route-profile2=@ProfileName.Profile1 class="btn border btn-secondary">Game Cube</button>
                             </div>
                         </td>
                     </tr>
