@@ -105,7 +105,8 @@
                         <td class="align-middle text-right">Special</td>
                         <td>
                             <div class="btn-group">
-                                <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.FitWidth asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.Ratio16x9 asp-route-paddingx="42" class="btn btn-light border text-center">F-Zero GX Widescreen</button>
+                                <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.FitWidth asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.Ratio16x9 asp-route-paddingx="42" class="btn btn-light border text-center">F-Zero GX</button>
+                                <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.FitWidth asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.Ratio16x9 asp-route-paddingx="84" class="btn btn-light border text-center">RE4</button>
                             </div>
                         </td>
                     </tr>
@@ -114,7 +115,8 @@
                         <td>
                             <div class="btn-group">
                                 <button type="submit" asp-page-handler="SetDetailFilter" asp-route-value="30" class="btn border btn-light">30</button>
-                                <button type="submit" asp-page-handler="SetDetailFilter" asp-route-value="30" class="btn border btn-light">40</button>
+                                <button type="submit" asp-page-handler="SetDetailFilter" asp-route-value="40" class="btn border btn-light">40</button>
+                                <button type="submit" asp-page-handler="SetDetailFilter" asp-route-value="50" class="btn border btn-light">50</button>
                                 <button type="submit" asp-page-handler="SetDetailFilter" asp-route-value="64" class="btn border btn-light">64*</button>
                             </div>
                         </td>
@@ -130,7 +132,7 @@
                         <td class="align-middle text-right">Scanlines</td>
                         <td>
                             <div class="btn-group">
-                                <button type="submit" asp-page-handler="OSSCSendCommand" asp-route-commandname=@CommandName.ScanlineMode asp-route-positiontype=@PositionType.Centre class="btn border btn-secondary">Toggle (On | Off | Auto)</button>
+                                <button type="submit" asp-page-handler="OSSCSendCommand" asp-route-commandname=@CommandName.ScanlineMode asp-route-positiontype=@PositionType.Centre class="btn border btn-light">Toggle (On | Off | Auto)</button>
                             </div>
                         </td>
                     </tr>
@@ -138,7 +140,8 @@
                         <td class="align-middle text-right">Reset</td>
                         <td>
                             <div class="btn-group">
-                                <button type="submit" asp-page-handler="OSSCProfileCycle" asp-route-profile1=@ProfileName.Profile2 asp-route-profile2=@ProfileName.Profile1 class="btn border btn-secondary">Game Cube</button>
+                                <button type="submit" asp-page-handler="OSSCProfileCycle" asp-route-profile1=@ProfileName.Profile2 asp-route-profile2=@ProfileName.Profile1 class="btn border btn-light">Game Cube</button>
+                                <button type="submit" asp-page-handler="OSSCProfileCycle" asp-route-profile1=@ProfileName.Profile2 asp-route-profile2=@ProfileName.Profile6 class="btn border btn-light">Mega Drive</button>
                             </div>
                         </td>
                     </tr>

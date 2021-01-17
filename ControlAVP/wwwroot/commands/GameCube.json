@@ -83,6 +83,24 @@
       "PostWait": 2.0
     },
     {
+      "Description": "Load OSSC Reset Profile",
+      "DeviceType": "OSSC",
+      "Function": "LoadProfile",
+      "Parameters": {
+        "profileName": "Profile2"
+      },
+      "PostWait": 3.0
+    },
+    {
+      "Description": "Load OSSC Profile for Game Cube",
+      "DeviceType": "OSSC",
+      "Function": "LoadProfile",
+      "Parameters": {
+        "profileName": "Profile1"
+      },
+      "PostWait": 3.0
+    },
+    {
       "Description": "Scale Fit Preserve Ratio",
       "DeviceType": "ExtronDSC301HD",
       "Function": "Scale",
