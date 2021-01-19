@@ -42,12 +42,15 @@ namespace ControlAVP.Pages
         private OSSC _ossc;
 
         private string _commandDirectory;
+        private IEnumerable<Outlet> _outlets;
+        private IEnumerable<string> _outletConfirmation;
+
 
         public IList<CommandInfo> CommandInfos { get; private set; }
         public bool RackDevicesAvailable { get; private set; }
-        public bool TvAvailable { get; private set; }
         public bool ScalerCardVisible { get; private set; }
         public bool OsscCardVisible { get; private set; }
+        public bool GameCubeAvailable { get; private set; }
 
         public IndexModel(IConfiguration configuration, IWebHostEnvironment environment)
         {
@@ -66,6 +69,9 @@ namespace ControlAVP.Pages
             _apcAP8959EU3 = new ApcAP8959EU3(_serviceClient, _deviceId);
             _sonyKDL60W855 = new SonyKDL60W855(_serviceClient, _deviceId);
             _ossc = new OSSC(_serviceClient, _deviceId);
+
+            _outlets = _apcAP8959EU3.GetOutlets();
+            _outletConfirmation = _configuration.GetSection("OutletConfirmation").Get<string[]>();
 
             _commandDirectory = Path.Combine(_environment.WebRootPath, "commands");
         }
@@ -105,12 +111,14 @@ namespace ControlAVP.Pages
                 });
             }
 
-            //Get the status of the power outlet named "Rack" to determine if devices connected to the rack are available
-            var outlets = _apcAP8959EU3.GetOutlets();
-            var rackOutlet = outlets.FirstOrDefault(o => o.Name == "Rack");
-            RackDevicesAvailable = rackOutlet?.State == Outlet.PowerState.On;
+            if (_outlets != null)
+            {
+                var rackOutlet = _outlets.FirstOrDefault(o => o.Name == "Rack");
+                RackDevicesAvailable = rackOutlet?.State == Outlet.PowerState.On;
 
-            TvAvailable = _sonyKDL60W855.GetPowerStatus() == PowerStatus.On;
+                var gameCubeOutlet = _outlets.FirstOrDefault(o => o.Name == "GameCube");
+                GameCubeAvailable = gameCubeOutlet?.State == Outlet.PowerState.On;
+            }
 
             ScalerCardVisible = scalerCardVisible;
             OsscCardVisible = osscCardVisible;
@@ -170,6 +178,26 @@ namespace ControlAVP.Pages
             _sonyKDL60W855.SetInputPort(input1);
             Thread.Sleep(TimeSpan.FromSeconds(3));
             _sonyKDL60W855.SetInputPort(input2);
+            return RedirectToPage();
+        }
+
+        // Turn off all devices not on the exclusion list, including the TV
+        public IActionResult OnPostPowerOff()
+        {
+            var outlets = _apcAP8959EU3.GetOutlets();
+
+            if(outlets != null)
+            {
+                foreach (var outlet in outlets.Where(o =>
+                    !_outletConfirmation.Contains(o.Name) &&
+                    o.State == Outlet.PowerState.On))
+                {
+                    _apcAP8959EU3.TurnOutletOff(outlet.Id);
+                }
+            }
+
+            _sonyKDL60W855.TurnOff();
+
             return RedirectToPage();
         }
 

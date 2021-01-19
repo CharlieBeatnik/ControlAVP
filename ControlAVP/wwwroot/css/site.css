@@ -65,3 +65,40 @@ body {
 .nav-item {
     text-align: right;
 }
+
+.btn-purple {
+  color: #fff;
+  background-color: #6660a0;
+  border-color: #6660a0;
+}
+
+.btn-purple:hover {
+  color: #fff;
+  background-color: #39346e;
+  border-color: #545b62;
+}
+
+.btn-purple:focus, .btn-purple.focus {
+  color: #fff;
+  background-color: #39346e;
+  border-color: #545b62;
+  box-shadow: 0 0 0 0.2rem rgba(120, 114, 186, 0.5);
+}
+
+.btn-purple.disabled, .btn-purple:disabled {
+  color: #fff;
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+
+.btn-purple:not(:disabled):not(.disabled):active, .btn-purple:not(:disabled):not(.disabled).active,
+.show > .btn-purple.dropdown-toggle {
+  color: #fff;
+  background-color: #39346e;
+  border-color: #4e555b;
+}
+
+.btn-purple:not(:disabled):not(.disabled):active:focus, .btn-purple:not(:disabled):not(.disabled).active:focus,
+.show > .btn-purple.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem rgba(120, 114, 186, 0.5);
+}

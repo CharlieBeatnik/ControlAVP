@@ -64,11 +64,13 @@
             {
                 <button type="button" data-toggle="collapse" data-target="#scalerCollapse" class="btn border btn-secondary">Scaler</button>
                 <button type="button" data-toggle="collapse" data-target="#osscCollapse" class="btn border btn-secondary">OSSC</button>
+                @if (Model.GameCubeAvailable)
+                {
+                    <button type="submit" asp-page-handler="OSSCProfileCycle" asp-route-profile1=@ProfileName.Profile2 asp-route-profile2=@ProfileName.Profile1 class="btn border btn-purple">Game Cube Reset</button>
+                }
             }
-            @if (Model.TvAvailable)
-            {
-                <button type="submit" asp-page-handler="TVInputCycle" asp-route-input1=@ControllableDeviceTypes.SonyKDL60W855Types.InputPort.Hdmi1 asp-route-input2=@ControllableDeviceTypes.SonyKDL60W855Types.InputPort.Hdmi4 class="btn border btn-secondary">Cycle TV for Rack</button>
-            }
+
+            <button type="submit" asp-page-handler="PowerOff" class="btn border btn-danger">Power Off</button>
 
         </div>
     </form>
