@@ -78,7 +78,7 @@
       "DeviceType": "OSSC",
       "Function": "SendCommand",
       "Parameters": {
-        "commandName": "AV1RGBS"
+        "commandName": "AV3RGBHV"
       },
       "PostWait": 1.0
     },
