@@ -284,7 +284,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GivenJsonAndDevice_WhenExecuteCommandWithExecuteAfter5Seconds_ThenStartTimeGreaterThan5Seconds()
+        public void GivenJsonAndDevice_WhenExecuteCommandWithExecuteAfter5Seconds_ThenExecutionTimeGreaterThan5Seconds()
         {
             using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-execute-after.json"))
             {
@@ -296,7 +296,7 @@ namespace Tests
 
                     foreach (var commandResult in CommandProcessorUtils.Execute(devices, json))
                     {
-                        Assert.IsTrue(commandResult.StartTime.TotalSeconds > 5);
+                        Assert.IsTrue(commandResult.ExecutionTime.TotalSeconds > 5);
                     }
                 }
             }
