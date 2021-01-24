@@ -48,6 +48,7 @@ namespace ControlAVP.Pages
 
         public IList<CommandInfo> CommandInfos { get; private set; }
         public bool RackDevicesAvailable { get; private set; }
+        public bool TvAvailable { get; private set; }
         public bool ScalerCardVisible { get; private set; }
         public bool OsscCardVisible { get; private set; }
         public bool GameCubeAvailable { get; private set; }
@@ -119,6 +120,8 @@ namespace ControlAVP.Pages
                 var gameCubeOutlet = _outlets.FirstOrDefault(o => o.Name == "GameCube");
                 GameCubeAvailable = gameCubeOutlet?.State == Outlet.PowerState.On;
             }
+
+            TvAvailable = _sonyKDL60W855.GetPowerStatus() == PowerStatus.On;
 
             ScalerCardVisible = scalerCardVisible;
             OsscCardVisible = osscCardVisible;
@@ -212,6 +215,14 @@ namespace ControlAVP.Pages
             _ossc.LoadProfile(profile1);
             Thread.Sleep(TimeSpan.FromSeconds(3));
             _ossc.LoadProfile(profile2);
+            return RedirectToPage();
+        }
+
+        public IActionResult OnPostOSSCInputCycle(CommandName inputPort1, CommandName inputPort2)
+        {
+            _ossc.SendCommand(inputPort1);
+            Thread.Sleep(TimeSpan.FromSeconds(3));
+            _ossc.SendCommand(inputPort2);
             return RedirectToPage();
         }
     }

@@ -70,6 +70,11 @@
                 }
             }
 
+            @if (Model.TvAvailable)
+            {
+                <button type="submit" asp-page-handler="TVInputCycle" asp-route-input1=@ControllableDeviceTypes.SonyKDL60W855Types.InputPort.Hdmi1 asp-route-input2=@ControllableDeviceTypes.SonyKDL60W855Types.InputPort.Hdmi4 class="btn border btn-secondary">TV Cycle</button>
+            }
+
             <button type="submit" asp-page-handler="PowerOff" class="btn border btn-danger">Power Off</button>
 
         </div>
@@ -139,12 +144,21 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="align-middle text-right">Reset</td>
+                        <td class="align-middle text-right text-nowrap">Input Cycle</td>
                         <td>
-                            <div class="btn-group">
-                                <button type="submit" asp-page-handler="OSSCProfileCycle" asp-route-profile1=@ProfileName.Profile2 asp-route-profile2=@ProfileName.Profile1 class="btn border btn-light">Game Cube</button>
-                                <button type="submit" asp-page-handler="OSSCProfileCycle" asp-route-profile1=@ProfileName.Profile2 asp-route-profile2=@ProfileName.Profile6 class="btn border btn-light">Mega Drive</button>
-                                <button type="submit" asp-page-handler="OSSCProfileCycle" asp-route-profile1=@ProfileName.Profile2 asp-route-profile2=@ProfileName.Profile0 class="btn border btn-light">Dreamcast</button>
+                            <div class="btn-group flex-wrap">
+                                <button type="submit" asp-page-handler="OSSCInputCycle" asp-route-inputPort1=@CommandName.AV1YPbPr asp-route-inputPort2=@CommandName.AV1RGBS class="btn border btn-light">AV1RGBS</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="align-middle text-right text-nowrap">Profile Cycle</td>
+                        <td>
+                            <div class="btn-group flex-wrap">
+                                <button type="submit" asp-page-handler="OSSCProfileCycle" asp-route-profile1=@ProfileName.Profile2 asp-route-profile2=@ProfileName.Profile1 class="btn btn-sm border btn-light">Game Cube</button>
+                                <button type="submit" asp-page-handler="OSSCProfileCycle" asp-route-profile1=@ProfileName.Profile2 asp-route-profile2=@ProfileName.Profile6 class="btn btn-sm border btn-light">Mega Drive</button>
+                                <button type="submit" asp-page-handler="OSSCProfileCycle" asp-route-profile1=@ProfileName.Profile2 asp-route-profile2=@ProfileName.Profile0 class="btn btn-sm border btn-light">Dreamcast</button>
+                                <button type="submit" asp-page-handler="OSSCProfileCycle" asp-route-profile1=@ProfileName.Profile2 asp-route-profile2=@ProfileName.Profile11 class="btn btn-sm border btn-light">Saturn</button>
                             </div>
                         </td>
                     </tr>
