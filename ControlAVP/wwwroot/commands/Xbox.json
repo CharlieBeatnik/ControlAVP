@@ -54,20 +54,13 @@
       }
     },
     {
-      "Description": "Load OSSC Profile for Xbox",
-      "DeviceType": "OSSC",
-      "Function": "LoadProfile",
+      "Description": "Scaler to Output Rate for Xbox",
+      "DeviceType": "ExtronDSC301HD",
+      "Function": "SetOutputRateWithoutEdid",
       "Parameters": {
-        "profileName": "Profile12"
-      },
-      "PostWait": 2.0
-    },
-    {
-      "Description": "Change OSSC to AV1YPbPr (Dummy)",
-      "DeviceType": "OSSC",
-      "Function": "SendCommand",
-      "Parameters": {
-        "commandName": "AV1YPbPr"
+        "width": 1920,
+        "height": 1080,
+        "refreshRate": 60.0
       },
       "PostWait": 2.0
     },
@@ -81,15 +74,39 @@
       "PostWait": 1.0
     },
     {
-      "Description": "Scaler to Output Rate for Xbox",
-      "DeviceType": "ExtronDSC301HD",
-      "Function": "SetOutputRateWithoutEdid",
+      "Description": "Load OSSC Profile for Xbox",
+      "DeviceType": "OSSC",
+      "Function": "LoadProfile",
       "Parameters": {
-        "width": 1920,
-        "height": 1080,
-        "refreshRate": 60.0
+        "profileName": "Profile12"
       },
       "PostWait": 2.0
+    },
+    {
+      "Description": "Load OSSC Reset Profile",
+      "DeviceType": "OSSC",
+      "Function": "LoadProfile",
+      "Parameters": {
+        "profileName": "Profile2"
+      },
+      "PostWait": 3.0
+    },
+    {
+      "Description": "Load OSSC Profile for Xbox",
+      "DeviceType": "OSSC",
+      "Function": "LoadProfile",
+      "Parameters": {
+        "profileName": "Profile12"
+      },
+      "PostWait": 3.0
+    },
+    {
+      "Description": "TV HDMI1 for Not Rack",
+      "DeviceType": "SonyKDL60W855",
+      "Function": "SetInputPort",
+      "Parameters": {
+        "inputPort": "Hdmi1"
+      }
     },
     {
       "Description": "Enable HDMI Switch 0 Output",
@@ -126,7 +143,6 @@
       }
     },
     {
-      "ExecuteAfter": 35.0,
       "Description": "TV HDMI4 for Rack",
       "DeviceType": "SonyKDL60W855",
       "Function": "SetInputPort",

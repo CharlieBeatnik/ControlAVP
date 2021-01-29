@@ -66,7 +66,7 @@
                 <button type="button" data-toggle="collapse" data-target="#osscCollapse" class="btn border btn-secondary">OSSC</button>
                 @if (Model.GameCubeAvailable)
                 {
-                    <button type="submit" asp-page-handler="OSSCProfileCycle" asp-route-profile1=@ProfileName.Profile2 asp-route-profile2=@ProfileName.Profile1 class="btn border btn-purple">Game Cube Reset</button>
+                    <button type="submit" asp-page-handler="OSSCProfileCycle" asp-route-profile1=@ProfileName.Profile2 asp-route-profile2=@ProfileName.Profile1 class="btn border btn-purple">GC Reset</button>
                 }
             }
 
@@ -75,7 +75,7 @@
                 <button type="submit" asp-page-handler="TVInputCycle" asp-route-input1=@ControllableDeviceTypes.SonyKDL60W855Types.InputPort.Hdmi1 asp-route-input2=@ControllableDeviceTypes.SonyKDL60W855Types.InputPort.Hdmi4 class="btn border btn-secondary">TV Cycle</button>
             }
 
-            <button type="submit" asp-page-handler="PowerOff" class="btn border btn-danger">Power Off</button>
+            <button type="submit" asp-page-handler="PowerOff" class="btn border btn-danger">Off</button>
 
         </div>
     </form>
@@ -159,6 +159,7 @@
                                 <button type="submit" asp-page-handler="OSSCProfileCycle" asp-route-profile1=@ProfileName.Profile2 asp-route-profile2=@ProfileName.Profile6 class="btn btn-sm border btn-light">Mega Drive</button>
                                 <button type="submit" asp-page-handler="OSSCProfileCycle" asp-route-profile1=@ProfileName.Profile2 asp-route-profile2=@ProfileName.Profile0 class="btn btn-sm border btn-light">Dreamcast</button>
                                 <button type="submit" asp-page-handler="OSSCProfileCycle" asp-route-profile1=@ProfileName.Profile2 asp-route-profile2=@ProfileName.Profile11 class="btn btn-sm border btn-light">Saturn</button>
+                                <button type="submit" asp-page-handler="OSSCProfileCycle" asp-route-profile1=@ProfileName.Profile2 asp-route-profile2=@ProfileName.Profile12 class="btn btn-sm border btn-light">Xbox</button>
                             </div>
                         </td>
                     </tr>
