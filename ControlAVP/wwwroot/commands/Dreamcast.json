@@ -24,7 +24,7 @@
       "DeviceType": "ApcAP8959EU3",
       "Function": "TurnOutletOn",
       "Parameters": {
-        "id": 14
+        "id": 16
       },
       "PostWait": 18.0
     },

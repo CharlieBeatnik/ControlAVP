@@ -1,7 +1,7 @@
 {
   "DefaultAssembly": "ControllableDevice",
   "DefaultDeviceIndex": 0,
-  "DisplayName": "NES Mini",
+  "DisplayName": "Nt mini",
   "Commands": [
     {
       "Description": "Rack On",
@@ -17,6 +17,14 @@
       "Function": "TurnOn",
       "Parameters": {
         "wait": "false"
+      }
+    },
+    {
+      "Description": "Nt mini Noir On",
+      "DeviceType": "ApcAP8959EU3",
+      "Function": "TurnOutletOn",
+      "Parameters": {
+        "id": 4
       }
     },
     {
@@ -55,7 +63,7 @@
       }
     },
     {
-      "Description": "HDMI Switch 0 to NES Mini",
+      "Description": "HDMI Switch 0 to Nt mini Noir",
       "DeviceType": "AtenVS0801H",
       "Function": "SetInputPort",
       "Parameters": {
