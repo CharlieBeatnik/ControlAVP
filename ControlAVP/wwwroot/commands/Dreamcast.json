@@ -46,11 +46,11 @@
       }
     },
     {
-      "Description": "Switch VGA Matrix to Dreamcast",
+      "Description": "Ensure No VGA Matrix Ties",
       "DeviceType": "ExtronMVX44VGA",
       "Function": "TieInputPortToAllOutputPorts",
       "Parameters": {
-        "inputPort": "Port1",
+        "inputPort": "NoTie",
         "tieType": "AudioVideo"
       }
     },
@@ -74,11 +74,11 @@
       "PostWait": 2.0
     },
     {
-      "Description": "Change OSSC to RGBHV",
+      "Description": "Change OSSC to RGBS",
       "DeviceType": "OSSC",
       "Function": "SendCommand",
       "Parameters": {
-        "commandName": "AV3RGBHV"
+        "commandName": "AV1RGBS"
       },
       "PostWait": 1.0
     },

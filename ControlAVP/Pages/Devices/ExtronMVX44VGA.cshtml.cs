@@ -57,7 +57,7 @@ namespace ControlAVP.Pages.Devices
             return RedirectToPage();
         }
 
-        public IActionResult OnPostTieInputPortTOutputPort(InputPort inputPort, OutputPort outputPort, TieType tieType)
+        public IActionResult OnPostTieInputPortToOutputPort(InputPort inputPort, OutputPort outputPort, TieType tieType)
         {
             _device.TieInputPortToOutputPort(inputPort, outputPort, tieType);
             DeviceInfoCache.TieState = _device.GetTieState();
