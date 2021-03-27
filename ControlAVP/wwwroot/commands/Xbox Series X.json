@@ -12,7 +12,7 @@
       }
     },
     {
-      "Description": "XboxOne On",
+      "Description": "Xbox Series X On",
       "DeviceType": "ApcAP8959EU3",
       "Function": "TurnOutletOn",
       "Parameters": {
