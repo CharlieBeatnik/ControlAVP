@@ -50,7 +50,7 @@ namespace Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(SocketException))]
         public void GivenInvalidHost_WhenNewDevice_ThenExceptionThrown()
         {
             using (var device = new SshDevice("0.0.0.0", _port, _username, _password, ApcAP8959EU3.TerminalPrompt))

@@ -182,6 +182,9 @@
     <PackageReference Include="NLog">
       <Version>4.7.9</Version>
     </PackageReference>
+    <PackageReference Include="SSH.NET">
+      <Version>2020.0.1</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\CommandProcessor\CommandProcessor.csproj">
@@ -199,10 +202,6 @@
     <ProjectReference Include="..\..\ControlRelay\ControlRelay.csproj">
       <Project>{e98566e4-cac9-4460-9baf-105d172124a4}</Project>
       <Name>ControlRelay</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\SSH.NET\src\Renci.SshNet.NETCore\Renci.SshNet.NETCore.csproj">
-      <Project>{d006ea14-4740-4b9d-bc8b-c1e909eeaed1}</Project>
-      <Name>Renci.SshNet.NETCore</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

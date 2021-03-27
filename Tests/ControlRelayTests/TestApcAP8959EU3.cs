@@ -70,7 +70,7 @@ namespace Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(SocketException))]
         public void GivenInvalidHost_WhenNewDevice_ThenExceptionThrown()
         {
             using (var device = new ApcAP8959EU3("0.0.0.0", _port, _username, _password))
