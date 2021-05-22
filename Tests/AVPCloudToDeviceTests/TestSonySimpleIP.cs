@@ -10,21 +10,21 @@ using System.Linq;
 
 namespace Tests
 {
-    public class TestSonyKDL60W855
+    public class TestSonySimpleIP
     {
         private dynamic _settings;
         private const string _settingsFile = "settings.json";
 
         private ServiceClient _serviceClient;
-        private SonyKDL60W855 _device;
+        private SonySimpleIP _device;
 
-        public TestSonyKDL60W855()
+        public TestSonySimpleIP()
         {
             using (StreamReader r = new StreamReader(_settingsFile))
             {
                 string json = r.ReadToEnd();
                 dynamic parsed = JsonConvert.DeserializeObject<ExpandoObject>(json, new ExpandoObjectConverter());
-                _settings = parsed.SonyKDL60W855;
+                _settings = parsed.SonySimpleIP;
             }
         }
 
@@ -37,7 +37,7 @@ namespace Tests
         public void Setup()
         {
             _serviceClient = ServiceClient.CreateFromConnectionString(_settings.ConnectionString);
-            _device = new SonyKDL60W855(_serviceClient, _settings.DeviceId);
+            _device = new SonySimpleIP(_serviceClient, _settings.DeviceId);
             _device.TurnOn();
         }
 

@@ -5,12 +5,12 @@ using System.IO;
 using Newtonsoft.Json.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
-using ControllableDeviceTypes.SonyKDL60W855Types;
+using ControllableDeviceTypes.SonySimpleIPTypes;
 
 namespace Tests
 {
     [TestClass]
-    public class TestSonyKDL60W855
+    public class TestSonySimpleIP
     {
         private const string _settingsFile = "settings.json";
         private static JToken _deviceSettings;
@@ -30,7 +30,7 @@ namespace Tests
                 jsonParsed = JObject.Parse(json);
             }
 
-            _deviceSettings = jsonParsed["Devices"]["SonyKDL60W855"][0];
+            _deviceSettings = jsonParsed["Devices"]["SonySimpleIP"][0];
         }
 
         [ClassCleanup]
@@ -57,16 +57,16 @@ namespace Tests
         }
 
 
-        public static SonyKDL60W855 CreateDevice()
+        public static SonySimpleIP CreateDevice()
         {
-            return new SonyKDL60W855(IPAddress.Parse(_deviceSettings["host"].ToString()),
+            return new SonySimpleIP(IPAddress.Parse(_deviceSettings["host"].ToString()),
                                      PhysicalAddress.Parse(_deviceSettings["physicalAddress"].ToString()),
                                      _deviceSettings["preSharedKey"].ToString());
         }
 
-        public static SonyKDL60W855 CreateInvalidIPDevice()
+        public static SonySimpleIP CreateInvalidIPDevice()
         {
-            return new SonyKDL60W855(IPAddress.Parse("192.0.2.0"),
+            return new SonySimpleIP(IPAddress.Parse("192.0.2.0"),
                                      PhysicalAddress.Parse(_deviceSettings["physicalAddress"].ToString()),
                                      _deviceSettings["preSharedKey"].ToString());
         }

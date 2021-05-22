@@ -1,16 +1,16 @@
 ﻿using Microsoft.Azure.Devices;
-using ControllableDeviceTypes.SonyKDL60W855Types;
+using ControllableDeviceTypes.SonySimpleIPTypes;
 using Newtonsoft.Json;
 using System;
 
 namespace AVPCloudToDevice
 {
-    public class SonyKDL60W855
+    public class SonySimpleIP
     {
         private ServiceClient _serviceClient;
         private string _deviceId;
 
-        public SonyKDL60W855(ServiceClient serviceClient, string deviceId)
+        public SonySimpleIP(ServiceClient serviceClient, string deviceId)
         {
             _serviceClient = serviceClient;
             _deviceId = deviceId;

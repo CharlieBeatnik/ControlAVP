@@ -2,7 +2,7 @@
 @model IndexModel
 @using ControllableDeviceTypes.ExtronDSC301HDTypes;
 @using ControllableDeviceTypes.OSSCTypes;
-@using ControllableDeviceTypes.SonyKDL60W855Types;
+@using ControllableDeviceTypes.SonySimpleIPTypes;
 @using System.Numerics;
 @{
     ViewData["Title"] = "ControlAVP";
@@ -72,7 +72,7 @@
 
             @if (Model.TvAvailable)
             {
-                <button type="submit" asp-page-handler="TVInputCycle" asp-route-input1=@ControllableDeviceTypes.SonyKDL60W855Types.InputPort.Hdmi1 asp-route-input2=@ControllableDeviceTypes.SonyKDL60W855Types.InputPort.Hdmi4 class="btn border btn-secondary">TV Cycle</button>
+                <button type="submit" asp-page-handler="TVInputCycle" asp-route-input1=@ControllableDeviceTypes.SonySimpleIPTypes.InputPort.Hdmi1 asp-route-input2=@ControllableDeviceTypes.SonySimpleIPTypes.InputPort.Hdmi4 class="btn border btn-secondary">TV Cycle</button>
             }
 
             <button type="submit" asp-page-handler="PowerOff" class="btn border btn-danger"><i class="fas fa-power-off"></i></button>

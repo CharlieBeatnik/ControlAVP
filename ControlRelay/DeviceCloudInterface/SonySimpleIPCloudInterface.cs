@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 using ControllableDevice;
 using Microsoft.Azure.Devices.Client;
 using Newtonsoft.Json;
-using ControllableDeviceTypes.SonyKDL60W855Types;
+using ControllableDeviceTypes.SonySimpleIPTypes;
 
 namespace ControlRelay
 {
-    class SonyKDL60W855CloudInterface : DeviceCloudInterface
+    class SonySimpleIPCloudInterface : DeviceCloudInterface
     {
-        private SonyKDL60W855 _device;
+        private SonySimpleIP _device;
 
-        public SonyKDL60W855CloudInterface(SonyKDL60W855 device)
+        public SonySimpleIPCloudInterface(SonySimpleIP device)
         {
             _device = device;
         }

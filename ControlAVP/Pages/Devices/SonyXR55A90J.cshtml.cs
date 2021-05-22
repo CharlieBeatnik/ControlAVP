@@ -8,17 +8,17 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Azure.Devices;
 using Microsoft.Extensions.Configuration;
 using AVPCloudToDevice;
-using ControllableDeviceTypes.SonyKDL60W855Types;
+using ControllableDeviceTypes.SonySimpleIPTypes;
 
 namespace ControlAVP.Pages.Devices
 {
-    public class SonyKDL60W855DeviceInfo
+    public class SonySimpleIPDeviceInfo
     {
         public PowerStatus? PowerStatus { get; set; }
         public InputPort? InputPort { get; set; }
     }
 
-    public class SonyKDL60W855Model : PageModel
+    public class SonySimpleIPModel : PageModel
     {
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _environment;
@@ -26,11 +26,11 @@ namespace ControlAVP.Pages.Devices
         private string _connectionString;
         private string _deviceId;
         private ServiceClient _serviceClient;
-        private SonyKDL60W855 _device;
+        private SonySimpleIP _device;
 
-        public SonyKDL60W855DeviceInfo DeviceInfoCache { get; private set; } = new SonyKDL60W855DeviceInfo();
+        public SonySimpleIPDeviceInfo DeviceInfoCache { get; private set; } = new SonySimpleIPDeviceInfo();
 
-        public SonyKDL60W855Model(IConfiguration configuration, IWebHostEnvironment environment)
+        public SonySimpleIPModel(IConfiguration configuration, IWebHostEnvironment environment)
         {
             _configuration = configuration;
             _environment = environment;
@@ -39,7 +39,7 @@ namespace ControlAVP.Pages.Devices
             _deviceId = _configuration.GetValue<string>("ControlAVPIoTHubDeviceId");
 
             _serviceClient = ServiceClient.CreateFromConnectionString(_connectionString);
-            _device = new SonyKDL60W855(_serviceClient, _deviceId);
+            _device = new SonySimpleIP(_serviceClient, _deviceId);
         }
 
         public void OnGet()

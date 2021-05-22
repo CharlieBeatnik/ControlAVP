@@ -1,4 +1,4 @@
-﻿using ControllableDeviceTypes.SonyKDL60W855Types;
+﻿using ControllableDeviceTypes.SonySimpleIPTypes;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Diagnostics;
@@ -9,7 +9,7 @@ using System.Threading;
 
 namespace ControllableDevice
 {
-    public class SonyKDL60W855 : IControllableDevice
+    public class SonySimpleIP : IControllableDevice
     {
         private bool _disposed;
         private JsonRpcDevice _jsonRpcDevice;
@@ -24,7 +24,7 @@ namespace ControllableDevice
         private readonly TimeSpan _fromOnToStandbyWait = TimeSpan.FromSeconds(1);
         private readonly TimeSpan _jsonRpcDeviceWebRequestTimeout = TimeSpan.MaxValue;
 
-        public SonyKDL60W855(IPAddress host, PhysicalAddress physicalAddress, string preSharedKey)
+        public SonySimpleIP(IPAddress host, PhysicalAddress physicalAddress, string preSharedKey)
         {
             _host = host;
             _physicalAddress = physicalAddress;

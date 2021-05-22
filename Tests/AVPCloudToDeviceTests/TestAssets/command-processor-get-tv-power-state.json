@@ -4,7 +4,7 @@
     {
       "Assembly": "ControllableDevice",
       "Description": "Check TV power status.",
-      "DeviceType": "SonyKDL60W855",
+      "DeviceType": "SonySimpleIP",
       "DeviceIndex": 0,
       "Function": "GetPowerStatus"
     }

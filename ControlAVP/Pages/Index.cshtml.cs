@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using ControllableDeviceTypes.ExtronDSC301HDTypes;
 using ControllableDeviceTypes.OSSCTypes;
 using ControllableDeviceTypes.ApcAP8959EU3Types;
-using ControllableDeviceTypes.SonyKDL60W855Types;
+using ControllableDeviceTypes.SonySimpleIPTypes;
 using Newtonsoft.Json;
 using System.Numerics;
 using System;
@@ -38,7 +38,7 @@ namespace ControlAVP.Pages
         private CommandDispatcher _cp;
         private ExtronDSC301HD _extronDSC301HD;
         private ApcAP8959EU3 _apcAP8959EU3;
-        private SonyKDL60W855 _sonyKDL60W855;
+        private SonySimpleIP _sonySimpleIP;
         private OSSC _ossc;
 
         private string _commandDirectory;
@@ -68,7 +68,7 @@ namespace ControlAVP.Pages
             _cp = new CommandDispatcher(_serviceClient, _deviceId);
             _extronDSC301HD = new ExtronDSC301HD(_serviceClient, _deviceId);
             _apcAP8959EU3 = new ApcAP8959EU3(_serviceClient, _deviceId);
-            _sonyKDL60W855 = new SonyKDL60W855(_serviceClient, _deviceId);
+            _sonySimpleIP = new SonySimpleIP(_serviceClient, _deviceId);
             _ossc = new OSSC(_serviceClient, _deviceId);
 
             _outlets = _apcAP8959EU3.GetOutlets();
@@ -121,7 +121,7 @@ namespace ControlAVP.Pages
                 GameCubeAvailable = gameCubeOutlet?.State == Outlet.PowerState.On;
             }
 
-            TvAvailable = _sonyKDL60W855.GetPowerStatus() == PowerStatus.On;
+            TvAvailable = _sonySimpleIP.GetPowerStatus() == PowerStatus.On;
 
             ScalerCardVisible = scalerCardVisible;
             OsscCardVisible = osscCardVisible;
@@ -176,11 +176,11 @@ namespace ControlAVP.Pages
             return RedirectToPage();
         }
 
-        public IActionResult OnPostTVInputCycle(ControllableDeviceTypes.SonyKDL60W855Types.InputPort input1, ControllableDeviceTypes.SonyKDL60W855Types.InputPort input2)
+        public IActionResult OnPostTVInputCycle(ControllableDeviceTypes.SonySimpleIPTypes.InputPort input1, ControllableDeviceTypes.SonySimpleIPTypes.InputPort input2)
         {
-            _sonyKDL60W855.SetInputPort(input1);
+            _sonySimpleIP.SetInputPort(input1);
             Thread.Sleep(TimeSpan.FromSeconds(3));
-            _sonyKDL60W855.SetInputPort(input2);
+            _sonySimpleIP.SetInputPort(input2);
             return RedirectToPage();
         }
 
@@ -199,7 +199,7 @@ namespace ControlAVP.Pages
                 }
             }
 
-            _sonyKDL60W855.TurnOff();
+            _sonySimpleIP.TurnOff();
 
             return RedirectToPage();
         }

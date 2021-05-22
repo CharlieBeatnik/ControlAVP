@@ -13,7 +13,7 @@
     },
     {
       "Description": "TV On",
-      "DeviceType": "SonyKDL60W855",
+      "DeviceType": "SonySimpleIP",
       "Function": "TurnOn",
       "Parameters": {
         "wait": "false"
@@ -102,7 +102,7 @@
     },
     {
       "Description": "TV HDMI1 for Not Rack",
-      "DeviceType": "SonyKDL60W855",
+      "DeviceType": "SonySimpleIP",
       "Function": "SetInputPort",
       "Parameters": {
         "inputPort": "Hdmi1"
@@ -143,11 +143,11 @@
       }
     },
     {
-      "Description": "TV HDMI4 for Rack",
-      "DeviceType": "SonyKDL60W855",
+      "Description": "TV HDMI1 for Rack",
+      "DeviceType": "SonySimpleIP",
       "Function": "SetInputPort",
       "Parameters": {
-        "inputPort": "Hdmi4"
+        "inputPort": "Hdmi1"
       }
     }
   ]

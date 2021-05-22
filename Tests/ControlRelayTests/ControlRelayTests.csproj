@@ -114,7 +114,7 @@
     <Compile Include="TestRs232Device.cs" />
     <Compile Include="TestOSSC.cs" />
     <Compile Include="TestSerialBlaster.cs" />
-    <Compile Include="TestSonyKDL60W855.cs" />
+    <Compile Include="TestSonySimpleIP.cs" />
     <Compile Include="TestSshDevice.cs" />
     <Compile Include="UnitTestApp.xaml.cs">
       <DependentUpon>UnitTestApp.xaml</DependentUpon>
@@ -177,10 +177,10 @@
       <Version>2.2.3</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.NET.Test.Sdk">
-      <Version>16.9.1</Version>
+      <Version>16.9.4</Version>
     </PackageReference>
     <PackageReference Include="NLog">
-      <Version>4.7.9</Version>
+      <Version>4.7.10</Version>
     </PackageReference>
     <PackageReference Include="SSH.NET">
       <Version>2020.0.1</Version>

@@ -12,7 +12,7 @@ using System;
 using Newtonsoft.Json.Linq;
 using System.Linq;
 using CommandProcessor;
-using ControllableDeviceTypes.SonyKDL60W855Types;
+using ControllableDeviceTypes.SonySimpleIPTypes;
 
 namespace Tests
 {
@@ -25,7 +25,7 @@ namespace Tests
         private ServiceClient _serviceClient;
         private CommandDispatcher _cd;
         private AtenVS0801H _hdmiDevice0, _hdmiDevice1;
-        private SonyKDL60W855 _tvDevice;
+        private SonySimpleIP _tvDevice;
         private SmartEventHubConsumer _smartEventHubConsumer;
         private CancellationTokenSource _cts;
 
@@ -63,7 +63,7 @@ namespace Tests
             _cd = new CommandDispatcher(_serviceClient, _commandExecuterSettings.DeviceId);
             _hdmiDevice0 = new AtenVS0801H(_serviceClient, _commandExecuterSettings.DeviceId, 0);
             _hdmiDevice1 = new AtenVS0801H(_serviceClient, _commandExecuterSettings.DeviceId, 1);
-            _tvDevice = new SonyKDL60W855(_serviceClient, _commandExecuterSettings.DeviceId);
+            _tvDevice = new SonySimpleIP(_serviceClient, _commandExecuterSettings.DeviceId);
         }
 
         [Test]

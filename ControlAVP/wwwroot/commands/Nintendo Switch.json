@@ -5,7 +5,7 @@
   "Commands": [
     {
       "Description": "TV On",
-      "DeviceType": "SonyKDL60W855",
+      "DeviceType": "SonySimpleIP",
       "Function": "TurnOn",
       "Parameters": {
         "wait": "true"
@@ -21,7 +21,7 @@
     },
     {
       "Description": "TV HDMI2 for Nintendo Switch",
-      "DeviceType": "SonyKDL60W855",
+      "DeviceType": "SonySimpleIP",
       "Function": "SetInputPort",
       "Parameters": {
         "inputPort": "Hdmi2"

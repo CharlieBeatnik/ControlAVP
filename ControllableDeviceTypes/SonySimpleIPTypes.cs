@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ControllableDeviceTypes
 {
-    namespace SonyKDL60W855Types
+    namespace SonySimpleIPTypes
     {
         public enum PowerStatus
         {
