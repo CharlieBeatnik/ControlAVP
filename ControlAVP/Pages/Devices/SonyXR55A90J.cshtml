@@ -70,23 +70,6 @@
                                 </div>
                             </td>
                         </tr>
-                        <tr>
-                            <td class="align-middle">
-                                <div class="btn-group">
-                                    @foreach (InputPort inputPort in new InputPort[] { InputPort.Scart1, InputPort.Component1, InputPort.Composite1 })
-                                    {
-                                        if (inputPort == Model.DeviceInfoCache.InputPort)
-                                        {
-                                            <button class="btn btn-success border disabled" disabled>@inputPortNames[inputPort]</button>
-                                        }
-                                        else
-                                        {
-                                            <button type="submit" asp-page-handler="SetInput" asp-route-inputport=@inputPort class="btn btn-light border">@inputPortNames[inputPort]</button>
-                                        }
-                                    }
-                                </div>
-                            </td>
-                        </tr>
                     }
                 </table>
             </div>
