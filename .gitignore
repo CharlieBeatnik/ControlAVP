@@ -262,3 +262,4 @@ __pycache__/
 **/settings.json
 !SerialBlaster/.vscode/settings.json
 SerialBlaster/build
+/ControlAVP/Properties/ServiceDependencies/controlAVP - Web Deploy/profile.arm.json

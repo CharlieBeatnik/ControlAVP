@@ -20,6 +20,14 @@
       }
     },
     {
+      "Description": "GameCube On",
+      "DeviceType": "ApcAP8959EU3",
+      "Function": "TurnOutletOn",
+      "Parameters": {
+        "id": 8
+      }
+    },
+    {
       "ExecuteAfter": 16.0,
       "Description": "Disable HDMI Switch 0 Output",
       "DeviceType": "AtenVS0801H",
