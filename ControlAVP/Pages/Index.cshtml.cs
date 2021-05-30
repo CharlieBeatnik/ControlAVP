@@ -48,10 +48,8 @@ namespace ControlAVP.Pages
 
         public IList<CommandInfo> CommandInfos { get; private set; }
         public bool RackDevicesAvailable { get; private set; }
-        public bool TvAvailable { get; private set; }
         public bool ScalerCardVisible { get; private set; }
         public bool OsscCardVisible { get; private set; }
-        public bool GameCubeAvailable { get; private set; }
 
         public IndexModel(IConfiguration configuration, IWebHostEnvironment environment)
         {
@@ -116,12 +114,7 @@ namespace ControlAVP.Pages
             {
                 var rackOutlet = _outlets.FirstOrDefault(o => o.Name == "Rack");
                 RackDevicesAvailable = rackOutlet?.State == Outlet.PowerState.On;
-
-                var gameCubeOutlet = _outlets.FirstOrDefault(o => o.Name == "GameCube");
-                GameCubeAvailable = gameCubeOutlet?.State == Outlet.PowerState.On;
             }
-
-            TvAvailable = _sonySimpleIP.GetPowerStatus() == PowerStatus.On;
 
             ScalerCardVisible = scalerCardVisible;
             OsscCardVisible = osscCardVisible;

@@ -64,15 +64,6 @@
             {
                 <button type="button" data-toggle="collapse" data-target="#scalerCollapse" class="btn border btn-secondary">Scaler</button>
                 <button type="button" data-toggle="collapse" data-target="#osscCollapse" class="btn border btn-secondary">OSSC</button>
-                @if (Model.GameCubeAvailable)
-                {
-                    <button type="submit" asp-page-handler="OSSCProfileCycle" asp-route-profile1=@ProfileName.Profile2 asp-route-profile2=@ProfileName.Profile1 class="btn border btn-purple">GC Reset</button>
-                }
-            }
-
-            @if (Model.TvAvailable)
-            {
-                <button type="submit" asp-page-handler="TVInputCycle" asp-route-input1=@ControllableDeviceTypes.SonySimpleIPTypes.InputPort.Hdmi1 asp-route-input2=@ControllableDeviceTypes.SonySimpleIPTypes.InputPort.Hdmi4 class="btn border btn-secondary">TV Cycle</button>
             }
 
             <button type="submit" asp-page-handler="PowerOff" class="btn border btn-danger"><i class="fas fa-power-off"></i></button>
