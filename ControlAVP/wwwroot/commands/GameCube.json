@@ -25,10 +25,10 @@
       "Function": "TurnOutletOn",
       "Parameters": {
         "id": 8
-      },
-      "PostWait": 35.0
+      }
     },
     {
+      "ExecuteAfter": 16.0,
       "Description": "Disable HDMI Switch 0 Output",
       "DeviceType": "AtenVS0801H",
       "Function": "SetOutput",
@@ -43,91 +43,6 @@
       "Function": "SetOutput",
       "Parameters": {
         "enable": "false"
-      }
-    },
-    {
-      "Description": "Scaler to HDMI",
-      "DeviceType": "ExtronDSC301HD",
-      "Function": "SetInputPort",
-      "Parameters": {
-        "inputPort": "HDMI"
-      }
-    },
-    {
-      "Description": "Scaler to Output Rate for GameCube",
-      "DeviceType": "ExtronDSC301HD",
-      "Function": "SetOutputRateWithoutEdid",
-      "Parameters": {
-        "width": 1920,
-        "height": 1080,
-        "refreshRate": 60.0
-      },
-      "PostWait": 2.0
-    },
-    {
-      "Description": "Change OSSC to YPbPr",
-      "DeviceType": "OSSC",
-      "Function": "SendCommand",
-      "Parameters": {
-        "commandName": "AV2YPbPr"
-      },
-      "PostWait": 1.0
-    },
-    {
-      "Description": "Load OSSC Profile for Game Cube",
-      "DeviceType": "OSSC",
-      "Function": "LoadProfile",
-      "Parameters": {
-        "profileName": "Profile1"
-      },
-      "PostWait": 2.0
-    },
-    {
-      "Description": "Load OSSC Reset Profile",
-      "DeviceType": "OSSC",
-      "Function": "LoadProfile",
-      "Parameters": {
-        "profileName": "Profile2"
-      },
-      "PostWait": 3.0
-    },
-    {
-      "Description": "Load OSSC Profile for Game Cube",
-      "DeviceType": "OSSC",
-      "Function": "LoadProfile",
-      "Parameters": {
-        "profileName": "Profile1"
-      },
-      "PostWait": 3.0
-    },
-    {
-      "Description": "Scale Fit Preserve Ratio",
-      "DeviceType": "ExtronDSC301HD",
-      "Function": "Scale",
-      "Parameters": {
-        "scaleType": "Fit",
-        "positionType": "Centre",
-        "aspectRatio": "RatioPreserve",
-        "padding": {
-          "X": 0,
-          "Y": 0
-        }
-      }
-    },
-    {
-      "Description": "Set Brightness",
-      "DeviceType": "ExtronDSC301HD",
-      "Function": "SetBrightness",
-      "Parameters": {
-        "value": 60
-      }
-    },
-    {
-      "Description": "TV HDMI1 for Not Rack",
-      "DeviceType": "SonySimpleIP",
-      "Function": "SetInputPort",
-      "Parameters": {
-        "inputPort": "Hdmi1"
       }
     },
     {
@@ -148,24 +63,24 @@
       }
     },
     {
-      "Description": "HDMI Switch 0 to Scaler",
+      "Description": "HDMI Switch 0 Not Used",
       "DeviceType": "AtenVS0801H",
       "Function": "SetInputPort",
       "Parameters": {
-        "inputPort": "Port2"
+        "inputPort": "Port1"
       }
     },
     {
-      "Description": "HDMI Switch 1 Passthrough",
+      "Description": "HDMI Switch 1 to Game Cube",
       "DeviceType": "AtenVS0801H",
       "DeviceIndex": 1,
       "Function": "SetInputPort",
       "Parameters": {
-        "inputPort": "Port1"
-      },
-      "PostWait": 2.0
+        "inputPort": "Port7"
+      }
     },
     {
+      "ExecuteAfter": 35.0,
       "Description": "TV HDMI1 for Rack",
       "DeviceType": "SonySimpleIP",
       "Function": "SetInputPort",
