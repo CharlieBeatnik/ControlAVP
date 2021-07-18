@@ -19,5 +19,14 @@ namespace ControllableDeviceTypes
             public float Watts { get; set; }
             public float Amps { get; set; }
         }
+
+        public class Phase
+        {
+            public int Id { get; set; }
+            public float Watts { get; set; }
+            public float Amps { get; set; }
+
+            public float Voltage { get; set; }
+        }
     }
 }

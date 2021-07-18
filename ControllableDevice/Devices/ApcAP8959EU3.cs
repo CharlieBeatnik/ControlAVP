@@ -110,7 +110,7 @@ namespace ControllableDevice
             // Initially populate Outlet dictionary with information parsed from olStatus all
             foreach (string line in olStatusAll)
             {
-                bool success = ParseCommonLine(line, out id, out name, out tail);
+                bool success = ParseOlReadingCommonLine(line, out id, out name, out tail);
                 if (success)
                 {
                     Match match = Regex.Match(tail, @"^([A-Za-z]+)([*]*) *$");
@@ -132,7 +132,7 @@ namespace ControllableDevice
                 // Populate additional information parsed from power command
                 foreach (string line in olReadingAllPower)
                 {
-                    bool success = ParseCommonLine(line, out id, out name, out tail);
+                    bool success = ParseOlReadingCommonLine(line, out id, out name, out tail);
                     if (success)
                     {
                         Match match = Regex.Match(tail, @"^([0-9.]+) W *$");
@@ -156,7 +156,7 @@ namespace ControllableDevice
                 // Populate additional information parsed from current command
                 foreach (string line in olReadingAllCurrent)
                 {
-                    bool success = ParseCommonLine(line, out id, out name, out tail);
+                    bool success = ParseOlReadingCommonLine(line, out id, out name, out tail);
                     if (success)
                     {
                         Match match = Regex.Match(tail, @"^([0-9.]+) A *$");
@@ -182,7 +182,81 @@ namespace ControllableDevice
             }
         }
 
-        private static bool ParseCommonLine(string line, out int id, out string name, out string tail)
+        public IEnumerable<Phase> GetPhases()
+        {
+            Dictionary<int, Phase> phase = new Dictionary<int, Phase>();
+
+            int id;
+            string tail;
+
+            //Get power of all phases in Watts
+            var phReadingAllPower = _sshDevice.ExecuteCommand("phReading all power");
+            Debug.Assert(phReadingAllPower != null);
+            foreach (string line in phReadingAllPower)
+            {
+                bool success = ParsePhReadingCommonLine(line, out id, out tail);
+                if (success)
+                {
+                    Match match = Regex.Match(tail, @"^([0-9.]+) kW*$");
+                    if (match.Success)
+                    {
+                        float watts = (float.Parse(match.Groups[1].Value) * 1000); //kW to W
+                        phase.Add(id, new Phase() { Id = id, Watts = watts });
+                    }
+                }
+            }
+
+            //Get current of all phases in Amps
+            var phReadingAllCurrent = _sshDevice.ExecuteCommand("phReading all current");
+            Debug.Assert(phReadingAllCurrent != null);
+            foreach (string line in phReadingAllCurrent)
+            {
+                bool success = ParsePhReadingCommonLine(line, out id, out tail);
+                if (success)
+                {
+                    Match match = Regex.Match(tail, @"^([0-9.]+) A*$");
+                    if (match.Success)
+                    {
+                        Phase foundPhase;
+                        if (phase.TryGetValue(id, out foundPhase))
+                        {
+                            foundPhase.Amps = float.Parse(match.Groups[1].Value);
+                        }
+                    }
+                }
+            }
+
+            //Get voltage of all phases in Volts
+            var phReadingAllVoltage = _sshDevice.ExecuteCommand("phReading all voltage");
+            Debug.Assert(phReadingAllVoltage != null);
+            foreach (string line in phReadingAllVoltage)
+            {
+                bool success = ParsePhReadingCommonLine(line, out id, out tail);
+                if (success)
+                {
+                    Match match = Regex.Match(tail, @"^([0-9.]+) V*$");
+                    if (match.Success)
+                    {
+                        Phase foundPhase;
+                        if (phase.TryGetValue(id, out foundPhase))
+                        {
+                            foundPhase.Voltage = float.Parse(match.Groups[1].Value);
+                        }
+                    }
+                }
+            }
+
+            if (phase.Values.Count > 0)
+            {
+                return phase.Values;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        private static bool ParseOlReadingCommonLine(string line, out int id, out string name, out string tail)
         {
             // Examples
             // 21: Outlet 21: Off
@@ -201,6 +275,28 @@ namespace ControllableDevice
             {
                 id = -1;
                 name = string.Empty;
+                tail = string.Empty;
+                return false;
+            }
+        }
+
+        private static bool ParsePhReadingCommonLine(string line, out int id, out string tail)
+        {
+            // Examples
+            // 1: 0.13 kVA
+            // 2: 0.04 kW
+            // 3: 257 V
+            // 4: 0.5 A
+            Match match = Regex.Match(line, @"^ *([0-9]+): (.+)$");
+            if (match.Success)
+            {
+                id = int.Parse(match.Groups[1].Value);
+                tail = match.Groups[2].Value;
+                return true;
+            }
+            else
+            {
+                id = -1;
                 tail = string.Empty;
                 return false;
             }

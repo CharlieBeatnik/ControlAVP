@@ -63,11 +63,26 @@ namespace Tests
         {
             using (var device = CreateDevice())
             {
-                var outlets = device.GetOutlets();
+                var outlets = device.GetOutlets(true, true);
                 Assert.IsNotNull(outlets);
                 Assert.IsTrue(outlets.Count() == 24);
             }
         }
+
+        [TestMethod]
+        public void GivenDevice_WhenGetPhases_ThenFirstPhaseVoltageIsGreaterThan220()
+        {
+            using (var device = CreateDevice())
+            {
+                var phase = device.GetPhases();
+
+                Assert.IsNotNull(phase);
+                Assert.IsTrue(phase.Count() >= 1);
+
+                Assert.IsTrue(phase.First().Voltage > 220);
+            }
+        }
+
 
         [TestMethod]
         [ExpectedException(typeof(SocketException))]
