@@ -16,11 +16,12 @@ namespace AVPCloudToDevice
             _deviceId = deviceId;
         }
 
-        public IEnumerable<Outlet> GetOutlets()
+        public IEnumerable<Outlet> GetOutlets(bool getPower = false, bool getCurrent = false)
         {
             try
             {
-                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "PDUGetOutlets", null);
+                var payload = new { getPower, getCurrent };
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "PDUGetOutlets", payload);
                 string json = response.GetPayloadAsJson();
                 return JsonConvert.DeserializeObject<List<Outlet>>(json);
             }
@@ -30,11 +31,12 @@ namespace AVPCloudToDevice
             }
         }
 
-        public IEnumerable<Outlet> GetOutletsWaitForPending()
+        public IEnumerable<Outlet> GetOutletsWaitForPending(bool getPower = false, bool getCurrent = false)
         {
             try
             {
-                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "PDUGetOutletsWaitForPending", null);
+                var payload = new { getPower, getCurrent };
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "PDUGetOutletsWaitForPending", payload);
                 string json = response.GetPayloadAsJson();
                 return JsonConvert.DeserializeObject<List<Outlet>>(json);
             }

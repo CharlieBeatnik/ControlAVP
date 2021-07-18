@@ -29,7 +29,14 @@ namespace ControlRelay
 
         private Task<MethodResponse> GetOutlets(MethodRequest methodRequest, object userContext)
         {
-            var result = _device.GetOutlets();
+            var payloadDefintion = new
+            {
+                getPower = false,
+                getCurrent = false
+            };
+
+            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
+            var result = _device.GetOutlets(payload.getPower, payload.getCurrent);
 
             if (result != null)
             {
@@ -43,7 +50,14 @@ namespace ControlRelay
 
         private Task<MethodResponse> GetOutletsWaitForPending(MethodRequest methodRequest, object userContext)
         {
-            var result = _device.GetOutletsWaitForPending();
+            var payloadDefintion = new
+            {
+                getPower = false,
+                getCurrent = false
+            };
+
+            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
+            var result = _device.GetOutletsWaitForPending(payload.getPower, payload.getCurrent);
 
             if (result != null)
             {
@@ -54,6 +68,7 @@ namespace ControlRelay
                 return methodRequest.GetMethodResponse(false);
             }
         }
+
 
         private Task<MethodResponse> TurnOutletOn(MethodRequest methodRequest, object userContext)
         {

@@ -46,7 +46,7 @@ namespace ControllableDevice
             return outlets.Count() == _outletCount;
         }
 
-        public IEnumerable<Outlet> GetOutletsWaitForPending()
+        public IEnumerable<Outlet> GetOutletsWaitForPending(bool getPower = false, bool getCurrent = false)
         {
             IEnumerable<Outlet> outlets;
             bool pendingFound;
@@ -54,7 +54,7 @@ namespace ControllableDevice
             do
             {
                 pendingFound = false;
-                outlets = GetOutlets();
+                outlets = GetOutlets(getPower, getCurrent);
 
                 // If any ids are found to have a pending state then run the query again
                 var pendingSearch = outlets.ToList().FindAll(o => o.Pending == true);
@@ -69,7 +69,7 @@ namespace ControllableDevice
             return outlets;
         }
 
-        public IEnumerable<Outlet> GetOutletsWaitForPending(List<int> outletIds)
+        public IEnumerable<Outlet> GetOutletsWaitForPending(List<int> outletIds, bool getPower = false, bool getCurrent = false)
         {
             IEnumerable<Outlet> outlets;
             bool pendingFound;
@@ -77,7 +77,7 @@ namespace ControllableDevice
             do
             {
                 pendingFound = false;
-                outlets = GetOutlets();
+                outlets = GetOutlets(getPower, getCurrent);
 
                 // If any ids from outletIds are found to have a pending state then run the query again
                 var pendingSearch = outlets.ToList().FindAll(o =>

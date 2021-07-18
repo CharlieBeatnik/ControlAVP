@@ -51,7 +51,7 @@ namespace ControlAVP.Pages.Devices
         public ActionResult OnGetOutletTable()
         {
             var outletTableViewModel = new OutletTableViewModel();
-            outletTableViewModel.Outlets = _pdu.GetOutlets();
+            outletTableViewModel.Outlets = _pdu.GetOutlets(true, false);
             outletTableViewModel.WebRootPath = _environment.WebRootPath;
             outletTableViewModel.OutletConfirmation = _configuration.GetSection("OutletConfirmation").Get<string[]>();
 
