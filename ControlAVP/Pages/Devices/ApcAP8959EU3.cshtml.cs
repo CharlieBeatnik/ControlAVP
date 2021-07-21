@@ -19,6 +19,7 @@ namespace ControlAVP.Pages.Devices
         public IEnumerable<Outlet> Outlets { get; set; }
         public string WebRootPath { get; set; }
         public IEnumerable<string> OutletConfirmation { get; set; }
+        public IEnumerable<Phase> Phases { get; set; }
     }
 
     public class ApcAP8959EU3Model : PageModel
@@ -54,6 +55,7 @@ namespace ControlAVP.Pages.Devices
             outletTableViewModel.Outlets = _pdu.GetOutlets(true, false);
             outletTableViewModel.WebRootPath = _environment.WebRootPath;
             outletTableViewModel.OutletConfirmation = _configuration.GetSection("OutletConfirmation").Get<string[]>();
+            outletTableViewModel.Phases = _pdu.GetPhases();
 
             var viewData = new ViewDataDictionary(new Microsoft.AspNetCore.Mvc.ModelBinding.EmptyModelMetadataProvider(), new Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary()) { { "OutletTableViewModel", outletTableViewModel } };
             viewData.Model = outletTableViewModel;
@@ -80,9 +82,10 @@ namespace ControlAVP.Pages.Devices
             }
 
             var outletTableViewModel = new OutletTableViewModel();
-            outletTableViewModel.Outlets = _pdu.GetOutletsWaitForPending();
+            outletTableViewModel.Outlets = _pdu.GetOutletsWaitForPending(true, false);
             outletTableViewModel.WebRootPath = _environment.WebRootPath;
             outletTableViewModel.OutletConfirmation = _configuration.GetSection("OutletConfirmation").Get<string[]>();
+            outletTableViewModel.Phases = _pdu.GetPhases();
 
             var viewData = new ViewDataDictionary(new Microsoft.AspNetCore.Mvc.ModelBinding.EmptyModelMetadataProvider(), new Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary()) { { "OutletTableViewModel", outletTableViewModel } };
             viewData.Model = outletTableViewModel;
