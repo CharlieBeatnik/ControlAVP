@@ -25,6 +25,7 @@ namespace ControlRelay
             yield return new MethodHandlerInfo("PDUTurnOutletOn", TurnOutletOn);
             yield return new MethodHandlerInfo("PDUTurnOutletOff", TurnOutletOff);
             yield return new MethodHandlerInfo("PDUGetAvailable", GetAvailable);
+            yield return new MethodHandlerInfo("PDUGetPhases", GetPhases);
         }
 
         private Task<MethodResponse> GetOutlets(MethodRequest methodRequest, object userContext)
@@ -106,6 +107,12 @@ namespace ControlRelay
         private Task<MethodResponse> GetAvailable(MethodRequest methodRequest, object userContext)
         {
             var result = _device.GetAvailable();
+            return methodRequest.GetMethodResponseSerialize(true, result);
+        }
+
+        private Task<MethodResponse> GetPhases(MethodRequest methodRequest, object userContext)
+        {
+            var result = _device.GetPhases();
             return methodRequest.GetMethodResponseSerialize(true, result);
         }
     }

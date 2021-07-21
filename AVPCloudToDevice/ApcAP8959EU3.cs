@@ -95,5 +95,20 @@ namespace AVPCloudToDevice
                 return false;
             }
         }
+
+        public IEnumerable<Phase> GetPhases()
+        {
+            try
+            {
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "PDUGetPhases", null);
+                string json = response.GetPayloadAsJson();
+                return JsonConvert.DeserializeObject<List<Phase>>(json);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
     }
 }

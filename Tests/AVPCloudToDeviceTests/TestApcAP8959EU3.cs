@@ -88,5 +88,16 @@ namespace Tests
         {
             Assert.IsFalse(_device.TurnOutletOff(_invalidOutletId));
         }
+
+        [Test]
+        public void GivenDevice_WhenGetPhases_ThenFirstPhaseVoltageIsGreaterThan220()
+        {
+            var phase = _device.GetPhases();
+
+            Assert.IsNotNull(phase);
+            Assert.IsTrue(phase.Any());
+
+            Assert.IsTrue(phase.First().Voltage > 220);
+        }
     }
 }
