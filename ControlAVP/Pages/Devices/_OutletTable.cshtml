@@ -43,15 +43,16 @@
                         var styleWidth = $@"width: {phase.Watts / (2500 / 100)}%;";
                     }
                     <div class="progress-bar progress-bar-striped progress-bar-animated @wattsColour"
-                            role="progressbar"
-                            aria-valuenow="@phase.Watts"
-                            aria-valuemin="0"
-                            aria-valuemax="2500"
-                            style="@styleWidth">
+                         role="progressbar"
+                         aria-valuenow="@phase.Watts"
+                         aria-valuemin="0"
+                         aria-valuemax="2500"
+                         style="@styleWidth">
                     </div>
                     <small class="justify-content-center d-flex position-absolute w-100" style="padding-top: 1px;">@(phase.Watts)W</small>
                 </div>
             </td>
+            <td class="align-middle text-nowrap" width=1%>Voltage <span class="badge badge-primary">@(phase.Voltage)V</span></td>
         </tr>
     </table>
 }
