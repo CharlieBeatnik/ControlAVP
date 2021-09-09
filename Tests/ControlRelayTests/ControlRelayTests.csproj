@@ -105,6 +105,7 @@
     <Compile Include="DummyDevice.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="TestAtenVS0801HB.cs" />
     <Compile Include="TestCommandProcessor.cs" />
     <Compile Include="TestExtronMVX44VGA.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

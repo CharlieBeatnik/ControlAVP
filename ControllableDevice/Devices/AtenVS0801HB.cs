@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Windows.Devices.SerialCommunication;
-using ControllableDeviceTypes.AtenVS0801HTypes;
+using ControllableDeviceTypes.AtenVS0801HBTypes;
 
 namespace ControllableDevice
 {
@@ -93,14 +93,14 @@ namespace ControllableDevice
             string result = string.Empty;
             switch (mode)
             {
-                case SwitchMode.Default:
-                    result = _rs232Device.WriteWithResponse("swmode default", $"^swmode default {_respSuccess}$");
+                case SwitchMode.Off:
+                    result = _rs232Device.WriteWithResponse("swmode default", $"^swmode off {_respSuccess}$");
                     break;
                 case SwitchMode.Next:
                     result = _rs232Device.WriteWithResponse("swmode next", $"^swmode next {_respSuccess}$");
                     break;
-                case SwitchMode.Auto:
-                    result = _rs232Device.WriteWithResponse($"swmode i{inputPort:00} auto", $"^swmode i{inputPort:00} auto {_respSuccess}$");
+                case SwitchMode.Priority:
+                    result = _rs232Device.WriteWithResponse($"swmode i{inputPort:00} priority", $"^swmode i{inputPort:00} priority {_respSuccess}$");
                     break;
                 default:
                     Debug.Assert(false, "Unkown SwitchMode");
@@ -110,11 +110,11 @@ namespace ControllableDevice
             return result != null;
         }
 
-        public bool SetGoTo(bool enable)
+        public bool SetPowerOnDetection(bool enable)
         {
             if (!_rs232Device.Enabled) return false;
 
-            var write = string.Format("swmode goto {0}", enable ? "on" : "off");
+            var write = string.Format("swmode pod {0}", enable ? "on" : "off");
             var result = _rs232Device.WriteWithResponse(write, $"{write} {_respSuccess}");
             return result != null;
         }
@@ -149,18 +149,18 @@ namespace ControllableDevice
                 Debug.Assert(match.Success);
                 switch (match.Groups[1].Value)
                 {
-                    case "Default": state.Mode = SwitchMode.Default; break;
+                    case "Off": state.Mode = SwitchMode.Off; break;
                     case "Next": state.Mode = SwitchMode.Next; break;
-                    case "Auto": state.Mode = SwitchMode.Auto; break;
+                    case "Priority": state.Mode = SwitchMode.Priority; break;
                     default:
                         Debug.Assert(false, "Unknown SwitchMode");
                         break;
                 }
 
-                //GoTo
-                match = Regex.Match(responses[4], @"^Goto: ([A-Z]+)$");
+                //Power On Detection (POD)
+                match = Regex.Match(responses[4], @"^POD: ([A-Z]+)$");
                 Debug.Assert(match.Success);
-                state.GoTo = match.Groups[1].Value == "ON";
+                state.PowerOnDetection = match.Groups[1].Value == "ON";
 
                 //Firmware
                 match = Regex.Match(responses[5], @"^F/W: V([0-9]+).([0-9]+).([0-9]+)$");
