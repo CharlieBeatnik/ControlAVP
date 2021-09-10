@@ -18,7 +18,7 @@ namespace Tests
         private ServiceClient _serviceClient;
         private List<AtenVS0801H> _devices = new List<AtenVS0801H>();
 
-        private uint _invalidHdmiSwitchId = 999;
+        private uint _invalidDeviceIndex = 999;
         private int _invalidInputPort = 999;
 
         public TestAtenVS0801H()
@@ -101,41 +101,41 @@ namespace Tests
         }
 
         [Test]
-        public void GivenDeviceWithInvalidHdmiSwitchId_WhenGetState_ThenStateIsNull()
+        public void GivenDeviceWithInvalidDeviceIndex_WhenGetState_ThenStateIsNull()
         {
-            var device = new AtenVS0801H(_serviceClient, _settings.DeviceId, _invalidHdmiSwitchId);
+            var device = new AtenVS0801H(_serviceClient, _settings.DeviceId, _invalidDeviceIndex);
             var state = device.GetState();
             Assert.IsNull(state);
         }
 
         [Test]
-        public void GivenDeviceWithInvalidHdmiSwitchId_WhenGetAvailable_ThenAvailableIsFalse()
+        public void GivenDeviceWithInvalidDeviceIndex_WhenGetAvailable_ThenAvailableIsFalse()
         {
-            var device = new AtenVS0801H(_serviceClient, _settings.DeviceId, _invalidHdmiSwitchId);
+            var device = new AtenVS0801H(_serviceClient, _settings.DeviceId, _invalidDeviceIndex);
             var available = device.GetAvailable();
             Assert.IsFalse(available);
         }
 
         [Test]
-        public void GivenDeviceWithInvalidHdmiSwitchId_WhenGoToNextInput_ThenSuccessIsFalse()
+        public void GivenDeviceWithInvalidDeviceIndex_WhenGoToNextInput_ThenSuccessIsFalse()
         {
-            var device = new AtenVS0801H(_serviceClient, _settings.DeviceId, _invalidHdmiSwitchId);
+            var device = new AtenVS0801H(_serviceClient, _settings.DeviceId, _invalidDeviceIndex);
             var success = device.GoToNextInput();
             Assert.IsFalse(success);
         }
 
         [Test]
-        public void GivenDeviceWithInvalidHdmiSwitchId_WhenGoToPreviousInput_ThenSuccessIsFalse()
+        public void GivenDeviceWithInvalidDeviceIndex_WhenGoToPreviousInput_ThenSuccessIsFalse()
         {
-            var device = new AtenVS0801H(_serviceClient, _settings.DeviceId, _invalidHdmiSwitchId);
+            var device = new AtenVS0801H(_serviceClient, _settings.DeviceId, _invalidDeviceIndex);
             var success = device.GoToPreviousInput();
             Assert.IsFalse(success);
         }
 
         [Test]
-        public void GivenDeviceWithInvalidHdmiSwitchId_WhenSetInput_ThenSuccessIsFalse()
+        public void GivenDeviceWithInvalidDeviceIndex_WhenSetInput_ThenSuccessIsFalse()
         {
-            var device = new AtenVS0801H(_serviceClient, _settings.DeviceId, _invalidHdmiSwitchId);
+            var device = new AtenVS0801H(_serviceClient, _settings.DeviceId, _invalidDeviceIndex);
             var success = device.SetInputPort(InputPort.Port1);
             Assert.IsFalse(success);
         }

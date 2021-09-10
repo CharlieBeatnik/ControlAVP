@@ -9,20 +9,20 @@ namespace AVPCloudToDevice
     {
         private ServiceClient _serviceClient;
         private string _deviceId;
-        private uint _deviceIdx;
+        private uint _deviceIndex;
 
-        public AtenVS0801HB(ServiceClient serviceClient, string deviceId, uint deviceIdx)
+        public AtenVS0801HB(ServiceClient serviceClient, string deviceId, uint deviceIndex)
         {
             _serviceClient = serviceClient;
             _deviceId = deviceId;
-            _deviceIdx = deviceIdx;
+            _deviceIndex = deviceIndex;
         }
 
         public State GetState()
         {
             try
             {
-                var payload = new { _deviceIdx };
+                var payload = new { _deviceIndex };
 
                 var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "AtenVS0801HBGetState", payload);
                 string json = response.GetPayloadAsJson();
@@ -40,7 +40,7 @@ namespace AVPCloudToDevice
             {
                 var payload = new
                 {
-                    _deviceIdx,
+                    _deviceIndex,
                     inputPort
                 };
 
@@ -57,7 +57,7 @@ namespace AVPCloudToDevice
         {
             try
             {
-                var payload = new { _deviceIdx };
+                var payload = new { _deviceIndex };
 
                 var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "AtenVS0801HBGetAvailable", payload);
                 string json = response.GetPayloadAsJson();

@@ -28,12 +28,12 @@ namespace ControlRelay
 
         private Task<MethodResponse> GetState(MethodRequest methodRequest, object userContext)
         {
-            var payloadDefintion = new { _deviceIdx = -1 };
+            var payloadDefintion = new { _deviceIndex = -1 };
 
             var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
-            if (DeviceIdValid(payload._deviceIdx))
+            if (DeviceIndexValid(payload._deviceIndex))
             {
-                var result = _devices[payload._deviceIdx].GetState();
+                var result = _devices[payload._deviceIndex].GetState();
                 if (result != null)
                 {
                     return methodRequest.GetMethodResponseSerialize(true, result);
@@ -47,14 +47,14 @@ namespace ControlRelay
         {
             var payloadDefintion = new
             {
-                _deviceIdx = -1,
+                _deviceIndex = -1,
                 inputPort = (InputPort)(-1)
             };
 
             var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
-            if (DeviceIdValid(payload._deviceIdx) && payload.inputPort.Valid())
+            if (DeviceIndexValid(payload._deviceIndex) && payload.inputPort.Valid())
             {
-                bool success = _devices[payload._deviceIdx].SetInputPort(payload.inputPort);
+                bool success = _devices[payload._deviceIndex].SetInputPort(payload.inputPort);
                 return methodRequest.GetMethodResponse(success);
             }
 
@@ -63,21 +63,21 @@ namespace ControlRelay
 
         private Task<MethodResponse> GetAvailable(MethodRequest methodRequest, object userContext)
         {
-            var payloadDefintion = new { _deviceIdx = -1 };
+            var payloadDefintion = new { _deviceIndex = -1 };
 
             var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
-            if (DeviceIdValid(payload._deviceIdx))
+            if (DeviceIndexValid(payload._deviceIndex))
             {
-                var result = _devices[payload._deviceIdx].GetAvailable();
+                var result = _devices[payload._deviceIndex].GetAvailable();
                 return methodRequest.GetMethodResponseSerialize(true, result);
             }
 
             return methodRequest.GetMethodResponse(false);
         }
 
-        private bool DeviceIdValid(int deviceIdx)
+        private bool DeviceIndexValid(int deviceIndex)
         {
-            return (deviceIdx >= 0 && deviceIdx < _devices.Count);
+            return (deviceIndex >= 0 && deviceIndex < _devices.Count);
         }
     }
 }
