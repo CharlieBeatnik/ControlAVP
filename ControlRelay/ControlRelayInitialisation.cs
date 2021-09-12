@@ -22,14 +22,17 @@ namespace ControlRelay
             var atenVS0801H = _devices.OfType<AtenVS0801H>().ToList();
             AddCloudInterface(() => new AtenVS0801HCloudInterface(atenVS0801H), deviceCloudInterfaces);
 
+            var atenVS0801HB = _devices.OfType<AtenVS0801HB>().ToList();
+            AddCloudInterface(() => new AtenVS0801HBCloudInterface(atenVS0801HB), deviceCloudInterfaces);
+
             var apcAP8959EU3 = _devices.OfType<ApcAP8959EU3>().First();
             AddCloudInterface(() => new ApcAP8959EU3CloudInterface(apcAP8959EU3), deviceCloudInterfaces);
 
             var extronDSC301HD = _devices.OfType<ExtronDSC301HD>().First();
             AddCloudInterface(() => new ExtronDSC301HDCloudInterface(extronDSC301HD), deviceCloudInterfaces);
 
-            var SonySimpleIP = _devices.OfType<SonySimpleIP>().First();
-            AddCloudInterface(() => new SonySimpleIPCloudInterface(SonySimpleIP), deviceCloudInterfaces);
+            var sonySimpleIP = _devices.OfType<SonySimpleIP>().First();
+            AddCloudInterface(() => new SonySimpleIPCloudInterface(sonySimpleIP), deviceCloudInterfaces);
 
             var extronMVX44VGA = _devices.OfType<ExtronMVX44VGA>().First();
             AddCloudInterface(() => new ExtronMVX44VGACloudInterface(extronMVX44VGA), deviceCloudInterfaces);

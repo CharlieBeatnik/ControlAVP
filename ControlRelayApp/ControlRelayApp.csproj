@@ -125,6 +125,9 @@
     <Compile Include="..\ControlRelay\DeviceCloudInterface\ApcAP8959EU3CloudInterface.cs">
       <Link>DeviceCloudInterface\ApcAP8959EU3CloudInterface.cs</Link>
     </Compile>
+    <Compile Include="..\ControlRelay\DeviceCloudInterface\AtenVS0801HBCloudInterface.cs">
+      <Link>DeviceCloudInterface\AtenVS0801HBCloudInterface.cs</Link>
+    </Compile>
     <Compile Include="..\ControlRelay\DeviceCloudInterface\AtenVS0801HCloudInterface.cs">
       <Link>DeviceCloudInterface\AtenVS0801HCloudInterface.cs</Link>
     </Compile>
@@ -143,6 +146,9 @@
     <Compile Include="..\ControlRelay\DeviceCloudInterface\OSSCCloudInterface.cs">
       <Link>DeviceCloudInterface\OSSCCloudInterface.cs</Link>
     </Compile>
+    <Compile Include="..\ControlRelay\DeviceCloudInterface\SonySimpleIPCloudInterface.cs">
+      <Link>DeviceCloudInterface\SonySimpleIPCloudInterface.cs</Link>
+    </Compile>
     <Compile Include="..\ControlRelay\Extensions\MethodRequestExtensions.cs">
       <Link>Extensions\MethodRequestExtensions.cs</Link>
     </Compile>
@@ -152,7 +158,6 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DeviceCloudInterface\SonySimpleIPCloudInterface.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>

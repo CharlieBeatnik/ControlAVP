@@ -481,7 +481,7 @@ namespace ControllableDevice
             //Call ConfigureAwait(false) on the task to schedule continuations to the thread pool,
             //thereby avoiding a deadlock on the UI thread. Passing false is a good option for app-independent libraries.
 
-           var devices = Task.Run(async () => await GetAvailableDevices().ConfigureAwait(false)).Result;
+            var devices = Task.Run(async () => await GetAvailableDevices().ConfigureAwait(false)).Result;
             var deviceInformation = devices.FirstOrDefault(s => s.Id.Contains(partialId));
 
             return deviceInformation?.Id;
