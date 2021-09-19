@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ControllableDeviceTypes.OSSCTypes;
 
 namespace ControllableDevice
@@ -13,61 +9,48 @@ namespace ControllableDevice
         private bool _disposed;
         private SerialBlaster _serialBlaster;
 
-        private class CommandCode
+        private Dictionary<GenericCommandName, IrCommandCode> _genericCommandNameToCommandCode = new Dictionary<GenericCommandName, IrCommandCode>
         {
-            public ushort Code { get; }
-            public uint CodeWithChecksum { get; }
-
-            public CommandCode(ushort code)
-            {
-                Code = code;
-                uint code32 = code;
-                CodeWithChecksum = ((code32 << 16) & 0xFF000000) | (~(code32 << 8) & 0X00FF0000) | ((code32 << 8) & 0x0000FF00) | (~(code32) & 0X000000FF);
-            }
-        };
-
-        private Dictionary<GenericCommandName, CommandCode> _genericCommandNameToCommandCode = new Dictionary<GenericCommandName, CommandCode>
-        {
-            {GenericCommandName.Number1, new CommandCode(0x3E29)},
-            {GenericCommandName.Number2, new CommandCode(0x3EA9)},
-            {GenericCommandName.Number3, new CommandCode(0x3E69)},
-            {GenericCommandName.Number4, new CommandCode(0x3EE9)},
-            {GenericCommandName.Number5, new CommandCode(0x3E19)},
-            {GenericCommandName.Number6, new CommandCode(0x3E99)},
-            {GenericCommandName.Number7, new CommandCode(0x3E59)},
-            {GenericCommandName.Number8, new CommandCode(0x3ED9)},
-            {GenericCommandName.Number9, new CommandCode(0x3E39)},
-            {GenericCommandName.Number0, new CommandCode(0x3EC9)},
-            {GenericCommandName.Number10, new CommandCode(0x3EB9)},
-            {GenericCommandName.ToggleReturn, new CommandCode(0x3E79)},
-            {GenericCommandName.PicCancel, new CommandCode(0x3E8D)},
-            {GenericCommandName.Menu, new CommandCode(0x3E4D)},
-            {GenericCommandName.Exit, new CommandCode(0x3EED)},
-            {GenericCommandName.Info, new CommandCode(0x3E65)},
-            {GenericCommandName.ClockEject, new CommandCode(0x3ED1)},
-            {GenericCommandName.Rewind, new CommandCode(0x3E61)},
-            {GenericCommandName.Forward, new CommandCode(0x3EE1)},
-            {GenericCommandName.LeftRight, new CommandCode(0x3EB5)},
-            {GenericCommandName.PauseZoom, new CommandCode(0x3EC1)},
-            {GenericCommandName.ChapterMinus, new CommandCode(0x3E9D)},
-            {GenericCommandName.ChapterPlus, new CommandCode(0x3E5D)},
-            {GenericCommandName.Stop, new CommandCode(0x3EA1)},
-            {GenericCommandName.Play, new CommandCode(0x3E41)},
-            {GenericCommandName.Left, new CommandCode(0x3EAD)},
-            {GenericCommandName.Right, new CommandCode(0x3E6D)},
-            {GenericCommandName.Up, new CommandCode(0x3E2D)},
-            {GenericCommandName.Down, new CommandCode(0x3ECD)},
-            {GenericCommandName.Ok, new CommandCode(0x3E1D)},
-            {GenericCommandName.Power, new CommandCode(0x3E01)},
-            {GenericCommandName.VolMinus, new CommandCode(0x1CF0)},
-            {GenericCommandName.VolPlus, new CommandCode(0x1C70)},
-            {GenericCommandName.Mute, new CommandCode(0x1C18)},
-            {GenericCommandName.ChPlus, new CommandCode(0x1C50)},
-            {GenericCommandName.ChMinus, new CommandCode(0x1CD0)},
-            {GenericCommandName.TvAv, new CommandCode(0x1CC8)},
-            {GenericCommandName.Pns, new CommandCode(0x1C48)},
-            {GenericCommandName.ToneMinus, new CommandCode(0x5ED8)},
-            {GenericCommandName.TonePlus, new CommandCode(0x5E58)},
+            {GenericCommandName.Number1, new IrCommandCode(0x3E29)},
+            {GenericCommandName.Number2, new IrCommandCode(0x3EA9)},
+            {GenericCommandName.Number3, new IrCommandCode(0x3E69)},
+            {GenericCommandName.Number4, new IrCommandCode(0x3EE9)},
+            {GenericCommandName.Number5, new IrCommandCode(0x3E19)},
+            {GenericCommandName.Number6, new IrCommandCode(0x3E99)},
+            {GenericCommandName.Number7, new IrCommandCode(0x3E59)},
+            {GenericCommandName.Number8, new IrCommandCode(0x3ED9)},
+            {GenericCommandName.Number9, new IrCommandCode(0x3E39)},
+            {GenericCommandName.Number0, new IrCommandCode(0x3EC9)},
+            {GenericCommandName.Number10, new IrCommandCode(0x3EB9)},
+            {GenericCommandName.ToggleReturn, new IrCommandCode(0x3E79)},
+            {GenericCommandName.PicCancel, new IrCommandCode(0x3E8D)},
+            {GenericCommandName.Menu, new IrCommandCode(0x3E4D)},
+            {GenericCommandName.Exit, new IrCommandCode(0x3EED)},
+            {GenericCommandName.Info, new IrCommandCode(0x3E65)},
+            {GenericCommandName.ClockEject, new IrCommandCode(0x3ED1)},
+            {GenericCommandName.Rewind, new IrCommandCode(0x3E61)},
+            {GenericCommandName.Forward, new IrCommandCode(0x3EE1)},
+            {GenericCommandName.LeftRight, new IrCommandCode(0x3EB5)},
+            {GenericCommandName.PauseZoom, new IrCommandCode(0x3EC1)},
+            {GenericCommandName.ChapterMinus, new IrCommandCode(0x3E9D)},
+            {GenericCommandName.ChapterPlus, new IrCommandCode(0x3E5D)},
+            {GenericCommandName.Stop, new IrCommandCode(0x3EA1)},
+            {GenericCommandName.Play, new IrCommandCode(0x3E41)},
+            {GenericCommandName.Left, new IrCommandCode(0x3EAD)},
+            {GenericCommandName.Right, new IrCommandCode(0x3E6D)},
+            {GenericCommandName.Up, new IrCommandCode(0x3E2D)},
+            {GenericCommandName.Down, new IrCommandCode(0x3ECD)},
+            {GenericCommandName.Ok, new IrCommandCode(0x3E1D)},
+            {GenericCommandName.Power, new IrCommandCode(0x3E01)},
+            {GenericCommandName.VolMinus, new IrCommandCode(0x1CF0)},
+            {GenericCommandName.VolPlus, new IrCommandCode(0x1C70)},
+            {GenericCommandName.Mute, new IrCommandCode(0x1C18)},
+            {GenericCommandName.ChPlus, new IrCommandCode(0x1C50)},
+            {GenericCommandName.ChMinus, new IrCommandCode(0x1CD0)},
+            {GenericCommandName.TvAv, new IrCommandCode(0x1CC8)},
+            {GenericCommandName.Pns, new IrCommandCode(0x1C48)},
+            {GenericCommandName.ToneMinus, new IrCommandCode(0x5ED8)},
+            {GenericCommandName.TonePlus, new IrCommandCode(0x5E58)},
         };
 
         private Dictionary<CommandName, GenericCommandName> _commandNameToGenericCommandName = new Dictionary<CommandName, GenericCommandName>
@@ -147,7 +130,7 @@ namespace ControllableDevice
                 throw new ArgumentException("Unknown command name.", nameof(genericCommandName));
             }
 
-            return _serialBlaster.SendCommand(SerialBlaster.Protocol.Nec, _genericCommandNameToCommandCode[genericCommandName].CodeWithChecksum);
+            return _serialBlaster.SendCommand(_genericCommandNameToCommandCode[genericCommandName].Protocol, _genericCommandNameToCommandCode[genericCommandName].CodeWithChecksum);
         }
 
         public bool SendCommand(CommandName commandName)
