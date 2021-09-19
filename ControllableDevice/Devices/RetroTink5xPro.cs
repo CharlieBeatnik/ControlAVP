@@ -23,7 +23,7 @@ namespace ControllableDevice
             {GenericCommandName.Back, new IrCommandCode(0x01E4)},
             {GenericCommandName.VolMinus, new IrCommandCode(0x0191)},
             {GenericCommandName.VolPlus, new IrCommandCode(0x01E1)},
-            {GenericCommandName.LefMouse, new IrCommandCode(0x0112)},
+            {GenericCommandName.LeftMouse, new IrCommandCode(0x0112)},
         };
 
         public RetroTink5xPro(SerialBlaster serialBlaster)

@@ -17,7 +17,7 @@ namespace ControllableDeviceTypes
             Back,
             VolMinus,
             VolPlus,
-            LefMouse
+            LeftMouse
         };
 
         public static class GenericCommandNameExtensions
