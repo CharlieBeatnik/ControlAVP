@@ -94,7 +94,7 @@ namespace ControllableDevice
             return result != null;
         }
 
-        public bool SetMode(SwitchMode mode, InputPort inputPort)
+        public bool SetMode(SwitchMode mode, InputPort? inputPort)
         {
             if (!_rs232Device.Enabled) return false;
 
@@ -102,13 +102,14 @@ namespace ControllableDevice
             switch (mode)
             {
                 case SwitchMode.Off:
-                    result = _rs232Device.WriteWithResponse("swmode default", $"^swmode off {_respSuccess}$");
+                    result = _rs232Device.WriteWithResponse("swmode off", $"^swmode off {_respSuccess}$");
                     break;
                 case SwitchMode.Next:
                     result = _rs232Device.WriteWithResponse("swmode next", $"^swmode next {_respSuccess}$");
                     break;
                 case SwitchMode.Priority:
-                    result = _rs232Device.WriteWithResponse($"swmode i{inputPort:00} priority", $"^swmode i{inputPort:00} priority {_respSuccess}$");
+                    if (inputPort == null) return false;
+                    result = _rs232Device.WriteWithResponse($"swmode i{(int)inputPort:00} priority", $"^swmode i{(int)inputPort:00} priority {_respSuccess}$");
                     break;
                 default:
                     Debug.Assert(false, "Unkown SwitchMode");
@@ -159,7 +160,7 @@ namespace ControllableDevice
                 {
                     case "OFF": state.Mode = SwitchMode.Off; break;
                     case "NEXT": state.Mode = SwitchMode.Next; break;
-                    case "PRIORITY": state.Mode = SwitchMode.Priority; break;
+                    case "Priority": state.Mode = SwitchMode.Priority; break;
                     default:
                         Debug.Assert(false, "Unknown SwitchMode");
                         break;

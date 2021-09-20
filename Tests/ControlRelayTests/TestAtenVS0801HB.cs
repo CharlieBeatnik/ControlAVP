@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System;
+using System.Threading;
 
 namespace Tests
 {
@@ -50,12 +51,12 @@ namespace Tests
             {
                 Assert.IsTrue(device.SetInputPort(InputPort.Port1));
                 var state = device.GetState();
-                Assert.IsTrue(state != null);
+                Assert.IsNotNull(state);
                 Assert.IsTrue(state.InputPort == InputPort.Port1);
 
                 Assert.IsTrue(device.SetInputPort(InputPort.Port2));
                 state = device.GetState();
-                Assert.IsTrue(state != null);
+                Assert.IsNotNull(state);
                 Assert.IsTrue(state.InputPort == InputPort.Port2);
             }
         }
@@ -130,7 +131,7 @@ namespace Tests
                 Assert.IsTrue(device.GoToNextInput());
 
                 var state = device.GetState();
-                Assert.IsTrue(state != null);
+                Assert.IsNotNull(state);
                 Assert.IsTrue(state.InputPort == InputPort.Port1);
             }
         }
@@ -144,8 +145,112 @@ namespace Tests
                 Assert.IsTrue(device.GoToPreviousInput());
 
                 var state = device.GetState();
-                Assert.IsTrue(state != null);
+                Assert.IsNotNull(state);
                 Assert.IsTrue(state.InputPort == InputPort.Port8);
+            }
+        }
+
+        [TestMethod]
+        public void GivenOutputIsTrue_WhenSetOutputFalse_ThenOutputIsFalse()
+        {
+            using (var device = CreateDevice())
+            {
+                //Set initial output state to true
+                Assert.IsTrue(device.SetOutput(true));
+                
+                //Validate
+                var state = device.GetState();
+                Assert.IsNotNull(state);
+                Assert.IsTrue(state.Output);
+
+                //Set output state to false
+                Assert.IsTrue(device.SetOutput(false));
+                
+                //Validate
+                state = device.GetState();
+                Assert.IsNotNull(state);
+                Assert.IsFalse(state.Output);
+
+                //Leave output state as true
+                Assert.IsTrue(device.SetOutput(true));
+            }
+        }
+
+        [TestMethod]
+        public void GivenPowerOnDetectionIsTrue_WhenSetPowerOnDetectionFalse_ThenPowerOnDetectionIsFalse()
+        {
+            using (var device = CreateDevice())
+            {
+                //Set POD to true
+                Assert.IsTrue(device.SetPowerOnDetection(true));
+
+                //Validate
+                var state = device.GetState();
+                Assert.IsNotNull(state);
+                Assert.IsTrue(state.PowerOnDetection);
+
+                //Set POD to false
+                Assert.IsTrue(device.SetPowerOnDetection(false));
+
+                //Validate
+                state = device.GetState();
+                Assert.IsNotNull(state);
+                Assert.IsFalse(state.PowerOnDetection);
+
+                //Leave POD as true
+                Assert.IsTrue(device.SetPowerOnDetection(true));
+            }
+        }
+
+        [TestMethod]
+        public void GivenSwitchModeIsOff_WhenSetSwitchModeToNext_ThenSwitchModeIsNext()
+        {
+            using (var device = CreateDevice())
+            {
+                //Set SwitchMode to Off
+                Assert.IsTrue(device.SetMode(SwitchMode.Off, null));
+
+                //Validate
+                var state = device.GetState();
+                Assert.IsNotNull(state);
+                Assert.AreEqual(SwitchMode.Off, state.Mode);
+
+                //Set SwitchMode to Next
+                Assert.IsTrue(device.SetMode(SwitchMode.Next, null));
+
+                //Validate
+                state = device.GetState();
+                Assert.IsNotNull(state);
+                Assert.AreEqual(SwitchMode.Next, state.Mode);
+
+                //Lead SwitchMode as Off
+                Assert.IsTrue(device.SetMode(SwitchMode.Off, null));
+            }
+        }
+
+        [TestMethod]
+        public void GivenSwitchModeIsOff_WhenSetSwitchModeToPriorityInputPort8_ThenSwitchModeIsPriority()
+        {
+            using (var device = CreateDevice())
+            {
+                //Set SwitchMode to Off
+                Assert.IsTrue(device.SetMode(SwitchMode.Off, null));
+
+                //Validate
+                var state = device.GetState();
+                Assert.IsNotNull(state);
+                Assert.AreEqual(SwitchMode.Off, state.Mode);
+
+                //Set SwitchMode to Priority InputPort.Port8 
+                Assert.IsTrue(device.SetMode(SwitchMode.Priority, InputPort.Port8));
+
+                //Validate
+                state = device.GetState();
+                Assert.IsNotNull(state);
+                Assert.AreEqual(SwitchMode.Priority, state.Mode);
+
+                //Lead SwitchMode as Off
+                Assert.IsTrue(device.SetMode(SwitchMode.Off, null));
             }
         }
 
