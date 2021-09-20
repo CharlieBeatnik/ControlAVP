@@ -24,6 +24,11 @@ namespace ControllableDeviceTypes
             {
                 return Enum.IsDefined(typeof(InputPort), inputPort);
             }
+
+            public static int Count(this InputPort inputPort)
+            {
+                return Enum.GetNames(typeof(InputPort)).Length;
+            }
         }
 
         public enum SwitchMode

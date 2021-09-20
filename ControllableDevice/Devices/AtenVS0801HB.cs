@@ -57,16 +57,24 @@ namespace ControllableDevice
         {
             if (!_rs232Device.Enabled) return false;
 
-            var result = _rs232Device.WriteWithResponse("sw+", $"^sw[+] {_respSuccess}$");
-            return result != null;
+            var state = GetState();
+            if (state == null) return false;
+
+            int portCount = state.InputPort.Count();
+            InputPort nextInput = (InputPort)((int)state.InputPort % portCount) + 1;
+            return SetInputPort(nextInput);
         }
 
         public bool GoToPreviousInput()
         {
             if (!_rs232Device.Enabled) return false;
 
-            var result = _rs232Device.WriteWithResponse("sw-", $"^sw[-] {_respSuccess}$");
-            return result != null;
+            var state = GetState();
+            if (state == null) return false;
+
+            int portCount = state.InputPort.Count();
+            InputPort previousInput = (InputPort)(portCount - (((portCount - (int)state.InputPort) + 1) % portCount));
+            return SetInputPort(previousInput);
         }
 
         public bool SetInputPort(InputPort inputPort)

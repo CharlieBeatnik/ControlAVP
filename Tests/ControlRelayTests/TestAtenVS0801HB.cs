@@ -122,6 +122,34 @@ namespace Tests
         }
 
         [TestMethod]
+        public void GivenInputPortIsPort8_WhenGoToNextInput_ThenInputPortIsPort1()
+        {
+            using (var device = CreateDevice())
+            {
+                Assert.IsTrue(device.SetInputPort(InputPort.Port8));
+                Assert.IsTrue(device.GoToNextInput());
+
+                var state = device.GetState();
+                Assert.IsTrue(state != null);
+                Assert.IsTrue(state.InputPort == InputPort.Port1);
+            }
+        }
+
+        [TestMethod]
+        public void GivenInputPortIsPort1_WhenGoToPreviousInput_ThenInputPortIsPort8()
+        {
+            using (var device = CreateDevice())
+            {
+                Assert.IsTrue(device.SetInputPort(InputPort.Port1));
+                Assert.IsTrue(device.GoToPreviousInput());
+
+                var state = device.GetState();
+                Assert.IsTrue(state != null);
+                Assert.IsTrue(state.InputPort == InputPort.Port8);
+            }
+        }
+
+        [TestMethod]
         public void GivenInvalidDevice_WhenGetAvailable_ThenDeviceIsNotAvailable()
         {
             using (var device = CreateInvalidDevice())
