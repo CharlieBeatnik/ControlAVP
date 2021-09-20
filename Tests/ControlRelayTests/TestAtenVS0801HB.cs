@@ -110,14 +110,14 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GivenDevice_WhenGetState_ThenFirmwareIsGTE2_0_197()
+        public void GivenDevice_WhenGetState_ThenFirmwareIsGTE1_1_105()
         {
             using (var device = CreateDevice())
             {
                 var state = device.GetState();
                 Assert.IsNotNull(state);
 
-                Assert.IsTrue(state.Firmware >= new Version(2, 0, 197));
+                Assert.IsTrue(state.Firmware >= new Version(1, 1, 105));
             }
         }
 

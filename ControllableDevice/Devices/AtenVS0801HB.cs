@@ -132,7 +132,7 @@ namespace ControllableDevice
                 State state = new State();
 
                 //Input 
-                match = Regex.Match(responses[1], @"^Input: port([0-9]+)$");
+                match = Regex.Match(responses[1], @"^Input: port *([0-9]+)$");
                 Debug.Assert(match.Success);
                 var inputParseSuccess = int.TryParse(match.Groups[1].Value, out int inputPort);
                 Debug.Assert(inputParseSuccess);
@@ -149,16 +149,16 @@ namespace ControllableDevice
                 Debug.Assert(match.Success);
                 switch (match.Groups[1].Value)
                 {
-                    case "Off": state.Mode = SwitchMode.Off; break;
-                    case "Next": state.Mode = SwitchMode.Next; break;
-                    case "Priority": state.Mode = SwitchMode.Priority; break;
+                    case "OFF": state.Mode = SwitchMode.Off; break;
+                    case "NEXT": state.Mode = SwitchMode.Next; break;
+                    case "PRIORITY": state.Mode = SwitchMode.Priority; break;
                     default:
                         Debug.Assert(false, "Unknown SwitchMode");
                         break;
                 }
 
                 //Power On Detection (POD)
-                match = Regex.Match(responses[4], @"^POD: ([A-Z]+)$");
+                match = Regex.Match(responses[4], @"^Pod: ([A-Z]+)$");
                 Debug.Assert(match.Success);
                 state.PowerOnDetection = match.Groups[1].Value == "ON";
 
