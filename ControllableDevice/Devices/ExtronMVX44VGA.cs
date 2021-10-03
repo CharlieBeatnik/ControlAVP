@@ -134,8 +134,8 @@ namespace ControllableDevice
         {
             if (!_rs232Device.Enabled) return null;
 
-            //0 0 0 0 Vid 0 0 0 0 Aud 
-            string pattern = @"^([0-4]) ([0-4]) ([0-4]) ([0-4]) Vid ([0-4]) ([0-4]) ([0-4]) ([0-4]) Aud $";
+            //0 0 0 0 Vid 0 0 0 0 Aud
+            string pattern = @"^([0-4]) ([0-4]) ([0-4]) ([0-4]) Vid ([0-4]) ([0-4]) ([0-4]) ([0-4]) Aud$";
             var result = _rs232Device.WriteWithResponse($"{_cmdEsc}{(int)tiePreset:D2}VC{_cmdCr}", pattern);
             if (result == null) return null;
 
