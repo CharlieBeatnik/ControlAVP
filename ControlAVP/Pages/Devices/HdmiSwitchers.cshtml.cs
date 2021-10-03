@@ -36,7 +36,7 @@ namespace ControlAVP.Pages.Devices
         private string _deviceId;
         private ServiceClient _serviceClient;
 
-        private const uint _numAtenVS0801HDevices = 2;
+        private const uint _numAtenVS0801HDevices = 1;
         private List<AtenVS0801H> _atenVS0801HDevices = new List<AtenVS0801H>();
 
         private const uint _numAtenVS0801HBDevices = 1;
@@ -89,7 +89,6 @@ namespace ControlAVP.Pages.Devices
             if (deviceIndex < _numAtenVS0801HDevices)
             {
                 _atenVS0801HDevices[deviceIndex].SetInputPort(inputPort);
-                AtenVS0801HDeviceInfoCaches[deviceIndex].State = _atenVS0801HDevices[deviceIndex].GetState();
             }
             return RedirectToPage();
         }
@@ -100,7 +99,6 @@ namespace ControlAVP.Pages.Devices
             if (deviceIndex < _numAtenVS0801HDevices)
             {
                 _atenVS0801HBDevices[deviceIndex].SetInputPort(inputPort);
-                AtenVS0801HBDeviceInfoCaches[deviceIndex].State = _atenVS0801HBDevices[deviceIndex].GetState();
             }
             return RedirectToPage();
         }

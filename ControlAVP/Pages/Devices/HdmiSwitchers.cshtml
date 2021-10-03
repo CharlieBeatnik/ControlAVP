@@ -28,7 +28,7 @@
                                         @foreach (ControllableDeviceTypes.AtenVS0801HTypes.InputPort inputPort in Enum.GetValues(typeof(ControllableDeviceTypes.AtenVS0801HTypes.InputPort)))
                                         {
                                             <button type="submit"
-                                                    asp-page-handler="VS0801HSetInputPort"
+                                                    asp-page-handler="AtenVS0801HSetInputPort"
                                                     asp-route-deviceindex=@i
                                                     asp-route-inputport=@inputPort
                                                     class="btn border @(inputPort == Model.AtenVS0801HDeviceInfoCaches[i].State.InputPort ? "btn-success" : "btn-light")">
@@ -86,7 +86,7 @@
                                         @foreach (ControllableDeviceTypes.AtenVS0801HBTypes.InputPort inputPort in Enum.GetValues(typeof(ControllableDeviceTypes.AtenVS0801HBTypes.InputPort)))
                                         {
                                             <button type="submit"
-                                                    asp-page-handler="VS0801HBSetInputPort"
+                                                    asp-page-handler="AtenVS0801HBSetInputPort"
                                                     asp-route-deviceindex=@i
                                                     asp-route-inputport=@inputPort
                                                     class="btn border @(inputPort == Model.AtenVS0801HBDeviceInfoCaches[i].State.InputPort ? "btn-success" : "btn-light")">
