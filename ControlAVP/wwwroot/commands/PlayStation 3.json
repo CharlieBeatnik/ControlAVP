@@ -45,7 +45,7 @@
       }
     },
     {
-      "Description": "HDMI Switch 0 Not Used",
+      "Description": "HDMI Switch 0 Passthrough",
       "DeviceType": "AtenVS0801HB",
       "Function": "SetInputPort",
       "Parameters": {
