@@ -21,9 +21,39 @@ namespace ControlRelay
 
         public override IEnumerable<MethodHandlerInfo> GetMethodHandlerInfos(DeviceClient deviceClient)
         {
+            yield return new MethodHandlerInfo($"{_deviceApiPrefix}{nameof(GoToNextInput)}", GoToNextInput);
+            yield return new MethodHandlerInfo($"{_deviceApiPrefix}{nameof(GoToPreviousInput)}", GoToPreviousInput);
             yield return new MethodHandlerInfo($"{_deviceApiPrefix}{nameof(GetState)}", GetState);
             yield return new MethodHandlerInfo($"{_deviceApiPrefix}{nameof(SetInputPort)}", SetInputPort);
             yield return new MethodHandlerInfo($"{_deviceApiPrefix}{nameof(GetAvailable)}", GetAvailable);
+        }
+
+        private Task<MethodResponse> GoToNextInput(MethodRequest methodRequest, object userContext)
+        {
+            var payloadDefintion = new { _deviceIndex = -1 };
+
+            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
+            if (DeviceIndexValid(payload._deviceIndex))
+            {
+                bool success = _devices[payload._deviceIndex].GoToNextInput();
+                return methodRequest.GetMethodResponse(success);
+            }
+
+            return methodRequest.GetMethodResponse(false);
+        }
+
+        private Task<MethodResponse> GoToPreviousInput(MethodRequest methodRequest, object userContext)
+        {
+            var payloadDefintion = new { _deviceIndex = -1 };
+
+            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
+            if (DeviceIndexValid(payload._deviceIndex))
+            {
+                bool success = _devices[payload._deviceIndex].GoToPreviousInput();
+                return methodRequest.GetMethodResponse(success);
+            }
+
+            return methodRequest.GetMethodResponse(false);
         }
 
         private Task<MethodResponse> GetState(MethodRequest methodRequest, object userContext)

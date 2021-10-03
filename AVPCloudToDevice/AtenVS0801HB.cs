@@ -18,6 +18,36 @@ namespace AVPCloudToDevice
             _deviceIndex = deviceIndex;
         }
 
+        public bool GoToNextInput()
+        {
+            try
+            {
+                var payload = new { _deviceIndex };
+
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "AtenVS0801HBGoToNextInput", payload);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public bool GoToPreviousInput()
+        {
+            try
+            {
+                var payload = new { _deviceIndex };
+
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "AtenVS0801HBGoToPreviousInput", payload);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         public State GetState()
         {
             try

@@ -97,6 +97,22 @@ namespace Tests
         }
 
         [Test]
+        public void GivenDeviceWithInvalidDeviceIndex_WhenGoToNextInput_ThenSuccessIsFalse()
+        {
+            var device = new AtenVS0801HB(_serviceClient, _settings.DeviceId, _invalidDeviceIndex);
+            var success = device.GoToNextInput();
+            Assert.IsFalse(success);
+        }
+
+        [Test]
+        public void GivenDeviceWithInvalidDeviceIndex_WhenGoToPreviousInput_ThenSuccessIsFalse()
+        {
+            var device = new AtenVS0801HB(_serviceClient, _settings.DeviceId, _invalidDeviceIndex);
+            var success = device.GoToPreviousInput();
+            Assert.IsFalse(success);
+        }
+
+        [Test]
         public void GivenDevice_WhenSetInvalidInput_ThenSuccessIsFalse()
         {
             foreach (var device in _devices)
@@ -105,5 +121,33 @@ namespace Tests
                 Assert.IsFalse(success);
             }
         }
-   }
+
+        [Test]
+        public void GivenInputPortIsPort1_WhenGoToNextInput_ThenInputPortIsPort2()
+        {
+            foreach (var device in _devices)
+            {
+                Assert.IsTrue(device.SetInputPort(InputPort.Port1));
+                Assert.IsTrue(device.GoToNextInput());
+
+                var state = device.GetState();
+                Assert.IsTrue(state != null);
+                Assert.IsTrue(state.InputPort == InputPort.Port2);
+            }
+        }
+
+        [Test]
+        public void GivenInputPortIsPort2_WhenGoToPreviousInput_ThenInputPortIsPort1()
+        {
+            foreach (var device in _devices)
+            {
+                Assert.IsTrue(device.SetInputPort(InputPort.Port2));
+                Assert.IsTrue(device.GoToPreviousInput());
+
+                var state = device.GetState();
+                Assert.IsTrue(state != null);
+                Assert.IsTrue(state.InputPort == InputPort.Port1);
+            }
+        }
+    }
 }
