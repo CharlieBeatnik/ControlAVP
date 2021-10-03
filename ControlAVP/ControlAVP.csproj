@@ -45,11 +45,6 @@
     </Reference>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="wwwroot\images\devices\large\" />
-    <Folder Include="wwwroot\images\devices\small\" />
-  </ItemGroup>
-
   <PropertyGroup>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
     <AnalysisLevel>latest</AnalysisLevel>
