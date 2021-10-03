@@ -21,22 +21,6 @@
     },
     {
       "ExecuteAfter": 16.0,
-      "Description": "Disable HDMI Switch 1 Output",
-      "DeviceType": "AtenVS0801H",
-      "Function": "SetOutput",
-      "Parameters": {
-        "enable": "false"
-      }
-    },
-    {
-      "Description": "Enable HDMI Switch 1 Output",
-      "DeviceType": "AtenVS0801H",
-      "Function": "SetOutput",
-      "Parameters": {
-        "enable": "true"
-      }
-    },
-    {
       "Description": "HDMI Switch 0 Passthrough",
       "DeviceType": "AtenVS0801HB",
       "Function": "SetInputPort",
