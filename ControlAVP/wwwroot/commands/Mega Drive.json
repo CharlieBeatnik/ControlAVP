@@ -32,7 +32,6 @@
       "ExecuteAfter": 16.0,
       "Description": "Disable HDMI Switch 1 Output",
       "DeviceType": "AtenVS0801H",
-      "DeviceIndex": 1,
       "Function": "SetOutput",
       "Parameters": {
         "enable": "false"
@@ -108,17 +107,16 @@
       }
     },
     {
-      "Description": "TV HDMI1 for Not Rack",
+      "Description": "TV HDMI4 for Not Rack",
       "DeviceType": "SonySimpleIP",
       "Function": "SetInputPort",
       "Parameters": {
-        "inputPort": "Hdmi1"
+        "inputPort": "Hdmi4"
       }
     },
     {
       "Description": "Enable HDMI Switch 1 Output",
       "DeviceType": "AtenVS0801H",
-      "DeviceIndex": 1,
       "Function": "SetOutput",
       "Parameters": {
         "enable": "true"
@@ -126,19 +124,10 @@
     },
     {
       "Description": "HDMI Switch 0 to Scaler",
-      "DeviceType": "AtenVS0801H",
+      "DeviceType": "AtenVS0801HB",
       "Function": "SetInputPort",
       "Parameters": {
-        "inputPort": "Port2"
-      }
-    },
-    {
-      "Description": "HDMI Switch 1 Passthrough",
-      "DeviceType": "AtenVS0801H",
-      "DeviceIndex": 1,
-      "Function": "SetInputPort",
-      "Parameters": {
-        "inputPort": "Port1"
+        "inputPort": "Port3"
       }
     },
     {

@@ -23,7 +23,6 @@
       "ExecuteAfter": 16.0,
       "Description": "Disable HDMI Switch 1 Output",
       "DeviceType": "AtenVS0801H",
-      "DeviceIndex": 1,
       "Function": "SetOutput",
       "Parameters": {
         "enable": "false"
@@ -32,7 +31,6 @@
     {
       "Description": "Enable HDMI Switch 1 Output",
       "DeviceType": "AtenVS0801H",
-      "DeviceIndex": 1,
       "Function": "SetOutput",
       "Parameters": {
         "enable": "true"
@@ -40,7 +38,7 @@
     },
     {
       "Description": "HDMI Switch 0 Not Used",
-      "DeviceType": "AtenVS0801H",
+      "DeviceType": "AtenVS0801HB",
       "Function": "SetInputPort",
       "Parameters": {
         "inputPort": "Port1"
@@ -49,7 +47,6 @@
     {
       "Description": "HDMI Switch 1 to Super Nintendo Mini",
       "DeviceType": "AtenVS0801H",
-      "DeviceIndex": 1,
       "Function": "SetInputPort",
       "Parameters": {
         "inputPort": "Port2"

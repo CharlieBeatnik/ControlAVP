@@ -21,38 +21,11 @@
     },
     {
       "ExecuteAfter": 16.0,
-      "Description": "Disable HDMI Switch 1 Output",
-      "DeviceType": "AtenVS0801H",
-      "DeviceIndex": 1,
-      "Function": "SetOutput",
-      "Parameters": {
-        "enable": "false"
-      }
-    },
-    {
-      "Description": "Enable HDMI Switch 1 Output",
-      "DeviceType": "AtenVS0801H",
-      "DeviceIndex": 1,
-      "Function": "SetOutput",
-      "Parameters": {
-        "enable": "true"
-      }
-    },
-    {
       "Description": "HDMI Switch 0 to Spectrum Next",
-      "DeviceType": "AtenVS0801H",
+      "DeviceType": "AtenVS0801HB",
       "Function": "SetInputPort",
       "Parameters": {
         "inputPort": "Port7"
-      }
-    },
-    {
-      "Description": "HDMI Switch 1 Passthrough",
-      "DeviceType": "AtenVS0801H",
-      "DeviceIndex": 1,
-      "Function": "SetInputPort",
-      "Parameters": {
-        "inputPort": "Port1"
       }
     },
     {
