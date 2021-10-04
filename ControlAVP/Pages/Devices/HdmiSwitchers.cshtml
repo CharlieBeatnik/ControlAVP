@@ -9,70 +9,11 @@
 <h2></h2>
 
 <form method="post">
-    @for (int i = 0; i < Model.AtenVS0801HDeviceInfoCaches.Count; ++i)
-    {
-        <div class="card mb-4">
-            <div class="card-header pb-0">
-                <h6 class="mb-0">AtenVS0801H</h6>
-                <p class="mt-0 small font-weight-bold">Device #@(i + 1)</p>
-            </div>
-            <div class="card-body pb-0">
-                @if (Model.AtenVS0801HDeviceInfoCaches[i].Available)
-                {
-                    <div class="col-sm-6">
-                        <table class="table table-sm table-borderless">
-                            <tr>
-                                <td class="align-middle text-right" width="1%">Input</td>
-                                <td>
-                                    <div class="btn-group">
-                                        @foreach (ControllableDeviceTypes.AtenVS0801HTypes.InputPort inputPort in Enum.GetValues(typeof(ControllableDeviceTypes.AtenVS0801HTypes.InputPort)))
-                                        {
-                                            <button type="submit"
-                                                    asp-page-handler="AtenVS0801HSetInputPort"
-                                                    asp-route-deviceindex=@i
-                                                    asp-route-inputport=@inputPort
-                                                    class="btn border @(inputPort == Model.AtenVS0801HDeviceInfoCaches[i].State.InputPort ? "btn-success" : "btn-light")">
-                                                @((int)inputPort)
-                                            </button>
-                                        }
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="align-middle text-right">Firmware</td>
-                                <td class="align-middle"><span class="badge badge-secondary">@Model.AtenVS0801HDeviceInfoCaches[i].State.Firmware</span></td>
-                            </tr>
-                            <tr>
-                                <td class="align-middle text-right">Output</td>
-                                <td class="align-middle"><span class="badge badge-secondary">@Model.AtenVS0801HDeviceInfoCaches[i].State.Output</span></td>
-                            </tr>
-                            <tr>
-                                <td class="align-middle text-right">GoTo</td>
-                                <td class="align-middle"><span class="badge badge-secondary">@Model.AtenVS0801HDeviceInfoCaches[i].State.GoTo</span></td>
-                            </tr>
-                            <tr>
-                                <td class="align-middle text-right">Mode</td>
-                                <td class="align-middle"><span class="badge badge-secondary">@Model.AtenVS0801HDeviceInfoCaches[i].State.Mode</span></td>
-                            </tr>
-                        </table>
-                    </div>
-                }
-                else
-                {
-                    <div class="alert alert-warning">
-                        <strong>Warning!</strong> Device not found, is it turned on?
-                    </div>
-                }
-            </div>
-        </div>
-    }
-
     @for (int i = 0; i < Model.AtenVS0801HBDeviceInfoCaches.Count; ++i)
     {
         <div class="card mb-4">
             <div class="card-header pb-0">
-                <h6 class="mb-0">AtenVS0801HB</h6>
-                <p class="mt-0 small font-weight-bold">Device #@(i + 1)</p>
+                <h6>AtenVS0801HB</h6>
             </div>
             <div class="card-body pb-0">
                 @if (Model.AtenVS0801HBDeviceInfoCaches[i].Available)
@@ -111,6 +52,63 @@
                             <tr>
                                 <td class="align-middle text-right">Mode</td>
                                 <td class="align-middle"><span class="badge badge-secondary">@Model.AtenVS0801HBDeviceInfoCaches[i].State.Mode</span></td>
+                            </tr>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-warning">
+                        <strong>Warning!</strong> Device not found, is it turned on?
+                    </div>
+                }
+            </div>
+        </div>
+    }
+
+    @for (int i = 0; i < Model.AtenVS0801HDeviceInfoCaches.Count; ++i)
+    {
+        <div class="card mb-4">
+            <div class="card-header pb-0">
+                <h6>AtenVS0801H</h6>
+            </div>
+            <div class="card-body pb-0">
+                @if (Model.AtenVS0801HDeviceInfoCaches[i].Available)
+                {
+                    <div class="col-sm-6">
+                        <table class="table table-sm table-borderless">
+                            <tr>
+                                <td class="align-middle text-right" width="1%">Input</td>
+                                <td>
+                                    <div class="btn-group">
+                                        @foreach (ControllableDeviceTypes.AtenVS0801HTypes.InputPort inputPort in Enum.GetValues(typeof(ControllableDeviceTypes.AtenVS0801HTypes.InputPort)))
+                                        {
+                                            <button type="submit"
+                                                    asp-page-handler="AtenVS0801HSetInputPort"
+                                                    asp-route-deviceindex=@i
+                                                    asp-route-inputport=@inputPort
+                                                    class="btn border @(inputPort == Model.AtenVS0801HDeviceInfoCaches[i].State.InputPort ? "btn-success" : "btn-light")">
+                                                @((int)inputPort)
+                                            </button>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="align-middle text-right">Firmware</td>
+                                <td class="align-middle"><span class="badge badge-secondary">@Model.AtenVS0801HDeviceInfoCaches[i].State.Firmware</span></td>
+                            </tr>
+                            <tr>
+                                <td class="align-middle text-right">Output</td>
+                                <td class="align-middle"><span class="badge badge-secondary">@Model.AtenVS0801HDeviceInfoCaches[i].State.Output</span></td>
+                            </tr>
+                            <tr>
+                                <td class="align-middle text-right">GoTo</td>
+                                <td class="align-middle"><span class="badge badge-secondary">@Model.AtenVS0801HDeviceInfoCaches[i].State.GoTo</span></td>
+                            </tr>
+                            <tr>
+                                <td class="align-middle text-right">Mode</td>
+                                <td class="align-middle"><span class="badge badge-secondary">@Model.AtenVS0801HDeviceInfoCaches[i].State.Mode</span></td>
                             </tr>
                         </table>
                     </div>
