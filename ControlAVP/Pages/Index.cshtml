@@ -58,16 +58,25 @@
 
 <div class="pt-0 pb-1 pl-1 pr-1 m-0">
     <form method="post">
-        <div class="btn-group">
-
+        <div class="btn-toolbar" role="toolbar">
             @if (Model.RackDevicesAvailable)
             {
-                <button type="button" data-toggle="collapse" data-target="#scalerCollapse" class="btn border btn-secondary">Scaler</button>
-                <button type="button" data-toggle="collapse" data-target="#osscCollapse" class="btn border btn-secondary">OSSC</button>
+                <div class="btn-group" role="group">
+                    <button id="btnGroupDropScalerSelect" type="button" class="btn border btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Scaler</button>
+                    <div class="dropdown-menu" aria-labelledby="btnGroupDropScalerSelect">
+                        <button type="submit" asp-page-handler="ScalerSelect" asp-route-scaler=@IndexModel.Scaler.OSSC class="dropdown-item">OSSC</button>
+                        <button type="submit" asp-page-handler="ScalerSelect" asp-route-scalere=@IndexModel.Scaler.ExtronDSC301HD class="dropdown-item">Extron</button>
+                        <button type="submit" asp-page-handler="ScalerSelect" asp-route-scaler=@IndexModel.Scaler.RetroTink5XPro class="dropdown-item">RetroTink</button>
+                    </div>
+                </div>
+                <div class="btn-group" role="group">
+                    <button type="button" data-toggle="collapse" data-target="#scalerCollapse" class="btn border btn-secondary">Extron</button>
+                    <button type="button" data-toggle="collapse" data-target="#osscCollapse" class="btn border btn-secondary">OSSC</button>
+                </div>
             }
-
-            <button type="submit" asp-page-handler="PowerOff" class="btn border btn-danger"><i class="fas fa-power-off"></i></button>
-
+            <div class="btn-group" role="group">
+                <button type="submit" asp-page-handler="PowerOff" class="btn border btn-danger"><i class="fas fa-power-off"></i></button>
+            </div>
         </div>
     </form>
 </div>

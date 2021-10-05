@@ -11,11 +11,13 @@ using ControllableDeviceTypes.ExtronDSC301HDTypes;
 using ControllableDeviceTypes.OSSCTypes;
 using ControllableDeviceTypes.ApcAP8959EU3Types;
 using ControllableDeviceTypes.SonySimpleIPTypes;
+using ControllableDeviceTypes.AtenVS0801HBTypes;
 using Newtonsoft.Json;
 using System.Numerics;
 using System;
 using System.Linq;
 using System.Threading;
+using System.Diagnostics;
 
 namespace ControlAVP.Pages
 {
@@ -27,8 +29,17 @@ namespace ControlAVP.Pages
         public string DisplayName { get; set; }
     }
 
+
+
     public class IndexModel : PageModel
     {
+        public enum Scaler
+        {
+            ExtronDSC301HD,
+            OSSC,
+            RetroTink5XPro
+        }
+
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _environment;
 
@@ -40,6 +51,7 @@ namespace ControlAVP.Pages
         private ApcAP8959EU3 _apcAP8959EU3;
         private SonySimpleIP _sonySimpleIP;
         private OSSC _ossc;
+        private AtenVS0801HB _atenVS0801HB;
 
         private string _commandDirectory;
         private IEnumerable<Outlet> _outlets;
@@ -68,6 +80,7 @@ namespace ControlAVP.Pages
             _apcAP8959EU3 = new ApcAP8959EU3(_serviceClient, _deviceId);
             _sonySimpleIP = new SonySimpleIP(_serviceClient, _deviceId);
             _ossc = new OSSC(_serviceClient, _deviceId);
+            _atenVS0801HB = new AtenVS0801HB(_serviceClient, _deviceId, 0);
 
             _outlets = _apcAP8959EU3.GetOutlets();
             _outletConfirmation = _configuration.GetSection("OutletConfirmation").Get<string[]>();
@@ -216,6 +229,25 @@ namespace ControlAVP.Pages
             _ossc.SendCommand(inputPort1);
             Thread.Sleep(TimeSpan.FromSeconds(3));
             _ossc.SendCommand(inputPort2);
+            return RedirectToPage();
+        }
+
+        // Helper function to switch HDMI port to appropriate scaler
+        public IActionResult OnPostScalerSelect(Scaler scaler)
+        {
+            ControllableDeviceTypes.AtenVS0801HBTypes.InputPort inputPort;
+            switch(scaler)
+            {
+                case Scaler.OSSC: inputPort = ControllableDeviceTypes.AtenVS0801HBTypes.InputPort.Port2; break;
+                case Scaler.ExtronDSC301HD: inputPort = ControllableDeviceTypes.AtenVS0801HBTypes.InputPort.Port3; break;
+                case  Scaler.RetroTink5XPro: inputPort = ControllableDeviceTypes.AtenVS0801HBTypes.InputPort.Port8; break;
+                default:
+                    inputPort = ControllableDeviceTypes.AtenVS0801HBTypes.InputPort.Port1;
+                    Debug.Fail($"Unknown Scaler enumeration value {scaler}");
+                    break;
+            }
+
+            _atenVS0801HB.SetInputPort(inputPort);
             return RedirectToPage();
         }
     }
