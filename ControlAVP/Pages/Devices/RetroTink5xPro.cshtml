@@ -1,0 +1,87 @@
+﻿@page
+@model ControlAVP.Pages.Devices.RetroTink5xProModel
+@using ControllableDeviceTypes.RetroTink5xProTypes;
+
+@{
+    ViewData["Title"] = "RetroTINK";
+    string defaultButtonCss = "btn-light";
+}
+<h2></h2>
+
+
+<form method="post">
+    <div class="card">
+        <div class="card-header">
+            <h6 class="mb-0">@ViewData["Title"]</h6>
+        </div>
+        <div class="card-body">
+            @if (Model.DeviceInfoCache.Available)
+            {
+                <div class="col-sm-6 pl-0 pr-0">
+                    <table class="table table-sm table-borderless text-nowrap">
+                        <tr>
+                            <td class="align-middle text-right" width="1%">Power</td>
+                            <td>
+                                <div class="btn-group">
+                                    <vc:retro-tink5x-pro-button command-name=@CommandName.Back button-label="Power" css-class="btn-danger" css-fa-icon="power-off" />
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle text-right" width="1%">Navigation</td>
+                            <td>
+                                <div class="container p-0 m-0 w-50">
+                                    <div class="row">
+                                        <div class="col-sm btn-group">
+                                            <vc:retro-tink5x-pro-button command-name=@CommandName.Up button-label="" css-class=@defaultButtonCss css-fa-icon="arrow-up" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm btn-group">
+                                            <vc:retro-tink5x-pro-button command-name=@CommandName.Left button-label="" css-class=@(defaultButtonCss + " pt-3 pb-3") css-fa-icon="arrow-left" />
+                                            <vc:retro-tink5x-pro-button command-name=@CommandName.Ok button-label="OK" css-class=@(defaultButtonCss + " pt-3 pb-3") css-fa-icon="" />
+                                            <vc:retro-tink5x-pro-button command-name=@CommandName.Right button-label="" css-class=@(defaultButtonCss + " pt-3 pb-3") css-fa-icon="arrow-right" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm btn-group">
+                                            <vc:retro-tink5x-pro-button command-name=@CommandName.Down button-label="" css-class=@defaultButtonCss css-fa-icon="arrow-down" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="btn-group mt-2">
+                                    <vc:retro-tink5x-pro-button command-name=@CommandName.Back button-label="Back" css-class=@defaultButtonCss css-fa-icon="undo-alt" />
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle text-right" width="1%">Input</td>
+                            <td>
+                                <div class="btn-group">
+                                    <vc:retro-tink5x-pro-button command-name=@CommandName.PageInput button-label="Input Port" css-class=@defaultButtonCss css-fa-icon="" />
+                                    <vc:retro-tink5x-pro-button command-name=@CommandName.PageInterpolation button-label="Interpolation" css-class=@defaultButtonCss css-fa-icon="" />
+                                    <vc:retro-tink5x-pro-button command-name=@CommandName.PageHorizontalSampling button-label="Sampling" css-class=@defaultButtonCss css-fa-icon="" />
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle text-right" width="1%">Output</td>
+                            <td>
+                                <div class="btn-group">
+                                    <vc:retro-tink5x-pro-button command-name=@CommandName.PageOutputResolution button-label="Resolution" css-class=@defaultButtonCss css-fa-icon="" />
+                                    <vc:retro-tink5x-pro-button command-name=@CommandName.PageScanlines button-label="Scanlines" css-class=@defaultButtonCss css-fa-icon="" />
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-warning">
+                    <strong>Warning!</strong> Device not found, is it turned on?
+                </div>
+            }
+        </div>
+    </div>
+</form>

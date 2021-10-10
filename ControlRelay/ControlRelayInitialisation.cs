@@ -40,6 +40,9 @@ namespace ControlRelay
             var ossc = _devices.OfType<OSSC>().First();
             AddCloudInterface(() => new OSSCCloudInterface(ossc), deviceCloudInterfaces);
 
+            var retroTink5xPro = _devices.OfType<RetroTink5xPro>().First();
+            AddCloudInterface(() => new RetroTink5xProCloudInterface(retroTink5xPro), deviceCloudInterfaces);
+
             //All devices are added to the command processor, as that can call functionality from any device
             AddCloudInterface(() => new CommandProcessorInterface(_devices), deviceCloudInterfaces);
 

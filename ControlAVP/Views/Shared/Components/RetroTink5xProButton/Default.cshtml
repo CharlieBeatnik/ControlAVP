@@ -1,0 +1,17 @@
+﻿@model ControlAVP.ViewComponents.RetroTink5xProButtonParameters
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@if (string.IsNullOrEmpty(Model.CssFaIcon))
+{
+    <button type="submit" asp-page-handler="SendCommand" asp-route-commandname=@Model.CommandName class="btn border @Model.CssClass">@Model.ButtonLabel</button>
+}
+else
+{
+<button type="submit" asp-page-handler="SendCommand" asp-route-commandname=@Model.CommandName class="btn border @Model.CssClass">
+    <i class="fas fa-@Model.CssFaIcon"></i>
+    @if (!string.IsNullOrEmpty(Model.ButtonLabel))
+    {
+    <span class="pl-1">@Model.ButtonLabel</span>
+    }
+</button>
+}

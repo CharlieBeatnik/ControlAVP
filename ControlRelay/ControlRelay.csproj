@@ -122,6 +122,7 @@
     <Compile Include="DeviceCloudInterface\ExtronDSC301HDCloudInterface.cs" />
     <Compile Include="DeviceCloudInterface\ExtronMVX44VGACloudInterface.cs" />
     <Compile Include="DeviceCloudInterface\OSSCCloudInterface.cs" />
+    <Compile Include="DeviceCloudInterface\RetronTink5xProCloudInterface.cs" />
     <Compile Include="DeviceCloudInterface\SonySimpleIPCloudInterface.cs" />
     <Compile Include="Extensions\MethodRequestExtensions.cs" />
     <Compile Include="GlobalSuppressions.cs" />
