@@ -17,7 +17,7 @@ namespace ControlAVP.ViewComponents
 
     public class RetroTink5xProButtonViewComponent : ViewComponent
     {
-        public async Task<IViewComponentResult> InvokeAsync(CommandName commandName, string buttonLabel, string cssClass, string cssFaIcon = null)
+        public async Task<IViewComponentResult> InvokeAsync(CommandName commandName, string buttonLabel, string cssClass, string cssFaIcon)
         {
             await Task.FromResult(0).ConfigureAwait(false); //dummy call to make async
             return View(new RetroTink5xProButtonParameters() { CommandName = commandName, ButtonLabel = buttonLabel, CssClass = cssClass, CssFaIcon = cssFaIcon });
