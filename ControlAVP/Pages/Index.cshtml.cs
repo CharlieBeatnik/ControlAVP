@@ -33,13 +33,6 @@ namespace ControlAVP.Pages
 
     public class IndexModel : PageModel
     {
-        public enum Scaler
-        {
-            ExtronDSC301HD,
-            OSSC,
-            RetroTink5XPro
-        }
-
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _environment;
 
@@ -232,21 +225,8 @@ namespace ControlAVP.Pages
             return RedirectToPage();
         }
 
-        // Helper function to switch HDMI port to appropriate scaler
-        public IActionResult OnPostScalerSelect(Scaler scaler)
+        public IActionResult OnPostAtenVS0801HBSetInputPort(ControllableDeviceTypes.AtenVS0801HBTypes.InputPort inputPort)
         {
-            ControllableDeviceTypes.AtenVS0801HBTypes.InputPort inputPort;
-            switch(scaler)
-            {
-                case Scaler.OSSC: inputPort = ControllableDeviceTypes.AtenVS0801HBTypes.InputPort.Port2; break;
-                case Scaler.ExtronDSC301HD: inputPort = ControllableDeviceTypes.AtenVS0801HBTypes.InputPort.Port3; break;
-                case  Scaler.RetroTink5XPro: inputPort = ControllableDeviceTypes.AtenVS0801HBTypes.InputPort.Port8; break;
-                default:
-                    inputPort = ControllableDeviceTypes.AtenVS0801HBTypes.InputPort.Port1;
-                    Debug.Fail($"Unknown Scaler enumeration value {scaler}");
-                    break;
-            }
-
             _atenVS0801HB.SetInputPort(inputPort);
             return RedirectToPage();
         }

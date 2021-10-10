@@ -5,7 +5,7 @@ using ControllableDeviceTypes.RetroTink5xProTypes;
 
 namespace ControllableDevice
 {
-    class RetroTink5xPro : IControllableDevice
+    public class RetroTink5xPro : IControllableDevice
     {
         private bool _disposed;
         private SerialBlaster _serialBlaster;
@@ -24,6 +24,24 @@ namespace ControllableDevice
             {GenericCommandName.VolMinus, new IrCommandCode(0x0191)},
             {GenericCommandName.VolPlus, new IrCommandCode(0x01E1)},
             {GenericCommandName.LeftMouse, new IrCommandCode(0x0112)},
+        };
+
+        private Dictionary<CommandName, GenericCommandName> _commandNameToGenericCommandName = new Dictionary<CommandName, GenericCommandName>
+        {
+            {CommandName.Power, GenericCommandName.Power },
+            {CommandName.PageOutputResolution, GenericCommandName.Menu },
+            {CommandName.PageInput, GenericCommandName.Home },
+            {CommandName.PageScanlines, GenericCommandName.VolMinus },
+            {CommandName.PageInterpolation, GenericCommandName.VolPlus },
+            {CommandName.PageHorizontalSampling, GenericCommandName.LeftMouse },
+            {CommandName.ShiftPictureUp, GenericCommandName.Up },
+            {CommandName.ShiftPictureDown, GenericCommandName.Down },
+            {CommandName.Left, GenericCommandName.Left },
+            {CommandName.Right, GenericCommandName.Right },
+            {CommandName.Up, GenericCommandName.Up },
+            {CommandName.Down, GenericCommandName.Down },
+            {CommandName.Ok, GenericCommandName.Ok },
+            {CommandName.Back, GenericCommandName.Back }
         };
 
         public RetroTink5xPro(SerialBlaster serialBlaster)
@@ -62,6 +80,21 @@ namespace ControllableDevice
             }
 
             return _serialBlaster.SendCommand(_genericCommandNameToCommandCode[genericCommandName].Protocol, _genericCommandNameToCommandCode[genericCommandName].CodeWithChecksum);
+        }
+
+        public bool SendCommand(CommandName commandName)
+        {
+            return SendCommand(ConvertCommandNameToGenericCommandName(commandName));
+        }
+
+        private GenericCommandName ConvertCommandNameToGenericCommandName(CommandName commandName)
+        {
+            if (!_commandNameToGenericCommandName.ContainsKey(commandName))
+            {
+                throw new ArgumentException($"Unable to convert {commandName.ToString()} to a GenericCommandName.", nameof(commandName));
+            }
+
+            return _commandNameToGenericCommandName[commandName];
         }
     }
 }

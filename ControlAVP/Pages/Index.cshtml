@@ -3,6 +3,7 @@
 @using ControllableDeviceTypes.ExtronDSC301HDTypes;
 @using ControllableDeviceTypes.OSSCTypes;
 @using ControllableDeviceTypes.SonySimpleIPTypes;
+@using ControllableDeviceTypes.AtenVS0801HBTypes;
 @using System.Numerics;
 @{
     ViewData["Title"] = "ControlAVP";
@@ -64,9 +65,9 @@
                 <div class="btn-group" role="group">
                     <button id="btnGroupDropScalerSelect" type="button" class="btn border btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Scaler</button>
                     <div class="dropdown-menu" aria-labelledby="btnGroupDropScalerSelect">
-                        <button type="submit" asp-page-handler="ScalerSelect" asp-route-scaler=@IndexModel.Scaler.OSSC class="dropdown-item">OSSC</button>
-                        <button type="submit" asp-page-handler="ScalerSelect" asp-route-scalere=@IndexModel.Scaler.ExtronDSC301HD class="dropdown-item">Extron</button>
-                        <button type="submit" asp-page-handler="ScalerSelect" asp-route-scaler=@IndexModel.Scaler.RetroTink5XPro class="dropdown-item">RetroTink</button>
+                        <button type="submit" asp-page-handler="AtenVS0801HBSetInputPort" asp-route-inputport=@ControllableDeviceTypes.AtenVS0801HBTypes.InputPort.Port2 class="dropdown-item">OSSC</button>
+                        <button type="submit" asp-page-handler="AtenVS0801HBSetInputPort" asp-route-inputport=@ControllableDeviceTypes.AtenVS0801HBTypes.InputPort.Port3 class="dropdown-item">Extron</button>
+                        <button type="submit" asp-page-handler="AtenVS0801HBSetInputPort" asp-route-inputport=@ControllableDeviceTypes.AtenVS0801HBTypes.InputPort.Port8 class="dropdown-item">RetroTink</button>
                     </div>
                 </div>
                 <div class="btn-group" role="group">

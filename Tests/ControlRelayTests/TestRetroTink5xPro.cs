@@ -1,0 +1,123 @@
+﻿using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ControllableDevice;
+using System.IO;
+using Newtonsoft.Json.Linq;
+using ControllableDeviceTypes.RetroTink5xProTypes;
+
+namespace Tests
+{
+    [TestClass]
+    public class TestRetroTink5xPro
+    {
+        private const string _settingsFile = "settings.json";
+        private static JToken _serialBlasterSettings;
+        private static JToken _deviceSettings;
+
+        [ClassInitialize]
+        public static void ClassInitialize(TestContext tc)
+        {
+            if (tc == null)
+            {
+                throw new ArgumentNullException(nameof(tc));
+            }
+
+            JObject jsonParsed;
+            using (StreamReader r = new StreamReader(_settingsFile))
+            {
+                string json = r.ReadToEnd();
+                jsonParsed = JObject.Parse(json);
+            }
+
+            _serialBlasterSettings = jsonParsed["Devices"]["SerialBlaster"][0];
+            _deviceSettings = jsonParsed["Devices"]["RetroTink5xPro"][0];
+        }
+
+        public static SerialBlaster CreateSerialBlaster()
+        {
+            return new SerialBlaster(_serialBlasterSettings["portId"].ToString());
+        }
+
+        public static SerialBlaster CreateInvalidSerialBlaster()
+        {
+            return new SerialBlaster("invalid");
+        }
+
+        public static RetroTink5xPro CreateDevice(SerialBlaster serialBlaster)
+        {
+            return new RetroTink5xPro(serialBlaster);
+        }
+
+        [TestMethod]
+        public void GivenDevice_WhenSendCommand_ThenResponseIsTrue()
+        {
+            using (var serialBlaster = CreateSerialBlaster())
+            using (var device = CreateDevice(serialBlaster))
+            {
+                var result = device.SendCommand(CommandName.Back);
+                Assert.IsTrue(result);
+            }
+        }
+
+        [TestMethod]
+        public void GivenDeviceAndCommandSentAndDeviceDisposed_WhenCreateDeviceAndSendCommand_ThenResponseIsTrue()
+        {
+            using (var serialBlaster = CreateSerialBlaster())
+            using (var device = CreateDevice(serialBlaster))
+            {
+                var result = device.SendCommand(CommandName.Back);
+                Assert.IsTrue(result);
+            }
+
+            using (var serialBlaster = CreateSerialBlaster())
+            using (var device = CreateDevice(serialBlaster))
+            {
+                var result = device.SendCommand(CommandName.Back);
+                Assert.IsTrue(result);
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void GivenDevice_WhenSendCommandUsingInvalidEnum_ThenExceptionThrown()
+        {
+            using (var serialBlaster = CreateSerialBlaster())
+            using (var device = CreateDevice(serialBlaster))
+            {
+                var result = device.SendCommand((CommandName)int.MaxValue);
+                Assert.IsTrue(result);
+            }
+        }
+
+        [TestMethod]
+        public void GivenDevice_WhenGetAvailable_ThenDeviceIsAvailable()
+        {
+            using (var serialBlaster = CreateSerialBlaster())
+            using (var device = CreateDevice(serialBlaster))
+            {
+                Assert.IsTrue(device.GetAvailable());
+            }
+        }
+
+        [TestMethod]
+        public void GivenInvalidDevice_WhenGetAvailable_ThenDeviceIsNotAvailable()
+        {
+            using (var serialBlaster = CreateInvalidSerialBlaster())
+            using (var device = CreateDevice(serialBlaster))
+            {
+                Assert.IsFalse(device.GetAvailable());
+            }
+        }
+
+        [TestMethod]
+        public void GivenInvalidDevice_WhenSendCommandFromEnum_ThenResponseIsFalse()
+        {
+            using (var serialBlaster = CreateInvalidSerialBlaster())
+            using (var device = CreateDevice(serialBlaster))
+            {
+                var result = device.SendCommand(CommandName.Back);
+                Assert.IsFalse(result);
+            }
+        }
+    }
+}
