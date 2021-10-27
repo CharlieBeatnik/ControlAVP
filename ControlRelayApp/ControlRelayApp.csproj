@@ -146,6 +146,9 @@
     <Compile Include="..\ControlRelay\DeviceCloudInterface\OSSCCloudInterface.cs">
       <Link>DeviceCloudInterface\OSSCCloudInterface.cs</Link>
     </Compile>
+    <Compile Include="..\ControlRelay\DeviceCloudInterface\RetronTink5xProCloudInterface.cs">
+      <Link>DeviceCloudInterface\RetronTink5xProCloudInterface.cs</Link>
+    </Compile>
     <Compile Include="..\ControlRelay\DeviceCloudInterface\SonySimpleIPCloudInterface.cs">
       <Link>DeviceCloudInterface\SonySimpleIPCloudInterface.cs</Link>
     </Compile>

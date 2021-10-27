@@ -57,7 +57,7 @@ namespace ControlRelay
 
         public static List<object> CreateControllableDevices(JToken deviceTypesJson)
         {
-            SerialBlaster serialBlaster = null;
+            var serialBlasters = new List<SerialBlaster>();
 
             var devices = new List<object>();
 
@@ -76,6 +76,10 @@ namespace ControlRelay
                 {
                     var parameters = new List<object>();
 
+                    //Look for special serialBlasterIndex parameter
+                    Int64? serialBlasterIndex = (Int64?)((JValue)deviceSettingsJson["serialBlasterIndex"])?.Value;
+                    bool hasSerialBlasterIndex = serialBlasterIndex !=null;
+
                     //For each paramter, either manager the cast or assignment explicitly by type, or rely on an explicit cast
                     foreach (var parameterInfo in parameterInfos)
                     {
@@ -85,8 +89,9 @@ namespace ControlRelay
                         switch (type)
                         {
                             case Type _ when type == typeof(SerialBlaster):
-                                Debug.Assert(serialBlaster != null, $"SerialBlaster has not been initialised but is required for construction of {deviceType.Name}.");
-                                parameters.Add(serialBlaster);
+                                Debug.Assert(hasSerialBlasterIndex, $"SerialBlaster is required for consruction of {deviceType.Name}, but no serialBlasterIndex parameter has been provided.");
+                                Debug.Assert(serialBlasters.Count >= serialBlasterIndex+1, $"A SerialBlaster index of value {serialBlasterIndex} has been requested but does not exist.");
+                                parameters.Add(serialBlasters[(int)serialBlasterIndex]);
                                 break;
                             case Type _ when type == typeof(IPAddress):
                                 parameters.Add(IPAddress.Parse(value));
@@ -95,6 +100,9 @@ namespace ControlRelay
                                 parameters.Add(PhysicalAddress.Parse(value));
                                 break;
                             default:
+                                //Ignore special serialBlasterIndex parameter
+                                if (parameterInfo.Name == "serialBlasterIndex") break;
+                                
                                 //Default is to rely on an explicit case
                                 parameters.Add(Convert.ChangeType(value, parameterInfo.ParameterType));
                                 break;
@@ -105,7 +113,7 @@ namespace ControlRelay
 
                     if(device.GetType() == typeof(SerialBlaster))
                     {
-                        serialBlaster = (SerialBlaster)device;
+                        serialBlasters.Add((SerialBlaster)device);
                     }
 
                     devices.Add(device);
