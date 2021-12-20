@@ -21,7 +21,7 @@ namespace CommandProcessor
         public string ErrorMessage { get; set; }
         public TimeSpan StartTime { get; set; }
         public TimeSpan EndTime { get; set; }
-        public TimeSpan Time => EndTime - StartTime;
+        public TimeSpan OutrightTime => EndTime - StartTime;
         public TimeSpan ExecutionStartTime { get; set; }
         public TimeSpan ExecutionEndTime { get; set; }
         public TimeSpan ExecutionTime => ExecutionEndTime - ExecutionStartTime;
