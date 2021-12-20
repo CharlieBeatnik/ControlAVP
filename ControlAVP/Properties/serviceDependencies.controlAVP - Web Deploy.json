@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "mssql1": {
+      "ignored": "true",
+      "suggestion": "true",
+      "type": "mssql",
+      "connectionId": ""
+    },
+    "secrets1": {
+      "ignored": "true",
+      "suggestion": "true",
+      "type": "secrets",
+      "connectionId": ""
+    }
+  }
+}
