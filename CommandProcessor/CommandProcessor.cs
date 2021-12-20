@@ -21,7 +21,10 @@ namespace CommandProcessor
         public string ErrorMessage { get; set; }
         public TimeSpan StartTime { get; set; }
         public TimeSpan EndTime { get; set; }
-        public TimeSpan ExecutionTime => EndTime - StartTime;
+        public TimeSpan Time => EndTime - StartTime;
+        public TimeSpan ExecutionStartTime { get; set; }
+        public TimeSpan ExecutionEndTime { get; set; }
+        public TimeSpan ExecutionTime => ExecutionEndTime - ExecutionStartTime;
         public int Count { get; set; }
         public int Index { get; set; }
         public Guid Id { get; set; }
@@ -84,6 +87,8 @@ namespace CommandProcessor
                     Thread.Sleep(timeToWaitMilliseconds);
                 }
 
+                TimeSpan executionStartTime = sw.Elapsed;
+
                 string assembly = (command["Assembly"] == null) ? defaultAssembly : (string)command["Assembly"];
                 int? deviceIndex = (command["DeviceIndex"] == null) ? defaultDeviceIndex : (int?)command["DeviceIndex"];
 
@@ -95,6 +100,7 @@ namespace CommandProcessor
                     Function = (string)command["Function"],
                     Description = (string)command["Description"],
                     StartTime = startTime,
+                    ExecutionStartTime = executionStartTime,
                     Id = id,
                     Count = commandBatch["Commands"].Count(),
                     Index = item.i
@@ -104,7 +110,7 @@ namespace CommandProcessor
                 //then return a failure for this command
                 if(assembly == null || deviceIndex == null)
                 {
-                    commandResult.EndTime = sw.Elapsed;
+                    commandResult.ExecutionEndTime = commandResult.EndTime = sw.Elapsed;
                     commandResult.ErrorMessage = "Assembly or Device Index is missing.";
                     yield return commandResult;
                     break;
@@ -118,7 +124,7 @@ namespace CommandProcessor
 
                 if (methodInfo == null)
                 {
-                    commandResult.EndTime = sw.Elapsed;
+                    commandResult.ExecutionEndTime = commandResult.EndTime = sw.Elapsed;
                     commandResult.ErrorMessage = $"Method {(string)command["Function"]} could not be found.";
                     yield return commandResult;
                     break;
@@ -131,7 +137,7 @@ namespace CommandProcessor
                 if((command["Parameters"] == null && parameterInfos.Length != 0) ||
                    (command["Parameters"] != null && (command["Parameters"].Count() != parameterInfos.Length)))
                 {
-                    commandResult.EndTime = sw.Elapsed;
+                    commandResult.ExecutionEndTime = commandResult.EndTime = sw.Elapsed;
                     commandResult.ErrorMessage = "The wrong number of parameters have been provided.";
                     yield return commandResult;
                     break;
@@ -197,7 +203,7 @@ namespace CommandProcessor
 
                 if(!allParametersProvided)
                 {
-                    commandResult.EndTime = sw.Elapsed;
+                    commandResult.ExecutionEndTime = commandResult.EndTime = sw.Elapsed;
                     commandResult.ErrorMessage = "The correct number of parameters were provides but there was a problem with at least 1, is the name correct?";
                     yield return commandResult;
                     break;
@@ -231,6 +237,8 @@ namespace CommandProcessor
                     commandResult.ErrorMessage = $"Return type of method {(string)command["Function"]} must be bool or nullable";
                     commandResult.Success = false;
                 }
+
+                commandResult.ExecutionEndTime = sw.Elapsed;
 
                 if(command["PostWait"] != null)
                 {

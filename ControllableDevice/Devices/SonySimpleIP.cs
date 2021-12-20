@@ -18,10 +18,11 @@ namespace ControllableDevice
         private  PhysicalAddress _physicalAddress;
         private string _preSharedKey;
 
-        private readonly TimeSpan _fromColdBootToOnTimeout = TimeSpan.FromSeconds(30);
+        private readonly TimeSpan _fromColdBootToOnTimeout = TimeSpan.FromSeconds(5);
         private readonly TimeSpan _fromColdBootToOnPollInterval = TimeSpan.FromMilliseconds(500);
         private readonly TimeSpan _fromStandbyToOnWait = TimeSpan.FromSeconds(1);
         private readonly TimeSpan _fromOnToStandbyWait = TimeSpan.FromSeconds(1);
+        private readonly TimeSpan _afterSetInputPort = TimeSpan.FromSeconds(2);
         private readonly TimeSpan _jsonRpcDeviceWebRequestTimeout = TimeSpan.MaxValue;
 
         public SonySimpleIP(IPAddress host, PhysicalAddress physicalAddress, string preSharedKey)
@@ -296,6 +297,11 @@ namespace ControllableDevice
                 );
 
                 var result = CallMethod("setPlayContent", "sony/avContent", parameters);
+                
+                //Whilst the method return immediately, it has been observed that a short wait is needed
+                //to gurantee that the new input port has been switched to
+                Thread.Sleep(_afterSetInputPort);
+                
                 return ResultIsSuccessful(result);
             }
 

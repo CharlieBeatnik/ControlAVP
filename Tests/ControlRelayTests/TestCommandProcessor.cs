@@ -223,7 +223,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GivenJsonAndDevice_WhenExecuteCommandWith5SecondsPostWait_ThenExecuteTimeGreaterThan5Seconds()
+        public void GivenJsonAndDevice_WhenExecuteCommandWith5SecondsPostWait_ThenEndTimeIs5SecondsGreaterThanOrEqualToExecutionEndTime()
         {
             using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-post-wait.json"))
             {
@@ -235,7 +235,7 @@ namespace Tests
 
                     foreach (var commandResult in CommandProcessorUtils.Execute(devices, json))
                     {
-                        Assert.IsTrue(commandResult.ExecutionTime.TotalSeconds >= 5);
+                        Assert.IsTrue((commandResult.EndTime - commandResult.ExecutionEndTime).TotalSeconds >= 5);
                     }
                 }
             }
@@ -284,7 +284,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GivenJsonAndDevice_WhenExecuteCommandWithExecuteAfter5Seconds_ThenExecutionTimeGreaterThan5Seconds()
+        public void GivenJsonAndDevice_WhenExecuteCommandWithExecuteAfter5Seconds_ThenExecutionStartTimeIsGreaterThanOrEqualTo5Seconds()
         {
             using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-execute-after.json"))
             {
@@ -296,7 +296,7 @@ namespace Tests
 
                     foreach (var commandResult in CommandProcessorUtils.Execute(devices, json))
                     {
-                        Assert.IsTrue(commandResult.ExecutionTime.TotalSeconds > 5);
+                        Assert.IsTrue(commandResult.ExecutionStartTime.TotalSeconds > 5);
                     }
                 }
             }

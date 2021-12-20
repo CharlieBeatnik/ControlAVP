@@ -178,7 +178,7 @@ namespace Tests
                 //Confirm HDMI1
                 var inputPort = device.GetInputPort();
                 Assert.IsNotNull(inputPort);
-                Assert.IsTrue(inputPort == InputPort.Hdmi1);
+                Assert.AreEqual(InputPort.Hdmi1, inputPort);
 
                 //Change to HDMI2
                 success = device.SetInputPort(InputPort.Hdmi2);
@@ -187,7 +187,7 @@ namespace Tests
                 //Confirm HDMI2
                 inputPort = device.GetInputPort();
                 Assert.IsNotNull(inputPort);
-                Assert.IsTrue(inputPort == InputPort.Hdmi2);
+                Assert.AreEqual(InputPort.Hdmi2, inputPort);
             }
         }
     }
