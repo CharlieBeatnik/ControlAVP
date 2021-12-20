@@ -12,9 +12,9 @@ namespace EventHub
 {
     public class SmartEventHubConsumer
     {
-        private string _eventHubConnectionString;
-        private string _eventHubName;
-        private ConcurrentDictionary<Guid, BlockingCollection<EventData>> _eventQueues = new ConcurrentDictionary<Guid, BlockingCollection<EventData>>();
+        private readonly string _eventHubConnectionString;
+        private readonly string _eventHubName;
+        private readonly ConcurrentDictionary<Guid, BlockingCollection<EventData>> _eventQueues = new();
 
         public SmartEventHubConsumer(string eventHubConnectionString, string eventHubName)
         {
@@ -29,10 +29,8 @@ namespace EventHub
 
         public bool DeregisterEventQueue(Guid id)
         {
-            BlockingCollection<EventData> queue;
             bool result = false;
-
-            if(_eventQueues.TryGetValue(id, out queue))
+            if (_eventQueues.TryGetValue(id, out _))
             {
                 result = _eventQueues.TryRemove(id, out _);
             }
@@ -50,22 +48,19 @@ namespace EventHub
 
         public IEnumerable<string> GetEvents(Guid id, TimeSpan? maxEventWaitTime = null)
         {
-            BlockingCollection<EventData> queue;
             int count = 0;
 
-            while(true)
+            while (true)
             {
-                if (_eventQueues.TryGetValue(id, out queue))
+                if (_eventQueues.TryGetValue(id, out BlockingCollection<EventData> queue))
                 {
                     EventData eventData;
                     if (maxEventWaitTime != null)
                     {
                         try
                         {
-                            using (var source = new CancellationTokenSource((TimeSpan)maxEventWaitTime))
-                            {
-                                eventData = queue.Take(source.Token);
-                            }
+                            using var source = new CancellationTokenSource((TimeSpan)maxEventWaitTime);
+                            eventData = queue.Take(source.Token);
                         }
                         catch(OperationCanceledException)
                         {
@@ -80,12 +75,10 @@ namespace EventHub
                     count++;
                     yield return Encoding.UTF8.GetString(eventData.Body.ToArray());
 
-                    object userCount;
-                    if (eventData.Properties.TryGetValue("user-command-count", out userCount) && int.Parse((string)userCount) == count)
+                    if (eventData.Properties.TryGetValue("user-command-count", out object userCount) && int.Parse((string)userCount) == count)
                         break;
-                    
-                    object success;
-                    if (eventData.Properties.TryGetValue("user-success", out success) && !bool.Parse((string)success))
+
+                    if (eventData.Properties.TryGetValue("user-success", out object success) && !bool.Parse((string)success))
                         break;
                 }
                 else yield break;
@@ -105,8 +98,7 @@ namespace EventHub
             {
                 await foreach (PartitionEvent partitionEvent in consumer.ReadEventsAsync(ct))
                 {
-                    object idString;
-                    partitionEvent.Data.Properties.TryGetValue("user-id", out idString);
+                    partitionEvent.Data.Properties.TryGetValue("user-id", out object idString);
 
                     if (idString != null)
                     {
@@ -114,7 +106,7 @@ namespace EventHub
 
                         if (_eventQueues.ContainsKey(id))
                         {
-                            _eventQueues[id].Add(partitionEvent.Data);
+                            _eventQueues[id].Add(partitionEvent.Data, ct);
                         }
                     }
                 }
