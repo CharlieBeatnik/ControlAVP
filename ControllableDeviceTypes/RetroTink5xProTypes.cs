@@ -31,13 +31,11 @@ namespace ControllableDeviceTypes
         public enum CommandName
         {
             Power,
-            PageOutputResolution,
-            PageInput,
-            PageScanlines,
-            PageInterpolation,
-            PageHorizontalSampling,
-            ShiftPictureUp,
-            ShiftPictureDown,
+            ShowMainMenu,
+            ShowInputSourceMenu,
+            ShowPostProcessingMenu,
+            ShowScalingAndCroppingMenu,
+            ShowHorizontalSamplingMenu,
             Left,
             Right,
             Up,
@@ -51,6 +49,29 @@ namespace ControllableDeviceTypes
             public static bool Valid(this CommandName commandName)
             {
                 return Enum.IsDefined(typeof(CommandName), commandName);
+            }
+        }
+
+        public enum ProfileName
+        {
+            Profile1 = 1,
+            Profile2 = 2,
+            Profile3 = 3,
+            Profile4 = 4,
+            Profile5 = 5,
+            Profile6 = 6,
+            Profile7 = 7,
+            Profile8 = 8,
+            Profile9 = 9,
+            Profile10 = 10,
+            ProfileDefault = 11,
+        };
+
+        public static class ProfileNameExtensions
+        {
+            public static bool Valid(this ProfileName profileName)
+            {
+                return Enum.IsDefined(typeof(ProfileName), profileName);
             }
         }
     }

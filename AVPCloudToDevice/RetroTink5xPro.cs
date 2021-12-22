@@ -43,5 +43,19 @@ namespace AVPCloudToDevice
                 return false;
             }
         }
+
+        public bool LoadProfile(ProfileName profileName)
+        {
+            try
+            {
+                var payload = new { profileName };
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "RetroTink5xProLoadProfile", payload);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }

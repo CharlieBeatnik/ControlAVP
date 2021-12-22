@@ -51,5 +51,11 @@ namespace ControlAVP.Pages.Devices
             _device.SendCommand(commandName);
             return RedirectToPage();
         }
+
+        public IActionResult OnPostLoadProfile(ProfileName profileName)
+        {
+            _device.LoadProfile(profileName);
+            return RedirectToPage();
+        }
     }
 }

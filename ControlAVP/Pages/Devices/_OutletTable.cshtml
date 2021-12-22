@@ -22,82 +22,90 @@
 </div>
 
 
-@foreach (var phase in Model.Phases)
+@if (Model.Phases != null)
 {
-    <table class="table table-sm table-borderless">
-        <tr>
-            <td class="align-middle text-nowrap" width=1%>Load</td>
-            <td class="align-middle">
-                <div class="progress position-relative">
-                    @{
-                        var wattsColour = "bg-success";
-                        if (phase.Watts > 2000)
-                        {
-                            wattsColour = "bg-warning";
-                        }
-                        if (phase.Watts > 2500)
-                        {
-                            wattsColour = "bg-danger";
-                        }
+    @foreach (var phase in Model.Phases)
+    {
+        <table class="table table-sm table-borderless">
+            <tr>
+                <td class="align-middle text-nowrap" width=1%>Load</td>
+                <td class="align-middle">
+                    <div class="progress position-relative">
+                        @{
+                            var wattsColour = "bg-success";
+                            if (phase.Watts > 2000)
+                            {
+                                wattsColour = "bg-warning";
+                            }
+                            if (phase.Watts > 2500)
+                            {
+                                wattsColour = "bg-danger";
+                            }
 
-                        var styleWidth = $@"width: {phase.Watts / (2500 / 100)}%;";
-                    }
-                    <div class="progress-bar progress-bar-striped progress-bar-animated @wattsColour"
+                            var styleWidth = $@"width: {phase.Watts / (2500 / 100)}%;";
+                        }
+                        <div class="progress-bar progress-bar-striped progress-bar-animated @wattsColour"
                          role="progressbar"
                          aria-valuenow="@phase.Watts"
                          aria-valuemin="0"
                          aria-valuemax="2500"
                          style="@styleWidth">
+                        </div>
+                        <small class="justify-content-center d-flex position-absolute w-100" style="padding-top: 1px;">@(phase.Watts)W</small>
                     </div>
-                    <small class="justify-content-center d-flex position-absolute w-100" style="padding-top: 1px;">@(phase.Watts)W</small>
-                </div>
-            </td>
-            <td class="align-middle text-nowrap" width=1%>Voltage <span class="badge badge-primary">@(phase.Voltage)V</span></td>
-        </tr>
-    </table>
+                </td>
+                <td class="align-middle text-nowrap" width=1%>Voltage <span class="badge badge-primary">@(phase.Voltage)V</span></td>
+            </tr>
+        </table>
+    }
 }
 
-<table class="table table-sm">
-    <thead>
-        <tr>
-            <th width="38px"></th>
-            <th>Name</th>
-            <th>Control</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var outlet in Model.Outlets.OrderBy(o => o.Name).Where(o => !o.Name.Contains("Outlet")))
-        {
-            string relativeImagePath = string.Format("../images/outlets/small/{0}.png", outlet.Name);
-            string absoluteImagePath = System.IO.Path.Combine(Model.WebRootPath, @"images\outlets\small", outlet.Name + ".png");
-
-            string relativeLargeImagePath = string.Format("../images/outlets/large/{0}.png", outlet.Name);
-
-            <tr class="@(@outlet.State == Outlet.PowerState.On ? "table-success" : "")">
-                <td class="align-middle">
-                    @if (!System.IO.File.Exists(absoluteImagePath))
-                    {
-                        relativeImagePath = "../images/outlets/small/empty.png";
-                    }
-                    <img src="@relativeImagePath" class="img-fluid" />
-                </td>
-                <td class="align-middle">@outlet.Name <span class="badge badge-success ml-2">@(outlet.Watts > 0 ? $"{outlet.Watts}W" : "")</span></td>
-                <td class="align-middle">
-                    @{bool confirmation = Model.OutletConfirmation.Contains(outlet.Name);}
-                    @switch (outlet.State)
-                    {
-                        case Outlet.PowerState.On:
-                            var messageOff = string.Format("Turn the {0} off?", outlet.Name);
-                            <button data-outlet="@outlet.Id" data-currentpowerstate="@outlet.State" data-confirmation="@confirmation" data-message="@messageOff" data-image="@relativeLargeImagePath" class="btn border btn-danger btn-sm btn-click-action btn-block">Turn Off</button>
-                            break;
-                        case Outlet.PowerState.Off:
-                            var messageOn = string.Format("Turn the {0} on?", outlet.Name);
-                            <button data-outlet="@outlet.Id" data-currentpowerstate="@outlet.State" data-confirmation="@false" data-message="@messageOn" data-image="@relativeLargeImagePath" class="btn border btn-success btn-sm btn-click-action btn-block">Turn On</button>
-                            break;
-                    }
-                </td>
+@if (Model.Outlets != null)
+{
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                <th width="38px"></th>
+                <th>Name</th>
+                <th>Control</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var outlet in Model.Outlets.OrderBy(o => o.Name).Where(o => !o.Name.Contains("Outlet")))
+            {
+                string relativeImagePath = string.Format("../images/outlets/small/{0}.png", outlet.Name);
+                string absoluteImagePath = System.IO.Path.Combine(Model.WebRootPath, @"images\outlets\small", outlet.Name + ".png");
+
+                string relativeLargeImagePath = string.Format("../images/outlets/large/{0}.png", outlet.Name);
+
+                <tr class="@(@outlet.State == Outlet.PowerState.On ? "table-success" : "")">
+                    <td class="align-middle">
+                        @if (!System.IO.File.Exists(absoluteImagePath))
+                        {
+                            relativeImagePath = "../images/outlets/small/empty.png";
+                        }
+                        <img src="@relativeImagePath" class="img-fluid" />
+                    </td>
+                    <td class="align-middle">@outlet.Name <span class="badge badge-success ml-2">@(outlet.Watts > 0 ? $"{outlet.Watts}W" : "")</span></td>
+                    <td class="align-middle">
+                        @{
+                            bool confirmation = Model.OutletConfirmation.Contains(outlet.Name);
+                        }
+                        @switch (outlet.State)
+                        {
+                            case Outlet.PowerState.On:
+                                var messageOff = string.Format("Turn the {0} off?", outlet.Name);
+                                <button data-outlet="@outlet.Id" data-currentpowerstate="@outlet.State" data-confirmation="@confirmation" data-message="@messageOff" data-image="@relativeLargeImagePath" class="btn border btn-danger btn-sm btn-click-action btn-block">Turn Off</button>
+                                break;
+                            case Outlet.PowerState.Off:
+                                var messageOn = string.Format("Turn the {0} on?", outlet.Name);
+                                <button data-outlet="@outlet.Id" data-currentpowerstate="@outlet.State" data-confirmation="@false" data-message="@messageOn" data-image="@relativeLargeImagePath" class="btn border btn-success btn-sm btn-click-action btn-block">Turn On</button>
+                                break;
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
 

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Numerics;
+using System.Threading;
 using ControllableDeviceTypes.RetroTink5xProTypes;
 
 
@@ -29,13 +31,11 @@ namespace ControllableDevice
         private Dictionary<CommandName, GenericCommandName> _commandNameToGenericCommandName = new Dictionary<CommandName, GenericCommandName>
         {
             {CommandName.Power, GenericCommandName.Power },
-            {CommandName.PageOutputResolution, GenericCommandName.Menu },
-            {CommandName.PageInput, GenericCommandName.Home },
-            {CommandName.PageScanlines, GenericCommandName.VolMinus },
-            {CommandName.PageInterpolation, GenericCommandName.VolPlus },
-            {CommandName.PageHorizontalSampling, GenericCommandName.LeftMouse },
-            {CommandName.ShiftPictureUp, GenericCommandName.Up },
-            {CommandName.ShiftPictureDown, GenericCommandName.Down },
+            {CommandName.ShowMainMenu, GenericCommandName.Menu },
+            {CommandName.ShowInputSourceMenu, GenericCommandName.Home },
+            {CommandName.ShowPostProcessingMenu, GenericCommandName.VolMinus },
+            {CommandName.ShowScalingAndCroppingMenu, GenericCommandName.VolPlus },
+            {CommandName.ShowHorizontalSamplingMenu, GenericCommandName.LeftMouse },
             {CommandName.Left, GenericCommandName.Left },
             {CommandName.Right, GenericCommandName.Right },
             {CommandName.Up, GenericCommandName.Up },
@@ -82,6 +82,14 @@ namespace ControllableDevice
             return _serialBlaster.SendCommand(_genericCommandNameToCommandCode[genericCommandName].Protocol, _genericCommandNameToCommandCode[genericCommandName].CodeWithChecksum);
         }
 
+        public bool SendCommand(CommandName commandName, TimeSpan postSendDelay)
+        {
+            bool result = SendCommand(ConvertCommandNameToGenericCommandName(commandName));
+            Thread.Sleep(postSendDelay);
+
+            return result;
+        }
+
         public bool SendCommand(CommandName commandName)
         {
             return SendCommand(ConvertCommandNameToGenericCommandName(commandName));
@@ -95,6 +103,53 @@ namespace ControllableDevice
             }
 
             return _commandNameToGenericCommandName[commandName];
+        }
+
+        public bool LoadProfile(ProfileName profileName)
+        {
+            bool result = true;
+            TimeSpan postSendDelay = TimeSpan.FromMilliseconds(1000);
+
+            //Reset the device to ensure the main menu is a in a known state
+            //Power Off
+            result &= SendCommand(CommandName.Power, TimeSpan.FromSeconds(6));
+            //Power On
+            result &= SendCommand(CommandName.Power, TimeSpan.FromSeconds(8));
+
+            //Enter main menu, cursor should now be in default top-left postion
+            result &= SendCommand(CommandName.ShowMainMenu, postSendDelay);
+
+            //Navigate to Load Profile Screen
+            result &= SendCommand(CommandName.Right, postSendDelay);
+            result &= SendCommand(CommandName.Down, postSendDelay);
+            result &= SendCommand(CommandName.Down, postSendDelay);
+            result &= SendCommand(CommandName.Down, postSendDelay);
+            result &= SendCommand(CommandName.Ok, postSendDelay);
+
+            //Calculate how many presses are needed to move the cursor to the correct positon
+            const int entriesPerColumn = 8;
+            int profileIdx = (int)profileName - 1;
+            int posX = (int)Math.Floor((float)profileIdx / entriesPerColumn);
+            int posY = profileIdx % entriesPerColumn;
+
+            for (int i = 0; i < posX; i++)
+            {
+                result &= SendCommand(CommandName.Right, postSendDelay);
+            }
+
+            for (int i = 0; i < posY; i++)
+            {
+                result &= SendCommand(CommandName.Down, postSendDelay);
+            }
+
+            //Press Ok to load the profile
+            result &= SendCommand(CommandName.Ok, postSendDelay);
+
+            //Exit the menu
+            result &= SendCommand(CommandName.Back,postSendDelay);
+            result &= SendCommand(CommandName.Back);
+
+            return result;
         }
     }
 }
