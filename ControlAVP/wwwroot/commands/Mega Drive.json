@@ -29,14 +29,6 @@
     },
     {
       "ExecuteAfter": 16.0,
-      "Description": "Load RetroTINK Profile for Mega Drive",
-      "DeviceType": "RetroTink5xPro",
-      "Function": "LoadProfile",
-      "Parameters": {
-        "profileName": "Profile1"
-      }
-    },
-    {
       "Description": "HDMI Switch 0 to Scaler",
       "DeviceType": "AtenVS0801HB",
       "Function": "SetInputPort",
@@ -50,6 +42,16 @@
       "Function": "SetInputPort",
       "Parameters": {
         "inputPort": "Hdmi1"
+      },
+      "PostWait": 3.0
+    },
+    {
+
+      "Description": "Load RetroTINK Profile for Mega Drive",
+      "DeviceType": "RetroTink5xPro",
+      "Function": "LoadProfile",
+      "Parameters": {
+        "profileName": "Profile1"
       }
     }
   ]

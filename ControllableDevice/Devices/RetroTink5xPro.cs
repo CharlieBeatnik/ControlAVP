@@ -112,9 +112,9 @@ namespace ControllableDevice
 
             //Reset the device to ensure the main menu is a in a known state
             //Power Off
-            result &= SendCommand(CommandName.Power, TimeSpan.FromSeconds(6));
+            result &= SendCommand(CommandName.Power, TimeSpan.FromSeconds(10));
             //Power On
-            result &= SendCommand(CommandName.Power, TimeSpan.FromSeconds(8));
+            result &= SendCommand(CommandName.Power, TimeSpan.FromSeconds(10));
 
             //Enter main menu, cursor should now be in default top-left postion
             result &= SendCommand(CommandName.ShowMainMenu, postSendDelay);
