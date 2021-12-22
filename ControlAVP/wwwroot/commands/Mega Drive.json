@@ -25,101 +25,15 @@
       "Function": "TurnOutletOn",
       "Parameters": {
         "id": 20
-      },
-      "PostWait": 7.0
+      }
     },
     {
       "ExecuteAfter": 16.0,
-      "Description": "Disable HDMI Switch 1 Output",
-      "DeviceType": "AtenVS0801H",
-      "Function": "SetOutput",
-      "Parameters": {
-        "enable": "false"
-      }
-    },
-    {
-      "Description": "Scaler to HDMI",
-      "DeviceType": "ExtronDSC301HD",
-      "Function": "SetInputPort",
-      "Parameters": {
-        "inputPort": "HDMI"
-      }
-    },
-    {
-      "Description": "Scaler to Output Rate for Mega Drive",
-      "DeviceType": "ExtronDSC301HD",
-      "Function": "SetOutputRateWithoutEdid",
-      "Parameters": {
-        "width": 1920,
-        "height": 1080,
-        "refreshRate": 60.0
-      },
-      "PostWait": 2.0
-    },
-    {
-      "Description": "Change OSSC to RGBS",
-      "DeviceType": "OSSC",
-      "Function": "SendCommand",
-      "Parameters": {
-        "commandName": "AV1RGBS"
-      },
-      "PostWait": 1.0
-    },
-    {
-      "Description": "Load OSSC Profile for Mega Drive",
-      "DeviceType": "OSSC",
+      "Description": "Load RetroTINK Profile for Mega Drive",
+      "DeviceType": "RetroTink5xPro",
       "Function": "LoadProfile",
       "Parameters": {
-        "profileName": "Profile6"
-      },
-      "PostWait": 2.0
-    },
-    {
-      "Description": "Load OSSC Reset Profile",
-      "DeviceType": "OSSC",
-      "Function": "LoadProfile",
-      "Parameters": {
-        "profileName": "Profile2"
-      },
-      "PostWait": 3.0
-    },
-    {
-      "Description": "Load OSSC Profile for Mega Drive",
-      "DeviceType": "OSSC",
-      "Function": "LoadProfile",
-      "Parameters": {
-        "profileName": "Profile6"
-      },
-      "PostWait": 3.0
-    },
-    {
-      "Description": "Scale Fit Preserve Ratio",
-      "DeviceType": "ExtronDSC301HD",
-      "Function": "Scale",
-      "Parameters": {
-        "scaleType": "Fit",
-        "positionType": "Centre",
-        "aspectRatio": "RatioPreserve",
-        "padding": {
-          "X": 0,
-          "Y": 0
-        }
-      }
-    },
-    {
-      "Description": "TV HDMI4 for Not Rack",
-      "DeviceType": "SonySimpleIP",
-      "Function": "SetInputPort",
-      "Parameters": {
-        "inputPort": "Hdmi4"
-      }
-    },
-    {
-      "Description": "Enable HDMI Switch 1 Output",
-      "DeviceType": "AtenVS0801H",
-      "Function": "SetOutput",
-      "Parameters": {
-        "enable": "true"
+        "profileName": "Profile1"
       }
     },
     {
@@ -127,7 +41,7 @@
       "DeviceType": "AtenVS0801HB",
       "Function": "SetInputPort",
       "Parameters": {
-        "inputPort": "Port3"
+        "inputPort": "Port8"
       }
     },
     {

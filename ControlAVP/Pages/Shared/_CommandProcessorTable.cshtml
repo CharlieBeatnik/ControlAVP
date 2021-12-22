@@ -32,15 +32,15 @@
                 }
                 <img src="@relativeImagePath" class="img-fluid" />
                 </td>
-                <td class="align-middle">@commandResult.Description</td>
+                <td class="align-middle"><small>@commandResult.Description</small></td>
 
                 @if (Math.Abs(commandResult.OutrightTime.TotalSeconds - commandResult.ExecutionTime.TotalSeconds) < 0.1)
                 {
-                    <td class="align-middle">@commandResult.OutrightTime.TotalSeconds.ToString("0.0")s</td>
+                    <td class="align-middle"><small>@commandResult.OutrightTime.TotalSeconds.ToString("0.0")s</small></td>
                 }
                 else
                 {
-                    <td class="align-middle">@commandResult.OutrightTime.TotalSeconds.ToString("0.0")s (@commandResult.ExecutionTime.TotalSeconds.ToString("0.0")s)</td>    
+                    <td class="align-middle"><small>@commandResult.OutrightTime.TotalSeconds.ToString("0.0")s (@commandResult.ExecutionTime.TotalSeconds.ToString("0.0")s)</small></td>    
                 }
                 
             </tr>
