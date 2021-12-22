@@ -22,20 +22,32 @@
                         <tr>
                             <td class="align-middle text-right" width="1%">Power</td>
                             <td>
-                                <div class="btn-group">
+                                <div class="btn-group-vertical">
                                     <vc:retro-tink5x-pro-button command-name=@CommandName.Power button-label="Power" css-class="btn-danger" css-fa-icon="power-off" />
                                 </div>
                             </td>
                         </tr>
                         <tr>
-                            <td class="align-middle text-right" width="1%">Load Profile</td>
+                            <td class="align-middle text-right" width="1%">Load</td>
                             <td>
-                                <div class="btn-group flex-wrap">
+                                <div class="btn-group-vertical">
                                     @foreach (ProfileName profileName in (ProfileName[]) Enum.GetValues(typeof(ProfileName)))
                                     {
-                                        string label = profileName == ProfileName.ProfileDefault ? "Default" : ((int)profileName).ToString();
+                                        string label = profileName == ProfileName.ProfileDefault ? "Default Profile" : $"Profile {((int)profileName).ToString()}";
                                         <button type="submit" asp-page-handler="LoadProfile" asp-route-profilename=@profileName class="btn btn-light border">@label</button>
                                     }
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle text-right" width="1%">Menus</td>
+                            <td>
+                                <div class="btn-group-vertical">
+                                    <vc:retro-tink5x-pro-button command-name=@CommandName.ShowMainMenu button-label="Main" css-class=@defaultButtonCss css-fa-icon="bars" />
+                                    <vc:retro-tink5x-pro-button command-name=@CommandName.ShowInputSourceMenu button-label="Input Source" css-class=@defaultButtonCss css-fa-icon="" />
+                                    <vc:retro-tink5x-pro-button command-name=@CommandName.ShowHorizontalSamplingMenu button-label="Horizontal Sampling" css-class=@defaultButtonCss css-fa-icon="" />
+                                    <vc:retro-tink5x-pro-button command-name=@CommandName.ShowScalingAndCroppingMenu button-label="Scaling & Cropping" css-class=@defaultButtonCss css-fa-icon="" />
+                                    <vc:retro-tink5x-pro-button command-name=@CommandName.ShowPostProcessingMenu button-label="Post Processing" css-class=@defaultButtonCss css-fa-icon="" />
                                 </div>
                             </td>
                         </tr>
@@ -63,18 +75,6 @@
                                 </div>
                                 <div class="btn-group mt-2">
                                     <vc:retro-tink5x-pro-button command-name=@CommandName.Back button-label="Back" css-class=@defaultButtonCss css-fa-icon="undo-alt" />
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle text-right" width="1%">Menus</td>
-                            <td>
-                                <div class="btn-group-vertical">
-                                    <vc:retro-tink5x-pro-button command-name=@CommandName.ShowMainMenu button-label="Main" css-class=@defaultButtonCss css-fa-icon="bars" />
-                                    <vc:retro-tink5x-pro-button command-name=@CommandName.ShowInputSourceMenu button-label="Input Source" css-class=@defaultButtonCss css-fa-icon="" />
-                                    <vc:retro-tink5x-pro-button command-name=@CommandName.ShowHorizontalSamplingMenu button-label="Horizontal Sampling" css-class=@defaultButtonCss css-fa-icon="" />
-                                    <vc:retro-tink5x-pro-button command-name=@CommandName.ShowScalingAndCroppingMenu button-label="Scaling & Cropping" css-class=@defaultButtonCss css-fa-icon="" />
-                                    <vc:retro-tink5x-pro-button command-name=@CommandName.ShowPostProcessingMenu button-label="Post Processing" css-class=@defaultButtonCss css-fa-icon="" />
                                 </div>
                             </td>
                         </tr>
