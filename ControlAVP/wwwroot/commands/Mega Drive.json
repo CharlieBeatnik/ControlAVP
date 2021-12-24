@@ -43,7 +43,7 @@
       "Parameters": {
         "inputPort": "Hdmi1"
       },
-      "PostWait": 3.0
+      "PostWait": 6.0
     },
     {
 

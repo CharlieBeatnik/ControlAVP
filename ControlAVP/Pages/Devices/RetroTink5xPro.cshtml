@@ -78,6 +78,15 @@
                                 </div>
                             </td>
                         </tr>
+                        <tr>
+                            <td class="align-middle text-right" width="1%">Test</td>
+                            <td>
+                                <div class="btn-group-vertical">
+                                    <button type="submit" asp-page-handler="SendCountOfCommandWithDelay" asp-route-commandname=@CommandName.Left asp-route-count=100 asp-route-postsenddelay=@TimeSpan.FromMilliseconds(200) class="btn btn-light border">Left 100 Times (Delay: 200ms)</button>
+                                    <button type="submit" asp-page-handler="SendCountOfCommandWithDelay" asp-route-commandname=@CommandName.Right asp-route-count=100 asp-route-postsenddelay=@TimeSpan.FromMilliseconds(200) class="btn btn-light border">Right 100 Times (Delay: 200ms)</button>
+                                </div>
+                            </td>
+                        </tr>
                     </table>
                 </div>
             }

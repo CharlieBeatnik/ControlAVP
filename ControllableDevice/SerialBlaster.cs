@@ -54,10 +54,10 @@ namespace ControllableDevice
             }
         }
 
-        public bool SendCommand(Protocol protocol, uint command)
+        public bool SendCommand(Protocol protocol, uint command, uint repeats = 0)
         {
             string commandHex = command.ToString("X8");
-            string result = _rs232Device.WriteWithResponse($"send {protocol.ToString().ToLower()} 0x{commandHex}", "OK");
+            string result = _rs232Device.WriteWithResponse($"send {protocol.ToString().ToLower()} 0x{commandHex} {repeats}", "OK");
 
             return result != null;
         }

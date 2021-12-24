@@ -57,5 +57,11 @@ namespace ControlAVP.Pages.Devices
             _device.LoadProfile(profileName);
             return RedirectToPage();
         }
+
+        public IActionResult OnPostSendCountOfCommandWithDelay(CommandName commandName, int count, TimeSpan postSendDelay)
+        {
+            _device.SendCountOfCommandWithDelay(commandName, count, postSendDelay);
+            return RedirectToPage();
+        }
     }
 }

@@ -79,13 +79,26 @@ namespace ControllableDevice
                 throw new ArgumentException("Unknown command name.", nameof(genericCommandName));
             }
 
-            return _serialBlaster.SendCommand(_genericCommandNameToCommandCode[genericCommandName].Protocol, _genericCommandNameToCommandCode[genericCommandName].CodeWithChecksum);
+            return _serialBlaster.SendCommand(_genericCommandNameToCommandCode[genericCommandName].Protocol, _genericCommandNameToCommandCode[genericCommandName].CodeWithChecksum, 2);
         }
 
-        public bool SendCommand(CommandName commandName, TimeSpan postSendDelay)
+        private bool SendCommand(CommandName commandName, TimeSpan postSendDelay)
         {
             bool result = SendCommand(ConvertCommandNameToGenericCommandName(commandName));
             Thread.Sleep(postSendDelay);
+
+            return result;
+        }
+
+        public bool SendCountOfCommandWithDelay(CommandName commandName, int count, TimeSpan postSendDelay)
+        {
+            bool result = true;
+
+            for(int i = 0; i < count; i++)
+            {
+                result &= SendCommand(ConvertCommandNameToGenericCommandName(commandName));
+                Thread.Sleep(postSendDelay);
+            }
 
             return result;
         }

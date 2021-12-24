@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using ControllableDevice;
 using ControllableDeviceTypes.RetroTink5xProTypes;
@@ -22,6 +23,7 @@ namespace ControlRelay
             yield return new MethodHandlerInfo("RetroTink5xProGetAvailable", GetAvailable);
             yield return new MethodHandlerInfo("RetroTink5xProSendCommand", SendCommand);
             yield return new MethodHandlerInfo("RetroTink5xProLoadProfile", LoadProfile);
+            yield return new MethodHandlerInfo("RetroTink5xProSendCountOfCommandWithDelay", SendCountOfCommandWithDelay);
         }
 
         private Task<MethodResponse> GetAvailable(MethodRequest methodRequest, object userContext)
@@ -62,6 +64,26 @@ namespace ControlRelay
             if (payload.profileName.Valid())
             {
                 success = _device.LoadProfile(payload.profileName);
+            }
+
+            return methodRequest.GetMethodResponse(success);
+        }
+
+        private Task<MethodResponse> SendCountOfCommandWithDelay(MethodRequest methodRequest, object userContext)
+        {
+            bool success = false;
+            var payloadDefintion = new
+            {
+                commandName = (CommandName)(-1),
+                count = 0,
+                postSendDelay = TimeSpan.FromSeconds(0)
+            };
+
+            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
+
+            if (payload.commandName.Valid())
+            {
+                success = _device.SendCountOfCommandWithDelay(payload.commandName, payload.count, payload.postSendDelay);
             }
 
             return methodRequest.GetMethodResponse(success);

@@ -1,7 +1,7 @@
 ﻿using Microsoft.Azure.Devices;
 using Newtonsoft.Json;
 using ControllableDeviceTypes.RetroTink5xProTypes;
-
+using System;
 
 namespace AVPCloudToDevice
 {
@@ -50,6 +50,20 @@ namespace AVPCloudToDevice
             {
                 var payload = new { profileName };
                 var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "RetroTink5xProLoadProfile", payload);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public bool SendCountOfCommandWithDelay(CommandName commandName, int count, TimeSpan postSendDelay)
+        {
+            try
+            {
+                var payload = new { commandName, count, postSendDelay };
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "RetroTink5xProSendCountOfCommandWithDelay", payload);
                 return true;
             }
             catch
