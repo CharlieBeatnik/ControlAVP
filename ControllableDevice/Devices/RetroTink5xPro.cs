@@ -72,40 +72,40 @@ namespace ControllableDevice
             return _serialBlaster.Enabled;
         }
 
-        private bool SendCommand(GenericCommandName genericCommandName)
+        private bool SendCommand(GenericCommandName genericCommandName, uint repeats = 0)
         {
             if (!_genericCommandNameToCommandCode.ContainsKey(genericCommandName))
             {
                 throw new ArgumentException("Unknown command name.", nameof(genericCommandName));
             }
 
-            return _serialBlaster.SendCommand(_genericCommandNameToCommandCode[genericCommandName].Protocol, _genericCommandNameToCommandCode[genericCommandName].CodeWithChecksum, 2);
+            return _serialBlaster.SendCommand(_genericCommandNameToCommandCode[genericCommandName].Protocol, _genericCommandNameToCommandCode[genericCommandName].CodeWithChecksum, repeats);
         }
 
-        private bool SendCommand(CommandName commandName, TimeSpan postSendDelay)
+        private bool SendCommand(CommandName commandName, TimeSpan postSendDelay, uint repeats = 0)
         {
-            bool result = SendCommand(ConvertCommandNameToGenericCommandName(commandName));
+            bool result = SendCommand(ConvertCommandNameToGenericCommandName(commandName), repeats);
             Thread.Sleep(postSendDelay);
 
             return result;
         }
 
-        public bool SendCountOfCommandWithDelay(CommandName commandName, int count, TimeSpan postSendDelay)
+        public bool SendCountOfCommandWithDelay(CommandName commandName, int count, TimeSpan postSendDelay, uint repeats = 0)
         {
             bool result = true;
 
             for(int i = 0; i < count; i++)
             {
-                result &= SendCommand(ConvertCommandNameToGenericCommandName(commandName));
+                result &= SendCommand(ConvertCommandNameToGenericCommandName(commandName), repeats);
                 Thread.Sleep(postSendDelay);
             }
 
             return result;
         }
 
-        public bool SendCommand(CommandName commandName)
+        public bool SendCommand(CommandName commandName, uint repeats = 0)
         {
-            return SendCommand(ConvertCommandNameToGenericCommandName(commandName));
+            return SendCommand(ConvertCommandNameToGenericCommandName(commandName), repeats);
         }
 
         private GenericCommandName ConvertCommandNameToGenericCommandName(CommandName commandName)
