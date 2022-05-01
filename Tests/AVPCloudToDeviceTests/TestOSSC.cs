@@ -44,6 +44,7 @@ namespace Tests
         public void GivenDevice_WhenLoadProfile_ThenSuccessIsTrue()
         {
             Assert.IsTrue(_device.LoadProfile(ProfileName.Profile0));
+            
         }
 
     }

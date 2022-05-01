@@ -156,10 +156,28 @@ namespace ControllableDevice
 
         public Rs232Device(string partialId)
         {
+            Initialise(partialId);
+        }
+
+        public Rs232Device(uint deviceIndex)
+        {
+            var id = GetDeviceIdForDeviceIndex(deviceIndex);
+
+            if (id == null)
+            {
+                throw new ArgumentException("Index is invalid.", nameof(deviceIndex));
+            }
+
+            Initialise(id);
+        }
+
+        private void Initialise(string partialId)
+        {
             if (string.IsNullOrEmpty(partialId))
             {
                 throw new ArgumentException("Must not be Null or Empty.", nameof(partialId));
             }
+
             _partialId = partialId;
 
             InitialiseSerialDevice();
@@ -199,7 +217,7 @@ namespace ControllableDevice
                     {
                         //It's legitimate to try and initialise the device with a partial ID that doesn't exist
                         //For example, a serial device isn't yet connected. Handle this case gracefully by just returning.
-                        string id = GetDeviceId(_partialId);
+                        string id = GetDeviceIdFromPartialId(_partialId);
                         if (id == null) return;
 
                         _serialDevice = Task.Run(async () => await SerialDevice.FromIdAsync(id))?.Result;
@@ -491,7 +509,7 @@ namespace ControllableDevice
             return await DeviceInformation.FindAllAsync(aqs);
         }
 
-        private static string GetDeviceId(string partialId)
+        private static string GetDeviceIdFromPartialId(string partialId)
         {
             //Regarding: ConfigureAwait
             //Call ConfigureAwait(false) on the task to schedule continuations to the thread pool,
@@ -499,6 +517,14 @@ namespace ControllableDevice
 
             var devices = Task.Run(async () => await GetAvailableDevices().ConfigureAwait(false)).Result;
             var deviceInformation = devices.FirstOrDefault(s => s.Id.Contains(partialId));
+
+            return deviceInformation?.Id;
+        }
+
+        private static string GetDeviceIdForDeviceIndex(uint deviceIndex)
+        {
+            var devices = Task.Run(async () => await GetAvailableDevices().ConfigureAwait(false)).Result;
+            var deviceInformation = devices.ElementAtOrDefault((int)deviceIndex);
 
             return deviceInformation?.Id;
         }

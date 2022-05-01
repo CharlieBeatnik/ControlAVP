@@ -97,7 +97,7 @@ namespace ControlRelay
 
             //The Windows App version of the Control Relay (not the background task build that runs on the Raspberry Pi)
             //waiting on the SetMethodHandlerAsync runs indefinitely. Even a cancellation token is unable to make the method
-            //complete. It seems that although it doesn't complete, it *does* sucessfilly set the method handler. As the 
+            //complete. It seems that although it doesn't complete, it *does* sucessfully set the method handler. As the 
             //WINDOWS_UWP_APP build is only used for testing, removing the wait is a workaround that seems OK for now. The
             //issue needs replicating in a smaller app and reporting to Microsoft.
 #if !WINDOWS_UWP_APP

@@ -19,9 +19,21 @@ namespace ControllableDevice
         public SerialBlaster(string portId)
         {
             _rs232Device = new Rs232Device(portId);
-            _rs232Device.BaudRate = 115200;
+            Initialise(_rs232Device);
+        }
 
-            _rs232Device.PreWrite = (x) =>
+        public SerialBlaster(uint deviceIndex)
+        {
+            _rs232Device = new Rs232Device(deviceIndex);
+            Initialise(_rs232Device);
+        }
+
+        private void Initialise(Rs232Device rs232Device)
+        {
+            rs232Device.MessageLifetime = TimeSpan.FromHours(24);
+            rs232Device.BaudRate = 115200;
+
+            rs232Device.PreWrite = (x) =>
             {
                 return x + "\r";
             };

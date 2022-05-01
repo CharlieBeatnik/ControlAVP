@@ -33,7 +33,7 @@ namespace Tests
 
         public static SerialBlaster CreateDevice()
         {
-            return new SerialBlaster(_deviceSettings["portId"].ToString());
+            return new SerialBlaster(_deviceSettings["deviceIndex"].ToObject<uint>());
         }
 
         public static SerialBlaster CreateInvalidDevice()

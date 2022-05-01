@@ -68,55 +68,69 @@ namespace ControlRelay
 
                 //Get the constructor and parameters for the class were going to create (e.g AtenVS0801H)
                 Type deviceType = Type.GetType($"ControllableDevice.{deviceTypeAsString}, ControllableDevice");
-                var constructor = deviceType.GetConstructors()[0];
-                var parameterInfos = constructor.GetParameters();
+                var constructors = deviceType.GetConstructors();
 
-                // For each instance of the device settings
-                foreach (var deviceSettingsJson in deviceTypeJson.First())
+                foreach (var constructor in constructors)
                 {
-                    var parameters = new List<object>();
+                    var parameterInfos = constructor.GetParameters();
 
-                    //Look for special serialBlasterIndex parameter
-                    Int64? serialBlasterIndex = (Int64?)((JValue)deviceSettingsJson["serialBlasterIndex"])?.Value;
-                    bool hasSerialBlasterIndex = serialBlasterIndex !=null;
-
-                    //For each paramter, either manager the cast or assignment explicitly by type, or rely on an explicit cast
-                    foreach (var parameterInfo in parameterInfos)
+                    // For each instance of the device settings
+                    foreach (var deviceSettingsJson in deviceTypeJson.First())
                     {
-                        Type type = parameterInfo.ParameterType;
-                        string value = ((JValue)deviceSettingsJson[parameterInfo.Name])?.Value.ToString();
+                        var parameters = new List<object>();
 
-                        switch (type)
+                        //Look for special serialBlasterIndex parameter
+                        Int64? serialBlasterIndex = (Int64?)((JValue)deviceSettingsJson["serialBlasterIndex"])?.Value;
+                        bool hasSerialBlasterIndex = serialBlasterIndex != null;
+
+                        //For each paramter, either manager the cast or assignment explicitly by type, or rely on an explicit cast
+                        foreach (var parameterInfo in parameterInfos)
                         {
-                            case Type _ when type == typeof(SerialBlaster):
-                                Debug.Assert(hasSerialBlasterIndex, $"SerialBlaster is required for consruction of {deviceType.Name}, but no serialBlasterIndex parameter has been provided.");
-                                Debug.Assert(serialBlasters.Count >= serialBlasterIndex+1, $"A SerialBlaster index of value {serialBlasterIndex} has been requested but does not exist.");
-                                parameters.Add(serialBlasters[(int)serialBlasterIndex]);
-                                break;
-                            case Type _ when type == typeof(IPAddress):
-                                parameters.Add(IPAddress.Parse(value));
-                                break;
-                            case Type _ when type == typeof(PhysicalAddress):
-                                parameters.Add(PhysicalAddress.Parse(value));
-                                break;
-                            default:
-                                //Ignore special serialBlasterIndex parameter
-                                if (parameterInfo.Name == "serialBlasterIndex") break;
-                                
-                                //Default is to rely on an explicit case
-                                parameters.Add(Convert.ChangeType(value, parameterInfo.ParameterType));
-                                break;
+                            Type type = parameterInfo.ParameterType;
+                            string value = ((JValue)deviceSettingsJson[parameterInfo.Name])?.Value.ToString();
+
+                            if (value != null || type == typeof(SerialBlaster))
+                            {
+                                switch (type)
+                                {
+                                    case Type _ when type == typeof(SerialBlaster):
+                                        Debug.Assert(hasSerialBlasterIndex, $"SerialBlaster is required for consruction of {deviceType.Name}, but no serialBlasterIndex parameter has been provided.");
+                                        Debug.Assert(serialBlasters.Count >= serialBlasterIndex + 1, $"A SerialBlaster index of value {serialBlasterIndex} has been requested but does not exist.");
+                                        parameters.Add(serialBlasters[(int)serialBlasterIndex]);
+                                        break;
+                                    case Type _ when type == typeof(IPAddress):
+                                        parameters.Add(IPAddress.Parse(value));
+                                        break;
+                                    case Type _ when type == typeof(PhysicalAddress):
+                                        parameters.Add(PhysicalAddress.Parse(value));
+                                        break;
+                                    default:
+                                        //Ignore special serialBlasterIndex parameter
+                                        if (parameterInfo.Name == "serialBlasterIndex") break;
+
+                                        //Default is to rely on an explicit case
+                                        parameters.Add(Convert.ChangeType(value, parameterInfo.ParameterType));
+                                        break;
+                                }
+                            }
+                        }
+
+                        try
+                        {
+                            var device = constructor.Invoke(parameters.ToArray());
+
+                            if (device.GetType() == typeof(SerialBlaster))
+                            {
+                                serialBlasters.Add((SerialBlaster)device);
+                            }
+
+                            devices.Add(device);
+                        }
+                        catch
+                        {
+                            break;
                         }
                     }
-                    
-                    var device = constructor.Invoke(parameters.ToArray());
-
-                    if(device.GetType() == typeof(SerialBlaster))
-                    {
-                        serialBlasters.Add((SerialBlaster)device);
-                    }
-
-                    devices.Add(device);
                 }
             }
 

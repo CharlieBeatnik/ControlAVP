@@ -30,7 +30,7 @@ namespace Tests
 
         private static Rs232Device CreateDevice()
         {
-            var device = new Rs232Device(_settings["Devices"]["SerialBlaster"][0]["portId"].ToString());
+            var device = new Rs232Device(_settings["Devices"]["SerialBlaster"][0]["deviceIndex"].ToObject<uint>());
             device.BaudRate = 115200;
             device.PreWrite = (x) =>
             {
@@ -210,6 +210,15 @@ namespace Tests
 
                 result = device.WriteWithResponse("message Reconnected", "OK");
                 Assert.IsNotNull(result);
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void GivenInvalidDeviceIndex_WhenNewDevice_ThenArgumentExceptionThrown()
+        {
+            using (var rs232Device = new Rs232Device(999))
+            {
             }
         }
     }
