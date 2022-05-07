@@ -6,6 +6,8 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Text.RegularExpressions;
 using System.Threading;
+using NLog;
+using Newtonsoft.Json;
 
 namespace ControllableDevice
 {
@@ -24,6 +26,8 @@ namespace ControllableDevice
         private readonly TimeSpan _fromOnToStandbyWait = TimeSpan.FromSeconds(1);
         private readonly TimeSpan _afterSetInputPort = TimeSpan.FromSeconds(2);
         private readonly TimeSpan _jsonRpcDeviceWebRequestTimeout = TimeSpan.MaxValue;
+
+        private static Logger _logger = LogManager.GetCurrentClassLogger();
 
         public SonySimpleIP(IPAddress host, PhysicalAddress physicalAddress, string preSharedKey)
         {
@@ -298,11 +302,18 @@ namespace ControllableDevice
 
                 var result = CallMethod("setPlayContent", "sony/avContent", parameters);
                 
-                //Whilst the method return immediately, it has been observed that a short wait is needed
+                //Whilst the method returns immediately, it has been observed that a short wait is needed
                 //to gurantee that the new input port has been switched to
                 Thread.Sleep(_afterSetInputPort);
-                
-                return ResultIsSuccessful(result);
+
+                bool successful = ResultIsSuccessful(result);
+                if (!successful)
+                {
+                    _logger.Error("SetInputPort method failed. Result is below.");
+                    _logger.Error(JsonConvert.SerializeObject(result, Formatting.Indented));
+                }
+
+                return successful;
             }
 
             return false;
