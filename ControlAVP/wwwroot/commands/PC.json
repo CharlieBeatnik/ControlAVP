@@ -69,7 +69,7 @@
       "Parameters": {
         "commandName": "AV1YPbPr"
       },
-      "PostWait": 2.0
+      "PostWait": 3.0
     },
     {
       "Description": "Change OSSC to RGBHV",
