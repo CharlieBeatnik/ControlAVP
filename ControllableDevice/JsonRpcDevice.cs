@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NLog;
 
 namespace ControllableDevice
 {
@@ -16,6 +17,8 @@ namespace ControllableDevice
         private IPAddress _host;
         private string _preSharedKey;
         private WebClientEx _webClient;
+
+        private static Logger _logger = LogManager.GetCurrentClassLogger();
 
         public JsonRpcDevice(IPAddress host, string preSharedKey, TimeSpan webRequestTimeout)
         {
@@ -32,14 +35,20 @@ namespace ControllableDevice
             {
                 string address = $@"http://{_host.ToString()}/{path}";
                 string data = json.ToString(Formatting.None);
+                string response = string.Empty;
 
                 try
                 {
-                    var response = _webClient.UploadString(address, "POST", data);
+                    response = _webClient.UploadString(address, "POST", data);
                     return JObject.Parse(response);
                 }
-                catch (WebException)
+                catch (WebException webException)
                 {
+                    _logger.Error($"address: {address}");
+                    _logger.Error($"data: {data}");
+                    _logger.Error($"response: {response}");
+                    _logger.Error(webException.ToString());
+                    _logger.Error(webException.ToString());
                     //The URI formed by combining BaseAddress and address is invalid.
                     // or
                     //There was no response from the server hosting the resource.
