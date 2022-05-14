@@ -135,7 +135,17 @@ namespace ControllableDevice
 
         public bool SendCommand(CommandName commandName)
         {
-            return SendCommand(ConvertCommandNameToGenericCommandName(commandName));
+            bool result = true;
+
+            result &= SendCommand(ConvertCommandNameToGenericCommandName(commandName));
+            
+            //To increase reliability of AV input changes, send command twice
+            if (commandName.ToString().StartsWith("AV"))
+            {
+                result &= SendCommand(ConvertCommandNameToGenericCommandName(commandName));
+            }
+
+            return result;
         }
 
         public bool LoadProfile(ProfileName profileName)
