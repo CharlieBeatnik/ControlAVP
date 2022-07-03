@@ -163,6 +163,9 @@
     <PackageReference Include="NLog">
       <Version>4.7.15</Version>
     </PackageReference>
+    <PackageReference Include="Polly">
+      <Version>7.2.3</Version>
+    </PackageReference>
     <PackageReference Include="SSH.NET">
       <Version>2020.0.1</Version>
     </PackageReference>
