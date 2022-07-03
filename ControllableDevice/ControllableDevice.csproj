@@ -167,7 +167,7 @@
       <Version>7.2.3</Version>
     </PackageReference>
     <PackageReference Include="SSH.NET">
-      <Version>2020.0.1</Version>
+      <Version>2020.0.2</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
