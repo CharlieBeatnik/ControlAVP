@@ -4,19 +4,11 @@
   "DisplayName": "Switch",
   "Commands": [
     {
-      "Description": "Rack On",
-      "DeviceType": "ApcAP8959EU3",
-      "Function": "TurnOutletOn",
-      "Parameters": {
-        "id": 24
-      }
-    },
-    {
       "Description": "TV On",
       "DeviceType": "SonySimpleIP",
       "Function": "TurnOn",
       "Parameters": {
-        "wait": "false"
+        "wait": "true"
       }
     },
     {
@@ -28,29 +20,11 @@
       }
     },
     {
-      "ExecuteAfter": 16.0,
-      "Description": "HDMI Switch 0 Passthrough",
-      "DeviceType": "AtenVS0801HB",
-      "Function": "SetInputPort",
-      "Parameters": {
-        "inputPort": "Port1"
-      }
-    },
-    {
-      "Description": "HDMI Switch 1 to Nintendo Switch",
-      "DeviceType": "AtenVS0801H",
-      "Function": "SetInputPort",
-      "Parameters": {
-        "inputPort": "Port3"
-      }
-    },
-    {
-      "ExecuteAfter": 35.0,
-      "Description": "TV HDMI1 for Rack",
+      "Description": "TV HDMI2 for Nintendo Switch",
       "DeviceType": "SonySimpleIP",
       "Function": "SetInputPort",
       "Parameters": {
-        "inputPort": "Hdmi1"
+        "inputPort": "Hdmi2"
       }
     }
   ]
