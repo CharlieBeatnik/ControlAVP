@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using ControllableDeviceTypes.OSSCTypes;
 
 namespace ControllableDevice
@@ -123,26 +124,30 @@ namespace ControllableDevice
             return _serialBlaster.Enabled;
         }
 
-        private bool SendCommand(GenericCommandName genericCommandName)
+        private bool SendCommand(GenericCommandName genericCommandName, uint repeats = 0)
         {
             if (!_genericCommandNameToCommandCode.ContainsKey(genericCommandName))
             {
                 throw new ArgumentException("Unknown command name.", nameof(genericCommandName));
             }
 
-            return _serialBlaster.SendCommand(_genericCommandNameToCommandCode[genericCommandName].Protocol, _genericCommandNameToCommandCode[genericCommandName].CodeWithChecksum);
+            return _serialBlaster.SendCommand(_genericCommandNameToCommandCode[genericCommandName].Protocol, _genericCommandNameToCommandCode[genericCommandName].CodeWithChecksum, repeats);
         }
 
-        public bool SendCommand(CommandName commandName)
+        public bool SendCommand(CommandName commandName, uint repeats = 0)
         {
             bool result = true;
-
-            result &= SendCommand(ConvertCommandNameToGenericCommandName(commandName));
             
-            //To increase reliability of AV input changes, send command twice
+            //To increase reliability of AV input changes, send command twice with a delay
             if (commandName.ToString().StartsWith("AV"))
             {
-                result &= SendCommand(ConvertCommandNameToGenericCommandName(commandName));
+                result &= SendCommand(ConvertCommandNameToGenericCommandName(commandName), repeats);
+                Thread.Sleep(TimeSpan.FromSeconds(2));
+                result &= SendCommand(ConvertCommandNameToGenericCommandName(commandName), repeats);
+            }
+            else
+            {
+                result &= SendCommand(ConvertCommandNameToGenericCommandName(commandName), repeats);
             }
 
             return result;

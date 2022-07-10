@@ -37,13 +37,14 @@ namespace ControlRelay
             var payloadDefintion = new
             {
                 commandName = (CommandName)(-1),
+                repeats = (uint)(0),
             };
 
             var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
 
             if (payload.commandName.Valid())
             {
-                success = _device.SendCommand(payload.commandName);
+                success = _device.SendCommand(payload.commandName, payload.repeats);
             }
 
             return methodRequest.GetMethodResponse(success);

@@ -39,13 +39,14 @@ namespace ControlRelay
             var payloadDefintion = new
             {
                 commandName = (CommandName)(-1),
+                repeats = (uint)(0),
             };
 
             var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
 
             if (payload.commandName.Valid())
             {
-                success = _device.SendCommand(payload.commandName);
+                success = _device.SendCommand(payload.commandName, payload.repeats);
             }
 
             return methodRequest.GetMethodResponse(success);
@@ -76,14 +77,15 @@ namespace ControlRelay
             {
                 commandName = (CommandName)(-1),
                 count = 0,
-                postSendDelay = TimeSpan.FromSeconds(0)
+                postSendDelay = TimeSpan.FromSeconds(0),
+                repeats = (uint)(0),
             };
 
             var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
 
             if (payload.commandName.Valid())
             {
-                success = _device.SendCountOfCommandWithDelay(payload.commandName, payload.count, payload.postSendDelay);
+                success = _device.SendCountOfCommandWithDelay(payload.commandName, payload.count, payload.postSendDelay, payload.repeats);
             }
 
             return methodRequest.GetMethodResponse(success);
