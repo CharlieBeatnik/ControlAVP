@@ -30,7 +30,6 @@ namespace ControllableDevice
 
         private void Initialise(Rs232Device rs232Device)
         {
-            rs232Device.MessageLifetime = TimeSpan.FromHours(24);
             rs232Device.BaudRate = 115200;
 
             rs232Device.PreWrite = (x) =>
