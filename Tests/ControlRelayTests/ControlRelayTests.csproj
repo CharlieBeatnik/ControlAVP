@@ -152,6 +152,7 @@
     <Content Include="TestAssets\command-processor-call-function-with-incorrectly-named-parameters.json" />
     <Content Include="TestAssets\command-processor-call-function-with-missing-parameters.json" />
     <Content Include="TestAssets\command-processor-call-1-function.json" />
+    <Content Include="TestAssets\command-processor-call-function-with-default-parameter-without-passing-parameter-in-json.json" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Properties\UnitTestApp.rd.xml" />

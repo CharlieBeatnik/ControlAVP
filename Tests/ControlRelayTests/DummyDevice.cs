@@ -113,6 +113,24 @@ namespace Tests
             else return true;
         }
 
+        public bool DefaultParameter(uint parameter, uint defaultParameter = 0)
+        {
+            if (_invalid)
+            {
+                return false;
+            }
+            else return true;
+        }
+
+        public bool DefaultParameterOnly(uint defaultParameter = 0)
+        {
+            if (_invalid)
+            {
+                return false;
+            }
+            else return true;
+        }
+
         public DummyDeviceSetting? GetEnum(DummyDeviceSetting dummyDeviceSetting)
         {
             if (_invalid)

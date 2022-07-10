@@ -361,5 +361,25 @@ namespace Tests
                 }
             }
         }
+
+        [TestMethod]
+        public void GivenJsonAndDevice_WhenCallFunctionWithDefaultParameterWithoutPassingParameterInJson_ThenCommandResultIsTrue()
+        {
+            using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-call-function-with-default-parameter-without-passing-parameter-in-json.json"))
+            {
+                string json = r.ReadToEnd();
+                using (var device = CreateDevice())
+                {
+                    var devices = new List<object>();
+                    devices.Add(device);
+
+                    foreach (var commandResult in CommandProcessorUtils.Execute(devices, json))
+                    {
+                        Assert.IsTrue(commandResult.Success);
+                        Assert.IsTrue((bool)commandResult.Result);
+                    }
+                }
+            }
+        }
     }
 }

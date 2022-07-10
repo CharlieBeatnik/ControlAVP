@@ -132,10 +132,13 @@ namespace CommandProcessor
 
                 ParameterInfo[] parameterInfos = methodInfo.GetParameters();
 
+                int numRequiredParameters = parameterInfos.Where(param => 
+                    !(param.Attributes.HasFlag(ParameterAttributes.HasDefault) && param.Attributes.HasFlag(ParameterAttributes.Optional))).Count();
+
                 //If no parameters are provided, but parameters are required
                 //Or, if parameter count does not match required parameter count
-                if((command["Parameters"] == null && parameterInfos.Length != 0) ||
-                   (command["Parameters"] != null && (command["Parameters"].Count() != parameterInfos.Length)))
+                if ((command["Parameters"] == null && numRequiredParameters != 0) ||
+                   (command["Parameters"] != null && (command["Parameters"].Count() != numRequiredParameters)))
                 {
                     commandResult.ExecutionEndTime = commandResult.EndTime = sw.Elapsed;
                     commandResult.ErrorMessage = "The wrong number of parameters have been provided.";
@@ -150,6 +153,9 @@ namespace CommandProcessor
                 {
                     parameters = parameterInfos.Select(p =>
                     {
+                        if(p.Attributes.HasFlag(ParameterAttributes.HasDefault) && p.Attributes.HasFlag(ParameterAttributes.Optional))
+                            return p.DefaultValue;
+
                         switch (command["Parameters"][p.Name])
                         {
                             case JValue v:
