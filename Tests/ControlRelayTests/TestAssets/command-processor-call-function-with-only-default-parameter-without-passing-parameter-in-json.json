@@ -6,10 +6,7 @@
       "Description": "Example description.",
       "DeviceType": "DummyDevice",
       "DeviceIndex": 0,
-      "Function": "DefaultParameter",
-      "Parameters": {
-        "parameter": 42
-      }
+      "Function": "DefaultParameterOnly"
     }
   ]
 }

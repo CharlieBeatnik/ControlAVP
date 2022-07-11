@@ -136,9 +136,9 @@ namespace CommandProcessor
                     !(param.Attributes.HasFlag(ParameterAttributes.HasDefault) && param.Attributes.HasFlag(ParameterAttributes.Optional))).Count();
 
                 //If no parameters are provided, but parameters are required
-                //Or, if parameter count does not match required parameter count
+                //Or, if parameter count does is not in the correct range
                 if ((command["Parameters"] == null && numRequiredParameters != 0) ||
-                   (command["Parameters"] != null && (command["Parameters"].Count() != numRequiredParameters)))
+                   (command["Parameters"] != null && ((command["Parameters"].Count() < numRequiredParameters) && (command["Parameters"].Count() > parameterInfos.Length))))
                 {
                     commandResult.ExecutionEndTime = commandResult.EndTime = sw.Elapsed;
                     commandResult.ErrorMessage = "The wrong number of parameters have been provided.";
