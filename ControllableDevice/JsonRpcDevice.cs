@@ -20,7 +20,7 @@ namespace ControllableDevice
         private WebClientEx _webClient;
 
         private static readonly int _jsonPostRetryCount = 3;
-        private static readonly TimeSpan _jsonPostWaitBeforeRetry = TimeSpan.FromSeconds(1);
+        private static readonly TimeSpan _jsonPostWaitBeforeRetry = TimeSpan.FromSeconds(5);
 
         private static Logger _logger = LogManager.GetCurrentClassLogger();
 
@@ -51,7 +51,6 @@ namespace ControllableDevice
                                       _logger.Debug($"address: {address}");
                                       _logger.Debug($"data: {data}");
                                       _logger.Debug($"response: {response}");
-                                      _logger.Debug(exception.ToString());
                                   });
 
                 try
