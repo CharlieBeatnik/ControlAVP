@@ -1,4 +1,4 @@
-﻿using Collections.Generic;
+﻿using Cyotek.Collections.Generic;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using Windows.Devices.Enumeration;
 using Windows.Devices.SerialCommunication;
 using Windows.Storage.Streams;
-using System.Timers;
 using Windows.Foundation;
 
 namespace ControllableDevice
