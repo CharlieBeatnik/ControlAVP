@@ -29,82 +29,28 @@
     },
     {
       "ExecuteAfter": 16.0,
-      "Description": "Disable HDMI Switch 1 Output",
-      "DeviceType": "AtenVS0801H",
-      "Function": "SetOutput",
-      "Parameters": {
-        "enable": "false"
-      }
-    },
-    {
-      "Description": "Scaler to HDMI",
-      "DeviceType": "ExtronDSC301HD",
-      "Function": "SetInputPort",
-      "Parameters": {
-        "inputPort": "HDMI"
-      }
-    },
-    {
-      "Description": "Load OSSC Profile for Super Nintendo",
-      "DeviceType": "OSSC",
-      "Function": "LoadProfile",
-      "Parameters": {
-        "profileName": "Profile10"
-      },
-      "PostWait": 2.0
-    },
-    {
-      "Description": "Change OSSC to AV1YPbPr (Dummy)",
-      "DeviceType": "OSSC",
-      "Function": "SendCommand",
-      "Parameters": {
-        "commandName": "AV1YPbPr"
-      },
-      "PostWait": 2.0
-    },
-    {
-      "Description": "Change OSSC to RGBS",
-      "DeviceType": "OSSC",
-      "Function": "SendCommand",
-      "Parameters": {
-        "commandName": "AV1RGBS"
-      },
-      "PostWait": 1.0
-    },
-    {
-      "Description": "Scaler to Output Rate for Super Nintendo",
-      "DeviceType": "ExtronDSC301HD",
-      "Function": "SetOutputRateWithoutEdid",
-      "Parameters": {
-        "width": 1920,
-        "height": 1080,
-        "refreshRate": 50.0
-      },
-      "PostWait": 2.0
-    },
-    {
-      "Description": "Enable HDMI Switch 1 Output",
-      "DeviceType": "AtenVS0801H",
-      "Function": "SetOutput",
-      "Parameters": {
-        "enable": "true"
-      }
-    },
-    {
       "Description": "HDMI Switch 0 to Scaler",
       "DeviceType": "AtenVS0801HB",
       "Function": "SetInputPort",
       "Parameters": {
-        "inputPort": "Port3"
+        "inputPort": "Port8"
       }
     },
     {
-      "ExecuteAfter": 35.0,
       "Description": "TV HDMI1 for Rack",
       "DeviceType": "SonySimpleIP",
       "Function": "SetInputPort",
       "Parameters": {
         "inputPort": "Hdmi1"
+      },
+      "PostWait": 6.0
+    },
+    {
+      "Description": "Load RetroTINK Profile for Mega Drive",
+      "DeviceType": "RetroTink5xPro",
+      "Function": "LoadProfile",
+      "Parameters": {
+        "profileName": "Profile2"
       }
     }
   ]
