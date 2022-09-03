@@ -133,11 +133,9 @@ namespace ControllableDevice
             result &= SendCommand(CommandName.ShowMainMenu, postSendDelay);
 
             //Navigate to Load Profile Screen
-            result &= SendCommand(CommandName.Right, postSendDelay);
-            result &= SendCommand(CommandName.Down, postSendDelay);
-            result &= SendCommand(CommandName.Down, postSendDelay);
-            result &= SendCommand(CommandName.Down, postSendDelay);
-            result &= SendCommand(CommandName.Ok, postSendDelay);
+            result &= SendCommand(CommandName.Up, postSendDelay);
+            result &= SendCommand(CommandName.Up, postSendDelay);
+            result &= SendCommand(CommandName.Up, postSendDelay);
 
             //Calculate how many presses are needed to move the cursor to the correct positon
             const int entriesPerColumn = 8;
