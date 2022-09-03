@@ -41,6 +41,15 @@
       "Function": "SetInputPort",
       "Parameters": {
         "inputPort": "Hdmi1"
+      },
+      "PostWait": 6.0
+    },
+    {
+      "Description": "Load RetroTINK Profile for PlayStation 2",
+      "DeviceType": "RetroTink5xPro",
+      "Function": "LoadProfile",
+      "Parameters": {
+        "profileName": "Profile3"
       }
     }
   ]

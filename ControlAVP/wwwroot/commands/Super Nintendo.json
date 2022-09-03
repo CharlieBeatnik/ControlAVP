@@ -46,7 +46,7 @@
       "PostWait": 6.0
     },
     {
-      "Description": "Load RetroTINK Profile for Mega Drive",
+      "Description": "Load RetroTINK Profile for Super Nintendo",
       "DeviceType": "RetroTink5xPro",
       "Function": "LoadProfile",
       "Parameters": {

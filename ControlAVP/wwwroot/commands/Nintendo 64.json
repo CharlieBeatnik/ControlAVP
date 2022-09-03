@@ -49,7 +49,7 @@
       "DeviceType": "OSSC",
       "Function": "LoadProfile",
       "Parameters": {
-        "profileName": "Profile13"
+        "profileName": "Profile11"
       },
       "PostWait": 2.0
     },
