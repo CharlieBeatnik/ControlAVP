@@ -7,6 +7,7 @@ using System.Dynamic;
 using System.IO;
 using System.Linq;
 using ControllableDeviceTypes.ApcAP8959EU3Types;
+using System.Collections.Generic;
 
 namespace Tests
 {
@@ -92,7 +93,7 @@ namespace Tests
         [Test]
         public void GivenDevice_WhenGetPhases_ThenFirstPhaseVoltageIsGreaterThan220()
         {
-            var phase = _device.GetPhases();
+            var phase = (List<Phase>)_device.GetPhases();
 
             Assert.IsNotNull(phase);
             Assert.IsTrue(phase.Any());

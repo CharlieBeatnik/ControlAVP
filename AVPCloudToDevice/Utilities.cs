@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AVPCloudToDevice
 {
-    class Utilities
+    static class Utilities
     {
         public static async Task<CloudToDeviceMethodResult> InvokeDeviceMethodAsync(ServiceClient serviceClient, string deviceId, CloudToDeviceMethod cloudToDeviceMethod)
         {
