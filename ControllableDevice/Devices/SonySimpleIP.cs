@@ -25,7 +25,7 @@ namespace ControllableDevice
         private readonly TimeSpan _fromStandbyToOnWait = TimeSpan.FromSeconds(1);
         private readonly TimeSpan _fromOnToStandbyWait = TimeSpan.FromSeconds(1);
         private readonly TimeSpan _afterSetInputPort = TimeSpan.FromSeconds(2);
-        private readonly TimeSpan _jsonRpcDeviceWebRequestTimeout = TimeSpan.MaxValue;
+        private readonly TimeSpan _jsonRpcDeviceWebRequestTimeout = TimeSpan.MaxValue; // MaxValue essentially removes the forced timeout
 
         private static Logger _logger = LogManager.GetCurrentClassLogger();
 

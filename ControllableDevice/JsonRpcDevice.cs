@@ -19,7 +19,7 @@ namespace ControllableDevice
         private string _preSharedKey;
         private WebClientEx _webClient;
 
-        private static readonly int _jsonPostRetryCount = 3;
+        private static readonly int _jsonPostRetryCount = 1;
         private static readonly TimeSpan _jsonPostWaitBeforeRetry = TimeSpan.FromSeconds(5);
 
         private static Logger _logger = LogManager.GetCurrentClassLogger();
