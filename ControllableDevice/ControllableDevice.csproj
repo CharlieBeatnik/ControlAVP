@@ -65,6 +65,7 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Devices\ExtronIPL250.cs" />
     <Compile Include="IrCommandCode.cs" />
     <Compile Include="Devices\AtenVS0801HB.cs" />
     <Compile Include="Devices\OSSC.cs" />
@@ -109,6 +110,9 @@
     </PackageReference>
     <PackageReference Include="SSH.NET">
       <Version>2020.0.2</Version>
+    </PackageReference>
+    <PackageReference Include="Telnet">
+      <Version>0.11.3</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
