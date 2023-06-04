@@ -51,9 +51,8 @@ namespace ControllableDevice
         {
             if(_telnetDevice.IsConnected)
             {
-                Task.Run(async () => await _telnetDevice.WriteLineAsync("i").ConfigureAwait(false));
-
-                var result = Task.Run(async () => await _telnetDevice.ReadAsync().ConfigureAwait(false)).Result;
+                _telnetDevice.WriteLine("i");
+                var result = _telnetDevice.Read();
             }
         }
     }

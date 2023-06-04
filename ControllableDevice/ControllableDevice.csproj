@@ -66,6 +66,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Devices\ExtronIPL250.cs" />
+    <Compile Include="Extensions\PrimSTelnetClientExtensions.cs" />
     <Compile Include="IrCommandCode.cs" />
     <Compile Include="Devices\AtenVS0801HB.cs" />
     <Compile Include="Devices\OSSC.cs" />
