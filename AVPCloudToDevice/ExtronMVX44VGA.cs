@@ -23,6 +23,7 @@ namespace AVPCloudToDevice
             {
                 var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "VGAMatrixGetFirmware", null);
                 string json = response.GetPayloadAsJson();
+                
                 return JsonConvert.DeserializeObject<Version>(json, new VersionConverter());
             }
             catch
