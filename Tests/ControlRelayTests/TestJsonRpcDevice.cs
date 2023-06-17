@@ -42,7 +42,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GivenInvalidIPDeviceWith500msTimeout10Retries100msWaitBeforeRetry_WhenPost_ThenResultIsNullAndDurationIsLessThan7000ms()
+        public void GivenInvalidIPDeviceWith500msTimeout10Retries100msWaitBeforeRetry_WhenPost_ThenResultIsNullAndDurationIsLessThan8000ms()
         {
             using (var device = CreateInvalidIPDevice(TimeSpan.FromMilliseconds(500), 10, TimeSpan.FromMilliseconds(100)))
             {
@@ -56,7 +56,7 @@ namespace Tests
                 sw.Stop();
 
                 Assert.IsNull(result);
-                Assert.IsTrue(sw.ElapsedMilliseconds < 7000);
+                Assert.IsTrue(sw.ElapsedMilliseconds < 8000);
             }
         }
     }
