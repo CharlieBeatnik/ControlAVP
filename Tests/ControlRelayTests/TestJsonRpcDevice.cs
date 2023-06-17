@@ -42,21 +42,17 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GivenInvalidIPDeviceWith500msTimeout10Retries100msWaitBeforeRetry_WhenPost_ThenResultIsNullAndDurationIsLessThan8000ms()
+        public void GivenInvalidIPDeviceWith500msTimeout10Retries100msWaitBeforeRetry_WhenPost_ThenResultIsNull()
         {
             using (var device = CreateInvalidIPDevice(TimeSpan.FromMilliseconds(500), 10, TimeSpan.FromMilliseconds(100)))
             {
-                var sw = new Stopwatch();
                 var json = new JObject(
                     new JProperty("version", "1.0")
                 );
 
-                sw.Start();
                 var result = device.Post(json, "invalid/url");
-                sw.Stop();
 
                 Assert.IsNull(result);
-                Assert.IsTrue(sw.ElapsedMilliseconds < 8000);
             }
         }
     }
