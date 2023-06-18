@@ -1,5 +1,6 @@
 ﻿using Microsoft.Azure.Devices.Client;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,7 +41,7 @@ namespace ControlRelay
 
         public static Task<MethodResponse> GetMethodResponseSerialize(this MethodRequest methodRequest, bool success, object payloadToSerialize)
         {
-            string result = JsonConvert.SerializeObject(payloadToSerialize);
+            string result = JsonConvert.SerializeObject(payloadToSerialize, new VersionConverter());
             return methodRequest.GetMethodResponse(success, result);
         }
 

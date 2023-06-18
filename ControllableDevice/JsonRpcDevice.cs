@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -12,37 +13,40 @@ using Polly;
 
 namespace ControllableDevice
 {
-    class JsonRpcDevice : IDisposable
+    public class JsonRpcDevice : IDisposable
     {
         private bool _disposed;
         private IPAddress _host;
         private string _preSharedKey;
-        private WebClientEx _webClient;
+        private HttpClient _httpClient;
 
-        private static readonly int _jsonPostRetryCount = 3;
-        private static readonly TimeSpan _jsonPostWaitBeforeRetry = TimeSpan.FromSeconds(5);
+        private readonly int _jsonPostRetryCount;
+        private readonly TimeSpan _jsonPostWaitBeforeRetry;
 
         private static Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public JsonRpcDevice(IPAddress host, string preSharedKey, TimeSpan webRequestTimeout)
+        public JsonRpcDevice(IPAddress host, string preSharedKey, TimeSpan httpRequestTimeout, int retryCount, TimeSpan waitBeforeRetry)
         {
             _host = host;
             _preSharedKey = preSharedKey;
-            _webClient = new WebClientEx();
-            _webClient.Headers.Add("X-Auth-PSK", _preSharedKey);
-            _webClient.WebRequestTimeout = webRequestTimeout;
+
+            _httpClient = new HttpClient();
+            _httpClient.DefaultRequestHeaders.Add("X-Auth-PSK", _preSharedKey);
+            _httpClient.Timeout = httpRequestTimeout;
+
+            _jsonPostRetryCount = retryCount;
+            _jsonPostWaitBeforeRetry = waitBeforeRetry;
         }
 
         public JObject Post(JObject json, string path)
         {
-            lock (_webClient)
+            lock (_httpClient)
             {
                 string address = $@"http://{_host.ToString()}/{path}";
                 string data = json.ToString(Formatting.None);
-                string response = string.Empty;
 
                 var policy = Policy<JObject>
-                    .Handle<WebException>()
+                    .Handle<Exception>()
                     .WaitAndRetry(retryCount: _jsonPostRetryCount,
                                   sleepDurationProvider: _ => _jsonPostWaitBeforeRetry,
                                   onRetry: (exception, sleepDuration, attemptNumber, context) =>
@@ -50,22 +54,24 @@ namespace ControllableDevice
                                       _logger.Debug($"attemptNumber: {attemptNumber}");
                                       _logger.Debug($"address: {address}");
                                       _logger.Debug($"data: {data}");
-                                      _logger.Debug($"response: {response}");
                                   });
 
                 try
                 {
                     return policy.Execute(() =>
                     {
-                        response = _webClient.UploadString(address, "POST", data);
-                        return JObject.Parse(response);
+                        var httpContent = new StringContent(data, Encoding.UTF8, "application/json");
+
+                        HttpResponseMessage response = Task.Run(async () => await _httpClient.PostAsync(address, httpContent)).Result;
+                        response.EnsureSuccessStatusCode();
+                        string responseBody = Task.Run(async () => await response.Content.ReadAsStringAsync()).Result;
+                        return JObject.Parse(responseBody);
                     });
                 }
-                catch(WebException)
+                catch(Exception)
                 {
                     return null;
                 }
-
             }
         }
 
@@ -82,7 +88,7 @@ namespace ControllableDevice
 
             if (disposing)
             {
-                _webClient.Dispose();
+                _httpClient.Dispose();
             }
 
             _disposed = true;
