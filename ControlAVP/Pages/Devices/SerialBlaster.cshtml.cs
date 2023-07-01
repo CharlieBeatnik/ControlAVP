@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using AVPCloudToDevice;
 using ControllableDeviceTypes.SerialBlasterTypes;
 using System;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace ControlAVP.Pages.Devices
 {
@@ -39,10 +40,15 @@ namespace ControlAVP.Pages.Devices
 
         }
 
-        public void OnPostConvertRawHexToNecProtocol(string rawHex, string necHex)
+        public void OnPostConvertRawHexToNecProtocol(string rawHex)
         {
-            @ViewData["rawHex"] = $"{rawHex}";
-            @ViewData["necHex"] = $"{necHex}";
+            if(!string.IsNullOrEmpty(rawHex))
+            {
+                uint necHex = SerialBlaster.ConvertRawHexToNecHex(rawHex);
+                
+                @ViewData["rawHex"] = $"{rawHex}";
+                @ViewData["necHex"] = necHex.ToString("X8");
+            }
         }
 
         public void OnPostBlastNecHex(string necHex, string rawHex)
