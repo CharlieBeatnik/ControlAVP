@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ControllableDeviceTypes.SerialBlasterTypes;
 
 namespace ControllableDevice
 {
@@ -10,11 +11,6 @@ namespace ControllableDevice
     {
         private bool _disposed;
         private Rs232Device _rs232Device;
-
-        public enum Protocol
-        {
-            Nec
-        };
 
         public SerialBlaster(string portId)
         {
@@ -77,6 +73,12 @@ namespace ControllableDevice
         {
             string result = _rs232Device.WriteWithResponse($"message {message}", "OK");
             return result != null;
+        }
+
+        public bool GetAvailable()
+        {
+            //Send a dummy message to see if it succeeds
+            return SendMessage("GetAvailable");
         }
     }
 }

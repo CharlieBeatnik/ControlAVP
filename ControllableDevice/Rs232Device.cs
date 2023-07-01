@@ -10,6 +10,7 @@ using Windows.Devices.Enumeration;
 using Windows.Devices.SerialCommunication;
 using Windows.Storage.Streams;
 using Windows.Foundation;
+using System.ServiceModel.Channels;
 
 namespace ControllableDevice
 {
@@ -435,16 +436,15 @@ namespace ControllableDevice
                 {
                     if (!_messageStore.IsEmpty)
                     {
-                        var messageStore = _messageStore.ToList();
-                        messageStore.Reverse();
-
-                        foreach (var message in messageStore)
+                        foreach(var message in _messageStore.Reverse<TimestampedMessage>())
                         {
-                            if (message.Age < MessageLifetime)
+                            if ((message.Age < MessageLifetime) && (!message.Read))
                             {
                                 var match = Regex.Match(message.Message, pattern);
                                 if (match.Success)
                                 {
+                                    //Mark the message as read so that it isn't used up by other read calls
+                                    message.Read = true;
                                     return message.Message;
                                 }
                             }

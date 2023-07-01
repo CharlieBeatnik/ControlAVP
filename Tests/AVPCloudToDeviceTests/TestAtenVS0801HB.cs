@@ -64,7 +64,7 @@ namespace Tests
         }
 
         [Test]
-        public void GivenDevice_WhenCallAvailable_ThenDeviceIsAvailable()
+        public void GivenDevice_WhenGetAvailable_ThenDeviceIsAvailable()
         {
             foreach (var device in _devices)
             {

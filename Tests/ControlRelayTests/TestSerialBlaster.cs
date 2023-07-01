@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ControllableDevice;
 using System.IO;
 using Newtonsoft.Json.Linq;
-using ControllableDeviceTypes.OSSCTypes;
+using ControllableDeviceTypes.SerialBlasterTypes;
 
 namespace Tests
 {
@@ -46,7 +46,7 @@ namespace Tests
         {
             using (var device = CreateDevice())
             {
-                var result = device.SendCommand(SerialBlaster.Protocol.Nec, 0x3EC14DB2);
+                var result = device.SendCommand(Protocol.Nec, 0x3EC14DB2);
                 Assert.IsTrue(result);
             }
         }
@@ -56,7 +56,7 @@ namespace Tests
         {
             using (var device = CreateInvalidDevice())
             {
-                var result = device.SendCommand(SerialBlaster.Protocol.Nec, 0x3EC14DB2);
+                var result = device.SendCommand(Protocol.Nec, 0x3EC14DB2);
                 Assert.IsFalse(result);
             }
         }

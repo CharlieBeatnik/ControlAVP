@@ -1,4 +1,5 @@
-﻿
+﻿using ControllableDeviceTypes.SerialBlasterTypes;
+
 namespace ControllableDevice
 {
     internal class IrCommandCode
@@ -6,9 +7,9 @@ namespace ControllableDevice
         public ushort Code { get; }
         public uint CodeWithChecksum { get; }
 
-        public SerialBlaster.Protocol Protocol { get;  }
+        public Protocol Protocol { get;  }
 
-        public IrCommandCode(ushort code, SerialBlaster.Protocol protocol = SerialBlaster.Protocol.Nec)
+        public IrCommandCode(ushort code, Protocol protocol = Protocol.Nec)
         {
             Code = code;
             Protocol = protocol;

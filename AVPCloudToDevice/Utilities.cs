@@ -55,7 +55,7 @@ namespace AVPCloudToDevice
             {
                 if (response.Status != (int)HttpStatusCode.OK)
                 {
-                    throw new InvalidOperationException($"Invoking method '{methodName}' resulted in a HTPP status code '{response.Status}'.");
+                    throw new InvalidOperationException($"Invoking method '{methodName}' resulted in a HTTP status code '{response.Status}'.");
                 }
             }
 

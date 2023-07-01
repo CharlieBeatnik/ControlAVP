@@ -12,9 +12,12 @@ namespace ControllableDevice
         {
             Recieved = DateTime.Now;
             Message = message;
+            Read = false;
         }
         public DateTime Recieved { private set; get; }
         public string Message { private set; get; }
+
+        public bool Read { set; get; }
 
         public TimeSpan Age { get { return DateTime.Now - Recieved; } }
     }
