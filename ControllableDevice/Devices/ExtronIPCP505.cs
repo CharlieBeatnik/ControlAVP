@@ -17,20 +17,27 @@ namespace ControllableDevice
 
         public const string TerminalPrompt = "";
 
+        private CancellationToken _ct = new CancellationToken();
+
         public ExtronIPCP505(string host, int port)
         {
-            _telnetDevice = new Client(host, port, new CancellationToken());
-            //Client.IsWriteConsole = true;
+            Debug.WriteLine(System.Reflection.MethodBase.GetCurrentMethod().Name);
+            _ct = new CancellationToken();
+
+            _telnetDevice = new Client(host, port, _ct);
+            Client.IsWriteConsole = true;
         }
 
         public void Dispose()
         {
+            Debug.WriteLine(System.Reflection.MethodBase.GetCurrentMethod().Name);
             Dispose(true);
             GC.SuppressFinalize(this);
         }
 
         protected virtual void Dispose(bool disposing)
         {
+            Debug.WriteLine(System.Reflection.MethodBase.GetCurrentMethod().Name);
             if (_disposed)
                 return;
 
@@ -45,11 +52,13 @@ namespace ControllableDevice
 
         public bool GetAvailable()
         {
+            Debug.WriteLine(System.Reflection.MethodBase.GetCurrentMethod().Name);
             return true;
         }
 
-        public async void Test()
+        public async Task<bool> Test()
         {
+            Debug.WriteLine(System.Reflection.MethodBase.GetCurrentMethod().Name);
             string _cmdEsc = ('\x1B').ToString();
             string _cmdCr = ('\x0D').ToString();
             string _cmdCrLr = ('\x0D').ToString() + ('\x0A').ToString();
@@ -61,7 +70,10 @@ namespace ControllableDevice
             {
                 try
                 {
+                    //Debug.WriteLine("Read 1");
                     s = await _telnetDevice.TerminatedReadAsync(_cmdCrLr, TimeSpan.FromMilliseconds(timeoutMs));
+
+                    await _telnetDevice.TryLoginAsync("", "", 500);
                 }
                 catch (Exception ex)
                 {
@@ -69,12 +81,40 @@ namespace ControllableDevice
                 }
             }
 
+            var sw = new Stopwatch();
+            sw.Start();
             if (_telnetDevice.IsConnected)
             {
                 try
                 {
                     string send = $"{_cmdEsc}CT{_cmdCr}";
-                    await _telnetDevice.WriteLineAsync(send);
+                    //send = "cn";
+
+                    Thread.Sleep(1000);
+
+                    await _telnetDevice.WriteAsync(_cmdCrLr);
+                    await _telnetDevice.WriteAsync(_cmdCrLr);
+                    await _telnetDevice.WriteAsync(_cmdCrLr);
+
+                    Debug.WriteLine($"WriteAsync ({sw.ElapsedMilliseconds})");
+                    await _telnetDevice.WriteAsync(send);
+                    await _telnetDevice.WriteAsync(send);
+                    await _telnetDevice.WriteAsync(send);
+                    await _telnetDevice.WriteAsync(send);
+                    await _telnetDevice.WriteAsync(send);
+
+                    Debug.WriteLine($"TerminatedReadAsync ({sw.ElapsedMilliseconds})");
+                    s = await _telnetDevice.TerminatedReadAsync(_cmdCrLr);
+                    Debug.WriteLine(s + $" ({sw.ElapsedMilliseconds})");
+
+                    s = await _telnetDevice.TerminatedReadAsync(_cmdCrLr);
+                    Debug.WriteLine(s + $" ({sw.ElapsedMilliseconds})");
+
+                    s = await _telnetDevice.TerminatedReadAsync(_cmdCrLr);
+                    Debug.WriteLine(s + $" ({sw.ElapsedMilliseconds})");
+
+                    s = await _telnetDevice.TerminatedReadAsync(_cmdCrLr);
+                    Debug.WriteLine(s + $" ({sw.ElapsedMilliseconds})");
                 }
                 catch (Exception ex)
                 {
@@ -82,17 +122,8 @@ namespace ControllableDevice
                 }
             }
 
-            if (_telnetDevice.IsConnected)
-            {
-                try
-                {
-                    s = await _telnetDevice.TerminatedReadAsync(_cmdCrLr, TimeSpan.FromMilliseconds(timeoutMs));
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex);
-                }
-            }
+            sw.Stop();
+            return true;
         }
     }
 }

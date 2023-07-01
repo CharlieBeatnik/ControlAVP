@@ -8,6 +8,7 @@ using System.Threading;
 using System;
 using Renci.SshNet.Common;
 using System.Net.Sockets;
+using System.Threading.Tasks;
 
 namespace Tests
 {
@@ -58,7 +59,7 @@ namespace Tests
         {
             using (var device = CreateDevice())
             {
-                device.Test();
+                var result = Task.Run(async () => await device.Test()).Result;
             }
         }
 
