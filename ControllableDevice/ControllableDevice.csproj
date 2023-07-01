@@ -110,6 +110,9 @@
     <PackageReference Include="SSH.NET">
       <Version>2020.0.2</Version>
     </PackageReference>
+    <PackageReference Include="Telnet">
+      <Version>0.11.3</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ControllableDeviceTypes\ControllableDeviceTypes.csproj">
