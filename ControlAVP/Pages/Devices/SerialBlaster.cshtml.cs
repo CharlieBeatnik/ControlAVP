@@ -15,9 +15,16 @@ namespace ControlAVP.Pages.Devices
         {
         }
 
-        public void OnPostBlastRawHex(string rawHex)
+        public void OnPostConvertRawHexToNecProtocol(string rawHex, string necHex)
         {
             @ViewData["rawHex"] = $"{rawHex}";
+            @ViewData["necHex"] = $"{necHex}";
+        }
+
+        public void OnPostBlastNecHex(string necHex, string rawHex)
+        {
+            @ViewData["rawHex"] = $"{rawHex}";
+            @ViewData["necHex"] = $"{necHex}";
         }
     }
 }
