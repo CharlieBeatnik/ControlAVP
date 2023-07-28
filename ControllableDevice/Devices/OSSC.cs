@@ -131,7 +131,7 @@ namespace ControllableDevice
                 throw new ArgumentException("Unknown command name.", nameof(genericCommandName));
             }
 
-            return _serialBlaster.SendCommand(_genericCommandNameToCommandCode[genericCommandName].Protocol, _genericCommandNameToCommandCode[genericCommandName].CodeWithChecksum, repeats);
+            return _serialBlaster.SendCommand(_genericCommandNameToCommandCode[genericCommandName].Protocol, _genericCommandNameToCommandCode[genericCommandName].Code, repeats);
         }
 
         public bool SendCommand(CommandName commandName, uint repeats = 0)

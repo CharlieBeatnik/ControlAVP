@@ -17,7 +17,18 @@ namespace ControllableDeviceTypes
             Back,
             VolMinus,
             VolPlus,
-            LeftMouse
+            LeftMouse,
+            Number0,
+            Number1,
+            Number2,
+            Number3,
+            Number4,
+            Number5,
+            Number6,
+            Number7,
+            Number8,
+            Number9,
+            NumberPlus10
         };
 
         public static class GenericCommandNameExtensions
@@ -41,7 +52,18 @@ namespace ControllableDeviceTypes
             Up,
             Down,
             Ok,
-            Back
+            Back,
+            LoadProfileDefault,
+            LoadProfile1,
+            LoadProfile2,
+            LoadProfile3,
+            LoadProfile4,
+            LoadProfile5,
+            LoadProfile6,
+            LoadProfile7,
+            LoadProfile8,
+            LoadProfile9,
+            LoadProfile10
         };
 
         public static class CommandNameExtensions

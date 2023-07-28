@@ -26,6 +26,17 @@ namespace ControllableDevice
             {GenericCommandName.VolMinus, new IrCommandCode(0x0191)},
             {GenericCommandName.VolPlus, new IrCommandCode(0x01E1)},
             {GenericCommandName.LeftMouse, new IrCommandCode(0x0112)},
+            {GenericCommandName.Number0, new IrCommandCode(0xE144728D)},
+            {GenericCommandName.Number1, new IrCommandCode(0xE144A25D)},
+            {GenericCommandName.Number2, new IrCommandCode(0xE144629D)},
+            {GenericCommandName.Number3, new IrCommandCode(0xE144E21D)},
+            {GenericCommandName.Number4, new IrCommandCode(0xE14412ED)},
+            {GenericCommandName.Number5, new IrCommandCode(0xE144926D)},
+            {GenericCommandName.Number6, new IrCommandCode(0xE14452AD)},
+            {GenericCommandName.Number7, new IrCommandCode(0xE144D22D)},
+            {GenericCommandName.Number8, new IrCommandCode(0xE14432CD)},
+            {GenericCommandName.Number9, new IrCommandCode(0xE144B24D)},
+            {GenericCommandName.NumberPlus10, new IrCommandCode(0xE1448A75)},
         };
 
         private Dictionary<CommandName, GenericCommandName> _commandNameToGenericCommandName = new Dictionary<CommandName, GenericCommandName>
@@ -41,7 +52,33 @@ namespace ControllableDevice
             {CommandName.Up, GenericCommandName.Up },
             {CommandName.Down, GenericCommandName.Down },
             {CommandName.Ok, GenericCommandName.Ok },
-            {CommandName.Back, GenericCommandName.Back }
+            {CommandName.Back, GenericCommandName.Back },
+            {CommandName.LoadProfileDefault, GenericCommandName.Number0 },
+            {CommandName.LoadProfile1, GenericCommandName.Number1 },
+            {CommandName.LoadProfile2, GenericCommandName.Number2 },
+            {CommandName.LoadProfile3, GenericCommandName.Number3 },
+            {CommandName.LoadProfile4, GenericCommandName.Number4 },
+            {CommandName.LoadProfile5, GenericCommandName.Number5 },
+            {CommandName.LoadProfile6, GenericCommandName.Number6 },
+            {CommandName.LoadProfile7, GenericCommandName.Number7 },
+            {CommandName.LoadProfile8, GenericCommandName.Number8 },
+            {CommandName.LoadProfile9, GenericCommandName.Number9 },
+            {CommandName.LoadProfile10, GenericCommandName.NumberPlus10 }
+        };
+
+        private Dictionary<ProfileName, CommandName> _profileNameToCommandName = new Dictionary<ProfileName, CommandName>
+        {
+            {ProfileName.ProfileDefault, CommandName.LoadProfileDefault},
+            {ProfileName.Profile1, CommandName.LoadProfile1},
+            {ProfileName.Profile2, CommandName.LoadProfile2},
+            {ProfileName.Profile3, CommandName.LoadProfile3},
+            {ProfileName.Profile4, CommandName.LoadProfile4},
+            {ProfileName.Profile5, CommandName.LoadProfile5},
+            {ProfileName.Profile6, CommandName.LoadProfile6},
+            {ProfileName.Profile7, CommandName.LoadProfile7},
+            {ProfileName.Profile8, CommandName.LoadProfile8},
+            {ProfileName.Profile9, CommandName.LoadProfile9},
+            {ProfileName.Profile10, CommandName.LoadProfile10}
         };
 
         public RetroTink5xPro(SerialBlaster serialBlaster)
@@ -79,7 +116,7 @@ namespace ControllableDevice
                 throw new ArgumentException("Unknown command name.", nameof(genericCommandName));
             }
 
-            return _serialBlaster.SendCommand(_genericCommandNameToCommandCode[genericCommandName].Protocol, _genericCommandNameToCommandCode[genericCommandName].CodeWithChecksum, repeats);
+            return _serialBlaster.SendCommand(_genericCommandNameToCommandCode[genericCommandName].Protocol, _genericCommandNameToCommandCode[genericCommandName].Code, repeats);
         }
 
         private bool SendCommand(CommandName commandName, TimeSpan postSendDelay, uint repeats = 0)
@@ -121,44 +158,12 @@ namespace ControllableDevice
         public bool LoadProfile(ProfileName profileName)
         {
             bool result = true;
-            TimeSpan postSendDelay = TimeSpan.FromMilliseconds(1000);
+            TimeSpan postSendDelay = TimeSpan.FromMilliseconds(500);
 
-            //Reset the device to ensure the main menu is a in a known state
-            //Power Off
-            result &= SendCommand(CommandName.Power, TimeSpan.FromSeconds(10));
-            //Power On
-            result &= SendCommand(CommandName.Power, TimeSpan.FromSeconds(10));
-
-            //Enter main menu, cursor should now be in default top-left postion
-            result &= SendCommand(CommandName.ShowMainMenu, postSendDelay);
-
-            //Navigate to Load Profile Screen
-            result &= SendCommand(CommandName.Up, postSendDelay);
-            result &= SendCommand(CommandName.Up, postSendDelay);
-            result &= SendCommand(CommandName.Up, postSendDelay);
-
-            //Calculate how many presses are needed to move the cursor to the correct positon
-            const int entriesPerColumn = 8;
-            int profileIdx = (int)profileName - 1;
-            int posX = (int)Math.Floor((float)profileIdx / entriesPerColumn);
-            int posY = profileIdx % entriesPerColumn;
-
-            for (int i = 0; i < posX; i++)
-            {
-                result &= SendCommand(CommandName.Right, postSendDelay);
-            }
-
-            for (int i = 0; i < posY; i++)
-            {
-                result &= SendCommand(CommandName.Down, postSendDelay);
-            }
-
-            //Press Ok to load the profile
-            result &= SendCommand(CommandName.Ok, postSendDelay);
-
-            //Exit the menu
-            result &= SendCommand(CommandName.Back,postSendDelay);
-            result &= SendCommand(CommandName.Back);
+                        //Send 3 times for reliability
+            result &= SendCommand(_profileNameToCommandName[profileName], postSendDelay);
+            result &= SendCommand(_profileNameToCommandName[profileName], postSendDelay);
+            result &= SendCommand(_profileNameToCommandName[profileName], postSendDelay);
 
             return result;
         }
