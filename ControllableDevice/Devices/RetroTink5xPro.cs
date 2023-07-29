@@ -53,7 +53,7 @@ namespace ControllableDevice
             {CommandName.Down, GenericCommandName.Down },
             {CommandName.Ok, GenericCommandName.Ok },
             {CommandName.Back, GenericCommandName.Back },
-            {CommandName.LoadProfileDefault, GenericCommandName.Number0 },
+            {CommandName.LoadProfileDefault, GenericCommandName.NumberPlus10 },
             {CommandName.LoadProfile1, GenericCommandName.Number1 },
             {CommandName.LoadProfile2, GenericCommandName.Number2 },
             {CommandName.LoadProfile3, GenericCommandName.Number3 },
@@ -63,7 +63,7 @@ namespace ControllableDevice
             {CommandName.LoadProfile7, GenericCommandName.Number7 },
             {CommandName.LoadProfile8, GenericCommandName.Number8 },
             {CommandName.LoadProfile9, GenericCommandName.Number9 },
-            {CommandName.LoadProfile10, GenericCommandName.NumberPlus10 }
+            {CommandName.LoadProfile10, GenericCommandName.Number0 }
         };
 
         private Dictionary<ProfileName, CommandName> _profileNameToCommandName = new Dictionary<ProfileName, CommandName>
@@ -160,10 +160,11 @@ namespace ControllableDevice
             bool result = true;
             TimeSpan postSendDelay = TimeSpan.FromMilliseconds(500);
 
-            //Send 3 times for reliability
-            result &= SendCommand(_profileNameToCommandName[profileName], postSendDelay);
-            result &= SendCommand(_profileNameToCommandName[profileName], postSendDelay);
-            result &= SendCommand(_profileNameToCommandName[profileName], postSendDelay);
+            //Send multiple times for reliability
+            for (int i = 0; i < 5; i++)
+            { 
+                result &= SendCommand(_profileNameToCommandName[profileName], postSendDelay);
+            }
 
             return result;
         }
