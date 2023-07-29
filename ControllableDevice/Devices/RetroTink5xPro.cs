@@ -160,7 +160,7 @@ namespace ControllableDevice
             bool result = true;
             TimeSpan postSendDelay = TimeSpan.FromMilliseconds(500);
 
-                        //Send 3 times for reliability
+            //Send 3 times for reliability
             result &= SendCommand(_profileNameToCommandName[profileName], postSendDelay);
             result &= SendCommand(_profileNameToCommandName[profileName], postSendDelay);
             result &= SendCommand(_profileNameToCommandName[profileName], postSendDelay);
