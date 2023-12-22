@@ -50,10 +50,21 @@ namespace Tests
         }
 
         [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void GivenZeroHostAddress_WhenNewDevice_ThenExceptionThrown()
+        {
+            //Returns ArgumentException if IP address is 0
+            //IPv4 address 0.0.0.0 and IPv6 address ::0 are unspecified addresses that cannot be used as a target address.
+            using (var device = new SshDevice("0.0.0.0", _port, _username, _password, ApcAP8959EU3.TerminalPrompt))
+            {
+            }
+        }
+
+        [TestMethod]
         [ExpectedException(typeof(SocketException))]
         public void GivenInvalidHost_WhenNewDevice_ThenExceptionThrown()
         {
-            using (var device = new SshDevice("0.0.0.0", _port, _username, _password, ApcAP8959EU3.TerminalPrompt))
+            using (var device = new SshDevice("203.0.113.0", _port, _username, _password, ApcAP8959EU3.TerminalPrompt))
             {
             }
         }
