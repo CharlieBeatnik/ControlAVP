@@ -22,10 +22,10 @@ namespace ControlAVP.Pages.Devices
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _environment;
 
-        private string _connectionString;
-        private string _deviceId;
-        private ServiceClient _serviceClient;
-        private OSSC _device;
+        private readonly string _connectionString;
+        private readonly string _deviceId;
+        private readonly ServiceClient _serviceClient;
+        private readonly OSSC _device;
 
         public OSSCDeviceInfo DeviceInfoCache { get; private set; } = new OSSCDeviceInfo();
 

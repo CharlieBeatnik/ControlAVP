@@ -12,7 +12,7 @@ namespace ControlRelay
 {
     class SonySimpleIPCloudInterface : DeviceCloudInterface
     {
-        private SonySimpleIP _device;
+        private readonly SonySimpleIP _device;
 
         public SonySimpleIPCloudInterface(SonySimpleIP device)
         {

@@ -11,8 +11,8 @@ namespace ControlRelay
 {
     class AtenVS0801HCloudInterface : DeviceCloudInterface
     {
-        private List<AtenVS0801H> _devices = new List<AtenVS0801H>();
-        private static string _deviceApiPrefix = "AtenVS0801H";
+        private readonly List<AtenVS0801H> _devices = new List<AtenVS0801H>();
+        private static readonly string _deviceApiPrefix = "AtenVS0801H";
 
         public AtenVS0801HCloudInterface(List<AtenVS0801H> devices)
         {

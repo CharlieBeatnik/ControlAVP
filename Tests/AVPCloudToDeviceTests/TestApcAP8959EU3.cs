@@ -13,22 +13,20 @@ namespace Tests
 {
     public class TestApcAP8959EU3
     {
-        private dynamic _settings;
+        private readonly dynamic _settings;
         private const string _settingsFile = "settings.json";
 
         private ServiceClient _serviceClient;
         private ApcAP8959EU3 _device;
 
-        private int _invalidOutletId = 999;
+        private readonly int _invalidOutletId = 999;
 
         public TestApcAP8959EU3()
         {
-            using (StreamReader r = new StreamReader(_settingsFile))
-            {
-                string json = r.ReadToEnd();
-                dynamic parsed = JsonConvert.DeserializeObject<ExpandoObject>(json, new ExpandoObjectConverter());
-                _settings = parsed.ApcAP8959EU3;
-            }
+            using StreamReader r = new(_settingsFile);
+            string json = r.ReadToEnd();
+            dynamic parsed = JsonConvert.DeserializeObject<ExpandoObject>(json, new ExpandoObjectConverter());
+            _settings = parsed.ApcAP8959EU3;
         }
 
         [SetUp]
@@ -43,7 +41,7 @@ namespace Tests
         {
             var outlets = _device.GetOutlets();
             if (outlets == null) Assert.Fail();
-            Assert.IsTrue(outlets.Count() == 24);
+            Assert.That(outlets.Count(), Is.EqualTo(24));
         }
 
         [Test]
@@ -53,41 +51,41 @@ namespace Tests
             int outletId = 5;
 
             //Given
-            Assert.IsTrue(_device.TurnOutletOff(outletId));
+            Assert.That(_device.TurnOutletOff(outletId), Is.True);
             var outlets = _device.GetOutletsWaitForPending();
             if (outlets == null) Assert.Fail();
 
             var outlet = outlets.First(o => o.Id == outletId);
             if (outlet == null) Assert.Fail();
-            Assert.IsTrue(outlet.State == Outlet.PowerState.Off);
+            Assert.That(outlet.State, Is.EqualTo(Outlet.PowerState.Off));
 
             //When
-            Assert.IsTrue(_device.TurnOutletOn(outletId));
+            Assert.That(_device.TurnOutletOn(outletId), Is.True);
 
             //Then
             outlets = _device.GetOutletsWaitForPending();
             if (outlets == null) Assert.Fail();
             outlet = outlets.First(o => o.Id == outletId);
             if (outlet == null) Assert.Fail();
-            Assert.IsTrue(outlet.State == Outlet.PowerState.On);
+            Assert.That(outlet.State, Is.EqualTo(Outlet.PowerState.On));
         }
 
         [Test]
         public void GivenDevice_WhenCallAvailable_ThenDeviceIsAvailable()
         {
-            Assert.IsTrue(_device.GetAvailable());
+            Assert.That(_device.GetAvailable(), Is.True);
         }
 
         [Test]
         public void GivenDevice_WhenTurnOutletOnWithInvalidId_ThenSuccessIsFalse()
         {
-            Assert.IsFalse(_device.TurnOutletOn(_invalidOutletId));
+            Assert.That(_device.TurnOutletOn(_invalidOutletId), Is.False);
         }
 
         [Test]
         public void GivenDevice_WhenTurnOutletOffWithInvalidId_ThenSuccessIsFalse()
         {
-            Assert.IsFalse(_device.TurnOutletOff(_invalidOutletId));
+            Assert.That(_device.TurnOutletOff(_invalidOutletId), Is.False);
         }
 
         [Test]
@@ -95,10 +93,10 @@ namespace Tests
         {
             var phase = (List<Phase>)_device.GetPhases();
 
-            Assert.IsNotNull(phase);
-            Assert.IsTrue(phase.Count != 0);
+            Assert.That(phase, Is.Not.Null);
+            Assert.That(phase, Is.Not.Empty);
 
-            Assert.IsTrue(phase.First().Voltage > 220);
+            Assert.That(phase.First().Voltage, Is.GreaterThan(220));
         }
     }
 }

@@ -13,22 +13,20 @@ namespace Tests
 {
     public class TestSerialBlaster
     {
-        private dynamic _settings;
+        private readonly dynamic _settings;
         private const string _settingsFile = "settings.json";
 
         private ServiceClient _serviceClient;
-        private List<SerialBlaster> _devices = new List<SerialBlaster>();
+        private readonly List<SerialBlaster> _devices = [];
 
-        private uint _invalidDeviceIndex = 999;
+        private readonly uint _invalidDeviceIndex = 999;
 
         public TestSerialBlaster()
         {
-            using (StreamReader r = new StreamReader(_settingsFile))
-            {
-                string json = r.ReadToEnd();
-                dynamic parsed = JsonConvert.DeserializeObject<ExpandoObject>(json, new ExpandoObjectConverter());
-                _settings = parsed.SerialBlaster;
-            }
+            using StreamReader r = new(_settingsFile);
+            string json = r.ReadToEnd();
+            dynamic parsed = JsonConvert.DeserializeObject<ExpandoObject>(json, new ExpandoObjectConverter());
+            _settings = parsed.SerialBlaster;
         }
 
         [SetUp]
@@ -51,7 +49,7 @@ namespace Tests
         {
             foreach (var device in _devices)
             {
-                Assert.IsTrue(device.GetAvailable());
+                Assert.That(device.GetAvailable(), Is.True);
             }
         }
 
@@ -59,7 +57,7 @@ namespace Tests
         public void GivenDeviceWithInvalidDeviceIndex_WhenGetAvailable_ThenAvailableIsFalse()
         {
             var device = new SerialBlaster(_serviceClient, _settings.DeviceId, _invalidDeviceIndex);
-            Assert.IsFalse(device.GetAvailable());
+            Assert.That(device.GetAvailable(), Is.False);
         }
 
         [Test]
@@ -67,7 +65,7 @@ namespace Tests
         {
             foreach (var device in _devices)
             {
-                Assert.IsTrue(device.SendMessage("Test"));
+                Assert.That(device.SendMessage("Test"), Is.True);
             }
         }
 
@@ -76,7 +74,7 @@ namespace Tests
         {
             foreach (var device in _devices)
             {
-                Assert.IsFalse(device.SendMessage(null));
+                Assert.That(device.SendMessage(null), Is.False);
             }
         }
 
@@ -85,7 +83,7 @@ namespace Tests
         {
             foreach (var device in _devices)
             {
-                Assert.IsFalse(device.SendMessage(string.Empty));
+                Assert.That(device.SendMessage(string.Empty), Is.False);
             }
         }
 
@@ -93,7 +91,7 @@ namespace Tests
         public void GivenDeviceWithInvalidDeviceIndex_WhenSendMessage_ThenResultIsFalse()
         {
             var device = new SerialBlaster(_serviceClient, _settings.DeviceId, _invalidDeviceIndex);
-            Assert.IsFalse(device.SendMessage("Test"));
+            Assert.That(device.SendMessage("Test"), Is.False);
         }
 
         [Test]
@@ -101,7 +99,7 @@ namespace Tests
         {
             foreach (var device in _devices)
             {
-                Assert.IsTrue(device.SendCommand(Protocol.Nec, 0x01FE817E, 0));
+                Assert.That(device.SendCommand(Protocol.Nec, 0x01FE817E, 0), Is.True);
             }
         }
 
@@ -109,7 +107,7 @@ namespace Tests
         public void GivenInvalidDevice_WhenSendValidCommand_ThenResultIsTrue()
         {
             var device = new SerialBlaster(_serviceClient, _settings.DeviceId, _invalidDeviceIndex);
-            Assert.IsFalse(device.SendCommand(Protocol.Nec, 0x01FE817E, 0));
+            Assert.That(device.SendCommand(Protocol.Nec, 0x01FE817E, 0), Is.False);
         }
 
         [Test]
@@ -118,7 +116,7 @@ namespace Tests
             string rawHex = "0000 006E 0022 0002 0155 00AB 0015 0015 0015 0015 0015 0015 0015 0015 0015 0015 0015 0015 0015 0015 0015 0015 0015 0040 0015 0040 0015 0040 0015 0040 0015 0040 0015 0040 0015 0040 0015 0040 0015 0040 0015 0015 0015 0015 0015 0015 0015 0015 0015 0015 0015 0015 0015 0040 0015 0015 0015 0040 0015 0040 0015 0040 0015 0040 0015 0040 0015 0040 0015 0015 0015 05EB 0155 0055 0015 0E42";
             uint command = SerialBlaster.ConvertRawHexToNecHex(rawHex);
 
-            Assert.AreEqual(command, 0x00FF817E);
+            Assert.That(command, Is.EqualTo(0x00FF817E));
         }
 
         [Test]
@@ -126,7 +124,7 @@ namespace Tests
         {
             uint command = SerialBlaster.ConvertRawHexToNecHex(null);
 
-            Assert.AreEqual(command, 0);
+            Assert.That(command, Is.EqualTo(0));
         }
 
         [Test]
@@ -135,7 +133,7 @@ namespace Tests
             string rawHex = "qwEHVb rTK19qW6 uhnxlGj zWFQZ4Fib0Cd8Meb H1qK oIZzwHCl09 Zwp0cM31LFi pdI6ehtlCk ae29ypFAkv3RRndip8g3h 3SvWWcTSOohy JkAAWQ3 LbDUAjehMw 7tE3hu";
             uint command = SerialBlaster.ConvertRawHexToNecHex(rawHex);
 
-            Assert.AreEqual(command, 0);
+            Assert.That(command, Is.EqualTo(0));
         }
 
         [Test]
@@ -143,7 +141,7 @@ namespace Tests
         {
             uint command = SerialBlaster.ConvertRawHexToNecHex(string.Empty);
 
-            Assert.AreEqual(command, 0);
+            Assert.That(command, Is.EqualTo(0));
         }
     }
 }

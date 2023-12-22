@@ -17,7 +17,7 @@ namespace ControlRelay
 {
     class CommandProcessorInterface : DeviceCloudInterface
     {
-        private List<object> _devices;
+        private readonly List<object> _devices;
 
         public CommandProcessorInterface(List<object> devices)
         {

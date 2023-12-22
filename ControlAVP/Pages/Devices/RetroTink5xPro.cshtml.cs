@@ -22,10 +22,10 @@ namespace ControlAVP.Pages.Devices
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _environment;
 
-        private string _connectionString;
-        private string _deviceId;
-        private ServiceClient _serviceClient;
-        private RetroTink5xPro _device;
+        private readonly string _connectionString;
+        private readonly string _deviceId;
+        private readonly ServiceClient _serviceClient;
+        private readonly RetroTink5xPro _device;
 
         public RetroTink5xProCDeviceInfo DeviceInfoCache { get; private set; } = new RetroTink5xProCDeviceInfo();
 

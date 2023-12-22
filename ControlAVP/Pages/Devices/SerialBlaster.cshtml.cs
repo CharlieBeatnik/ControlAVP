@@ -14,12 +14,12 @@ namespace ControlAVP.Pages.Devices
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _environment;
 
-        private string _connectionString;
-        private string _deviceId;
-        private ServiceClient _serviceClient;
-        private SerialBlaster _device;
+        private readonly string _connectionString;
+        private readonly string _deviceId;
+        private readonly ServiceClient _serviceClient;
+        private readonly SerialBlaster _device;
 
-        uint _serialBlasterDeviceIndex;
+        readonly uint _serialBlasterDeviceIndex;
 
         public SerialBlasterModel(IConfiguration configuration, IWebHostEnvironment environment)
         {

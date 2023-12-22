@@ -24,10 +24,10 @@ namespace ControlAVP.Pages.Devices
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _environment;
 
-        private string _connectionString;
-        private string _deviceId;
-        private ServiceClient _serviceClient;
-        private ExtronMVX44VGA _device;
+        private readonly string _connectionString;
+        private readonly string _deviceId;
+        private readonly ServiceClient _serviceClient;
+        private readonly ExtronMVX44VGA _device;
 
         public ExtronMVX44VGADeviceInfo DeviceInfoCache { get; private set; } = new ExtronMVX44VGADeviceInfo();
 

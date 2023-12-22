@@ -40,9 +40,8 @@ namespace CommandProcessor
             JSchema schema = JSchema.Parse(jsonSchemaString);
 
             //Parse the json passed in and validate it
-            IList<string> errorMessages;
             parsedJsonCommands = JObject.Parse(jsonCommands);
-            return parsedJsonCommands.IsValid(schema, out errorMessages);
+            return parsedJsonCommands.IsValid(schema, out IList<string> errorMessages);
         }
 
         public static bool Valid(string jsonCommands)
@@ -63,8 +62,7 @@ namespace CommandProcessor
             var sw = new Stopwatch();
             sw.Start();
 
-            JObject commandBatch;
-            bool jsonValid = Valid(json, out commandBatch);
+            bool jsonValid = Valid(json, out JObject commandBatch);
             if (!jsonValid) throw new ArgumentException("JSON commands failed schema validation.");
 
             int? defaultDeviceIndex = (int?)commandBatch["DefaultDeviceIndex"];

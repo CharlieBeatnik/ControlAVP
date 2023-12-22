@@ -12,7 +12,7 @@ namespace ControlRelay
 {
     class ExtronMVX44VGACloudInterface : DeviceCloudInterface
     {
-        private ExtronMVX44VGA _device;
+        private readonly ExtronMVX44VGA _device;
 
         public ExtronMVX44VGACloudInterface(ExtronMVX44VGA device)
         {

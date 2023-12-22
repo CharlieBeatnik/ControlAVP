@@ -27,10 +27,10 @@ namespace ControlAVP
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _environment;
 
-        private string _eventHubConnectionString;
-        private string _eventHubName;
+        private readonly string _eventHubConnectionString;
+        private readonly string _eventHubName;
 
-        private SmartEventHubConsumer _smartEventHubConsumer;
+        private readonly SmartEventHubConsumer _smartEventHubConsumer;
         private CancellationTokenSource _cts;
 
         private bool disposed;

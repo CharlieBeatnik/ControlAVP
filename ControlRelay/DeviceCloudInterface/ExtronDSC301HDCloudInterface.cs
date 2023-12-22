@@ -13,7 +13,7 @@ namespace ControlRelay
 {
     class ExtronDSC301HDCloudInterface : DeviceCloudInterface
     {
-        private ExtronDSC301HD _device;
+        private readonly ExtronDSC301HD _device;
 
         public ExtronDSC301HDCloudInterface(ExtronDSC301HD device)
         {

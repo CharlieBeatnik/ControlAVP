@@ -11,7 +11,7 @@ namespace ControlRelay
 {
     class ApcAP8959EU3CloudInterface : DeviceCloudInterface
     {
-        private ApcAP8959EU3 _device;
+        private readonly ApcAP8959EU3 _device;
 
         public ApcAP8959EU3CloudInterface(ApcAP8959EU3 device)
         {

@@ -10,7 +10,7 @@ namespace ControlRelay
 {
     class OSSCCloudInterface : DeviceCloudInterface
     {
-        private OSSC _device;
+        private readonly OSSC _device;
 
         public OSSCCloudInterface(OSSC device)
         {

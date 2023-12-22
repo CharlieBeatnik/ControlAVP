@@ -12,7 +12,7 @@ namespace Tests
 {
     public class TestSonySimpleIP
     {
-        private dynamic _settings;
+        private readonly dynamic _settings;
         private const string _settingsFile = "settings.json";
 
         private ServiceClient _serviceClient;
@@ -20,12 +20,10 @@ namespace Tests
 
         public TestSonySimpleIP()
         {
-            using (StreamReader r = new StreamReader(_settingsFile))
-            {
-                string json = r.ReadToEnd();
-                dynamic parsed = JsonConvert.DeserializeObject<ExpandoObject>(json, new ExpandoObjectConverter());
-                _settings = parsed.SonySimpleIP;
-            }
+            using StreamReader r = new(_settingsFile);
+            string json = r.ReadToEnd();
+            dynamic parsed = JsonConvert.DeserializeObject<ExpandoObject>(json, new ExpandoObjectConverter());
+            _settings = parsed.SonySimpleIP;
         }
 
         [OneTimeSetUp]
@@ -55,8 +53,8 @@ namespace Tests
         [Test]
         public void GivenTVIsOff_WhenTurnOn_ThenTVIsOn()
         {
-            Assert.IsTrue(_device.TurnOff());
-            Assert.IsTrue(_device.TurnOn());
+            Assert.That(_device.TurnOff(), Is.True);
+            Assert.That(_device.TurnOn(), Is.True);
         }
     }
 }

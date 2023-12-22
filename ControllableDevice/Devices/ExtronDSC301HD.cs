@@ -10,7 +10,7 @@ namespace ControllableDevice
     public class ExtronDSC301HD : IControllableDevice
     {
         private bool _disposed;
-        private Rs232Device _rs232Device;
+        private readonly Rs232Device _rs232Device;
 
         private readonly string _cmdEsc = ('\x1B').ToString();
         private const string _cmdCr = "\r";

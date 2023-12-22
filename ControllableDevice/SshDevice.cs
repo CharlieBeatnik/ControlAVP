@@ -17,11 +17,11 @@ namespace ControllableDevice
         private bool _connectionValid;
         private readonly Object _lock = new Object();
 
-        private string _host;
-        private int _port;
-        private string _username;
-        private string _password;
-        private string _terminalPrompt = String.Empty;
+        private readonly string _host;
+        private readonly int _port;
+        private readonly string _username;
+        private readonly string _password;
+        private readonly string _terminalPrompt = String.Empty;
 
         public SshDevice(string host, int port, string username, string password, string terminalPrompt)
         {

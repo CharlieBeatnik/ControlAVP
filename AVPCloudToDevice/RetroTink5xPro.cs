@@ -5,16 +5,10 @@ using System;
 
 namespace AVPCloudToDevice
 {
-    public class RetroTink5xPro
+    public class RetroTink5xPro(ServiceClient serviceClient, string deviceId)
     {
-        private ServiceClient _serviceClient;
-        private string _deviceId;
-
-        public RetroTink5xPro(ServiceClient serviceClient, string deviceId)
-        {
-            _serviceClient = serviceClient;
-            _deviceId = deviceId;
-        }
+        private readonly ServiceClient _serviceClient = serviceClient;
+        private readonly string _deviceId = deviceId;
 
         public bool SendCommand(CommandName commandName)
         {

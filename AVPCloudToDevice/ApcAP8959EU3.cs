@@ -5,16 +5,10 @@ using ControllableDeviceTypes.ApcAP8959EU3Types;
 
 namespace AVPCloudToDevice
 {
-    public class ApcAP8959EU3
+    public class ApcAP8959EU3(ServiceClient serviceClient, string deviceId)
     {
-        private ServiceClient _serviceClient;
-        private string _deviceId;
-
-        public ApcAP8959EU3(ServiceClient serviceClient, string deviceId)
-        {
-            _serviceClient = serviceClient;
-            _deviceId = deviceId;
-        }
+        private readonly ServiceClient _serviceClient = serviceClient;
+        private readonly string _deviceId = deviceId;
 
         public IEnumerable<Outlet> GetOutlets(bool getPower = false, bool getCurrent = false)
         {

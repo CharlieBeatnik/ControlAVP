@@ -10,21 +10,15 @@ using Newtonsoft.Json.Linq;
 
 namespace EventHub
 {
-    public class SmartEventHubConsumer
+    public class SmartEventHubConsumer(string eventHubConnectionString, string eventHubName)
     {
-        private readonly string _eventHubConnectionString;
-        private readonly string _eventHubName;
+        private readonly string _eventHubConnectionString = eventHubConnectionString;
+        private readonly string _eventHubName = eventHubName;
         private readonly ConcurrentDictionary<Guid, BlockingCollection<EventData>> _eventQueues = new();
-
-        public SmartEventHubConsumer(string eventHubConnectionString, string eventHubName)
-        {
-            _eventHubConnectionString = eventHubConnectionString;
-            _eventHubName = eventHubName;
-        }
 
         public bool RegisterEventQueue(Guid id)
         {
-            return _eventQueues.TryAdd(id, new BlockingCollection<EventData>());
+            return _eventQueues.TryAdd(id, []);
         }
 
         public bool DeregisterEventQueue(Guid id)

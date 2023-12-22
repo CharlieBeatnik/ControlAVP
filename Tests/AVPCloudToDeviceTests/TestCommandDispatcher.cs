@@ -18,8 +18,8 @@ namespace Tests
 {
     public class TestCommandDispatcher : System.IDisposable
     {
-        private dynamic _commandExecuterSettings;
-        private dynamic _eventHubSettings;
+        private readonly dynamic _commandExecuterSettings;
+        private readonly dynamic _eventHubSettings;
         private const string _settingsFile = "settings.json";
 
         private ServiceClient _serviceClient;
@@ -31,13 +31,11 @@ namespace Tests
 
         public TestCommandDispatcher()
         {
-            using (StreamReader r = new StreamReader(_settingsFile))
-            {
-                string json = r.ReadToEnd();
-                dynamic parsed = JsonConvert.DeserializeObject<ExpandoObject>(json, new ExpandoObjectConverter());
-                _commandExecuterSettings = parsed.CommandDispatcher;
-                _eventHubSettings = parsed.EventHub;
-            }
+            using StreamReader r = new(_settingsFile);
+            string json = r.ReadToEnd();
+            dynamic parsed = JsonConvert.DeserializeObject<ExpandoObject>(json, new ExpandoObjectConverter());
+            _commandExecuterSettings = parsed.CommandDispatcher;
+            _eventHubSettings = parsed.EventHub;
         }
 
         [OneTimeSetUp]
@@ -69,229 +67,209 @@ namespace Tests
         [Test]
         public void GivenJsonIsInvalid_WhenCommandDispatcherDispatch_ThenResultIsFalse()
         {
-            using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-fail-validation.json"))
-            {
-                string json = r.ReadToEnd();
-                bool result = _cd.Dispatch(json);
+            using StreamReader r = new(@".\TestAssets\command-processor-fail-validation.json");
+            string json = r.ReadToEnd();
+            bool result = _cd.Dispatch(json);
 
-                Assert.IsFalse(result);
-            }
+            Assert.That(result, Is.False);
         }
 
         [Test]
         public void GivenJsonThatCallsFunction_WhenCommandDispatcherDispatch_ThenResultIsTrue()
         {
-            using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-call-function.json"))
-            {
-                string json = r.ReadToEnd();
-                bool result = _cd.Dispatch(json);
+            using StreamReader r = new(@".\TestAssets\command-processor-call-function.json");
+            string json = r.ReadToEnd();
+            bool result = _cd.Dispatch(json);
 
-                Assert.IsTrue(result);
-            }
+            Assert.That(result, Is.True);
         }
 
         [Test]
-        [Ignore("Requries the rack to be on, so ignoring during development.")]
-        public void GivenJsonThetChangesHDMIInputPortToPort8_WhenCommandDispatcherDispatch_ThenResultIsTrueAndInputPortIsPort8()
+        [Ignore("Requires the rack to be on, so ignoring during development.")]
+        public void GivenJsonThatChangesHDMIInputPortToPort8_WhenCommandDispatcherDispatch_ThenResultIsTrueAndInputPortIsPort8()
         {
-            using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-change-hdmi-input.json"))
-            {
-                string json = r.ReadToEnd();
+            using StreamReader r = new(@".\TestAssets\command-processor-change-hdmi-input.json");
+            string json = r.ReadToEnd();
 
-                //Firstly, make sure HDMI ports on both switchers are set to 1
-                _hdmiDevice0.SetInputPort(ControllableDeviceTypes.AtenVS0801HTypes.InputPort.Port1);
-                _hdmiDevice1.SetInputPort(ControllableDeviceTypes.AtenVS0801HTypes.InputPort.Port1);
+            //Firstly, make sure HDMI ports on both switchers are set to 1
+            _hdmiDevice0.SetInputPort(ControllableDeviceTypes.AtenVS0801HTypes.InputPort.Port1);
+            _hdmiDevice1.SetInputPort(ControllableDeviceTypes.AtenVS0801HTypes.InputPort.Port1);
 
-                //JSON commands should change both ports to 8
-                _cd.Dispatch(json);
+            //JSON commands should change both ports to 8
+            _cd.Dispatch(json);
 
-                //Read back and verify
-                var hdmiDevice0State = _hdmiDevice0.GetState();
-                Assert.IsTrue(hdmiDevice0State.InputPort == ControllableDeviceTypes.AtenVS0801HTypes.InputPort.Port8);
+            //Read back and verify
+            var hdmiDevice0State = _hdmiDevice0.GetState();
+            Assert.That(hdmiDevice0State.InputPort, Is.EqualTo(ControllableDeviceTypes.AtenVS0801HTypes.InputPort.Port8));
 
-                var hdmiDevice1State = _hdmiDevice1.GetState();
-                Assert.IsTrue(hdmiDevice1State.InputPort == ControllableDeviceTypes.AtenVS0801HTypes.InputPort.Port8);
-            }
+            var hdmiDevice1State = _hdmiDevice1.GetState();
+            Assert.That(hdmiDevice1State.InputPort, Is.EqualTo(ControllableDeviceTypes.AtenVS0801HTypes.InputPort.Port8));
         }
 
         [Test]
-        public void GivenJsonThetGetsTVPowerState_WhenCommandDispatcherDispatch_ThenPowerStateMatches()
+        public void GivenJsonThatGetsTVPowerState_WhenCommandDispatcherDispatch_ThenPowerStateMatches()
         {
-            using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-get-tv-power-state.json"))
-            {
-                string json = r.ReadToEnd();
+            using StreamReader r = new(@".\TestAssets\command-processor-get-tv-power-state.json");
+            string json = r.ReadToEnd();
 
-                //Firstly, get the current TV power status directly from the TV device
-                PowerStatus? powerStatusDirect = _tvDevice.GetPowerStatus();
+            //Firstly, get the current TV power status directly from the TV device
+            PowerStatus? powerStatusDirect = _tvDevice.GetPowerStatus();
 
-                //Secondly, get the current TV power via a command processor json
-                Guid id = Guid.NewGuid();
-                bool result = _smartEventHubConsumer.RegisterEventQueue(id);
+            //Secondly, get the current TV power via a command processor json
+            Guid id = Guid.NewGuid();
+            bool result = _smartEventHubConsumer.RegisterEventQueue(id);
 
-                _cd.Dispatch(json, id);
-                var commandResult = _smartEventHubConsumer.GetEvents<CommandResult>(id).First();
-                PowerStatus? powerStatusCommandDispatcher = commandResult.Result == null ? (PowerStatus?)null : (PowerStatus)(long)commandResult.Result;
+            _cd.Dispatch(json, id);
+            var commandResult = _smartEventHubConsumer.GetEvents<CommandResult>(id).First();
+            PowerStatus? powerStatusCommandDispatcher = commandResult.Result == null ? (PowerStatus?)null : (PowerStatus)(long)commandResult.Result;
 
-                Assert.NotNull(powerStatusDirect);
-                Assert.NotNull(powerStatusCommandDispatcher);
-                Assert.AreEqual(powerStatusDirect, powerStatusCommandDispatcher);
+            Assert.That(powerStatusDirect, Is.Not.Null);
+            Assert.That(powerStatusCommandDispatcher, Is.Not.Null);
+            Assert.That(powerStatusCommandDispatcher, Is.EqualTo(powerStatusDirect));
 
-                _smartEventHubConsumer.DeregisterEventQueue(id);
-            }
+            _smartEventHubConsumer.DeregisterEventQueue(id);
         }
 
         [Test]
         public void GivenJsonThatCalls2FunctionsWith2SecondPostWaitAfterFirst_WhenGetEvents_ThenEventCountIs2()
-        {           
-            using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-call-2-functions-with-2-second-post-wait.json"))
+        {
+            using StreamReader r = new(@".\TestAssets\command-processor-call-2-functions-with-2-second-post-wait.json");
+            Guid id = Guid.NewGuid();
+            bool result = _smartEventHubConsumer.RegisterEventQueue(id);
+            Assert.That(result, Is.True);
+
+            string json = r.ReadToEnd();
+
+            _cd.Dispatch(json, id);
+
+            int eventCount = 0;
+            foreach (var eventJson in _smartEventHubConsumer.GetEvents(id))
             {
-                Guid id = Guid.NewGuid();
-                bool result = _smartEventHubConsumer.RegisterEventQueue(id);
-                Assert.IsTrue(result);
-
-                string json = r.ReadToEnd();
-
-                _cd.Dispatch(json, id);
-
-                int eventCount = 0;
-                foreach(var eventJson in _smartEventHubConsumer.GetEvents(id))
-                {
-                    eventCount++;
-                }
-                Assert.AreEqual(2, eventCount);
-
-                _smartEventHubConsumer.DeregisterEventQueue(id);
+                eventCount++;
             }
+            Assert.That(eventCount, Is.EqualTo(2));
+
+            _smartEventHubConsumer.DeregisterEventQueue(id);
         }
 
         [Test]
         public void GivenJsonThatCalls2Functions_WhenDeregisterEventQueueDuringGetEvents_GetEventsCompletesOnNextEnumeration()
         {
-            using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-call-2-functions.json"))
+            using StreamReader r = new(@".\TestAssets\command-processor-call-2-functions.json");
+            Guid id = Guid.NewGuid();
+            _smartEventHubConsumer.RegisterEventQueue(id);
+            string json = r.ReadToEnd();
+
+            _cd.Dispatch(json, id);
+
+            int eventCount = 0;
+            foreach (var eventJson in _smartEventHubConsumer.GetEvents(id))
             {
-                Guid id = Guid.NewGuid();
-                _smartEventHubConsumer.RegisterEventQueue(id);
-                string json = r.ReadToEnd();
-
-               _cd.Dispatch(json, id);
-
-                int eventCount = 0;
-                foreach (var eventJson in _smartEventHubConsumer.GetEvents(id))
-                {
-                    eventCount++;
-                    bool result = _smartEventHubConsumer.DeregisterEventQueue(id);
-                    Assert.IsTrue(result);
-                }
-                Assert.AreEqual(1, eventCount);
-
-                _smartEventHubConsumer.DeregisterEventQueue(id);
+                eventCount++;
+                bool result = _smartEventHubConsumer.DeregisterEventQueue(id);
+                Assert.That(result, Is.True);
             }
+            Assert.That(eventCount, Is.EqualTo(1));
+
+            _smartEventHubConsumer.DeregisterEventQueue(id);
         }
 
         [Test]
         public void GivenJsonThatCalls10Functions_WhenGetEvents_ThenEventsAreReturnedInTheExpectedOrder()
         {
-            using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-call-10-functions.json"))
+            using StreamReader r = new(@".\TestAssets\command-processor-call-10-functions.json");
+            Guid id = Guid.NewGuid();
+            _smartEventHubConsumer.RegisterEventQueue(id);
+            string json = r.ReadToEnd();
+
+            _cd.Dispatch(json, id);
+
+            int i = 0;
+            foreach (var eventJson in _smartEventHubConsumer.GetEvents(id))
             {
-                Guid id = Guid.NewGuid();
-                _smartEventHubConsumer.RegisterEventQueue(id);
-                string json = r.ReadToEnd();
+                var parsedEventJson = JObject.Parse(eventJson);
+                var commandResult = parsedEventJson.ToObject<CommandProcessor.CommandResult>();
 
-                _cd.Dispatch(json, id);
+                Assert.That(commandResult.Index, Is.EqualTo(i));
 
-                int i = 0;
-                foreach (var eventJson in _smartEventHubConsumer.GetEvents(id))
-                {
-                    var parsedEventJson = JObject.Parse(eventJson);
-                    var commandResult = parsedEventJson.ToObject<CommandProcessor.CommandResult>();
-
-                    Assert.AreEqual(i, commandResult.Index);
-
-                    i++;
-                }
-
-                Assert.AreEqual(10, i);
-
-                _smartEventHubConsumer.DeregisterEventQueue(id);
+                i++;
             }
+
+            Assert.That(i, Is.EqualTo(10));
+
+            _smartEventHubConsumer.DeregisterEventQueue(id);
         }
 
         [Test]
-        public void GivenJsonThatCallsFunctionThatWillFail_WhenGetEvents_ThenEventIsUnccessfulAndHasErrorMessage()
+        public void GivenJsonThatCallsFunctionThatWillFail_WhenGetEvents_ThenEventIsUnsuccessfulAndHasErrorMessage()
         {
-            using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-call-function-that-will-fail.json"))
+            using StreamReader r = new(@".\TestAssets\command-processor-call-function-that-will-fail.json");
+            Guid id = Guid.NewGuid();
+            _smartEventHubConsumer.RegisterEventQueue(id);
+            string json = r.ReadToEnd();
+
+            _cd.Dispatch(json, id);
+
+            int i = 0;
+            foreach (var eventJson in _smartEventHubConsumer.GetEvents(id))
             {
-                Guid id = Guid.NewGuid();
-                _smartEventHubConsumer.RegisterEventQueue(id);
-                string json = r.ReadToEnd();
+                var parsedEventJson = JObject.Parse(eventJson);
+                var commandResult = parsedEventJson.ToObject<CommandProcessor.CommandResult>();
 
-                _cd.Dispatch(json, id);
+                Assert.That(commandResult.Success, Is.EqualTo(false));
+                Assert.That(commandResult.ErrorMessage, Is.Not.EqualTo(null));
+                Assert.That(commandResult.ErrorMessage, Is.Not.EqualTo(string.Empty));
 
-                int i = 0;
-                foreach (var eventJson in _smartEventHubConsumer.GetEvents(id))
-                {
-                    var parsedEventJson = JObject.Parse(eventJson);
-                    var commandResult = parsedEventJson.ToObject<CommandProcessor.CommandResult>();
-
-                    Assert.AreEqual(false, commandResult.Success);
-                    Assert.AreNotEqual(null, commandResult.ErrorMessage);
-                    Assert.AreNotEqual(string.Empty, commandResult.ErrorMessage);
-
-                    i++;
-                }
-
-                Assert.AreEqual(1, i);
-
-                _smartEventHubConsumer.DeregisterEventQueue(id);
+                i++;
             }
+
+            Assert.That(i, Is.EqualTo(1));
+
+            _smartEventHubConsumer.DeregisterEventQueue(id);
         }
 
         [Test]
         public void GivenJsonThatCalls2FunctionsWith2SecondPostWaitAfterFirst_WhenGetEventsWithMaxEventWaitTime1Second_ThenEventCountIs0()
         {
-            using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-call-2-functions-with-2-second-post-wait.json"))
+            using StreamReader r = new(@".\TestAssets\command-processor-call-2-functions-with-2-second-post-wait.json");
+            Guid id = Guid.NewGuid();
+            bool result = _smartEventHubConsumer.RegisterEventQueue(id);
+            Assert.That(result, Is.True);
+
+            string json = r.ReadToEnd();
+
+            _cd.Dispatch(json, id);
+
+            int eventCount = 0;
+            foreach (var eventJson in _smartEventHubConsumer.GetEvents(id, TimeSpan.FromSeconds(1)))
             {
-                Guid id = Guid.NewGuid();
-                bool result = _smartEventHubConsumer.RegisterEventQueue(id);
-                Assert.IsTrue(result);
-
-                string json = r.ReadToEnd();
-
-                _cd.Dispatch(json, id);
-
-                int eventCount = 0;
-                foreach (var eventJson in _smartEventHubConsumer.GetEvents(id, TimeSpan.FromSeconds(1)))
-                {
-                    eventCount++;
-                }
-                Assert.AreEqual(0, eventCount);
-
-                _smartEventHubConsumer.DeregisterEventQueue(id);
+                eventCount++;
             }
+            Assert.That(eventCount, Is.EqualTo(0));
+
+            _smartEventHubConsumer.DeregisterEventQueue(id);
         }
 
         [Test]
         public void GivenJsonThatCallsFunction_WhenGetEvents_ThenCommandResultCountAndIdAreCorrect()
         {
-            using (StreamReader r = new StreamReader(@".\TestAssets\command-processor-call-function.json"))
+            using StreamReader r = new(@".\TestAssets\command-processor-call-function.json");
+            Guid id = Guid.NewGuid();
+            _smartEventHubConsumer.RegisterEventQueue(id);
+            string json = r.ReadToEnd();
+
+            _cd.Dispatch(json, id);
+
+            foreach (var eventJson in _smartEventHubConsumer.GetEvents(id))
             {
-                Guid id = Guid.NewGuid();
-                _smartEventHubConsumer.RegisterEventQueue(id);
-                string json = r.ReadToEnd();
+                var parsedEventJson = JObject.Parse(eventJson);
+                var commandResult = parsedEventJson.ToObject<CommandProcessor.CommandResult>();
 
-                _cd.Dispatch(json, id);
-
-                foreach (var eventJson in _smartEventHubConsumer.GetEvents(id))
-                {
-                    var parsedEventJson = JObject.Parse(eventJson);
-                    var commandResult = parsedEventJson.ToObject<CommandProcessor.CommandResult>();
-
-                    Assert.AreEqual(1, commandResult.Count);
-                    Assert.AreEqual(id, commandResult.Id);
-                }
-
-                _smartEventHubConsumer.DeregisterEventQueue(id);
+                Assert.That(commandResult.Count, Is.EqualTo(1));
+                Assert.That(commandResult.Id, Is.EqualTo(id));
             }
+
+            _smartEventHubConsumer.DeregisterEventQueue(id);
         }
 
         public void Dispose()

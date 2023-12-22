@@ -14,11 +14,11 @@ namespace ControllableDevice
     public class SonySimpleIP : IControllableDevice
     {
         private bool _disposed;
-        private JsonRpcDevice _jsonRpcDevice;
+        private readonly JsonRpcDevice _jsonRpcDevice;
 
-        private IPAddress _host;
-        private  PhysicalAddress _physicalAddress;
-        private string _preSharedKey;
+        private readonly IPAddress _host;
+        private readonly PhysicalAddress _physicalAddress;
+        private readonly string _preSharedKey;
 
         private readonly TimeSpan _fromColdBootToOnTimeout = TimeSpan.FromSeconds(5);
         private readonly TimeSpan _fromColdBootToOnPollInterval = TimeSpan.FromMilliseconds(500);
@@ -30,7 +30,7 @@ namespace ControllableDevice
         private readonly int _jsonPostRetryCount = 2;
         private readonly TimeSpan _jsonPostWaitBeforeRetry = TimeSpan.FromSeconds(3);
 
-        private static Logger _logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
         public SonySimpleIP(IPAddress host, PhysicalAddress physicalAddress, string preSharedKey)
         {
@@ -273,8 +273,7 @@ namespace ControllableDevice
                     string portType = match.Groups[1].Value;
                     string portId = match.Groups[2].Value;
 
-                    InputPort inputPort;
-                    if (Enum.TryParse($"{portType}{portId}", true, out inputPort))
+                    if (Enum.TryParse($"{portType}{portId}", true, out InputPort inputPort))
                     {
                         return inputPort;
                     }

@@ -12,23 +12,21 @@ namespace Tests
 {
     public class TestAtenVS0801HB
     {
-        private dynamic _settings;
+        private readonly dynamic _settings;
         private const string _settingsFile = "settings.json";
 
         private ServiceClient _serviceClient;
-        private List<AtenVS0801HB> _devices = new List<AtenVS0801HB>();
+        private readonly List<AtenVS0801HB> _devices = [];
 
-        private uint _invalidDeviceIndex = 999;
-        private int _invalidInputPort = 999;
+        private readonly uint _invalidDeviceIndex = 999;
+        private readonly int _invalidInputPort = 999;
 
         public TestAtenVS0801HB()
         {
-            using (StreamReader r = new StreamReader(_settingsFile))
-            {
-                string json = r.ReadToEnd();
-                dynamic parsed = JsonConvert.DeserializeObject<ExpandoObject>(json, new ExpandoObjectConverter());
-                _settings = parsed.AtenVS0801HB;
-            }
+            using StreamReader r = new(_settingsFile);
+            string json = r.ReadToEnd();
+            dynamic parsed = JsonConvert.DeserializeObject<ExpandoObject>(json, new ExpandoObjectConverter());
+            _settings = parsed.AtenVS0801HB;
         }
 
         [SetUp]
@@ -51,15 +49,15 @@ namespace Tests
         {
             foreach (var device in _devices)
             {
-                Assert.IsTrue(device.SetInputPort(InputPort.Port1));
+                Assert.That(device.SetInputPort(InputPort.Port1), Is.True);
                 var state = device.GetState();
-                Assert.IsTrue(state != null);
-                Assert.IsTrue(state.InputPort == InputPort.Port1);
+                Assert.That(state, Is.Not.EqualTo(null));
+                Assert.That(state.InputPort, Is.EqualTo(InputPort.Port1));
 
-                Assert.IsTrue(device.SetInputPort(InputPort.Port2));
+                Assert.That(device.SetInputPort(InputPort.Port2), Is.True);
                 state = device.GetState();
-                Assert.IsTrue(state != null);
-                Assert.IsTrue(state.InputPort == InputPort.Port2);
+                Assert.That(state, Is.Not.EqualTo(null));
+                Assert.That(state.InputPort, Is.EqualTo(InputPort.Port2));
             }
         }
 
@@ -68,7 +66,7 @@ namespace Tests
         {
             foreach (var device in _devices)
             {
-                Assert.IsTrue(device.GetAvailable());
+                Assert.That(device.GetAvailable(), Is.True);
             }
         }
 
@@ -77,7 +75,7 @@ namespace Tests
         {
             var device = new AtenVS0801HB(_serviceClient, _settings.DeviceId, _invalidDeviceIndex);
             var state = device.GetState();
-            Assert.IsNull(state);
+            Assert.That(state, Is.Null);
         }
 
         [Test]
@@ -85,7 +83,7 @@ namespace Tests
         {
             var device = new AtenVS0801HB(_serviceClient, _settings.DeviceId, _invalidDeviceIndex);
             var available = device.GetAvailable();
-            Assert.IsFalse(available);
+            Assert.That(available, Is.False);
         }
 
         [Test]
@@ -93,7 +91,7 @@ namespace Tests
         {
             var device = new AtenVS0801HB(_serviceClient, _settings.DeviceId, _invalidDeviceIndex);
             var success = device.SetInputPort(InputPort.Port1);
-            Assert.IsFalse(success);
+            Assert.That(success, Is.False);
         }
 
         [Test]
@@ -101,7 +99,7 @@ namespace Tests
         {
             var device = new AtenVS0801HB(_serviceClient, _settings.DeviceId, _invalidDeviceIndex);
             var success = device.GoToNextInput();
-            Assert.IsFalse(success);
+            Assert.That(success, Is.False);
         }
 
         [Test]
@@ -109,7 +107,7 @@ namespace Tests
         {
             var device = new AtenVS0801HB(_serviceClient, _settings.DeviceId, _invalidDeviceIndex);
             var success = device.GoToPreviousInput();
-            Assert.IsFalse(success);
+            Assert.That(success, Is.False);
         }
 
         [Test]
@@ -118,7 +116,7 @@ namespace Tests
             foreach (var device in _devices)
             {
                 var success = device.SetInputPort((InputPort)_invalidInputPort);
-                Assert.IsFalse(success);
+                Assert.That(success, Is.False);
             }
         }
 
@@ -127,12 +125,12 @@ namespace Tests
         {
             foreach (var device in _devices)
             {
-                Assert.IsTrue(device.SetInputPort(InputPort.Port1));
-                Assert.IsTrue(device.GoToNextInput());
+                Assert.That(device.SetInputPort(InputPort.Port1), Is.True);
+                Assert.That(device.GoToNextInput(), Is.True);
 
                 var state = device.GetState();
-                Assert.IsTrue(state != null);
-                Assert.IsTrue(state.InputPort == InputPort.Port2);
+                Assert.That(state, Is.Not.EqualTo(null));
+                Assert.That(state.InputPort, Is.EqualTo(InputPort.Port2));
             }
         }
 
@@ -141,12 +139,12 @@ namespace Tests
         {
             foreach (var device in _devices)
             {
-                Assert.IsTrue(device.SetInputPort(InputPort.Port2));
-                Assert.IsTrue(device.GoToPreviousInput());
+                Assert.That(device.SetInputPort(InputPort.Port2), Is.True);
+                Assert.That(device.GoToPreviousInput(), Is.True);
 
                 var state = device.GetState();
-                Assert.IsTrue(state != null);
-                Assert.IsTrue(state.InputPort == InputPort.Port1);
+                Assert.That(state, Is.Not.EqualTo(null));
+                Assert.That(state.InputPort, Is.EqualTo(InputPort.Port1));
             }
         }
     }

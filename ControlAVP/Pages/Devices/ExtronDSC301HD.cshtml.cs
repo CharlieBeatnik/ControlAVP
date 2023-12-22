@@ -30,22 +30,20 @@ namespace ControlAVP.Pages.Devices
     public class ExtronDSC301HDModel : PageModel
     {
         private readonly IConfiguration _configuration;
-        private readonly IWebHostEnvironment _environment;
 
-        private string _connectionString;
-        private string _deviceId;
-        private ServiceClient _serviceClient;
-        private ExtronDSC301HD _device;
+        private readonly string _connectionString;
+        private readonly string _deviceId;
+        private readonly ServiceClient _serviceClient;
+        private readonly ExtronDSC301HD _device;
 
         public ExtronDSC301HDDeviceInfo DeviceInfoCache { get; private set; } = new ExtronDSC301HDDeviceInfo();
 
         public float PaddingX { get; private set; }
         public float PaddingY { get; private set; }
 
-        public ExtronDSC301HDModel(IConfiguration configuration, IWebHostEnvironment environment)
+        public ExtronDSC301HDModel(IConfiguration configuration)
         {
             _configuration = configuration;
-            _environment = environment;
 
             _connectionString = _configuration.GetValue<string>("ControlAVPIoTHubConnectionString");
             _deviceId = _configuration.GetValue<string>("ControlAVPIoTHubDeviceId");

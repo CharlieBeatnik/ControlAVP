@@ -11,7 +11,7 @@ namespace ControlRelay
 {
     class SerialBlasterCloudInterface : DeviceCloudInterface
     {
-        private List<SerialBlaster> _devices = new List<SerialBlaster>();
+        private readonly List<SerialBlaster> _devices = new List<SerialBlaster>();
 
         public SerialBlasterCloudInterface(List<SerialBlaster> devices)
         {

@@ -14,23 +14,21 @@ namespace Tests
 {
     public class TestExtronDSC301HD
     {
-        private dynamic _settings;
+        private readonly dynamic _settings;
         private const string _settingsFile = "settings.json";
 
         private ServiceClient _serviceClient;
         private ExtronDSC301HD _device;
 
-        private int _invalidScaleType = 999;
-        private int _invalidPositionType = 999;
+        private readonly int _invalidScaleType = 999;
+        private readonly int _invalidPositionType = 999;
 
         public TestExtronDSC301HD()
         {
-            using (StreamReader r = new StreamReader(_settingsFile))
-            {
-                string json = r.ReadToEnd();
-                dynamic parsed = JsonConvert.DeserializeObject<ExpandoObject>(json, new ExpandoObjectConverter());
-                _settings = parsed.ExtronDSC301HD;
-            }
+            using StreamReader r = new(_settingsFile);
+            string json = r.ReadToEnd();
+            dynamic parsed = JsonConvert.DeserializeObject<ExpandoObject>(json, new ExpandoObjectConverter());
+            _settings = parsed.ExtronDSC301HD;
         }
 
         [SetUp]
@@ -45,19 +43,19 @@ namespace Tests
         {
             var firmware = _device.GetFirmware();
             if (firmware == null) Assert.Fail();
-            Assert.IsTrue(firmware >= new Version(1, 25, 1));
+            Assert.That(firmware >= new Version(1, 25, 1), Is.True);
         }
 
         [Test]
         public void GivenDevice_WhenCallAvailable_ThenDeviceIsAvailable()
         {
-            Assert.IsTrue(_device.GetAvailable());
+            Assert.That(_device.GetAvailable(), Is.True);
         }
 
         [Test]
         public void GivenDevice_WhenSetOutputRate_ThenResultIsTrue()
         {
-            Assert.IsTrue(_device.SetOutputRate(Edid.GetEdid(1280, 720, 50.0f)));
+            Assert.That(_device.SetOutputRate(Edid.GetEdid(1280, 720, 50.0f)), Is.True);
         }
 
         [Test]
@@ -69,46 +67,46 @@ namespace Tests
         [Test]
         public void GivenDevice_WhenSetScale_ThenSuccessIsTrue()
         {
-            Assert.IsTrue(_device.SetScale(ScaleType.Fit, PositionType.Centre, AspectRatio.RatioPreserve, new Vector2(42,7)));
+            Assert.That(_device.SetScale(ScaleType.Fit, PositionType.Centre, AspectRatio.RatioPreserve, new Vector2(42,7)), Is.True);
         }
 
         [Test]
         public void GivenDevice_WhenSetScaleWithInvalidPositionType_ThenSuccessIsFalse()
         {
-            Assert.IsFalse(_device.SetScale(ScaleType.Fit, (PositionType)_invalidPositionType, AspectRatio.RatioPreserve, new Vector2(0)));
+            Assert.That(_device.SetScale(ScaleType.Fit, (PositionType)_invalidPositionType, AspectRatio.RatioPreserve, new Vector2(0)), Is.False);
         }
 
         [Test]
         public void GivenDevice_WhenSetScaleWithInvalidScaleType_ThenSuccessIsFalse()
         {
-            Assert.IsFalse(_device.SetScale((ScaleType)_invalidScaleType, PositionType.Centre, AspectRatio.RatioPreserve, new Vector2(0)));
+            Assert.That(_device.SetScale((ScaleType)_invalidScaleType, PositionType.Centre, AspectRatio.RatioPreserve, new Vector2(0)), Is.False);
         }
 
         [Test]
         public void GivenDevice_WhenSetInputPortToHDMI_ThenInputPortIsHDMI()
         {
-            Assert.IsTrue(_device.SetInputPort(InputPort.HDMI));
+            Assert.That(_device.SetInputPort(InputPort.HDMI), Is.True);
 
             var inputPort = _device.GetInputPort();
-            Assert.IsNotNull(inputPort);
-            Assert.AreEqual(InputPort.HDMI, inputPort);
+            Assert.That(inputPort, Is.Not.Null);
+            Assert.That(inputPort, Is.EqualTo(InputPort.HDMI));
         }
 
         [Test]
         public void GivenDevice_WhenGetTemperature_ThenResultIsNotNull()
         {
             var temperature = _device.GetTemperature();
-            Assert.IsNotNull(temperature);
+            Assert.That(temperature, Is.Not.Null);
         }
 
         [Test]
         public void GivenDevice_WhenSetDetailFilterTo32_ThenDetailFilterIs32()
         {
             bool success = _device.SetDetailFilter(32);
-            Assert.IsTrue(success);
+            Assert.That(success, Is.True);
 
             var value = _device.GetDetailFilter();
-            Assert.IsTrue(value == 32);
+            Assert.That(value, Is.EqualTo(32));
 
             _device.SetDetailFilter(64);
         }
@@ -117,17 +115,17 @@ namespace Tests
         public void GivenDevice_WhenSetDetailFilterToInvalidValue_ThenResultIsFalse()
         {
             bool success = _device.SetDetailFilter(-1);
-            Assert.IsFalse(success);
+            Assert.That(success, Is.False);
         }
 
         [Test]
         public void GivenDevice_WhenSetBrightnessTo32_ThenBrightnessIs32()
         {
             bool success = _device.SetBrightness(32);
-            Assert.IsTrue(success);
+            Assert.That(success, Is.True);
 
             var value = _device.GetBrightness();
-            Assert.IsTrue(value == 32);
+            Assert.That(value, Is.EqualTo(32));
 
             _device.SetBrightness(64);
         }
@@ -136,17 +134,17 @@ namespace Tests
         public void GivenDevice_WhenSetBrightnessToInvalidValue_ThenResultIsFalse()
         {
             bool success = _device.SetBrightness(-1);
-            Assert.IsFalse(success);
+            Assert.That(success, Is.False);
         }
 
         [Test]
         public void GivenDevice_WhenSetContrastTo32_ThenContrastIs32()
         {
             bool success = _device.SetContrast(32);
-            Assert.IsTrue(success);
+            Assert.That(success, Is.True);
 
             var value = _device.GetContrast();
-            Assert.IsTrue(value == 32);
+            Assert.That(value, Is.EqualTo(32));
 
             _device.SetContrast(64);
         }
@@ -155,7 +153,7 @@ namespace Tests
         public void GivenDevice_WhenSetContrastToInvalidValue_ThenResultIsFalse()
         {
             bool success = _device.SetContrast(-1);
-            Assert.IsFalse(success);
+            Assert.That(success, Is.False);
         }
 
         [Test]
@@ -163,22 +161,22 @@ namespace Tests
         {
             //Given
             bool success = _device.SetFreeze(false);
-            Assert.IsTrue(success);
+            Assert.That(success, Is.True);
 
             var result = _device.GetFreeze();
-            Assert.IsFalse((bool)result);
+            Assert.That((bool)result, Is.False);
 
             //When
             success = _device.SetFreeze(true);
-            Assert.IsTrue(success);
+            Assert.That(success, Is.True);
 
             //Then
             result = _device.GetFreeze();
-            Assert.IsTrue((bool)result);
+            Assert.That((bool)result, Is.True);
 
             //Default
             success = _device.SetFreeze(false);
-            Assert.IsTrue(success);
+            Assert.That(success, Is.True);
         }
     }
 }

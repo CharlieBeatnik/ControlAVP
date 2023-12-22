@@ -10,7 +10,7 @@ namespace ControllableDevice
     public class SerialBlaster : IDisposable
     {
         private bool _disposed;
-        private Rs232Device _rs232Device;
+        private readonly Rs232Device _rs232Device;
 
         public SerialBlaster(string portId)
         {

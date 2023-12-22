@@ -11,7 +11,7 @@ namespace ControlRelay
 {
     class RetroTink5xProCloudInterface : DeviceCloudInterface
     {
-        private RetroTink5xPro _device;
+        private readonly RetroTink5xPro _device;
 
         public RetroTink5xProCloudInterface(RetroTink5xPro device)
         {

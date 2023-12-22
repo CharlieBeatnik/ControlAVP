@@ -10,7 +10,7 @@ namespace ControllableDevice
     public class AtenVS0801HB : IControllableDevice
     {
         private bool _disposed;
-        private Rs232Device _rs232Device;
+        private readonly Rs232Device _rs232Device;
         private const string _respSuccess = "Command OK";
 
         public AtenVS0801HB(string portId)

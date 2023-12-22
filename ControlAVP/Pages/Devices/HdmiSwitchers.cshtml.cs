@@ -32,15 +32,15 @@ namespace ControlAVP.Pages.Devices
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _environment;
 
-        private string _connectionString;
-        private string _deviceId;
-        private ServiceClient _serviceClient;
+        private readonly string _connectionString;
+        private readonly string _deviceId;
+        private readonly ServiceClient _serviceClient;
 
         private const uint _numAtenVS0801HDevices = 1;
-        private List<AtenVS0801H> _atenVS0801HDevices = new List<AtenVS0801H>();
+        private readonly List<AtenVS0801H> _atenVS0801HDevices = [];
 
         private const uint _numAtenVS0801HBDevices = 1;
-        private List<AtenVS0801HB> _atenVS0801HBDevices = new List<AtenVS0801HB>();
+        private readonly List<AtenVS0801HB> _atenVS0801HBDevices = [];
 
         public IList<AtenVS0801HDeviceInfo> AtenVS0801HDeviceInfoCaches { get; private set; } = new List<AtenVS0801HDeviceInfo>();
         public IList<AtenVS0801HBDeviceInfo> AtenVS0801HBDeviceInfoCaches { get; private set; } = new List<AtenVS0801HBDeviceInfo>();

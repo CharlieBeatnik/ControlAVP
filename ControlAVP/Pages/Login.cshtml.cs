@@ -20,17 +20,12 @@ namespace ControlAVP.Pages
         public bool RememberMe { get; set; } = true;
     }
 
-    public class LoginModel : PageModel
+    public class LoginModel(IConfiguration configuration) : PageModel
     {
-        private readonly IConfiguration _configuration;
+        private readonly IConfiguration _configuration = configuration;
 
         [BindProperty] // Bind on Post
         public LoginData loginData { get; set; }
-
-        public LoginModel(IConfiguration configuration)
-        {
-            _configuration = configuration;
-        }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1054:Uri parameters should not be strings", Justification = "OnPostAsync requires parameter to be a string.")]
         public async Task<IActionResult> OnPostAsync(string returnUrl)

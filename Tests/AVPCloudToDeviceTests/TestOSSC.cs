@@ -11,7 +11,7 @@ namespace Tests
 {
     public class TestOSSC
     {
-        private dynamic _settings;
+        private readonly dynamic _settings;
         private const string _settingsFile = "settings.json";
 
         private ServiceClient _serviceClient;
@@ -19,12 +19,10 @@ namespace Tests
 
         public TestOSSC()
         {
-            using (StreamReader r = new StreamReader(_settingsFile))
-            {
-                string json = r.ReadToEnd();
-                dynamic parsed = JsonConvert.DeserializeObject<ExpandoObject>(json, new ExpandoObjectConverter());
-                _settings = parsed.OSSC;
-            }
+            using StreamReader r = new(_settingsFile);
+            string json = r.ReadToEnd();
+            dynamic parsed = JsonConvert.DeserializeObject<ExpandoObject>(json, new ExpandoObjectConverter());
+            _settings = parsed.OSSC;
         }
 
         [SetUp]
@@ -37,13 +35,13 @@ namespace Tests
         [Test]
         public void GivenDevice_WhenSendCommand_ThenSuccessIsTrue()
         {
-            Assert.IsTrue(_device.SendCommand(CommandName.Menu));
+            Assert.That(_device.SendCommand(CommandName.Menu), Is.True);
         }
 
         [Test]
         public void GivenDevice_WhenLoadProfile_ThenSuccessIsTrue()
         {
-            Assert.IsTrue(_device.LoadProfile(ProfileName.Profile0));
+            Assert.That(_device.LoadProfile(ProfileName.Profile0), Is.True);
             
         }
 

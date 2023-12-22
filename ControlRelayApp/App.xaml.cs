@@ -31,7 +31,7 @@ namespace ControlRelayApp
         private List<object> _devices;
         private List<DeviceCloudInterface> _deviceCloudInterfaces;
         private DeviceCloudInterfaceManager _deviceCloudInterfaceManager;
-        private Logger _logger;
+        private readonly Logger _logger;
 
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code

@@ -23,10 +23,10 @@ namespace ControlAVP.Pages.Devices
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _environment;
 
-        private string _connectionString;
-        private string _deviceId;
-        private ServiceClient _serviceClient;
-        private SonySimpleIP _device;
+        private readonly string _connectionString;
+        private readonly string _deviceId;
+        private readonly ServiceClient _serviceClient;
+        private readonly SonySimpleIP _device;
 
         public SonySimpleIPDeviceInfo DeviceInfoCache { get; private set; } = new SonySimpleIPDeviceInfo();
 

@@ -104,7 +104,7 @@ namespace ControllableDevice
             string tail;
 
             var olStatusAll = _sshDevice.ExecuteCommand("olStatus all");
-            // Added asserts as ExecuteCommand has been oberved to return null
+            // Added asserts as ExecuteCommand has been observed to return null
             Debug.Assert(olStatusAll != null);
 
             // Initially populate Outlet dictionary with information parsed from olStatus all
@@ -138,8 +138,7 @@ namespace ControllableDevice
                         Match match = Regex.Match(tail, @"^([0-9.]+) W *$");
                         if (match.Success)
                         {
-                            Outlet foundOutlet;
-                            if (output.TryGetValue(id, out foundOutlet))
+                            if (output.TryGetValue(id, out Outlet foundOutlet))
                             {
                                 foundOutlet.Watts = float.Parse(match.Groups[1].Value);
                             }
@@ -162,8 +161,7 @@ namespace ControllableDevice
                         Match match = Regex.Match(tail, @"^([0-9.]+) A *$");
                         if (match.Success)
                         {
-                            Outlet foundOutlet;
-                            if (output.TryGetValue(id, out foundOutlet))
+                            if (output.TryGetValue(id, out Outlet foundOutlet))
                             {
                                 foundOutlet.Amps = float.Parse(match.Groups[1].Value);
                             }
@@ -217,8 +215,7 @@ namespace ControllableDevice
                     Match match = Regex.Match(tail, @"^([0-9.]+) A*$");
                     if (match.Success)
                     {
-                        Phase foundPhase;
-                        if (phase.TryGetValue(id, out foundPhase))
+                        if (phase.TryGetValue(id, out Phase foundPhase))
                         {
                             foundPhase.Amps = float.Parse(match.Groups[1].Value);
                         }
@@ -237,8 +234,7 @@ namespace ControllableDevice
                     Match match = Regex.Match(tail, @"^([0-9.]+) V*$");
                     if (match.Success)
                     {
-                        Phase foundPhase;
-                        if (phase.TryGetValue(id, out foundPhase))
+                        if (phase.TryGetValue(id, out Phase foundPhase))
                         {
                             foundPhase.Voltage = float.Parse(match.Groups[1].Value);
                         }

@@ -8,9 +8,9 @@ namespace ControllableDevice
     public class OSSC : IControllableDevice
     {
         private bool _disposed;
-        private SerialBlaster _serialBlaster;
+        private readonly SerialBlaster _serialBlaster;
 
-        private Dictionary<GenericCommandName, IrCommandCode> _genericCommandNameToCommandCode = new Dictionary<GenericCommandName, IrCommandCode>
+        private readonly Dictionary<GenericCommandName, IrCommandCode> _genericCommandNameToCommandCode = new Dictionary<GenericCommandName, IrCommandCode>
         {
             {GenericCommandName.Number1, new IrCommandCode(0x3E29)},
             {GenericCommandName.Number2, new IrCommandCode(0x3EA9)},
@@ -54,7 +54,7 @@ namespace ControllableDevice
             {GenericCommandName.TonePlus, new IrCommandCode(0x5E58)},
         };
 
-        private Dictionary<CommandName, GenericCommandName> _commandNameToGenericCommandName = new Dictionary<CommandName, GenericCommandName>
+        private readonly Dictionary<CommandName, GenericCommandName> _commandNameToGenericCommandName = new Dictionary<CommandName, GenericCommandName>
         {
             {CommandName.AV1RGBS, GenericCommandName.Number1},
             {CommandName.AV1RGsB, GenericCommandName.Number4},
@@ -77,7 +77,7 @@ namespace ControllableDevice
             {CommandName.SourceInfo, GenericCommandName.Info}
         };
 
-        private Dictionary<ProfileName, GenericCommandName> _profileNameToGenericCommandName = new Dictionary<ProfileName, GenericCommandName>
+        private readonly Dictionary<ProfileName, GenericCommandName> _profileNameToGenericCommandName = new Dictionary<ProfileName, GenericCommandName>
         {
             {ProfileName.Profile0, GenericCommandName.Number0},
             {ProfileName.Profile1, GenericCommandName.Number1},
@@ -176,7 +176,7 @@ namespace ControllableDevice
         {
             if (!_commandNameToGenericCommandName.ContainsKey(commandName))
             {
-                throw new ArgumentException($"Unable to convert {commandName.ToString()} to a GenericCommandName.", nameof(commandName));
+                throw new ArgumentException($"Unable to convert {commandName} to a GenericCommandName.", nameof(commandName));
             }
 
             return _commandNameToGenericCommandName[commandName];
@@ -186,7 +186,7 @@ namespace ControllableDevice
         {
             if (!_profileNameToGenericCommandName.ContainsKey(profileName))
             {
-                throw new ArgumentException($"Unable to convert {profileName.ToString()} to a GenericCommandName.", nameof(profileName));
+                throw new ArgumentException($"Unable to convert {profileName} to a GenericCommandName.", nameof(profileName));
             }
 
             return _profileNameToGenericCommandName[profileName];

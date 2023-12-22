@@ -27,10 +27,10 @@ namespace ControlAVP.Pages.Devices
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _environment;
 
-        private string _connectionString;
-        private string _deviceId;
-        private ServiceClient _serviceClient;
-        private ApcAP8959EU3 _pdu;
+        private readonly string _connectionString;
+        private readonly string _deviceId;
+        private readonly ServiceClient _serviceClient;
+        private readonly ApcAP8959EU3 _pdu;
 
         public ApcAP8959EU3Model(IConfiguration configuration, IWebHostEnvironment environment)
         {
@@ -60,7 +60,7 @@ namespace ControlAVP.Pages.Devices
             var viewData = new ViewDataDictionary(new Microsoft.AspNetCore.Mvc.ModelBinding.EmptyModelMetadataProvider(), new Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary()) { { "OutletTableViewModel", outletTableViewModel } };
             viewData.Model = outletTableViewModel;
 
-            PartialViewResult result = new PartialViewResult()
+            PartialViewResult result = new()
             {
                 ViewName = "_OutletTable",
                 ViewData = viewData,
@@ -90,7 +90,7 @@ namespace ControlAVP.Pages.Devices
             var viewData = new ViewDataDictionary(new Microsoft.AspNetCore.Mvc.ModelBinding.EmptyModelMetadataProvider(), new Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary()) { { "OutletTableViewModel", outletTableViewModel } };
             viewData.Model = outletTableViewModel;
 
-            PartialViewResult result = new PartialViewResult()
+            PartialViewResult result = new()
             {
                 ViewName = "_OutletTable",
                 ViewData = viewData,

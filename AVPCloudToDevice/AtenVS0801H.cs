@@ -5,18 +5,11 @@ using ControllableDeviceTypes.AtenVS0801HTypes;
 
 namespace AVPCloudToDevice
 {
-    public class AtenVS0801H
+    public class AtenVS0801H(ServiceClient serviceClient, string deviceId, uint deviceIndex)
     {
-        private ServiceClient _serviceClient;
-        private string _deviceId;
-        private uint _deviceIndex;
-
-        public AtenVS0801H(ServiceClient serviceClient, string deviceId, uint deviceIndex)
-        {
-            _serviceClient = serviceClient;
-            _deviceId = deviceId;
-            _deviceIndex = deviceIndex;
-        }
+        private readonly ServiceClient _serviceClient = serviceClient;
+        private readonly string _deviceId = deviceId;
+        private readonly uint _deviceIndex = deviceIndex;
 
         public bool GoToNextInput()
         {

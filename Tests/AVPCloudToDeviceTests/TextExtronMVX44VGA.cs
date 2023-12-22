@@ -13,7 +13,7 @@ namespace Tests
 {
     public class TestExtronMVX44VGA
     {
-        private dynamic _settings;
+        private readonly dynamic _settings;
         private const string _settingsFile = "settings.json";
 
         private ServiceClient _serviceClient;
@@ -21,12 +21,10 @@ namespace Tests
 
         public TestExtronMVX44VGA()
         {
-            using (StreamReader r = new StreamReader(_settingsFile))
-            {
-                string json = r.ReadToEnd();
-                dynamic parsed = JsonConvert.DeserializeObject<ExpandoObject>(json, new ExpandoObjectConverter());
-                _settings = parsed.ExtronMVX44VGA;
-            }
+            using StreamReader r = new(_settingsFile);
+            string json = r.ReadToEnd();
+            dynamic parsed = JsonConvert.DeserializeObject<ExpandoObject>(json, new ExpandoObjectConverter());
+            _settings = parsed.ExtronMVX44VGA;
         }
 
         [SetUp]
@@ -41,31 +39,31 @@ namespace Tests
         {
             var firmware = _device.GetFirmware();
             if (firmware == null) Assert.Fail();
-            Assert.IsTrue(firmware >= new Version(1, 4));
+            Assert.That(firmware, Is.GreaterThanOrEqualTo(new Version(1, 4)));
         }
 
         [Test]
         public void GivenDevice_WhenCallAvailable_ThenDeviceIsAvailable()
         {
-            Assert.IsTrue(_device.GetAvailable());
+            Assert.That(_device.GetAvailable(), Is.True);
         }
 
         [Test]
         public void GivenDevice_WhenGetTieState_ThenTieStateIsNotNull()
         {
-            Assert.IsNotNull(_device.GetTieState());
+            Assert.That(_device.GetTieState(), Is.Not.Null);
         }
 
         [Test]
         public void GivenDevice_WhenTieInputPortToAllOutputPorts_ThenSuccessIsTrue()
         {
-            Assert.IsTrue(_device.TieInputPortToAllOutputPorts(InputPort.Port1, TieType.AudioVideo));
+            Assert.That(_device.TieInputPortToAllOutputPorts(InputPort.Port1, TieType.AudioVideo), Is.True);
         }
 
         [Test]
         public void GivenDevice_WhenTieInputPortToOutputPort_ThenSuccessIsTrue()
         {
-            Assert.IsTrue(_device.TieInputPortToOutputPort(InputPort.Port1, OutputPort.Port1, TieType.AudioVideo));
+            Assert.That(_device.TieInputPortToOutputPort(InputPort.Port1, OutputPort.Port1, TieType.AudioVideo), Is.True);
         }
     }
 }

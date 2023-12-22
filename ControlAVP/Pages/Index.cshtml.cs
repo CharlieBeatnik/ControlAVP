@@ -36,19 +36,19 @@ namespace ControlAVP.Pages
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _environment;
 
-        private string _connectionString;
-        private string _deviceId;
-        private ServiceClient _serviceClient;
-        private CommandDispatcher _cp;
-        private ExtronDSC301HD _extronDSC301HD;
-        private ApcAP8959EU3 _apcAP8959EU3;
-        private SonySimpleIP _sonySimpleIP;
-        private OSSC _ossc;
-        private AtenVS0801HB _atenVS0801HB;
+        private readonly string _connectionString;
+        private readonly string _deviceId;
+        private readonly ServiceClient _serviceClient;
+        private readonly CommandDispatcher _cp;
+        private readonly ExtronDSC301HD _extronDSC301HD;
+        private readonly ApcAP8959EU3 _apcAP8959EU3;
+        private readonly SonySimpleIP _sonySimpleIP;
+        private readonly OSSC _ossc;
+        private readonly AtenVS0801HB _atenVS0801HB;
 
-        private string _commandDirectory;
-        private IEnumerable<Outlet> _outlets;
-        private IEnumerable<string> _outletConfirmation;
+        private readonly string _commandDirectory;
+        private readonly IEnumerable<Outlet> _outlets;
+        private readonly IEnumerable<string> _outletConfirmation;
 
 
         public IList<CommandInfo> CommandInfos { get; private set; }
@@ -83,7 +83,7 @@ namespace ControlAVP.Pages
 
         public void OnGet(bool scalerCardVisible, bool osscCardVisible)
         {
-            DirectoryInfo directoryInfo = new DirectoryInfo(_commandDirectory);
+            DirectoryInfo directoryInfo = new(_commandDirectory);
 
             CommandInfos = new List<CommandInfo>();
             foreach (var file in directoryInfo.GetFiles("*.json"))
@@ -100,7 +100,7 @@ namespace ControlAVP.Pages
 
                 //Get display name from Json instead of replying on the file name
                 string displayName = string.Empty;
-                using (StreamReader r = new StreamReader(file.FullName))
+                using (StreamReader r = new(file.FullName))
                 {
                     string json = r.ReadToEnd();
                     dynamic parsed = JsonConvert.DeserializeObject(json);
@@ -148,7 +148,7 @@ namespace ControlAVP.Pages
         public IActionResult OnPostCommandProcessorExecute(string fileFullName, string displayName, string imagePath)
         {
             Guid id = Guid.NewGuid();
-            using (StreamReader r = new StreamReader(fileFullName))
+            using (StreamReader r = new(fileFullName))
             {
                 string json = r.ReadToEnd();
                 _cp.Dispatch(json, id);

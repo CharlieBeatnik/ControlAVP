@@ -16,12 +16,12 @@ namespace ControlRelay
 {
     class DeviceCloudInterfaceManager
     {
-        private List<DeviceCloudInterface> _deviceCloudInterfaces = new List<DeviceCloudInterface>();
+        private readonly List<DeviceCloudInterface> _deviceCloudInterfaces = new List<DeviceCloudInterface>();
         private DeviceClient _deviceClient;
 
-        private string _connectionString;
+        private readonly string _connectionString;
 
-        private static Logger _logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
         public DeviceClient DeviceClient
         {
@@ -66,7 +66,7 @@ namespace ControlRelay
                     // This allows this function to contain centralised logic to catch one of theses exceptions and retry.
                     foreach (var methodHandlerInfo in deviceCloudInterface.GetMethodHandlerInfos(_deviceClient))
                     {
-                        // Use a retry as we know it's possible to encounter serveral different exceptions
+                        // Use a retry as we know it's possible to encounter several different exceptions
                         var policy = Policy
                                         .Handle<TimeoutException>()
                                         .Or<Microsoft.Azure.Devices.Client.Exceptions.UnauthorizedException>()
@@ -97,7 +97,7 @@ namespace ControlRelay
 
             //The Windows App version of the Control Relay (not the background task build that runs on the Raspberry Pi)
             //waiting on the SetMethodHandlerAsync runs indefinitely. Even a cancellation token is unable to make the method
-            //complete. It seems that although it doesn't complete, it *does* sucessfully set the method handler. As the 
+            //complete. It seems that although it doesn't complete, it *does* successfully set the method handler. As the 
             //WINDOWS_UWP_APP build is only used for testing, removing the wait is a workaround that seems OK for now. The
             //issue needs replicating in a smaller app and reporting to Microsoft.
 #if !WINDOWS_UWP_APP
@@ -107,7 +107,7 @@ namespace ControlRelay
 
         private void DeviceClientConnectionStatusChanged(ConnectionStatus status, ConnectionStatusChangeReason reason)
         {
-            _logger.Debug($"Status: {status.ToString()}, Reason: {reason.ToString()}");
+            _logger.Debug($"Status: {status}, Reason: {reason}");
 
             switch(status)
             {
@@ -123,7 +123,7 @@ namespace ControlRelay
         private void ResetConnection(ConnectionStatus status, ConnectionStatusChangeReason reason)
         {
             _logger.Debug("Resetting Connection");
-            _logger.Debug($"Status: {status.ToString()}, Reason: {reason.ToString()}");
+            _logger.Debug($"Status: {status}, Reason: {reason}");
 
             // Attempt to close any existing connections before creating a new one
             if (_deviceClient != null)
@@ -137,7 +137,7 @@ namespace ControlRelay
                         // Exception:
                         //     DotNetty.Transport.Channels.ClosedChannelException: I/O error occurred.
                         //
-                        _logger.Debug($"As reason was {reason.ToString()} skipping '_deviceClient.CloseAsync().Wait()'");
+                        _logger.Debug($"As reason was {reason} skipping '_deviceClient.CloseAsync().Wait()'");
                     }
                     else
                     {

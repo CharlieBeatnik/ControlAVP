@@ -16,14 +16,14 @@ namespace ControllableDevice
     public class JsonRpcDevice : IDisposable
     {
         private bool _disposed;
-        private IPAddress _host;
-        private string _preSharedKey;
-        private HttpClient _httpClient;
+        private readonly IPAddress _host;
+        private readonly string _preSharedKey;
+        private readonly HttpClient _httpClient;
 
         private readonly int _jsonPostRetryCount;
         private readonly TimeSpan _jsonPostWaitBeforeRetry;
 
-        private static Logger _logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
         public JsonRpcDevice(IPAddress host, string preSharedKey, TimeSpan httpRequestTimeout, int retryCount, TimeSpan waitBeforeRetry)
         {
@@ -42,7 +42,7 @@ namespace ControllableDevice
         {
             lock (_httpClient)
             {
-                string address = $@"http://{_host.ToString()}/{path}";
+                string address = $@"http://{_host}/{path}";
                 string data = json.ToString(Formatting.None);
 
                 var policy = Policy<JObject>

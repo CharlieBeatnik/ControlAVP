@@ -10,9 +10,9 @@ namespace ControllableDevice
     public class RetroTink5xPro : IControllableDevice
     {
         private bool _disposed;
-        private SerialBlaster _serialBlaster;
+        private readonly SerialBlaster _serialBlaster;
 
-        private Dictionary<GenericCommandName, IrCommandCode> _genericCommandNameToCommandCode = new Dictionary<GenericCommandName, IrCommandCode>
+        private readonly Dictionary<GenericCommandName, IrCommandCode> _genericCommandNameToCommandCode = new Dictionary<GenericCommandName, IrCommandCode>
         {
             {GenericCommandName.Power, new IrCommandCode(0x0181)},
             {GenericCommandName.Menu, new IrCommandCode(0x01C1)},
@@ -39,7 +39,7 @@ namespace ControllableDevice
             {GenericCommandName.NumberPlus10, new IrCommandCode(0xE1448A75)},
         };
 
-        private Dictionary<CommandName, GenericCommandName> _commandNameToGenericCommandName = new Dictionary<CommandName, GenericCommandName>
+        private readonly Dictionary<CommandName, GenericCommandName> _commandNameToGenericCommandName = new Dictionary<CommandName, GenericCommandName>
         {
             {CommandName.Power, GenericCommandName.Power },
             {CommandName.ShowMainMenu, GenericCommandName.Menu },
@@ -66,7 +66,7 @@ namespace ControllableDevice
             {CommandName.LoadProfile10, GenericCommandName.Number0 }
         };
 
-        private Dictionary<ProfileName, CommandName> _profileNameToCommandName = new Dictionary<ProfileName, CommandName>
+        private readonly Dictionary<ProfileName, CommandName> _profileNameToCommandName = new Dictionary<ProfileName, CommandName>
         {
             {ProfileName.ProfileDefault, CommandName.LoadProfileDefault},
             {ProfileName.Profile1, CommandName.LoadProfile1},
@@ -149,7 +149,7 @@ namespace ControllableDevice
         {
             if (!_commandNameToGenericCommandName.ContainsKey(commandName))
             {
-                throw new ArgumentException($"Unable to convert {commandName.ToString()} to a GenericCommandName.", nameof(commandName));
+                throw new ArgumentException($"Unable to convert {commandName} to a GenericCommandName.", nameof(commandName));
             }
 
             return _commandNameToGenericCommandName[commandName];

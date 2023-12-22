@@ -7,16 +7,10 @@ using System.Numerics;
 
 namespace AVPCloudToDevice
 {
-    public class ExtronDSC301HD
+    public class ExtronDSC301HD(ServiceClient serviceClient, string deviceId)
     {
-        private ServiceClient _serviceClient;
-        private string _deviceId;
-
-        public ExtronDSC301HD(ServiceClient serviceClient, string deviceId)
-        {
-            _serviceClient = serviceClient;
-            _deviceId = deviceId;
-        }
+        private readonly ServiceClient _serviceClient = serviceClient;
+        private readonly string _deviceId = deviceId;
 
         public Version GetFirmware()
         {
