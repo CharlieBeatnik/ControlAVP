@@ -76,11 +76,8 @@ namespace AVPCloudToDevice
 
         public bool SetOutputRate(Edid outputRate)
         {
-            if(outputRate == null)
-            {
-                throw new ArgumentNullException(nameof(outputRate));
-            }
-            
+            ArgumentNullException.ThrowIfNull(outputRate);
+
             try
             {
                 var payload = new { outputRate.Id };

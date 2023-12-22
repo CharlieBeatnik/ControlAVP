@@ -96,7 +96,7 @@ namespace Tests
             var phase = (List<Phase>)_device.GetPhases();
 
             Assert.IsNotNull(phase);
-            Assert.IsTrue(phase.Any());
+            Assert.IsTrue(phase.Count != 0);
 
             Assert.IsTrue(phase.First().Voltage > 220);
         }

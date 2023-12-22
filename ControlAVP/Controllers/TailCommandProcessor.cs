@@ -52,7 +52,7 @@ namespace ControlAVP
         [HttpGet]
         public async Task Get(Guid id)
         {
-            Response.Headers.Add("Content-Type", "text/event-stream");
+            Response.Headers.Append("Content-Type", "text/event-stream");
 
             _smartEventHubConsumer.RegisterEventQueue(id);
 
