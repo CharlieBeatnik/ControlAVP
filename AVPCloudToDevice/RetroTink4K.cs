@@ -1,11 +1,11 @@
 ﻿using Microsoft.Azure.Devices;
 using Newtonsoft.Json;
-using ControllableDeviceTypes.RetroTink5xProTypes;
+using ControllableDeviceTypes.RetroTink4KTypes;
 using System;
 
 namespace AVPCloudToDevice
 {
-    public class RetroTink5xPro(ServiceClient serviceClient, string deviceId)
+    public class RetroTink4K(ServiceClient serviceClient, string deviceId)
     {
         private readonly ServiceClient _serviceClient = serviceClient;
         private readonly string _deviceId = deviceId;
@@ -15,7 +15,7 @@ namespace AVPCloudToDevice
             try
             {
                 var payload = new { commandName };
-                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "RetroTink5xProSendCommand", payload);
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "RetroTink4KSendCommand", payload);
                 return true;
             }
             catch
@@ -28,7 +28,7 @@ namespace AVPCloudToDevice
         {
             try
             {
-                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "RetroTink5xProGetAvailable", null);
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "RetroTink4KGetAvailable", null);
                 string json = response.GetPayloadAsJson();
                 return JsonConvert.DeserializeObject<bool>(json);
             }
@@ -43,7 +43,7 @@ namespace AVPCloudToDevice
             try
             {
                 var payload = new { profileName };
-                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "RetroTink5xProLoadProfile", payload);
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "RetroTink4KLoadProfile", payload);
                 return true;
             }
             catch
@@ -57,7 +57,7 @@ namespace AVPCloudToDevice
             try
             {
                 var payload = new { commandName, count, postSendDelay };
-                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "RetroTink5xProSendCountOfCommandWithDelay", payload);
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "RetroTink4KSendCountOfCommandWithDelay", payload);
                 return true;
             }
             catch

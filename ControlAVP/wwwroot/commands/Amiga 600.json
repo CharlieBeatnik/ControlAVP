@@ -25,116 +25,23 @@
       "Function": "TurnOutletOn",
       "Parameters": {
         "id": 19
-      },
-      "PostWait": 35.0
-    },
-    {
-      "Description": "Disable HDMI Switch 1 Output",
-      "DeviceType": "AtenVS0801H",
-      "Function": "SetOutput",
-      "Parameters": {
-        "enable": "false"
       }
     },
     {
       "Description": "Switch VGA Matrix to Amiga 600",
       "DeviceType": "ExtronMVX44VGA",
-      "Function": "TieInputPortToOutputPort",
+      "Function": "TieInputPortToAllOutputPorts",
       "Parameters": {
         "inputPort": "Port4",
-        "outputPort": "Port1",
         "tieType": "AudioVideo"
       }
     },
     {
-      "Description": "Scaler to HDMI",
-      "DeviceType": "ExtronDSC301HD",
-      "Function": "SetInputPort",
-      "Parameters": {
-        "inputPort": "HDMI"
-      }
-    },
-    {
-      "Description": "Scaler to Output Rate for Amiga 600",
-      "DeviceType": "ExtronDSC301HD",
-      "Function": "SetOutputRateWithoutEdid",
-      "Parameters": {
-        "width": 1920,
-        "height": 1080,
-        "refreshRate": 50.0
-      },
-      "PostWait": 2.0
-    },
-    {
-      "Description": "Change OSSC to RGBHV",
-      "DeviceType": "OSSC",
-      "Function": "SendCommand",
-      "Parameters": {
-        "commandName": "AV3RGBHV"
-      },
-      "PostWait": 1.0
-    },
-    {
-      "Description": "Load OSSC Profile for Amiga 600",
-      "DeviceType": "OSSC",
-      "Function": "LoadProfile",
-      "Parameters": {
-        "profileName": "Profile1"
-      },
-      "PostWait": 3.0
-    },
-    {
-      "Description": "Scale Fit Preserve Ratio",
-      "DeviceType": "ExtronDSC301HD",
-      "Function": "Scale",
-      "Parameters": {
-        "scaleType": "Fit",
-        "positionType": "Centre",
-        "aspectRatio": "RatioPreserve",
-        "padding": {
-          "X": 0,
-          "Y": 0
-        }
-      }
-    },
-    {
-      "Description": "Set Brightness",
-      "DeviceType": "ExtronDSC301HD",
-      "Function": "SetBrightness",
-      "Parameters": {
-        "value": 60
-      }
-    },
-    {
-      "Description": "TV HDMI4 for Not Rack",
+      "Description": "TV to RetroTink",
       "DeviceType": "SonySimpleIP",
       "Function": "SetInputPort",
       "Parameters": {
-        "inputPort": "Hdmi4"
-      }
-    },
-    {
-      "Description": "Enable HDMI Switch 1 Output",
-      "DeviceType": "AtenVS0801H",
-      "Function": "SetOutput",
-      "Parameters": {
-        "enable": "true"
-      }
-    },
-    {
-      "Description": "HDMI Switch 0 to Scaler",
-      "DeviceType": "AtenVS0801HB",
-      "Function": "SetInputPort",
-      "Parameters": {
-        "inputPort": "Port3"
-      }
-    },
-    {
-      "Description": "TV HDMI1 for Rack",
-      "DeviceType": "SonySimpleIP",
-      "Function": "SetInputPort",
-      "Parameters": {
-        "inputPort": "Hdmi1"
+        "inputPort": "Hdmi2"
       }
     }
   ]

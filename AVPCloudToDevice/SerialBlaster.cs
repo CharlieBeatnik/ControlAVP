@@ -80,7 +80,7 @@ namespace AVPCloudToDevice
                         value = 1;
                     }
 
-                    value = value << 31 - i;
+                    value <<= 31 - i;
                     command |= value;
                 }
 

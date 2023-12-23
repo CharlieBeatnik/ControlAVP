@@ -3,16 +3,15 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ControllableDevice;
 using System.IO;
 using Newtonsoft.Json.Linq;
-using ControllableDeviceTypes.RetroTink5xProTypes;
+using ControllableDeviceTypes.RetroTink4KTypes;
 
 namespace Tests
 {
     [TestClass]
-    public class TestRetroTink5xPro
+    public class TestRetroTink4K
     {
         private const string _settingsFile = "settings.json";
         private static JToken _serialBlasterSettings;
-        private static JToken _deviceSettings;
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext tc)
@@ -30,7 +29,6 @@ namespace Tests
             }
 
             _serialBlasterSettings = jsonParsed["Devices"]["SerialBlaster"][0];
-            _deviceSettings = jsonParsed["Devices"]["RetroTink5xPro"][0];
         }
 
         public static SerialBlaster CreateSerialBlaster()
@@ -43,9 +41,9 @@ namespace Tests
             return new SerialBlaster("invalid");
         }
 
-        public static RetroTink5xPro CreateDevice(SerialBlaster serialBlaster)
+        public static RetroTink4K CreateDevice(SerialBlaster serialBlaster)
         {
-            return new RetroTink5xPro(serialBlaster);
+            return new RetroTink4K(serialBlaster);
         }
 
         [TestMethod]

@@ -40,8 +40,8 @@ namespace ControlRelay
             var ossc = _devices.OfType<OSSC>().First();
             AddCloudInterface(() => new OSSCCloudInterface(ossc), deviceCloudInterfaces);
 
-            var retroTink5xPro = _devices.OfType<RetroTink5xPro>().First();
-            AddCloudInterface(() => new RetroTink5xProCloudInterface(retroTink5xPro), deviceCloudInterfaces);
+            var retroTink4K = _devices.OfType<RetroTink4K>().First();
+            AddCloudInterface(() => new RetroTink4KCloudInterface(retroTink4K), deviceCloudInterfaces);
            
             var serialBlaster = _devices.OfType<SerialBlaster>().ToList();
             AddCloudInterface(() => new SerialBlasterCloudInterface(serialBlaster), deviceCloudInterfaces);
