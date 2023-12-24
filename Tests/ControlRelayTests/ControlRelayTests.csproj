@@ -92,7 +92,7 @@
     <Compile Include="TestAtenVS0801H.cs" />
     <Compile Include="TestExtronDSC301HD.cs" />
     <Compile Include="TestJsonRpcDevice.cs" />
-    <Compile Include="TestRetroTink5xPro.cs" />
+    <Compile Include="TestRetroTink4K.cs" />
     <Compile Include="TestRs232Device.cs" />
     <Compile Include="TestOSSC.cs" />
     <Compile Include="TestSerialBlaster.cs" />

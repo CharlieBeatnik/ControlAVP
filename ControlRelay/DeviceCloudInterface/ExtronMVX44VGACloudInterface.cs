@@ -58,13 +58,13 @@ namespace ControlRelay
         private Task<MethodResponse> TieInputPortToAllOutputPorts(MethodRequest methodRequest, object userContext)
         {
             bool success = false;
-            var payloadDefintion = new
+            var payloadDefinition = new
             {
                 inputPort = (InputPort)(-1),
                 tieType = (TieType)(-1),
             };
 
-            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
+            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefinition);
 
             if (payload.inputPort.Valid() && payload.tieType.Valid())
             {
@@ -77,14 +77,14 @@ namespace ControlRelay
         private Task<MethodResponse> TieInputPortToOutputPort(MethodRequest methodRequest, object userContext)
         {
             bool success = false;
-            var payloadDefintion = new
+            var payloadDefinition = new
             {
                 inputPort = (InputPort)(-1),
                 outputPort = (OutputPort)(-1),
                 tieType = (TieType)(-1),
             };
 
-            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
+            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefinition);
 
             if (payload.inputPort.Valid() && payload.outputPort.Valid() && payload.tieType.Valid())
             {

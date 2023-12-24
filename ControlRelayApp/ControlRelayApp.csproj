@@ -99,8 +99,8 @@
     <Compile Include="..\ControlRelay\DeviceCloudInterface\OSSCCloudInterface.cs">
       <Link>DeviceCloudInterface\OSSCCloudInterface.cs</Link>
     </Compile>
-    <Compile Include="..\ControlRelay\DeviceCloudInterface\RetronTink5xProCloudInterface.cs">
-      <Link>DeviceCloudInterface\RetronTink5xProCloudInterface.cs</Link>
+    <Compile Include="..\ControlRelay\DeviceCloudInterface\RetronTink4KCloudInterface.cs">
+      <Link>DeviceCloudInterface\RetronTink4KCloudInterface.cs</Link>
     </Compile>
     <Compile Include="..\ControlRelay\DeviceCloudInterface\SerialBlasterCloudInterface.cs">
       <Link>DeviceCloudInterface\SerialBlasterCloudInterface.cs</Link>

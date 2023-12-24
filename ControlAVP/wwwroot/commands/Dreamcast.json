@@ -1,7 +1,7 @@
 {
   "DefaultAssembly": "ControllableDevice",
   "DefaultDeviceIndex": 0,
-  "DisplayName":  "Dreamcast",
+  "DisplayName": "Dreamcast",
   "Commands": [
     {
       "Description": "Rack On",
@@ -25,125 +25,32 @@
       "Function": "TurnOutletOn",
       "Parameters": {
         "id": 16
-      },
-      "PostWait": 18.0
-    },
-    {
-      "Description": "Disable HDMI Switch 1 Output",
-      "DeviceType": "AtenVS0801H",
-      "Function": "SetOutput",
-      "Parameters": {
-        "enable": "false"
       }
     },
     {
-      "Description": "Ensure No VGA Matrix Ties",
+      "ExecuteAfter": 15.0,
+      "Description": "Switch VGA Matrix to Dreamcast",
       "DeviceType": "ExtronMVX44VGA",
       "Function": "TieInputPortToAllOutputPorts",
       "Parameters": {
-        "inputPort": "NoTie",
+        "inputPort": "Port1",
         "tieType": "AudioVideo"
       }
     },
     {
-      "Description": "Scaler to HDMI",
-      "DeviceType": "ExtronDSC301HD",
-      "Function": "SetInputPort",
-      "Parameters": {
-        "inputPort": "HDMI"
-      }
-    },
-    {
-      "Description": "Scaler to Output Rate for Dreamcast",
-      "DeviceType": "ExtronDSC301HD",
-      "Function": "SetOutputRateWithoutEdid",
-      "Parameters": {
-        "width": 1920,
-        "height": 1080,
-        "refreshRate": 60.0
-      },
-      "PostWait": 2.0
-    },
-    {
-      "Description": "Change OSSC to RGBS",
-      "DeviceType": "OSSC",
-      "Function": "SendCommand",
-      "Parameters": {
-        "commandName": "AV1RGBS"
-      },
-      "PostWait": 1.0
-    },
-    {
-      "Description": "Load OSSC Profile for Dreamcast",
-      "DeviceType": "OSSC",
-      "Function": "LoadProfile",
-      "Parameters": {
-        "profileName": "Profile0"
-      },
-      "PostWait": 2.0
-    },
-    {
-      "Description": "Load OSSC Reset Profile",
-      "DeviceType": "OSSC",
-      "Function": "LoadProfile",
-      "Parameters": {
-        "profileName": "Profile14"
-      },
-      "PostWait": 3.0
-    },
-    {
-      "Description": "Load OSSC Profile for Dreamcast",
-      "DeviceType": "OSSC",
-      "Function": "LoadProfile",
-      "Parameters": {
-        "profileName": "Profile0"
-      },
-      "PostWait": 3.0
-    },
-    {
-      "Description": "Scale Fit Preserve Ratio",
-      "DeviceType": "ExtronDSC301HD",
-      "Function": "Scale",
-      "Parameters": {
-        "scaleType": "Fit",
-        "positionType": "Centre",
-        "aspectRatio": "RatioPreserve",
-        "padding": {
-          "X": 0,
-          "Y": 0
-        }
-      }
-    },
-    {
-      "Description": "TV HDMI4 for Not Rack",
+      "Description": "TV to RetroTink 4K",
       "DeviceType": "SonySimpleIP",
       "Function": "SetInputPort",
       "Parameters": {
-        "inputPort": "Hdmi4"
+        "inputPort": "Hdmi2"
       }
     },
     {
-      "Description": "Enable HDMI Switch 1 Output",
-      "DeviceType": "AtenVS0801H",
-      "Function": "SetOutput",
+      "Description": "Load RetroTink 4K Profile for Dreamcast",
+      "DeviceType": "RetroTink4K",
+      "Function": "LoadProfile",
       "Parameters": {
-        "enable": "true"
-      }
-    },
-    {
-      "Description": "HDMI Switch 0 to Scaler",
-      "DeviceType": "AtenVS0801HB",
-      "Function": "SetInputPort",
-      "Parameters": {
-        "inputPort": "Port3"
-      }
-    },
-    {
-      "Description": "TV HDMI1 for Rack",
-      "DeviceType": "SonySimpleIP",
-      "Function": "SetInputPort",
-      "Parameters": {
-        "inputPort": "Hdmi1"
+        "profileName": "Profile3"
       }
     }
   ]

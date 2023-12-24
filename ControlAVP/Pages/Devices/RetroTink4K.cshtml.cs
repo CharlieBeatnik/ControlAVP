@@ -8,37 +8,35 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Azure.Devices;
 using Microsoft.Extensions.Configuration;
 using AVPCloudToDevice;
-using ControllableDeviceTypes.RetroTink5xProTypes;
+using ControllableDeviceTypes.RetroTink4KTypes;
 
 namespace ControlAVP.Pages.Devices
 {
-    public class RetroTink5xProCDeviceInfo
+    public class RetroTink4KDeviceInfo
     {
         public bool Available { get; set; }
     }
 
-    public class RetroTink5xProModel : PageModel
+    public class RetroTink4KModel : PageModel
     {
         private readonly IConfiguration _configuration;
-        private readonly IWebHostEnvironment _environment;
 
         private readonly string _connectionString;
         private readonly string _deviceId;
         private readonly ServiceClient _serviceClient;
-        private readonly RetroTink5xPro _device;
+        private readonly RetroTink4K _device;
 
-        public RetroTink5xProCDeviceInfo DeviceInfoCache { get; private set; } = new RetroTink5xProCDeviceInfo();
+        public RetroTink4KDeviceInfo DeviceInfoCache { get; private set; } = new RetroTink4KDeviceInfo();
 
-        public RetroTink5xProModel(IConfiguration configuration, IWebHostEnvironment environment)
+        public RetroTink4KModel(IConfiguration configuration)
         {
             _configuration = configuration;
-            _environment = environment;
 
             _connectionString = _configuration.GetValue<string>("ControlAVPIoTHubConnectionString");
             _deviceId = _configuration.GetValue<string>("ControlAVPIoTHubDeviceId");
 
             _serviceClient = ServiceClient.CreateFromConnectionString(_connectionString);
-            _device = new RetroTink5xPro(_serviceClient, _deviceId);
+            _device = new RetroTink4K(_serviceClient, _deviceId);
         }
 
         public void OnGet()
@@ -58,9 +56,9 @@ namespace ControlAVP.Pages.Devices
             return RedirectToPage();
         }
 
-        public IActionResult OnPostSendCountOfCommandWithDelay(CommandName commandName, int count, TimeSpan postSendDelay)
+        public IActionResult OnPostTogglePower()
         {
-            _device.SendCountOfCommandWithDelay(commandName, count, postSendDelay);
+            _device.TogglePower();
             return RedirectToPage();
         }
     }

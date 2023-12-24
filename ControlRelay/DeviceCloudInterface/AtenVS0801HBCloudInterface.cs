@@ -30,9 +30,9 @@ namespace ControlRelay
 
         private Task<MethodResponse> GoToNextInput(MethodRequest methodRequest, object userContext)
         {
-            var payloadDefintion = new { _deviceIndex = -1 };
+            var payloadDefinition = new { _deviceIndex = -1 };
 
-            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
+            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefinition);
             if (DeviceIndexValid(payload._deviceIndex))
             {
                 bool success = _devices[payload._deviceIndex].GoToNextInput();
@@ -44,9 +44,9 @@ namespace ControlRelay
 
         private Task<MethodResponse> GoToPreviousInput(MethodRequest methodRequest, object userContext)
         {
-            var payloadDefintion = new { _deviceIndex = -1 };
+            var payloadDefinition = new { _deviceIndex = -1 };
 
-            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
+            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefinition);
             if (DeviceIndexValid(payload._deviceIndex))
             {
                 bool success = _devices[payload._deviceIndex].GoToPreviousInput();
@@ -58,9 +58,9 @@ namespace ControlRelay
 
         private Task<MethodResponse> GetState(MethodRequest methodRequest, object userContext)
         {
-            var payloadDefintion = new { _deviceIndex = -1 };
+            var payloadDefinition = new { _deviceIndex = -1 };
 
-            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
+            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefinition);
             if (DeviceIndexValid(payload._deviceIndex))
             {
                 var result = _devices[payload._deviceIndex].GetState();
@@ -75,13 +75,13 @@ namespace ControlRelay
 
         private Task<MethodResponse> SetInputPort(MethodRequest methodRequest, object userContext)
         {
-            var payloadDefintion = new
+            var payloadDefinition = new
             {
                 _deviceIndex = -1,
                 inputPort = (InputPort)(-1)
             };
 
-            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
+            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefinition);
             if (DeviceIndexValid(payload._deviceIndex) && payload.inputPort.Valid())
             {
                 bool success = _devices[payload._deviceIndex].SetInputPort(payload.inputPort);
@@ -93,9 +93,9 @@ namespace ControlRelay
 
         private Task<MethodResponse> GetAvailable(MethodRequest methodRequest, object userContext)
         {
-            var payloadDefintion = new { _deviceIndex = -1 };
+            var payloadDefinition = new { _deviceIndex = -1 };
 
-            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
+            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefinition);
             if (DeviceIndexValid(payload._deviceIndex))
             {
                 var result = _devices[payload._deviceIndex].GetAvailable();

@@ -28,83 +28,20 @@
       }
     },
     {
-      "ExecuteAfter": 16.0,
-      "Description": "Disable HDMI Switch 1 Output",
-      "DeviceType": "AtenVS0801H",
-      "Function": "SetOutput",
-      "Parameters": {
-        "enable": "false"
-      }
-    },
-    {
-      "Description": "Scaler to HDMI",
-      "DeviceType": "ExtronDSC301HD",
-      "Function": "SetInputPort",
-      "Parameters": {
-        "inputPort": "HDMI"
-      }
-    },
-    {
-      "Description": "Load OSSC Profile for Wii",
-      "DeviceType": "OSSC",
-      "Function": "LoadProfile",
-      "Parameters": {
-        "profileName": "Profile7"
-      },
-      "PostWait": 2.0
-    },
-    {
-      "Description": "Change OSSC to AV1YPbPr (Dummy)",
-      "DeviceType": "OSSC",
-      "Function": "SendCommand",
-      "Parameters": {
-        "commandName": "AV1YPbPr"
-      },
-      "PostWait": 2.0
-    },
-    {
-      "Description": "Change OSSC to YPbPr",
-      "DeviceType": "OSSC",
-      "Function": "SendCommand",
-      "Parameters": {
-        "commandName": "AV2YPbPr"
-      },
-      "PostWait": 1.0
-    },
-    {
-      "Description": "Scaler to Output Rate for Wii",
-      "DeviceType": "ExtronDSC301HD",
-      "Function": "SetOutputRateWithoutEdid",
-      "Parameters": {
-        "width": 1920,
-        "height": 1080,
-        "refreshRate": 60.0
-      },
-      "PostWait": 2.0
-    },
-    {
-      "Description": "Enable HDMI Switch 1 Output",
-      "DeviceType": "AtenVS0801H",
-      "Function": "SetOutput",
-      "Parameters": {
-        "enable": "true"
-      }
-    },
-    {
-      "Description": "HDMI Switch 0 to Scaler",
-      "DeviceType": "AtenVS0801HB",
-      "Function": "SetInputPort",
-      "Parameters": {
-        "inputPort": "Port3"
-      }
-    },
-    {
-      "ExecuteAfter": 35.0,
-      "Description": "TV HDMI1 for Rack",
+      "ExecuteAfter": 15.0,
+      "Description": "TV to RetroTink 4K",
       "DeviceType": "SonySimpleIP",
       "Function": "SetInputPort",
       "Parameters": {
-        "inputPort": "Hdmi1"
+        "inputPort": "Hdmi2"
+      }
+    },
+    {
+      "Description": "Load RetroTink 4K Profile for Wii",
+      "DeviceType": "RetroTink4K",
+      "Function": "LoadProfile",
+      "Parameters": {
+        "profileName": "Profile8"
       }
     }
   ]

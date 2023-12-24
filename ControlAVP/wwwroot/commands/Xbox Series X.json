@@ -20,11 +20,11 @@
       }
     },
     {
-      "Description": "TV HDMI4 for Xbox Series X",
+      "Description": "TV to Xbox Series X",
       "DeviceType": "SonySimpleIP",
       "Function": "SetInputPort",
       "Parameters": {
-        "inputPort": "Hdmi1"
+        "inputPort": "Hdmi4"
       }
     }
   ]

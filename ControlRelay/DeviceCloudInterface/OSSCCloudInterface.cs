@@ -34,13 +34,13 @@ namespace ControlRelay
         private Task<MethodResponse> SendCommand(MethodRequest methodRequest, object userContext)
         {
             bool success = false;
-            var payloadDefintion = new
+            var payloadDefinition = new
             {
                 commandName = (CommandName)(-1),
                 repeats = (uint)(0),
             };
 
-            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
+            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefinition);
 
             if (payload.commandName.Valid())
             {
@@ -53,12 +53,12 @@ namespace ControlRelay
         private Task<MethodResponse> LoadProfile(MethodRequest methodRequest, object userContext)
         {
             bool success = false;
-            var payloadDefintion = new
+            var payloadDefinition = new
             {
                 profileName = (ProfileName)(-1),
             };
 
-            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
+            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefinition);
 
             if (payload.profileName.Valid())
             {

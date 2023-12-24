@@ -1,9 +1,9 @@
 ﻿@page
-@model ControlAVP.Pages.Devices.RetroTink5xProModel
-@using ControllableDeviceTypes.RetroTink5xProTypes;
+@model ControlAVP.Pages.Devices.RetroTink4KModel
+@using ControllableDeviceTypes.RetroTink4KTypes;
 
 @{
-    ViewData["Title"] = "RetroTINK";
+    ViewData["Title"] = "RetroTink";
     string defaultButtonCss = "btn-light";
 }
 <h2></h2>
@@ -23,7 +23,7 @@
                             <td class="align-middle text-right" width="1%">Power</td>
                             <td>
                                 <div class="btn-group-vertical">
-                                    <vc:retro-tink5x-pro-button command-name=@CommandName.Power button-label="Power" css-class="btn-danger" css-fa-icon="power-off" />
+                                    <button type="submit" asp-page-handler="TogglePower" class="btn border btn-danger "><i class="fas fa-power-off"></i></button>
                                 </div>
                             </td>
                         </tr>
@@ -33,7 +33,7 @@
                                 <div class="btn-group-vertical">
                                     @foreach (ProfileName profileName in (ProfileName[]) Enum.GetValues(typeof(ProfileName)))
                                     {
-                                        string label = profileName == ProfileName.ProfileDefault ? "Default Profile" : $"Profile {((int)profileName).ToString()}";
+                                        string label = $"Profile {((int)profileName).ToString()}";
                                         <button type="submit" asp-page-handler="LoadProfile" asp-route-profilename=@profileName class="btn btn-light border">@label</button>
                                     }
                                 </div>
@@ -43,11 +43,13 @@
                             <td class="align-middle text-right" width="1%">Menus</td>
                             <td>
                                 <div class="btn-group-vertical">
-                                    <vc:retro-tink5x-pro-button command-name=@CommandName.ShowMainMenu button-label="Main" css-class=@defaultButtonCss css-fa-icon="bars" />
-                                    <vc:retro-tink5x-pro-button command-name=@CommandName.ShowInputSourceMenu button-label="Input Source" css-class=@defaultButtonCss css-fa-icon="" />
-                                    <vc:retro-tink5x-pro-button command-name=@CommandName.ShowHorizontalSamplingMenu button-label="Horizontal Sampling" css-class=@defaultButtonCss css-fa-icon="" />
-                                    <vc:retro-tink5x-pro-button command-name=@CommandName.ShowScalingAndCroppingMenu button-label="Scaling & Cropping" css-class=@defaultButtonCss css-fa-icon="" />
-                                    <vc:retro-tink5x-pro-button command-name=@CommandName.ShowPostProcessingMenu button-label="Post Processing" css-class=@defaultButtonCss css-fa-icon="" />
+                                    <vc:retro-tink4K-button command-name=@CommandName.ShowMainMenu button-label="Main" css-class=@defaultButtonCss css-fa-icon="bars" />
+                                    <vc:retro-tink4K-button command-name=@CommandName.ShowInputSourceMenu button-label="Input Source" css-class=@defaultButtonCss css-fa-icon="" />
+                                    <vc:retro-tink4K-button command-name=@CommandName.ShowHdmiOutputMenu button-label="HDMI Output" css-class=@defaultButtonCss css-fa-icon="" />
+                                    <vc:retro-tink4K-button command-name=@CommandName.ShowScalingAndCroppingMenu button-label="Scaling & Cropping" css-class=@defaultButtonCss css-fa-icon="" />
+                                    <vc:retro-tink4K-button command-name=@CommandName.ShowProcessingEffectsMenu button-label="Processing Effects" css-class=@defaultButtonCss css-fa-icon="" />
+                                    <vc:retro-tink4K-button command-name=@CommandName.ShowAdcMenu button-label="ADC" css-class=@defaultButtonCss css-fa-icon="" />
+                                    <vc:retro-tink4K-button command-name=@CommandName.ShowProfilesMenu button-label="Profiles" css-class=@defaultButtonCss css-fa-icon="" />
                                 </div>
                             </td>
                         </tr>
@@ -57,24 +59,24 @@
                                 <div class="container p-0 m-0 w-50">
                                     <div class="row">
                                         <div class="col-sm btn-group">
-                                            <vc:retro-tink5x-pro-button command-name=@CommandName.Up button-label="" css-class=@defaultButtonCss css-fa-icon="arrow-up" />
+                                            <vc:retro-tink4K-button command-name=@CommandName.Up button-label="" css-class=@defaultButtonCss css-fa-icon="arrow-up" />
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-sm btn-group">
-                                            <vc:retro-tink5x-pro-button command-name=@CommandName.Left button-label="" css-class=@(defaultButtonCss + " pt-3 pb-3") css-fa-icon="arrow-left" />
-                                            <vc:retro-tink5x-pro-button command-name=@CommandName.Ok button-label="OK" css-class=@(defaultButtonCss + " pt-3 pb-3") css-fa-icon="" />
-                                            <vc:retro-tink5x-pro-button command-name=@CommandName.Right button-label="" css-class=@(defaultButtonCss + " pt-3 pb-3") css-fa-icon="arrow-right" />
+                                            <vc:retro-tink4K-button command-name=@CommandName.Left button-label="" css-class=@(defaultButtonCss + " pt-3 pb-3") css-fa-icon="arrow-left" />
+                                            <vc:retro-tink4K-button command-name=@CommandName.Enter button-label="Enter" css-class=@(defaultButtonCss + " pt-3 pb-3") css-fa-icon="" />
+                                            <vc:retro-tink4K-button command-name=@CommandName.Right button-label="" css-class=@(defaultButtonCss + " pt-3 pb-3") css-fa-icon="arrow-right" />
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-sm btn-group">
-                                            <vc:retro-tink5x-pro-button command-name=@CommandName.Down button-label="" css-class=@defaultButtonCss css-fa-icon="arrow-down" />
+                                            <vc:retro-tink4K-button command-name=@CommandName.Down button-label="" css-class=@defaultButtonCss css-fa-icon="arrow-down" />
                                         </div>
                                     </div>
                                 </div>
                                 <div class="btn-group mt-2">
-                                    <vc:retro-tink5x-pro-button command-name=@CommandName.Back button-label="Back" css-class=@defaultButtonCss css-fa-icon="undo-alt" />
+                                    <vc:retro-tink4K-button command-name=@CommandName.Back button-label="Back" css-class=@defaultButtonCss css-fa-icon="undo-alt" />
                                 </div>
                             </td>
                         </tr>

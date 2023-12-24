@@ -375,7 +375,7 @@ namespace ControllableDevice
             List<string> messages = readData.Split(ReceivedMessageTerminator, StringSplitOptions.RemoveEmptyEntries).ToList();
 
             // It has been observed that if StringSplitOptions.RemoveEmptyEntries is used to remove blank lines consisting only of "\r\n"
-            // that the "\r" remains as the trailing character on the end of the line that preceeds the blank line. As an example:
+            // that the "\r" remains as the trailing character on the end of the line that precedes the blank line. As an example:
             //
             // Example\r\n
             // \r\n
@@ -385,7 +385,7 @@ namespace ControllableDevice
             // Test\r
             //
             // Consequently this loop trims whitespace from the head and tail of each line in the string list
-            for (int i = 0; i < messages.Count(); i++)
+            for (int i = 0; i < messages.Count; i++)
             {
                 messages[i] = messages[i].Trim();
             }

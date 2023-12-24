@@ -14,13 +14,6 @@
             <div class="col-sm-6 pl-0 pr-0">
                 <div class="d-flex justify-content-center">
                     <div class="input-group">
-                        <textarea type="text" rows="9" class="form-control" name="rawHex" style="resize:none">@ViewData["rawHex"]</textarea>
-                        <button type="submit" asp-page-handler="convertRawHexToNecProtocol" class="btn badge-primary text-white ml-2">Convert To Nec</button>
-                    </div>
-                </div>
-                <p></p>
-                <div class="d-flex justify-content-center">
-                    <div class="input-group">
                         <input type="text" class="form-control" name="necHex" value="@ViewData["necHex"]">
                         <button type="submit" asp-page-handler="blastNecHex" class="btn badge-primary text-white ml-2">Blast</button>
                     </div>

@@ -10,14 +10,10 @@ using Microsoft.AspNetCore.Mvc;
 using ControllableDeviceTypes.ExtronDSC301HDTypes;
 using ControllableDeviceTypes.OSSCTypes;
 using ControllableDeviceTypes.ApcAP8959EU3Types;
-using ControllableDeviceTypes.SonySimpleIPTypes;
-using ControllableDeviceTypes.AtenVS0801HBTypes;
 using Newtonsoft.Json;
 using System.Numerics;
 using System;
 using System.Linq;
-using System.Threading;
-using System.Diagnostics;
 
 namespace ControlAVP.Pages
 {
@@ -29,7 +25,12 @@ namespace ControlAVP.Pages
         public string DisplayName { get; set; }
     }
 
-
+    public enum Scaler
+    {
+        RetroTink4K,
+        OSSC,
+        ExtronDSC301HD
+    }
 
     public class IndexModel : PageModel
     {
@@ -175,14 +176,6 @@ namespace ControlAVP.Pages
             return RedirectToPage();
         }
 
-        public IActionResult OnPostTVInputCycle(ControllableDeviceTypes.SonySimpleIPTypes.InputPort input1, ControllableDeviceTypes.SonySimpleIPTypes.InputPort input2)
-        {
-            _sonySimpleIP.SetInputPort(input1);
-            Thread.Sleep(TimeSpan.FromSeconds(3));
-            _sonySimpleIP.SetInputPort(input2);
-            return RedirectToPage();
-        }
-
         // Turn off all devices not on the exclusion list, including the TV
         public IActionResult OnPostPowerOff()
         {
@@ -209,25 +202,23 @@ namespace ControlAVP.Pages
             return RedirectToPage();
         }
 
-        public IActionResult OnPostOSSCProfileCycle(ProfileName profile1, ProfileName profile2)
+        public IActionResult OnPostSetScaler(Scaler scaler)
         {
-            _ossc.LoadProfile(profile1);
-            Thread.Sleep(TimeSpan.FromSeconds(3));
-            _ossc.LoadProfile(profile2);
-            return RedirectToPage();
-        }
+            switch(scaler)
+            {
+                case Scaler.RetroTink4K:
+                    _sonySimpleIP.SetInputPort(ControllableDeviceTypes.SonySimpleIPTypes.InputPort.Hdmi2);
+                    break;
+                case Scaler.OSSC:
+                    _sonySimpleIP.SetInputPort(ControllableDeviceTypes.SonySimpleIPTypes.InputPort.Hdmi1);
+                    _atenVS0801HB.SetInputPort(ControllableDeviceTypes.AtenVS0801HBTypes.InputPort.Port1);
+                    break;
+                case Scaler.ExtronDSC301HD:
+                    _sonySimpleIP.SetInputPort(ControllableDeviceTypes.SonySimpleIPTypes.InputPort.Hdmi1);
+                    _atenVS0801HB.SetInputPort(ControllableDeviceTypes.AtenVS0801HBTypes.InputPort.Port2);
+                    break;
+            }
 
-        public IActionResult OnPostOSSCInputCycle(CommandName inputPort1, CommandName inputPort2)
-        {
-            _ossc.SendCommand(inputPort1);
-            Thread.Sleep(TimeSpan.FromSeconds(3));
-            _ossc.SendCommand(inputPort2);
-            return RedirectToPage();
-        }
-
-        public IActionResult OnPostAtenVS0801HBSetInputPort(ControllableDeviceTypes.AtenVS0801HBTypes.InputPort inputPort)
-        {
-            _atenVS0801HB.SetInputPort(inputPort);
             return RedirectToPage();
         }
     }

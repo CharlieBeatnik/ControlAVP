@@ -42,12 +42,12 @@ namespace ControlRelay
 
         private Task<MethodResponse> SetInputPort(MethodRequest methodRequest, object userContext)
         {
-            var payloadDefintion = new
+            var payloadDefinition = new
             {
                 inputPort = (InputPort)(-1)
             };
 
-            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
+            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefinition);
             if (payload.inputPort.Valid())
             {
                 bool success = _device.SetInputPort(payload.inputPort);

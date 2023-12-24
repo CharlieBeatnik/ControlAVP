@@ -28,29 +28,20 @@
       }
     },
     {
-      "ExecuteAfter": 16.0,
-      "Description": "HDMI Switch 0 Passthrough",
-      "DeviceType": "AtenVS0801HB",
-      "Function": "SetInputPort",
-      "Parameters": {
-        "inputPort": "Port1"
-      }
-    },
-    {
-      "Description": "HDMI Switch 1 to Wii U",
+      "ExecuteAfter": 15.0,
+      "Description": "1080p HDMI Switch to Wii U",
       "DeviceType": "AtenVS0801H",
       "Function": "SetInputPort",
       "Parameters": {
-        "inputPort": "Port6"
+        "inputPort": "Port5"
       }
     },
     {
-      "ExecuteAfter": 35.0,
-      "Description": "TV HDMI1 for Rack",
+      "Description": "TV to RetroTink 4K",
       "DeviceType": "SonySimpleIP",
       "Function": "SetInputPort",
       "Parameters": {
-        "inputPort": "Hdmi1"
+        "inputPort": "Hdmi2"
       }
     }
   ]
