@@ -28,29 +28,20 @@
       }
     },
     {
-      "ExecuteAfter": 16.0,
-      "Description": "HDMI Switch 0 Passthrough",
-      "DeviceType": "AtenVS0801HB",
-      "Function": "SetInputPort",
-      "Parameters": {
-        "inputPort": "Port1"
-      }
-    },
-    {
-      "Description": "HDMI Switch 1 to Xbox 360",
+      "ExecuteAfter": 15.0,
+      "Description": "1080p HDMI Switch to Xbox 360",
       "DeviceType": "AtenVS0801H",
       "Function": "SetInputPort",
       "Parameters": {
-        "inputPort": "Port4"
+        "inputPort": "Port3"
       }
     },
     {
-      "ExecuteAfter": 35.0,
-      "Description": "TV HDMI1 for Rack",
+      "Description": "TV to RetroTink 4K",
       "DeviceType": "SonySimpleIP",
       "Function": "SetInputPort",
       "Parameters": {
-        "inputPort": "Hdmi1"
+        "inputPort": "Hdmi2"
       }
     }
   ]

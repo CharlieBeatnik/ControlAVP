@@ -20,7 +20,7 @@
       }
     },
     {
-      "Description": "TV HDMI3 for PlayStation 5",
+      "Description": "TV to PlayStation 5",
       "DeviceType": "SonySimpleIP",
       "Function": "SetInputPort",
       "Parameters": {

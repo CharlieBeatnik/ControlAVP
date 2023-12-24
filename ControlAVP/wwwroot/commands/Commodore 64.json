@@ -1,7 +1,7 @@
 {
   "DefaultAssembly": "ControllableDevice",
   "DefaultDeviceIndex": 0,
-  "DisplayName": "Game Cube",
+  "DisplayName": "Commodore 64",
   "Commands": [
     {
       "Description": "Rack On",
@@ -20,20 +20,21 @@
       }
     },
     {
-      "Description": "GameCube On",
+      "Description": "Commodore 64 On",
       "DeviceType": "ApcAP8959EU3",
       "Function": "TurnOutletOn",
       "Parameters": {
-        "id": 8
+        "id": 19
       }
     },
     {
       "ExecuteAfter": 15.0,
-      "Description": "1080p HDMI Switch to Game Cube",
-      "DeviceType": "AtenVS0801H",
-      "Function": "SetInputPort",
+      "Description": "Switch VGA Matrix to Commodore 64",
+      "DeviceType": "ExtronMVX44VGA",
+      "Function": "TieInputPortToAllOutputPorts",
       "Parameters": {
-        "inputPort": "Port7"
+        "inputPort": "Port2",
+        "tieType": "AudioVideo"
       }
     },
     {

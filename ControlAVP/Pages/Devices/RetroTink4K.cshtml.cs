@@ -56,9 +56,9 @@ namespace ControlAVP.Pages.Devices
             return RedirectToPage();
         }
 
-        public IActionResult OnPostSendCountOfCommandWithDelay(CommandName commandName, int count, TimeSpan postSendDelay)
+        public IActionResult OnPostTogglePower()
         {
-            _device.SendCountOfCommandWithDelay(commandName, count, postSendDelay);
+            _device.TogglePower();
             return RedirectToPage();
         }
     }

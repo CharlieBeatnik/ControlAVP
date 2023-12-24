@@ -28,21 +28,20 @@
       }
     },
     {
-      "ExecuteAfter": 16.0,
-      "Description": "HDMI Switch 0 to Nt mini Noir",
-      "DeviceType": "AtenVS0801HB",
+      "ExecuteAfter": 15.0,
+      "Description": "1080p HDMI Switch to Nt mini Noir",
+      "DeviceType": "AtenVS0801H",
       "Function": "SetInputPort",
       "Parameters": {
-        "inputPort": "Port5"
+        "inputPort": "Port4"
       }
     },
     {
-      "ExecuteAfter": 35.0,
-      "Description": "TV HDMI1 for Rack",
+      "Description": "TV to RetroTink 4K",
       "DeviceType": "SonySimpleIP",
       "Function": "SetInputPort",
       "Parameters": {
-        "inputPort": "Hdmi1"
+        "inputPort": "Hdmi2"
       }
     }
   ]

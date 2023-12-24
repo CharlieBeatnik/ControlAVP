@@ -30,13 +30,13 @@ namespace ControlRelay
 
         private Task<MethodResponse> GetOutlets(MethodRequest methodRequest, object userContext)
         {
-            var payloadDefintion = new
+            var payloadDefinition = new
             {
                 getPower = false,
                 getCurrent = false
             };
 
-            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
+            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefinition);
             var result = _device.GetOutlets(payload.getPower, payload.getCurrent);
 
             if (result != null)
@@ -51,13 +51,13 @@ namespace ControlRelay
 
         private Task<MethodResponse> GetOutletsWaitForPending(MethodRequest methodRequest, object userContext)
         {
-            var payloadDefintion = new
+            var payloadDefinition = new
             {
                 getPower = false,
                 getCurrent = false
             };
 
-            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
+            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefinition);
             var result = _device.GetOutletsWaitForPending(payload.getPower, payload.getCurrent);
 
             if (result != null)
@@ -74,12 +74,12 @@ namespace ControlRelay
         private Task<MethodResponse> TurnOutletOn(MethodRequest methodRequest, object userContext)
         {
             bool success = false;
-            var payloadDefintion = new
+            var payloadDefinition = new
             {
                 outletId = -1
             };
 
-            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
+            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefinition);
             if (ApcAP8959EU3.OutletIdValid(payload.outletId))
             {
                 success = _device.TurnOutletOn(payload.outletId);
@@ -91,12 +91,12 @@ namespace ControlRelay
         private Task<MethodResponse> TurnOutletOff(MethodRequest methodRequest, object userContext)
         {
             bool success = false;
-            var payloadDefintion = new
+            var payloadDefinition = new
             {
                 outletId = -1
             };
 
-            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
+            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefinition);
             if (ApcAP8959EU3.OutletIdValid(payload.outletId))
             {
                 success = _device.TurnOutletOff(payload.outletId);

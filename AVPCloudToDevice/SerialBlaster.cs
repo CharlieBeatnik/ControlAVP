@@ -53,40 +53,5 @@ namespace AVPCloudToDevice
                 return false;
             }
         }
-
-        public static uint ConvertRawHexToNecHex(string rawHex)
-        {
-            // How to convert from raw hex to Nec hex codes
-            // "Starting at the seventh block (after the lead in) you'll see "0015 0015" (this is for a binary 0) or
-            // "0015 0040" (this is for a binary 1), do this till you have all 32 bits, the last numbers are a lead out."
-
-            // How to convert from Nec hex to raw hex codes
-            // https://www.yamaha.com/ypab/irhex_converter.asp
-
-            uint command = 0;
-
-            if (rawHex != null)
-            {
-                string[] tokens = rawHex.Split(' ');
-
-                // Raw hex codes should contain 76 segments
-                if (tokens.Length != 76) return 0;
-
-                for (int i = 0; i < 32; ++i)
-                {
-                    uint value = 0;
-                    if (tokens[6 + (i * 2) + 1] == "0040")
-                    {
-                        value = 1;
-                    }
-
-                    value <<= 31 - i;
-                    command |= value;
-                }
-
-                return command;
-            }
-            else return 0;
-        }
     }
 }

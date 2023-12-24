@@ -25,125 +25,23 @@
       "Function": "TurnOutletOn",
       "Parameters": {
         "id": 17
-      },
-      "PostWait": 10.0
-    },
-    {
-      "ExecuteAfter": 16.0,
-      "Description": "Disable HDMI Switch 1 Output",
-      "DeviceType": "AtenVS0801H",
-      "Function": "SetOutput",
-      "Parameters": {
-        "enable": "false"
       }
     },
     {
-      "Description": "Scaler to HDMI",
-      "DeviceType": "ExtronDSC301HD",
-      "Function": "SetInputPort",
-      "Parameters": {
-        "inputPort": "HDMI"
-      }
-    },
-    {
-      "Description": "Scaler to Output Rate for Saturn",
-      "DeviceType": "ExtronDSC301HD",
-      "Function": "SetOutputRateWithoutEdid",
-      "Parameters": {
-        "width": 1920,
-        "height": 1080,
-        "refreshRate": 50.0
-      },
-      "PostWait": 2.0
-    },
-    {
-      "Description": "Change OSSC to RGBS",
-      "DeviceType": "OSSC",
-      "Function": "SendCommand",
-      "Parameters": {
-        "commandName": "AV1RGBS"
-      },
-      "PostWait": 1.0
-    },
-    {
-      "Description": "Load OSSC Profile for Saturn",
-      "DeviceType": "OSSC",
-      "Function": "LoadProfile",
-      "Parameters": {
-        "profileName": "Profile8"
-      },
-      "PostWait": 2.0
-    },
-    {
-      "Description": "Load OSSC Reset Profile",
-      "DeviceType": "OSSC",
-      "Function": "LoadProfile",
-      "Parameters": {
-        "profileName": "Profile14"
-      },
-      "PostWait": 3.0
-    },
-    {
-      "Description": "Load OSSC Profile for Saturn",
-      "DeviceType": "OSSC",
-      "Function": "LoadProfile",
-      "Parameters": {
-        "profileName": "Profile8"
-      },
-      "PostWait": 3.0
-    },
-    {
-      "Description": "Scale Pixel Perfect Preserve Ratio",
-      "DeviceType": "ExtronDSC301HD",
-      "Function": "Scale",
-      "Parameters": {
-        "scaleType": "PixelPerfect",
-        "positionType": "Centre",
-        "aspectRatio": "RatioPreserve",
-        "padding": {
-          "X": 0,
-          "Y": 0
-        }
-      }
-    },
-    {
-      "Description": "Set Brightness",
-      "DeviceType": "ExtronDSC301HD",
-      "Function": "SetBrightness",
-      "Parameters": {
-        "value": 60
-      }
-    },
-    {
-      "Description": "TV HDMI4 for Not Rack",
+      "ExecuteAfter": 15.0,
+      "Description": "TV to RetroTink 4K",
       "DeviceType": "SonySimpleIP",
       "Function": "SetInputPort",
       "Parameters": {
-        "inputPort": "Hdmi4"
+        "inputPort": "Hdmi2"
       }
     },
     {
-      "Description": "Enable HDMI Switch 1 Output",
-      "DeviceType": "AtenVS0801H",
-      "Function": "SetOutput",
+      "Description": "Load RetroTink 4K Profile for Saturn",
+      "DeviceType": "RetroTink4K",
+      "Function": "LoadProfile",
       "Parameters": {
-        "enable": "true"
-      }
-    },
-    {
-      "Description": "HDMI Switch 0 to Scaler",
-      "DeviceType": "AtenVS0801HB",
-      "Function": "SetInputPort",
-      "Parameters": {
-        "inputPort": "Port3"
-      }
-    },
-    {
-      "Description": "TV HDMI1 for Rack",
-      "DeviceType": "SonySimpleIP",
-      "Function": "SetInputPort",
-      "Parameters": {
-        "inputPort": "Hdmi1"
+        "profileName": "Profile2"
       }
     }
   ]

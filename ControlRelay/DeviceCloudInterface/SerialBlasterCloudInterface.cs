@@ -27,9 +27,9 @@ namespace ControlRelay
 
         private Task<MethodResponse> GetAvailable(MethodRequest methodRequest, object userContext)
         {
-            var payloadDefintion = new { _deviceIndex = -1 };
+            var payloadDefinition = new { _deviceIndex = -1 };
 
-            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
+            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefinition);
             if (DeviceIndexValid(payload._deviceIndex))
             {
                 bool success = _devices[payload._deviceIndex].GetAvailable();
@@ -41,7 +41,7 @@ namespace ControlRelay
 
         private Task<MethodResponse> SendCommand(MethodRequest methodRequest, object userContext)
         {
-            var payloadDefintion = new
+            var payloadDefinition = new
             {
                 _deviceIndex = -1,
                 protocol = (Protocol)(-1),
@@ -49,7 +49,7 @@ namespace ControlRelay
                 repeats = (uint)(0),
             };
 
-            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
+            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefinition);
             if (DeviceIndexValid(payload._deviceIndex))
             {
                 bool success = _devices[payload._deviceIndex].SendCommand(payload.protocol, payload.command, payload.repeats);
@@ -61,13 +61,13 @@ namespace ControlRelay
 
         private Task<MethodResponse> SendMessage(MethodRequest methodRequest, object userContext)
         {
-            var payloadDefintion = new
+            var payloadDefinition = new
             {
                 _deviceIndex = -1,
                 message = string.Empty
             };
 
-            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
+            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefinition);
             if (DeviceIndexValid(payload._deviceIndex))
             {
                 bool success = _devices[payload._deviceIndex].SendMessage(payload.message);

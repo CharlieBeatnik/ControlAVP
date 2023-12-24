@@ -23,7 +23,7 @@
                             <td class="align-middle text-right" width="1%">Power</td>
                             <td>
                                 <div class="btn-group-vertical">
-                                    <vc:retro-tink4K-button command-name=@CommandName.Power button-label="Power" css-class="btn-danger" css-fa-icon="power-off" />
+                                    <button type="submit" asp-page-handler="TogglePower" class="btn border btn-danger "><i class="fas fa-power-off"></i></button>
                                 </div>
                             </td>
                         </tr>
@@ -49,6 +49,7 @@
                                     <vc:retro-tink4K-button command-name=@CommandName.ShowScalingAndCroppingMenu button-label="Scaling & Cropping" css-class=@defaultButtonCss css-fa-icon="" />
                                     <vc:retro-tink4K-button command-name=@CommandName.ShowProcessingEffectsMenu button-label="Processing Effects" css-class=@defaultButtonCss css-fa-icon="" />
                                     <vc:retro-tink4K-button command-name=@CommandName.ShowAdcMenu button-label="ADC" css-class=@defaultButtonCss css-fa-icon="" />
+                                    <vc:retro-tink4K-button command-name=@CommandName.ShowProfilesMenu button-label="Profiles" css-class=@defaultButtonCss css-fa-icon="" />
                                 </div>
                             </td>
                         </tr>

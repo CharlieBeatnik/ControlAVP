@@ -28,15 +28,7 @@
       }
     },
     {
-      "ExecuteAfter": 16.0,
-      "Description": "Disable HDMI Switch 1 Output",
-      "DeviceType": "AtenVS0801H",
-      "Function": "SetOutput",
-      "Parameters": {
-        "enable": "false"
-      }
-    },
-    {
+      "ExecuteAfter": 15.0,
       "Description": "Switch VGA Matrix to PC",
       "DeviceType": "ExtronMVX44VGA",
       "Function": "TieInputPortToAllOutputPorts",
@@ -46,88 +38,19 @@
       }
     },
     {
-      "Description": "Scaler to HDMI",
-      "DeviceType": "ExtronDSC301HD",
-      "Function": "SetInputPort",
-      "Parameters": {
-        "inputPort": "HDMI"
-      }
-    },
-    {
-      "Description": "Load OSSC Profile for PC",
-      "DeviceType": "OSSC",
-      "Function": "LoadProfile",
-      "Parameters": {
-        "profileName": "Profile5"
-      },
-      "PostWait": 2.0
-    },
-    {
-      "Description": "Change OSSC to AV1YPbPr (Dummy)",
-      "DeviceType": "OSSC",
-      "Function": "SendCommand",
-      "Parameters": {
-        "commandName": "AV1YPbPr"
-      },
-      "PostWait": 3.0
-    },
-    {
-      "Description": "Change OSSC to RGBHV",
-      "DeviceType": "OSSC",
-      "Function": "SendCommand",
-      "Parameters": {
-        "commandName": "AV3RGBHV"
-      },
-      "PostWait": 1.0
-    },
-    {
-      "Description": "Scaler to Output Rate for PC",
-      "DeviceType": "ExtronDSC301HD",
-      "Function": "SetOutputRateWithoutEdid",
-      "Parameters": {
-        "width": 1920,
-        "height": 1080,
-        "refreshRate": 60.0
-      },
-      "PostWait": 2.0
-    },
-    {
-      "Description": "Enable HDMI Switch 1 Output",
-      "DeviceType": "AtenVS0801H",
-      "Function": "SetOutput",
-      "Parameters": {
-        "enable": "true"
-      }
-    },
-    {
-      "Description": "HDMI Switch 0 to Scaler",
-      "DeviceType": "AtenVS0801HB",
-      "Function": "SetInputPort",
-      "Parameters": {
-        "inputPort": "Port3"
-      }
-    },
-    {
-      "ExecuteAfter": 35.0,
-      "Description": "TV HDMI1 for Rack",
+      "Description": "TV to RetroTink 4K",
       "DeviceType": "SonySimpleIP",
       "Function": "SetInputPort",
       "Parameters": {
-        "inputPort": "Hdmi1"
+        "inputPort": "Hdmi2"
       }
     },
     {
-      "Description": "Scale Fit 4:3",
-      "DeviceType": "ExtronDSC301HD",
-      "Function": "Scale",
+      "Description": "Load RetroTink 4K Profile for PC",
+      "DeviceType": "RetroTink4K",
+      "Function": "LoadProfile",
       "Parameters": {
-        "scaleType": "Fit",
-        "positionType": "Centre",
-        "aspectRatio": "Ratio4x3",
-        "padding": {
-          "X": 0,
-          "Y": 0
-        }
+        "profileName": "Profile10"
       }
     }
   ]

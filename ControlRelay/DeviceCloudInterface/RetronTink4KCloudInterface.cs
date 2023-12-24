@@ -23,7 +23,7 @@ namespace ControlRelay
             yield return new MethodHandlerInfo("RetroTink4KGetAvailable", GetAvailable);
             yield return new MethodHandlerInfo("RetroTink4KSendCommand", SendCommand);
             yield return new MethodHandlerInfo("RetroTink4KLoadProfile", LoadProfile);
-            yield return new MethodHandlerInfo("RetroTink4KSendCountOfCommandWithDelay", SendCountOfCommandWithDelay);
+            yield return new MethodHandlerInfo("RetroTink4KTogglePower", TogglePower);
         }
 
         private Task<MethodResponse> GetAvailable(MethodRequest methodRequest, object userContext)
@@ -70,23 +70,9 @@ namespace ControlRelay
             return methodRequest.GetMethodResponse(success);
         }
 
-        private Task<MethodResponse> SendCountOfCommandWithDelay(MethodRequest methodRequest, object userContext)
+        private Task<MethodResponse> TogglePower(MethodRequest methodRequest, object userContext)
         {
-            bool success = false;
-            var payloadDefinition = new
-            {
-                commandName = (CommandName)(-1),
-                count = 0,
-                postSendDelay = TimeSpan.FromSeconds(0),
-                repeats = (uint)(0),
-            };
-
-            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefinition);
-
-            if (payload.commandName.Valid())
-            {
-                success = _device.SendCountOfCommandWithDelay(payload.commandName, payload.count, payload.postSendDelay, payload.repeats);
-            }
+            var success = _device.ToggerPower();
 
             return methodRequest.GetMethodResponse(success);
         }

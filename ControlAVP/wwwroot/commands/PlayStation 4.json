@@ -28,8 +28,8 @@
       }
     },
     {
-      "ExecuteAfter": 16.0,
-      "Description": "HDMI Switch 0 to PlayStation 4",
+      "ExecuteAfter": 15.0,
+      "Description": "4K HDMI Switch to PlayStation 4",
       "DeviceType": "AtenVS0801HB",
       "Function": "SetInputPort",
       "Parameters": {
@@ -37,8 +37,7 @@
       }
     },
     {
-      "ExecuteAfter": 35.0,
-      "Description": "TV HDMI1 for Rack",
+      "Description": "TV to 4K HDMI Switch",
       "DeviceType": "SonySimpleIP",
       "Function": "SetInputPort",
       "Parameters": {

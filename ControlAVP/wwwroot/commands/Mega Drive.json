@@ -28,11 +28,20 @@
       }
     },
     {
-      "Description": "TV to RetroTink",
+      "ExecuteAfter": 15.0,
+      "Description": "TV to RetroTink 4K",
       "DeviceType": "SonySimpleIP",
       "Function": "SetInputPort",
       "Parameters": {
         "inputPort": "Hdmi2"
+      }
+    },
+    {
+      "Description": "Load RetroTink 4K Profile for Mega Drive",
+      "DeviceType": "RetroTink4K",
+      "Function": "LoadProfile",
+      "Parameters": {
+        "profileName": "Profile1"
       }
     }
   ]

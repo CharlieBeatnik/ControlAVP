@@ -65,9 +65,9 @@
                 <div class="btn-group" role="group">
                     <button id="btnGroupDropScalerSelect" type="button" class="btn border btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Scaler</button>
                     <div class="dropdown-menu" aria-labelledby="btnGroupDropScalerSelect">
-                        <button type="submit" asp-page-handler="AtenVS0801HBSetInputPort" asp-route-inputport=@ControllableDeviceTypes.AtenVS0801HBTypes.InputPort.Port2 class="dropdown-item">OSSC</button>
-                        <button type="submit" asp-page-handler="AtenVS0801HBSetInputPort" asp-route-inputport=@ControllableDeviceTypes.AtenVS0801HBTypes.InputPort.Port3 class="dropdown-item">Extron</button>
-                        <button type="submit" asp-page-handler="AtenVS0801HBSetInputPort" asp-route-inputport=@ControllableDeviceTypes.AtenVS0801HBTypes.InputPort.Port8 class="dropdown-item">RetroTINK</button>
+                        <button type="submit" asp-page-handler="SetScaler" asp-route-scaler=@Scaler.RetroTink4K class="dropdown-item">RetroTink 4K</button>
+                        <button type="submit" asp-page-handler="SetScaler" asp-route-scaler=@Scaler.OSSC class="dropdown-item">OSSC</button>
+                        <button type="submit" asp-page-handler="SetScaler" asp-route-scaler=@Scaler.ExtronDSC301HD class="dropdown-item">Extron Scaler</button>
                     </div>
                 </div>
                 <div class="btn-group" role="group">
@@ -109,15 +109,6 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="align-middle text-right">Special</td>
-                        <td>
-                            <div class="btn-group">
-                                <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.FitWidth asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.Ratio16x9 asp-route-paddingx="47" class="btn btn-light border text-center">F-Zero GX</button>
-                                <button type="submit" asp-page-handler="SetScale" asp-route-scaletype=@ScaleType.FitWidth asp-route-positiontype=@PositionType.Centre asp-route-aspectratio=@AspectRatio.Ratio4x3 asp-route-paddingx="48" class="btn btn-light border text-center">RE4</button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
                         <td class="align-middle text-right">Detail Filter</td>
                         <td>
                             <div class="btn-group">
@@ -140,26 +131,6 @@
                         <td>
                             <div class="btn-group">
                                 <button type="submit" asp-page-handler="OSSCSendCommand" asp-route-commandname=@CommandName.ScanlineMode asp-route-positiontype=@PositionType.Centre class="btn border btn-light">Toggle (On | Off | Auto)</button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="align-middle text-right text-nowrap">Input Cycle</td>
-                        <td>
-                            <div class="btn-group flex-wrap">
-                                <button type="submit" asp-page-handler="OSSCInputCycle" asp-route-inputPort1=@CommandName.AV1YPbPr asp-route-inputPort2=@CommandName.AV1RGBS class="btn border btn-light">AV1RGBS</button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="align-middle text-right text-nowrap">Profile Cycle</td>
-                        <td>
-                            <div class="btn-group flex-wrap">
-                                <button type="submit" asp-page-handler="OSSCProfileCycle" asp-route-profile1=@ProfileName.Profile2 asp-route-profile2=@ProfileName.Profile1 class="btn btn-sm border btn-light">Game Cube</button>
-                                <button type="submit" asp-page-handler="OSSCProfileCycle" asp-route-profile1=@ProfileName.Profile2 asp-route-profile2=@ProfileName.Profile6 class="btn btn-sm border btn-light">Mega Drive</button>
-                                <button type="submit" asp-page-handler="OSSCProfileCycle" asp-route-profile1=@ProfileName.Profile2 asp-route-profile2=@ProfileName.Profile0 class="btn btn-sm border btn-light">Dreamcast</button>
-                                <button type="submit" asp-page-handler="OSSCProfileCycle" asp-route-profile1=@ProfileName.Profile2 asp-route-profile2=@ProfileName.Profile11 class="btn btn-sm border btn-light">Saturn</button>
-                                <button type="submit" asp-page-handler="OSSCProfileCycle" asp-route-profile1=@ProfileName.Profile2 asp-route-profile2=@ProfileName.Profile12 class="btn btn-sm border btn-light">Xbox</button>
                             </div>
                         </td>
                     </tr>

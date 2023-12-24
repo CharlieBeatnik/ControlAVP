@@ -4,11 +4,19 @@
   "DisplayName": "Switch",
   "Commands": [
     {
+      "Description": "Rack On",
+      "DeviceType": "ApcAP8959EU3",
+      "Function": "TurnOutletOn",
+      "Parameters": {
+        "id": 24
+      }
+    },
+    {
       "Description": "TV On",
       "DeviceType": "SonySimpleIP",
       "Function": "TurnOn",
       "Parameters": {
-        "wait": "true"
+        "wait": "false"
       }
     },
     {
@@ -20,7 +28,16 @@
       }
     },
     {
-      "Description": "TV HDMI2 for Nintendo Switch",
+      "ExecuteAfter": 15.0,
+      "Description": "1080p HDMI Switch to Nintendo Switch",
+      "DeviceType": "AtenVS0801H",
+      "Function": "SetInputPort",
+      "Parameters": {
+        "inputPort": "Port2"
+      }
+    },
+    {
+      "Description": "TV to RetroTink 4K",
       "DeviceType": "SonySimpleIP",
       "Function": "SetInputPort",
       "Parameters": {

@@ -1,7 +1,7 @@
 {
   "DefaultAssembly": "ControllableDevice",
   "DefaultDeviceIndex": 0,
-  "DisplayName":  "Amiga 600",
+  "DisplayName": "Amiga 600",
   "Commands": [
     {
       "Description": "Rack On",
@@ -28,6 +28,7 @@
       }
     },
     {
+      "ExecuteAfter": 15.0,
       "Description": "Switch VGA Matrix to Amiga 600",
       "DeviceType": "ExtronMVX44VGA",
       "Function": "TieInputPortToAllOutputPorts",
@@ -37,11 +38,19 @@
       }
     },
     {
-      "Description": "TV to RetroTink",
+      "Description": "TV to RetroTink 4K",
       "DeviceType": "SonySimpleIP",
       "Function": "SetInputPort",
       "Parameters": {
         "inputPort": "Hdmi2"
+      }
+    },
+    {
+      "Description": "Load RetroTink 4K Profile for Amiga 600",
+      "DeviceType": "RetroTink4K",
+      "Function": "LoadProfile",
+      "Parameters": {
+        "profileName": "Profile9"
       }
     }
   ]

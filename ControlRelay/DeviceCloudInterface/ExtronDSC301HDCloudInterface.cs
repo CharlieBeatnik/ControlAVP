@@ -64,7 +64,7 @@ namespace ControlRelay
         private Task<MethodResponse> SetScale(MethodRequest methodRequest, object userContext)
         {
             bool success = false;
-            var payloadDefintion = new
+            var payloadDefinition = new
             {
                 ScaleType = (ScaleType)(-1),
                 PositionType = (PositionType)(-1),
@@ -72,7 +72,7 @@ namespace ControlRelay
                 Padding = new Vector2(-1)
             };
 
-            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
+            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefinition);
 
             if(payload.ScaleType.Valid() && payload.PositionType.Valid())
             {
@@ -85,12 +85,12 @@ namespace ControlRelay
         private Task<MethodResponse> SetOutputRate(MethodRequest methodRequest, object userContext)
         {
             bool success = false;
-            var payloadDefintion = new
+            var payloadDefinition = new
             {
                 Id = 0,
             };
 
-            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
+            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefinition);
 
             var edid = Edid.GetEdid(payload.Id);
             if(edid != null)
@@ -104,12 +104,12 @@ namespace ControlRelay
         private Task<MethodResponse> SetInputPort(MethodRequest methodRequest, object userContext)
         {
             bool success = false;
-            var payloadDefintion = new
+            var payloadDefinition = new
             {
                 inputPort = (InputPort)(-1),
             };
 
-            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
+            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefinition);
 
             if (payload.inputPort.Valid())
             {
@@ -141,12 +141,12 @@ namespace ControlRelay
         private Task<MethodResponse> SetDetailFilter(MethodRequest methodRequest, object userContext)
         {
             bool success = false;
-            var payloadDefintion = new
+            var payloadDefinition = new
             {
                 Value = -1,
             };
 
-            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
+            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefinition);
             success = _device.SetDetailFilter(payload.Value);
 
             return methodRequest.GetMethodResponse(success);
@@ -160,12 +160,12 @@ namespace ControlRelay
         private Task<MethodResponse> SetBrightness(MethodRequest methodRequest, object userContext)
         {
             bool success = false;
-            var payloadDefintion = new
+            var payloadDefinition = new
             {
                 Value = -1,
             };
 
-            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
+            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefinition);
             success = _device.SetBrightness(payload.Value);
 
             return methodRequest.GetMethodResponse(success);
@@ -179,12 +179,12 @@ namespace ControlRelay
         private Task<MethodResponse> SetContrast(MethodRequest methodRequest, object userContext)
         {
             bool success = false;
-            var payloadDefintion = new
+            var payloadDefinition = new
             {
                 Value = -1,
             };
 
-            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
+            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefinition);
             success = _device.SetContrast(payload.Value);
 
             return methodRequest.GetMethodResponse(success);
@@ -198,12 +198,12 @@ namespace ControlRelay
         private Task<MethodResponse> SetFreeze(MethodRequest methodRequest, object userContext)
         {
             bool success = false;
-            var payloadDefintion = new
+            var payloadDefinition = new
             {
                 Freeze = false,
             };
 
-            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefintion);
+            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefinition);
             success = _device.SetFreeze(payload.Freeze);
 
             return methodRequest.GetMethodResponse(success);

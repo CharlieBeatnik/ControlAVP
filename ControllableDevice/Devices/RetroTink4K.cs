@@ -166,31 +166,18 @@ namespace ControllableDevice
 
         private bool SendCommand(GenericCommandName genericCommandName, uint repeats = 0)
         {
-            if (!_genericCommandNameToCommandCode.ContainsKey(genericCommandName))
+            if (!_genericCommandNameToCommandCode.TryGetValue(genericCommandName, out IrCommandCode value))
             {
                 throw new ArgumentException("Unknown command name.", nameof(genericCommandName));
             }
 
-            return _serialBlaster.SendCommand(_genericCommandNameToCommandCode[genericCommandName].Protocol, _genericCommandNameToCommandCode[genericCommandName].Code, repeats);
+            return _serialBlaster.SendCommand(value.Protocol, value.Code, repeats);
         }
 
         private bool SendCommand(CommandName commandName, TimeSpan postSendDelay, uint repeats = 0)
         {
             bool result = SendCommand(ConvertCommandNameToGenericCommandName(commandName), repeats);
             Thread.Sleep(postSendDelay);
-
-            return result;
-        }
-
-        public bool SendCountOfCommandWithDelay(CommandName commandName, int count, TimeSpan postSendDelay, uint repeats = 0)
-        {
-            bool result = true;
-
-            for (int i = 0; i < count; i++)
-            {
-                result &= SendCommand(ConvertCommandNameToGenericCommandName(commandName), repeats);
-                Thread.Sleep(postSendDelay);
-            }
 
             return result;
         }
@@ -202,23 +189,38 @@ namespace ControllableDevice
 
         private GenericCommandName ConvertCommandNameToGenericCommandName(CommandName commandName)
         {
-            if (!_commandNameToGenericCommandName.ContainsKey(commandName))
+            if (!_commandNameToGenericCommandName.TryGetValue(commandName, out GenericCommandName value))
             {
                 throw new ArgumentException($"Unable to convert {commandName} to a GenericCommandName.", nameof(commandName));
             }
 
-            return _commandNameToGenericCommandName[commandName];
+            return value;
         }
 
         public bool LoadProfile(ProfileName profileName)
         {
             bool result = true;
-            TimeSpan postSendDelay = TimeSpan.FromMilliseconds(500);
+            TimeSpan postSendDelay = TimeSpan.FromMilliseconds(100);
 
             //Send multiple times for reliability
             for (int i = 0; i < 1; i++)
             {
                 result &= SendCommand(_profileNameToCommandName[profileName], postSendDelay);
+            }
+
+            return result;
+        }
+
+        public bool ToggerPower()
+        {
+            //It has been observed that the RetroTink 4K doesn't always turn on/off with a single command, so repeat to improve reliability.
+            bool result = true;
+            TimeSpan postSendDelay = TimeSpan.FromMilliseconds(100);
+
+            //Send multiple times for reliability
+            for (int i = 0; i < 2; i++)
+            {
+                result &= SendCommand(CommandName.Power, postSendDelay);
             }
 
             return result;

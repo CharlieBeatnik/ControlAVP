@@ -52,13 +52,13 @@ namespace AVPCloudToDevice
             }
         }
 
-        public bool SendCountOfCommandWithDelay(CommandName commandName, int count, TimeSpan postSendDelay)
+        public bool TogglePower()
         {
             try
             {
-                var payload = new { commandName, count, postSendDelay };
-                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "RetroTink4KSendCountOfCommandWithDelay", payload);
-                return true;
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "RetroTink4KTogglePower", null);
+                string json = response.GetPayloadAsJson();
+                return JsonConvert.DeserializeObject<bool>(json);
             }
             catch
             {
