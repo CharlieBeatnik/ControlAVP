@@ -66,39 +66,36 @@ body {
     text-align: right;
 }
 
-.btn-purple {
-  color: #fff;
-  background-color: #6660a0;
-  border-color: #6660a0;
+/* Arrange buttons */
+.btn-matrix {
+   flex-wrap: wrap; /* allow buttons to jump to another row */
+}
+.btn-matrix > .btn {
+   width: 33%; /* force buttons to have the same width regardless of content */
+}
+.btn-matrix > .btn:nth-child(3n + 4) {
+   margin-left: 0; /* because .btn-group adds `margin-left: -1px;` to all buttons */
+}
+.btn-matrix > .btn:nth-child(n + 4) {
+   margin-top: -1px; /* superimpose borders of the buttons from adjacent rows */
 }
 
-.btn-purple:hover {
-  color: #fff;
-  background-color: #39346e;
-  border-color: #545b62;
+/* Fix border radius */
+.btn-matrix > .btn:first-child {
+   border-bottom-left-radius: 0;
+}
+.btn-matrix > .btn:nth-child(3) {
+   border-top-right-radius: 4px !important;
+}
+.btn-matrix > .btn:nth-last-child(3) {
+   border-bottom-left-radius: 4px !important;
+}
+.btn-matrix > .btn:last-child {
+   border-top-right-radius: 0;
 }
 
-.btn-purple:focus, .btn-purple.focus {
-  color: #fff;
-  background-color: #39346e;
-  border-color: #545b62;
-  box-shadow: 0 0 0 0.2rem rgba(120, 114, 186, 0.5);
-}
-
-.btn-purple.disabled, .btn-purple:disabled {
-  color: #fff;
-  background-color: #6c757d;
-  border-color: #6c757d;
-}
-
-.btn-purple:not(:disabled):not(.disabled):active, .btn-purple:not(:disabled):not(.disabled).active,
-.show > .btn-purple.dropdown-toggle {
-  color: #fff;
-  background-color: #39346e;
-  border-color: #4e555b;
-}
-
-.btn-purple:not(:disabled):not(.disabled):active:focus, .btn-purple:not(:disabled):not(.disabled).active:focus,
-.show > .btn-purple.dropdown-toggle:focus {
-  box-shadow: 0 0 0 0.2rem rgba(120, 114, 186, 0.5);
+/* Decorations */
+.btn-matrix {
+   margin: 20px;
+   max-width: 500px;
 }

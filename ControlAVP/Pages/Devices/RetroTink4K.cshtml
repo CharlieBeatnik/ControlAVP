@@ -3,7 +3,7 @@
 @using ControllableDeviceTypes.RetroTink4KTypes;
 
 @{
-    ViewData["Title"] = "RetroTink";
+    ViewData["Title"] = "RetroTink 4K";
     string defaultButtonCss = "btn-light";
 }
 <h2></h2>
@@ -20,22 +20,37 @@
                 <div class="col-sm-6 pl-0 pr-0">
                     <table class="table table-sm table-borderless text-nowrap">
                         <tr>
-                            <td class="align-middle text-right" width="1%">Power</td>
+                            <td class="align-middle text-right" width="1%">Picture</td>
                             <td>
                                 <div class="btn-group-vertical">
-                                    <button type="submit" asp-page-handler="TogglePower" class="btn border btn-danger "><i class="fas fa-power-off"></i></button>
+                                    <vc:retro-tink4K-button command-name=@CommandName.AutoCalibratePhase button-label="Auto Phase" css-class=@defaultButtonCss css-fa-icon="wave-square" />
+                                    <vc:retro-tink4K-button command-name=@CommandName.AutoCalibrateGain button-label="Auto Gain" css-class=@defaultButtonCss css-fa-icon="sun" />
+                                    <vc:retro-tink4K-button command-name=@CommandName.PauseOrUnpauseCurrentFrame button-label="Pause" css-class=@defaultButtonCss css-fa-icon="pause" />
+                                    <vc:retro-tink4K-button command-name=@CommandName.AutoCrop43PAR button-label="Crop 4:3" css-class=@defaultButtonCss css-fa-icon="" />
+                                    <vc:retro-tink4K-button command-name=@CommandName.AutoCrop169PAR button-label="Crop 16:9" css-class=@defaultButtonCss css-fa-icon="" />
+                                    <vc:retro-tink4K-button command-name=@CommandName.AutoCropVerticalOnly button-label="Crop Vertical" css-class=@defaultButtonCss css-fa-icon="" />
                                 </div>
                             </td>
                         </tr>
                         <tr>
                             <td class="align-middle text-right" width="1%">Load</td>
                             <td>
-                                <div class="btn-group-vertical">
+                                <div class="btn-group btn-matrix m-0">
                                     @foreach (ProfileName profileName in (ProfileName[]) Enum.GetValues(typeof(ProfileName)))
                                     {
                                         string label = $"Profile {((int)profileName).ToString()}";
                                         <button type="submit" asp-page-handler="LoadProfile" asp-route-profilename=@profileName class="btn btn-light border">@label</button>
                                     }
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle text-right" width="1%">Information</td>
+                            <td>
+                                <div class="btn-group-vertical">
+                                    <vc:retro-tink4K-button command-name=@CommandName.ShowStatusScreen button-label="Status" css-class=@defaultButtonCss css-fa-icon="circle-info" />
+                                    <vc:retro-tink4K-button command-name=@CommandName.ShowDiagnosticsConsoleScreen button-label="Diagnostics" css-class=@defaultButtonCss css-fa-icon="magnifying-glass" />
+                                    
                                 </div>
                             </td>
                         </tr>
@@ -77,6 +92,14 @@
                                 </div>
                                 <div class="btn-group mt-2">
                                     <vc:retro-tink4K-button command-name=@CommandName.Back button-label="Back" css-class=@defaultButtonCss css-fa-icon="undo-alt" />
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle text-right" width="1%">Power</td>
+                            <td>
+                                <div class="btn-group-vertical">
+                                    <button type="submit" asp-page-handler="TogglePower" class="btn border btn-danger "><i class="fas fa-power-off"></i></button>
                                 </div>
                             </td>
                         </tr>
