@@ -50,9 +50,15 @@ namespace ControlAVP.Pages.Devices
             return RedirectToPage();
         }
 
-        public IActionResult OnPostLoadProfile(ProfileName profileName)
+        public IActionResult OnPostLoadProfileQuick(ProfileName profileName)
         {
-            _device.LoadProfile(profileName);
+            _device.LoadProfileQuick(profileName);
+            return RedirectToPage();
+        }
+
+        public IActionResult OnPostLoadProfile(uint directoryIndex, uint profileIndex)
+        {
+            _device.LoadProfile(directoryIndex, profileIndex);
             return RedirectToPage();
         }
 

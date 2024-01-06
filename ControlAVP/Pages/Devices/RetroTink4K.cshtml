@@ -39,7 +39,7 @@
                                     @foreach (ProfileName profileName in (ProfileName[]) Enum.GetValues(typeof(ProfileName)))
                                     {
                                         string label = $"Profile {((int)profileName).ToString()}";
-                                        <button type="submit" asp-page-handler="LoadProfile" asp-route-profilename=@profileName class="btn btn-light border">@label</button>
+                                        <button type="submit" asp-page-handler="LoadProfileQuick" asp-route-profilename=@profileName class="btn btn-light border">@label</button>
                                     }
                                 </div>
                             </td>
@@ -100,6 +100,15 @@
                             <td>
                                 <div class="btn-group-vertical">
                                     <button type="submit" asp-page-handler="TogglePower" class="btn border btn-danger "><i class="fas fa-power-off"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle text-right" width="1%">Profile Full</td>
+                            <td>
+                                <div class="btn-group-vertical">
+                                    <button type="submit" asp-page-handler="LoadProfile" asp-route-directoryIndex=9 asp-route-profileIndex=0 class ="btn btn-light border">Amiga 600</button>
+                                    <button type="submit" asp-page-handler="LoadProfile" asp-route-directoryIndex=20 asp-route-profileIndex=0 class="btn btn-light border">Commodore 64</button>
                                 </div>
                             </td>
                         </tr>

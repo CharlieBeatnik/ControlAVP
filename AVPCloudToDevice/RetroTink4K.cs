@@ -38,11 +38,25 @@ namespace AVPCloudToDevice
             }
         }
 
-        public bool LoadProfile(ProfileName profileName)
+        public bool LoadProfileQuick(ProfileName profileName)
         {
             try
             {
                 var payload = new { profileName };
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "RetroTink4KLoadProfileQuick", payload);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public bool LoadProfile(uint directoryIndex, uint profileIndex)
+        {
+            try
+            {
+                var payload = new { directoryIndex, profileIndex };
                 var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "RetroTink4KLoadProfile", payload);
                 return true;
             }

@@ -48,7 +48,7 @@
     {
       "Description": "Load RetroTink 4K Profile for Amiga 600",
       "DeviceType": "RetroTink4K",
-      "Function": "LoadProfile",
+      "Function": "LoadProfileQuick",
       "Parameters": {
         "profileName": "Profile9"
       }

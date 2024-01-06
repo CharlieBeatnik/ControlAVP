@@ -208,7 +208,7 @@ namespace CommandProcessor
                 if(!allParametersProvided)
                 {
                     commandResult.ExecutionEndTime = commandResult.EndTime = sw.Elapsed;
-                    commandResult.ErrorMessage = "The correct number of parameters were provides but there was a problem with at least 1, is the name correct?";
+                    commandResult.ErrorMessage = "The correct number of parameters were provided but there was a problem with at least 1, is the name correct?";
                     yield return commandResult;
                     break;
                 }

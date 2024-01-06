@@ -22,6 +22,7 @@ namespace ControlRelay
         {
             yield return new MethodHandlerInfo("RetroTink4KGetAvailable", GetAvailable);
             yield return new MethodHandlerInfo("RetroTink4KSendCommand", SendCommand);
+            yield return new MethodHandlerInfo("RetroTink4KLoadProfileQuick", LoadProfileQuick);
             yield return new MethodHandlerInfo("RetroTink4KLoadProfile", LoadProfile);
             yield return new MethodHandlerInfo("RetroTink4KTogglePower", TogglePower);
         }
@@ -52,7 +53,7 @@ namespace ControlRelay
             return methodRequest.GetMethodResponse(success);
         }
 
-        private Task<MethodResponse> LoadProfile(MethodRequest methodRequest, object userContext)
+        private Task<MethodResponse> LoadProfileQuick(MethodRequest methodRequest, object userContext)
         {
             bool success = false;
             var payloadDefinition = new
@@ -64,8 +65,24 @@ namespace ControlRelay
 
             if (payload.profileName.Valid())
             {
-                success = _device.LoadProfile(payload.profileName);
+                success = _device.LoadProfileQuick(payload.profileName);
             }
+
+            return methodRequest.GetMethodResponse(success);
+        }
+
+        private Task<MethodResponse> LoadProfile(MethodRequest methodRequest, object userContext)
+        {
+            bool success = false;
+            var payloadDefinition = new
+            {
+                directoryIndex = (uint)(0),
+                profileIndex = (uint)(0)
+            };
+
+            var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefinition);
+
+            success = _device.LoadProfile(payload.directoryIndex, payload.profileIndex);
 
             return methodRequest.GetMethodResponse(success);
         }

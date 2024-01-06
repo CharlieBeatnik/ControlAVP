@@ -48,7 +48,7 @@
     {
       "Description": "Load RetroTink 4K Profile for PC",
       "DeviceType": "RetroTink4K",
-      "Function": "LoadProfile",
+      "Function": "LoadProfileQuick",
       "Parameters": {
         "profileName": "Profile10"
       }

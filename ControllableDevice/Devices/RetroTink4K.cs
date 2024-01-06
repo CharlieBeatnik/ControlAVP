@@ -197,7 +197,7 @@ namespace ControllableDevice
             return value;
         }
 
-        public bool LoadProfile(ProfileName profileName)
+        public bool LoadProfileQuick(ProfileName profileName)
         {
             bool result = true;
             TimeSpan postSendDelay = TimeSpan.FromMilliseconds(100);
@@ -206,6 +206,46 @@ namespace ControllableDevice
             for (int i = 0; i < 1; i++)
             {
                 result &= SendCommand(_profileNameToCommandName[profileName], postSendDelay);
+            }
+
+            return result;
+        }
+
+        public bool LoadProfile(uint directoryIndex, uint profileIndex)
+        {
+            bool result = true;
+            TimeSpan postSendDelay = TimeSpan.FromMilliseconds(300);
+            uint repeats = 0;
+
+            //Access load profile menu
+            result &= SendCommand(CommandName.ShowProfilesMenu, postSendDelay, repeats);
+
+            //Enter "Load From File" menu, which then lists the contents of the profile directory on the SD card
+            result &= SendCommand(CommandName.Enter, postSendDelay, repeats);
+
+            //Enter the first profile directory, which we use for device specifcs profiles in a known order
+            result &= SendCommand(CommandName.Enter, postSendDelay, repeats); 
+
+
+            //Navigate down the direcotry listing by a certain number and send enter (directoryIndex)
+            for(int i = 0; i < directoryIndex; i++)
+            {
+                result &= SendCommand(CommandName.Down, postSendDelay, repeats);
+            }
+            result &= SendCommand(CommandName.Enter, postSendDelay, repeats);
+
+
+            //Navigate down the profiles listing by a certain number and send enter (profileIndex)
+            for (int i = 0; i < profileIndex; i++)
+            {
+                result &= SendCommand(CommandName.Down, postSendDelay, repeats);
+            }
+            result &= SendCommand(CommandName.Enter, postSendDelay, repeats);
+
+            //Exit out, press back 5 times
+            for (int i = 0; i < 5; i++)
+            {
+                result &= SendCommand(CommandName.Back, postSendDelay, repeats);
             }
 
             return result;

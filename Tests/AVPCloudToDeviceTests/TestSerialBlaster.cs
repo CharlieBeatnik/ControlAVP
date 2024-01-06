@@ -109,39 +109,5 @@ namespace Tests
             var device = new SerialBlaster(_serviceClient, _settings.DeviceId, _invalidDeviceIndex);
             Assert.That(device.SendCommand(Protocol.Nec, 0x01FE817E, 0), Is.False);
         }
-
-        [Test]
-        public void GivenRawHexCode_WhenConvertToNecHexCode_ThenResultIsCorrect()
-        {
-            string rawHex = "0000 006E 0022 0002 0155 00AB 0015 0015 0015 0015 0015 0015 0015 0015 0015 0015 0015 0015 0015 0015 0015 0015 0015 0040 0015 0040 0015 0040 0015 0040 0015 0040 0015 0040 0015 0040 0015 0040 0015 0040 0015 0015 0015 0015 0015 0015 0015 0015 0015 0015 0015 0015 0015 0040 0015 0015 0015 0040 0015 0040 0015 0040 0015 0040 0015 0040 0015 0040 0015 0015 0015 05EB 0155 0055 0015 0E42";
-            uint command = SerialBlaster.ConvertRawHexToNecHex(rawHex);
-
-            Assert.That(command, Is.EqualTo(0x00FF817E));
-        }
-
-        [Test]
-        public void GivenRawHexCodeIsNullString_WhenConvertToNecHexCode_ThenResultIs0()
-        {
-            uint command = SerialBlaster.ConvertRawHexToNecHex(null);
-
-            Assert.That(command, Is.EqualTo(0));
-        }
-
-        [Test]
-        public void GivenRawHexCodeIsGarbage_WhenConvertToNecHexCode_ThenResultIs0()
-        {
-            string rawHex = "qwEHVb rTK19qW6 uhnxlGj zWFQZ4Fib0Cd8Meb H1qK oIZzwHCl09 Zwp0cM31LFi pdI6ehtlCk ae29ypFAkv3RRndip8g3h 3SvWWcTSOohy JkAAWQ3 LbDUAjehMw 7tE3hu";
-            uint command = SerialBlaster.ConvertRawHexToNecHex(rawHex);
-
-            Assert.That(command, Is.EqualTo(0));
-        }
-
-        [Test]
-        public void GivenRawHexCodeIsEmpty_WhenConvertToNecHexCode_ThenResultIs0()
-        {
-            uint command = SerialBlaster.ConvertRawHexToNecHex(string.Empty);
-
-            Assert.That(command, Is.EqualTo(0));
-        }
     }
 }

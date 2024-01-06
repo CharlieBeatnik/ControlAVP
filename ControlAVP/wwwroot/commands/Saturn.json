@@ -39,7 +39,7 @@
     {
       "Description": "Load RetroTink 4K Profile for Saturn",
       "DeviceType": "RetroTink4K",
-      "Function": "LoadProfile",
+      "Function": "LoadProfileQuick",
       "Parameters": {
         "profileName": "Profile2"
       }

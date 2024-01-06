@@ -45,6 +45,8 @@ namespace ControllableDevice
                 string address = $@"http://{_host}/{path}";
                 string data = json.ToString(Formatting.None);
 
+                HttpResponseMessage response = null;
+
                 var policy = Policy<JObject>
                     .Handle<Exception>()
                     .WaitAndRetry(retryCount: _jsonPostRetryCount,
@@ -54,15 +56,17 @@ namespace ControllableDevice
                                       _logger.Debug($"attemptNumber: {attemptNumber}");
                                       _logger.Debug($"address: {address}");
                                       _logger.Debug($"data: {data}");
+                                      _logger.Debug($"exception: {exception.Exception.Message}");
                                   });
 
                 try
                 {
                     return policy.Execute(() =>
                     {
+                        response = null;
                         var httpContent = new StringContent(data, Encoding.UTF8, "application/json");
 
-                        HttpResponseMessage response = Task.Run(async () => await _httpClient.PostAsync(address, httpContent)).Result;
+                        response = Task.Run(async () => await _httpClient.PostAsync(address, httpContent)).Result;
                         response.EnsureSuccessStatusCode();
                         string responseBody = Task.Run(async () => await response.Content.ReadAsStringAsync()).Result;
                         return JObject.Parse(responseBody);
@@ -70,6 +74,8 @@ namespace ControllableDevice
                 }
                 catch(Exception)
                 {
+                    //This catch is reached if the final policy.Execute fails.
+                    //It is never reached if one of the policy.Execute attempts succeeds.
                     return null;
                 }
             }
