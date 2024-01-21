@@ -196,6 +196,24 @@ namespace ControlAVP.Pages
             return RedirectToPage();
         }
 
+        // Turn off all devices not on the exclusion list, exincluding the TV
+        public IActionResult OnPostPowerOffExcludingTV()
+        {
+            var outlets = _apcAP8959EU3.GetOutlets();
+
+            if (outlets != null)
+            {
+                foreach (var outlet in outlets.Where(o =>
+                    !_outletConfirmation.Contains(o.Name) &&
+                    o.State == Outlet.PowerState.On))
+                {
+                    _apcAP8959EU3.TurnOutletOff(outlet.Id);
+                }
+            }
+
+            return RedirectToPage();
+        }
+
         public IActionResult OnPostOSSCSendCommand(CommandName commandName)
         {
             _ossc.SendCommand(commandName);
