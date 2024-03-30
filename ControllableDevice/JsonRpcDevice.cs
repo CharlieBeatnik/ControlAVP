@@ -5,11 +5,14 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
 using Polly;
+using Polly.Fallback;
+using Polly.Retry;
 
 namespace ControllableDevice
 {
@@ -20,12 +23,17 @@ namespace ControllableDevice
         private readonly string _preSharedKey;
         private readonly HttpClient _httpClient;
 
-        private readonly int _jsonPostRetryCount;
-        private readonly TimeSpan _jsonPostWaitBeforeRetry;
-
         private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public JsonRpcDevice(IPAddress host, string preSharedKey, TimeSpan httpRequestTimeout, int retryCount, TimeSpan waitBeforeRetry)
+        // General Exceptions
+        public int RetryCountOnException { get; set; } = 2;
+        public TimeSpan WaitBeforeRetryOnException { get; set; } = TimeSpan.FromSeconds(3);
+
+        // HttpRequestExceptions
+        public int RetryCountOnHttpRequestException { get; set; } = 2;
+        public TimeSpan WaitBeforeRetryOnHttpRequestException { get; set; } = TimeSpan.FromSeconds(3);
+
+        public JsonRpcDevice(IPAddress host, string preSharedKey, TimeSpan httpRequestTimeout)
         {
             _host = host;
             _preSharedKey = preSharedKey;
@@ -33,9 +41,6 @@ namespace ControllableDevice
             _httpClient = new HttpClient();
             _httpClient.DefaultRequestHeaders.Add("X-Auth-PSK", _preSharedKey);
             _httpClient.Timeout = httpRequestTimeout;
-
-            _jsonPostRetryCount = retryCount;
-            _jsonPostWaitBeforeRetry = waitBeforeRetry;
         }
 
         public JObject Post(JObject json, string path)
@@ -47,21 +52,37 @@ namespace ControllableDevice
 
                 HttpResponseMessage response = null;
 
-                var policy = Policy<JObject>
-                    .Handle<Exception>()
-                    .WaitAndRetry(retryCount: _jsonPostRetryCount,
-                                  sleepDurationProvider: _ => _jsonPostWaitBeforeRetry,
+                var policyException = Policy<JObject>
+                    .Handle<Exception>(ex => !(ex is HttpRequestException))
+                    .WaitAndRetry(retryCount: RetryCountOnException,
+                                  sleepDurationProvider: _ => WaitBeforeRetryOnException,
                                   onRetry: (exception, sleepDuration, attemptNumber, context) =>
                                   {
+                                      _logger.Debug("Handle<Exception>");
                                       _logger.Debug($"attemptNumber: {attemptNumber}");
                                       _logger.Debug($"address: {address}");
                                       _logger.Debug($"data: {data}");
                                       _logger.Debug($"exception: {exception.Exception.Message}");
                                   });
 
+                var policyHttpRequestException = Policy<JObject>
+                    .Handle<HttpRequestException>()
+                    .WaitAndRetry(retryCount: RetryCountOnHttpRequestException,
+                                  sleepDurationProvider: _ => WaitBeforeRetryOnHttpRequestException,
+                                  onRetry: (exception, sleepDuration, attemptNumber, context) =>
+                                  {
+                                      _logger.Debug("Handle<HttpRequestException>");
+                                      _logger.Debug($"attemptNumber: {attemptNumber}");
+                                      _logger.Debug($"address: {address}");
+                                      _logger.Debug($"data: {data}");
+                                      _logger.Debug($"exception: {exception.Exception.Message}");
+                                  });
+
+                var policyWrap = Policy.Wrap(policyException, policyHttpRequestException);
+
                 try
                 {
-                    return policy.Execute(() =>
+                    return policyWrap.Execute(() =>
                     {
                         response = null;
                         var httpContent = new StringContent(data, Encoding.UTF8, "application/json");
@@ -80,7 +101,6 @@ namespace ControllableDevice
                 }
             }
         }
-
         public void Dispose()
         {
             Dispose(true);

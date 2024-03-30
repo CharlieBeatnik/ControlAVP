@@ -27,8 +27,10 @@ namespace ControllableDevice
         private readonly TimeSpan _afterSetInputPort = TimeSpan.FromSeconds(2);
         
         private readonly TimeSpan _jsonRpcDeviceWebRequestTimeout = TimeSpan.FromSeconds(4);
-        private readonly int _jsonPostRetryCount = 2;
-        private readonly TimeSpan _jsonPostWaitBeforeRetry = TimeSpan.FromSeconds(3);
+        private readonly int _retryCountOnException = 2;
+        private readonly TimeSpan _waitBeforeRetryOnException = TimeSpan.FromSeconds(3);
+        private readonly int _retryCountOnHttpRequestException = 5;
+        private readonly TimeSpan _waitBeforeRetryOnHttpRequestException = TimeSpan.FromSeconds(6);
 
         private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
@@ -38,7 +40,11 @@ namespace ControllableDevice
             _physicalAddress = physicalAddress;
             _preSharedKey = preSharedKey;
 
-            _jsonRpcDevice = new JsonRpcDevice(host, preSharedKey, _jsonRpcDeviceWebRequestTimeout, _jsonPostRetryCount, _jsonPostWaitBeforeRetry);
+            _jsonRpcDevice = new JsonRpcDevice(host, preSharedKey, _jsonRpcDeviceWebRequestTimeout);
+            _jsonRpcDevice.RetryCountOnException = _retryCountOnException;
+            _jsonRpcDevice.WaitBeforeRetryOnException = _waitBeforeRetryOnException;
+            _jsonRpcDevice.RetryCountOnHttpRequestException = _retryCountOnHttpRequestException;
+            _jsonRpcDevice.WaitBeforeRetryOnHttpRequestException = _waitBeforeRetryOnHttpRequestException;
         }
 
         public void Dispose()
