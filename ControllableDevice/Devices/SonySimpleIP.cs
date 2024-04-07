@@ -29,8 +29,8 @@ namespace ControllableDevice
         private readonly TimeSpan _jsonRpcDeviceWebRequestTimeout = TimeSpan.FromSeconds(4);
         private readonly int _retryCountOnException = 2;
         private readonly TimeSpan _waitBeforeRetryOnException = TimeSpan.FromSeconds(3);
-        private readonly int _retryCountOnHttpRequestException = 5;
-        private readonly TimeSpan _waitBeforeRetryOnHttpRequestException = TimeSpan.FromSeconds(6);
+        private readonly int _retryCountOnHttpRequestException = 6;
+        private readonly TimeSpan _waitBeforeRetryOnHttpRequestException = TimeSpan.FromSeconds(8);
 
         private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
