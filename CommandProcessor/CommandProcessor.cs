@@ -41,7 +41,7 @@ namespace CommandProcessor
 
             //Parse the json passed in and validate it
             parsedJsonCommands = JObject.Parse(jsonCommands);
-            return parsedJsonCommands.IsValid(schema, out IList<string> errorMessages);
+            return parsedJsonCommands.IsValid(schema);
         }
 
         public static bool Valid(string jsonCommands)
@@ -173,7 +173,7 @@ namespace CommandProcessor
                                     var properties = paramType.GetProperties();
                                     #endif
 
-                                    foreach (JProperty jProperty in command["Parameters"][p.Name])
+                                    foreach (JProperty jProperty in ((JProperty)command["Parameters"][p.Name]).Cast<JProperty>())
                                     {
 
                                         var field = paramType.GetField(jProperty.Name);

@@ -86,7 +86,7 @@ namespace ControlAVP.Pages
         {
             DirectoryInfo directoryInfo = new(_commandDirectory);
 
-            CommandInfos = new List<CommandInfo>();
+            CommandInfos = [];
             foreach (var file in directoryInfo.GetFiles("*.json"))
             {
                 string fileNameNoExtension = Path.GetFileNameWithoutExtension(file.Name);
