@@ -29,79 +29,28 @@
     },
     {
       "ExecuteAfter": 15.0,
-      "Description": "Scaler to Output Rate for Commodore 64",
-      "DeviceType": "ExtronDSC301HD",
-      "Function": "SetOutputRateWithoutEdid",
+      "Description": "Switch VGA Matrix to Commodore 64",
+      "DeviceType": "ExtronMVX44VGA",
+      "Function": "TieInputPortToAllOutputPorts",
       "Parameters": {
-        "width": 1920,
-        "height": 1080,
-        "refreshRate": 50.0
-      },
-      "PostWait": 2.0
+        "inputPort": "Port2",
+        "tieType": "AudioVideo"
+      }
     },
     {
-      "Description": "Scaler to HDMI",
-      "DeviceType": "ExtronDSC301HD",
+      "Description": "1080p HDMI Switch to Commodore 64",
+      "DeviceType": "AtenVS0801H",
       "Function": "SetInputPort",
       "Parameters": {
-        "inputPort": "HDMI"
+        "inputPort": "Port6"
       }
     },
     {
-      "Description": "Load OSSC Profile for Commodore 64",
-      "DeviceType": "OSSC",
-      "Function": "LoadProfile",
-      "Parameters": {
-        "profileName": "Profile0"
-      },
-      "PostWait": 2.0
-    },
-    {
-      "Description": "Change OSSC to AV1YPbPr (Dummy)",
-      "DeviceType": "OSSC",
-      "Function": "SendCommand",
-      "Parameters": {
-        "commandName": "AV1YPbPr"
-      },
-      "PostWait": 3.0
-    },
-    {
-      "Description": "Change OSSC to YPbPr",
-      "DeviceType": "OSSC",
-      "Function": "SendCommand",
-      "Parameters": {
-        "commandName": "AV2YPbPr"
-      },
-      "PostWait": 1.0
-    },
-    {
-      "Description": "Scale Fit 4:3",
-      "DeviceType": "ExtronDSC301HD",
-      "Function": "Scale",
-      "Parameters": {
-        "scaleType": "Fit",
-        "positionType": "Centre",
-        "aspectRatio": "RatioPreserve",
-        "padding": {
-          "X": 0,
-          "Y": 0
-        }
-      }
-    },
-    {
-      "Description": "HDMI Switch to Scaler",
-      "DeviceType": "AtenVS0801HB",
-      "Function": "SetInputPort",
-      "Parameters": {
-        "inputPort": "Port2"
-      }
-    },
-    {
-      "Description": "TV to Rack",
+      "Description": "TV to RetroTink 4K",
       "DeviceType": "SonySimpleIP",
       "Function": "SetInputPort",
       "Parameters": {
-        "inputPort": "Hdmi1"
+        "inputPort": "Hdmi2"
       }
     }
   ]
