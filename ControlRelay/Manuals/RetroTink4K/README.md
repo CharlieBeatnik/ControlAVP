@@ -1,4 +1,4 @@
-# RetronTink 4K Remote Control Emulation Over Serial
+# RetroTink 4K Remote Control Emulation Over Serial
 
 ## Serial Port Parameters
 * Baud Rate: **115200**
