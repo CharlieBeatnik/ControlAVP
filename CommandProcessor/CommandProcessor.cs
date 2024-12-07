@@ -173,9 +173,8 @@ namespace CommandProcessor
                                     var properties = paramType.GetProperties();
                                     #endif
 
-                                    foreach (JProperty jProperty in ((JProperty)command["Parameters"][p.Name]).Cast<JProperty>())
+                                    foreach (JProperty jProperty in ((JObject)command["Parameters"][p.Name]).Properties())
                                     {
-
                                         var field = paramType.GetField(jProperty.Name);
                                         if (field != null)
                                         {
