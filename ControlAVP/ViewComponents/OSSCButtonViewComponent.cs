@@ -14,7 +14,9 @@ namespace ControlAVP.ViewComponents
         public string CssClass { get; set; }
     }
 
-    internal sealed class OsscButtonViewComponent : ViewComponent
+#pragma warning disable CA1515 // Consider making public types internal
+    public class OsscButtonViewComponent : ViewComponent
+#pragma warning restore CA1515 // Consider making public types internal
     {
         public async Task<IViewComponentResult> InvokeAsync(CommandName commandName, string buttonLabel, string cssClass)
         {

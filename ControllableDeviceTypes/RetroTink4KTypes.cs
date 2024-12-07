@@ -37,7 +37,7 @@ namespace ControllableDeviceTypes
             AutoGain,
             AutoPha,
             GenSync,
-            GenBug,
+            GenBuf,
             PlayPause,
             Safe,
             Res4K,

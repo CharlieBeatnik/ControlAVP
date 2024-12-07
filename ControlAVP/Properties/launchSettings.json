@@ -3,7 +3,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "https://localhost:44318/Devices/RetroTink4K",
+      "launchUrl": "https://localhost:44318/Devices/RetroTink4KSerial",
       "environmentVariables": {
         "KEYVAULT_ENDPOINT": "https://andydennocokeyvault.vault.azure.net/",
         "ASPNETCORE_ENVIRONMENT": "Development"

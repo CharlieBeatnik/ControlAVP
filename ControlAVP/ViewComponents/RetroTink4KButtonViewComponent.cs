@@ -15,7 +15,9 @@ namespace ControlAVP.ViewComponents
         public string CssFaIcon { get; set; }
     }
 
-    internal sealed class RetroTink4KButtonViewComponent : ViewComponent
+#pragma warning disable CA1515 // Consider making public types internal
+    public class RetroTink4KButtonViewComponent : ViewComponent
+#pragma warning restore CA1515 // Consider making public types internal
     {
         public async Task<IViewComponentResult> InvokeAsync(CommandName commandName, string buttonLabel, string cssClass, string cssFaIcon)
         {

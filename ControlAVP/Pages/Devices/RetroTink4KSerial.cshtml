@@ -1,0 +1,133 @@
+﻿@page
+@model ControlAVP.Pages.Devices.RetroTink4KSerialModel
+@using ControllableDeviceTypes.RetroTink4KTypes;
+
+@{
+    ViewData["Title"] = "RetroTink 4K";
+    string defaultButtonCss = "btn-light";
+}
+<h2></h2>
+
+
+<form method="post">
+    <div class="card">
+        <div class="card-header">
+            <h6 class="mb-0">@ViewData["Title"]</h6>
+        </div>
+        <div class="card-body">
+            @if (Model.DeviceInfoCache.Available)
+            {
+                <div class="col-sm-6 pl-0 pr-0">
+                    <table class="table table-sm table-borderless text-nowrap">
+                        <tr>
+                            <td class="align-middle text-right" width="1%">Picture</td>
+                            <td>
+                                <div class="btn-group-vertical">
+                                    <vc:retro-tink4K-button command-name=@CommandName.AutoCalibratePhase button-label="Auto Phase" css-class=@defaultButtonCss css-fa-icon="wave-square" />
+                                    <vc:retro-tink4K-button command-name=@CommandName.AutoCalibrateGain button-label="Auto Gain" css-class=@defaultButtonCss css-fa-icon="sun" />
+                                    <vc:retro-tink4K-button command-name=@CommandName.PauseOrUnpauseCurrentFrame button-label="Pause" css-class=@defaultButtonCss css-fa-icon="pause" />
+                                    <vc:retro-tink4K-button command-name=@CommandName.AutoCrop43PAR button-label="Crop 4:3" css-class=@defaultButtonCss css-fa-icon="" />
+                                    <vc:retro-tink4K-button command-name=@CommandName.AutoCrop169PAR button-label="Crop 16:9" css-class=@defaultButtonCss css-fa-icon="" />
+                                    <vc:retro-tink4K-button command-name=@CommandName.AutoCropVerticalOnly button-label="Crop Vertical" css-class=@defaultButtonCss css-fa-icon="" />
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle text-right" width="1%">Load</td>
+                            <td>
+                                <div class="btn-group btn-matrix m-0">
+                                    <vc:retro-tink4K-button command-name=@CommandName.LoadProfile1 button-label="Profile 1" css-class=@defaultButtonCss css-fa-icon="" />
+                                    <vc:retro-tink4K-button command-name=@CommandName.LoadProfile2 button-label="Profile 2" css-class=@defaultButtonCss css-fa-icon="" />
+                                    <vc:retro-tink4K-button command-name=@CommandName.LoadProfile3 button-label="Profile 3" css-class=@defaultButtonCss css-fa-icon="" />
+                                    <vc:retro-tink4K-button command-name=@CommandName.LoadProfile4 button-label="Profile 4" css-class=@defaultButtonCss css-fa-icon="" />
+                                    <vc:retro-tink4K-button command-name=@CommandName.LoadProfile5 button-label="Profile 5" css-class=@defaultButtonCss css-fa-icon="" />
+                                    <vc:retro-tink4K-button command-name=@CommandName.LoadProfile6 button-label="Profile 6" css-class=@defaultButtonCss css-fa-icon="" />
+                                    <vc:retro-tink4K-button command-name=@CommandName.LoadProfile7 button-label="Profile 7" css-class=@defaultButtonCss css-fa-icon="" />
+                                    <vc:retro-tink4K-button command-name=@CommandName.LoadProfile8 button-label="Profile 8" css-class=@defaultButtonCss css-fa-icon="" />
+                                    <vc:retro-tink4K-button command-name=@CommandName.LoadProfile9 button-label="Profile 9" css-class=@defaultButtonCss css-fa-icon="" />
+                                    <vc:retro-tink4K-button command-name=@CommandName.LoadProfile10 button-label="Profile 10" css-class=@defaultButtonCss css-fa-icon="" />
+                                    <vc:retro-tink4K-button command-name=@CommandName.LoadProfile11 button-label="Profile 11" css-class=@defaultButtonCss css-fa-icon="" />
+                                    <vc:retro-tink4K-button command-name=@CommandName.LoadProfile12 button-label="Profile 12" css-class=@defaultButtonCss css-fa-icon="" />
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle text-right" width="1%">Info</td>
+                            <td>
+                                <div class="btn-group-vertical">
+                                    <vc:retro-tink4K-button command-name=@CommandName.ShowStatusScreen button-label="Status" css-class=@defaultButtonCss css-fa-icon="circle-info" />
+                                    <vc:retro-tink4K-button command-name=@CommandName.ShowDiagnosticsConsoleScreen button-label="Diagnostics" css-class=@defaultButtonCss css-fa-icon="magnifying-glass" />
+
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle text-right" width="1%">Menus</td>
+                            <td>
+                                <div class="btn-group-vertical">
+                                    <vc:retro-tink4K-button command-name=@CommandName.ShowMainMenu button-label="Main" css-class=@defaultButtonCss css-fa-icon="bars" />
+                                    <vc:retro-tink4K-button command-name=@CommandName.ShowInputSourceMenu button-label="Input Source" css-class=@defaultButtonCss css-fa-icon="" />
+                                    <vc:retro-tink4K-button command-name=@CommandName.ShowHdmiOutputMenu button-label="HDMI Output" css-class=@defaultButtonCss css-fa-icon="" />
+                                    <vc:retro-tink4K-button command-name=@CommandName.ShowScalingAndCroppingMenu button-label="Scaling & Cropping" css-class=@defaultButtonCss css-fa-icon="" />
+                                    <vc:retro-tink4K-button command-name=@CommandName.ShowProcessingEffectsMenu button-label="Processing Effects" css-class=@defaultButtonCss css-fa-icon="" />
+                                    <vc:retro-tink4K-button command-name=@CommandName.ShowAdcMenu button-label="ADC" css-class=@defaultButtonCss css-fa-icon="" />
+                                    <vc:retro-tink4K-button command-name=@CommandName.ShowProfilesMenu button-label="Profiles" css-class=@defaultButtonCss css-fa-icon="" />
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle text-right" width="1%">Nav</td>
+                            <td>
+                                <div class="container p-0 m-0 w-50">
+                                    <div class="row">
+                                        <div class="col-sm btn-group">
+                                            <vc:retro-tink4K-button command-name=@CommandName.Up button-label="" css-class=@defaultButtonCss css-fa-icon="arrow-up" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm btn-group">
+                                            <vc:retro-tink4K-button command-name=@CommandName.Left button-label="" css-class=@(defaultButtonCss + " pt-3 pb-3") css-fa-icon="arrow-left" />
+                                            <vc:retro-tink4K-button command-name=@CommandName.Enter button-label="OK" css-class=@(defaultButtonCss + " pt-3 pb-3") css-fa-icon="" />
+                                            <vc:retro-tink4K-button command-name=@CommandName.Right button-label="" css-class=@(defaultButtonCss + " pt-3 pb-3") css-fa-icon="arrow-right" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm btn-group">
+                                            <vc:retro-tink4K-button command-name=@CommandName.Down button-label="" css-class=@defaultButtonCss css-fa-icon="arrow-down" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="btn-group mt-2">
+                                    <vc:retro-tink4K-button command-name=@CommandName.Back button-label="Back" css-class=@defaultButtonCss css-fa-icon="undo-alt" />
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle text-right" width="1%">Power</td>
+                            <td>
+                                <div class="btn-group-vertical">
+                                    <button type="submit" asp-page-handler="TogglePower" class="btn border btn-danger "><i class="fas fa-power-off"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle text-right" width="1%">Profile Full</td>
+                            <td>
+                                <div class="btn-group-vertical">
+                                    <button type="submit" asp-page-handler="LoadProfile" asp-route-directoryIndex=9 asp-route-profileIndex=0 class="btn btn-light border">Amiga 600</button>
+                                    <button type="submit" asp-page-handler="LoadProfile" asp-route-directoryIndex=20 asp-route-profileIndex=0 class="btn btn-light border">Commodore 64</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-warning">
+                    <strong>Warning!</strong> Device not found, is it turned on?
+                </div>
+            }
+        </div>
+    </div>
+</form>

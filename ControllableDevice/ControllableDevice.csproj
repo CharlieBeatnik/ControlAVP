@@ -66,6 +66,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Devices\RetroTink4K.cs" />
+    <Compile Include="Devices\RetroTink4KSerial.cs" />
     <Compile Include="IrCommandCode.cs" />
     <Compile Include="Devices\AtenVS0801HB.cs" />
     <Compile Include="Devices\OSSC.cs" />
