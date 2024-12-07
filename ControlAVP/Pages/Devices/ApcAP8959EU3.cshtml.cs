@@ -14,7 +14,7 @@ using AVPCloudToDevice;
 
 namespace ControlAVP.Pages.Devices
 {
-    public class OutletTableViewModel
+    internal sealed class OutletTableViewModel
     {
         public IEnumerable<Outlet> Outlets { get; set; }
         public string WebRootPath { get; set; }
@@ -22,7 +22,7 @@ namespace ControlAVP.Pages.Devices
         public IEnumerable<Phase> Phases { get; set; }
     }
 
-    public class ApcAP8959EU3Model : PageModel
+    internal sealed class ApcAP8959EU3Model : PageModel
     {
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _environment;

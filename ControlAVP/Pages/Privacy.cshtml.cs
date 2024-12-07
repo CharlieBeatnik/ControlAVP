@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace ControlAVP.Pages
 {
-    public class PrivacyModel : PageModel
+    internal sealed class PrivacyModel : PageModel
     {
         public static void OnGet()
         {

@@ -12,14 +12,14 @@ using ControllableDeviceTypes.ExtronMVX44VGATypes;
 
 namespace ControlAVP.Pages.Devices
 {
-    public class ExtronMVX44VGADeviceInfo
+    internal sealed class ExtronMVX44VGADeviceInfo
     {
         public bool Available { get; set; }
         public Version Firmware { get; set; }
         public TieState TieState { get; set; }
     }
 
-    public class ExtronMVX44VGAModel : PageModel
+    internal sealed class ExtronMVX44VGAModel : PageModel
     {
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _environment;

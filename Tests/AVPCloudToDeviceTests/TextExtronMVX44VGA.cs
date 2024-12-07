@@ -11,7 +11,7 @@ using ControllableDeviceTypes.ExtronMVX44VGATypes;
 
 namespace Tests
 {
-    public class TestExtronMVX44VGA
+    internal sealed class TestExtronMVX44VGA
     {
         private readonly dynamic _settings;
         private const string _settingsFile = "settings.json";

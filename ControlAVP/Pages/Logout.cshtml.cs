@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace ControlAVP.Pages
 {
-    public class LogoutModel : PageModel
+    internal sealed class LogoutModel : PageModel
     {
         public async Task<ActionResult> OnGet()
         {

@@ -12,12 +12,12 @@ using ControllableDeviceTypes.RetroTink4KTypes;
 
 namespace ControlAVP.Pages.Devices
 {
-    public class RetroTink4KDeviceInfo
+    internal sealed class RetroTink4KDeviceInfo
     {
         public bool Available { get; set; }
     }
 
-    public class RetroTink4KModel : PageModel
+    internal sealed class RetroTink4KModel : PageModel
     {
         private readonly IConfiguration _configuration;
 

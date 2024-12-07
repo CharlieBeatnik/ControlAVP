@@ -11,7 +11,7 @@ using NUnit.Framework.Internal;
 
 namespace Tests
 {
-    public class TestSerialBlaster
+    internal sealed class TestSerialBlaster
     {
         private readonly dynamic _settings;
         private const string _settingsFile = "settings.json";

@@ -12,7 +12,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace ControlAVP.Pages
 {
-    public class LoginData
+    internal sealed class LoginData
     {
         [Required, DataType(DataType.Password)]
         public string Password { get; set; }
@@ -20,7 +20,7 @@ namespace ControlAVP.Pages
         public bool RememberMe { get; set; } = true;
     }
 
-    public class LoginModel(IConfiguration configuration) : PageModel
+    internal sealed class LoginModel(IConfiguration configuration) : PageModel
     {
         private readonly IConfiguration _configuration = configuration;
 

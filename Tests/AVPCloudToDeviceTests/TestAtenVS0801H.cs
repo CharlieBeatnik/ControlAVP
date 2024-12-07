@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace Tests
 {
-    public class TestAtenVS0801H
+    internal sealed class TestAtenVS0801H
     {
         private readonly dynamic _settings;
         private const string _settingsFile = "settings.json";

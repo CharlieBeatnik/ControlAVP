@@ -9,7 +9,7 @@ using ControllableDeviceTypes.OSSCTypes;
 
 namespace Tests
 {
-    public class TestOSSC
+    internal sealed class TestOSSC
     {
         private readonly dynamic _settings;
         private const string _settingsFile = "settings.json";

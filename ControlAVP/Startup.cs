@@ -17,7 +17,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace ControlAVP
 {
-    public class Startup(IConfiguration configuration)
+    internal sealed class Startup(IConfiguration configuration)
     {
         public IConfiguration Configuration { get; } = configuration;
 

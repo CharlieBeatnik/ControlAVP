@@ -5,3 +5,4 @@
 
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "<Pending>", Scope = "namespaceanddescendants", Target = "ControlAVP")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1305:Specify IFormatProvider", Justification = "<Pending>", Scope = "namespaceanddescendants", Target = "ControlAVP")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1812:Avoid uninstantiated internal classes", Justification = "<Pending>", Scope = "namespaceanddescendants", Target = "ControlAVP")]

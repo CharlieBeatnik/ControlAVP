@@ -9,7 +9,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace ControlAVP.Pages.Devices
 {
-    public class SerialBlasterModel : PageModel
+    internal sealed class SerialBlasterModel : PageModel
     {
         private readonly IConfiguration _configuration;
 
@@ -31,11 +31,6 @@ namespace ControlAVP.Pages.Devices
 
             _serviceClient = ServiceClient.CreateFromConnectionString(_connectionString);
             _device = new SerialBlaster(_serviceClient, _deviceId, _serialBlasterDeviceIndex);
-        }
-
-        public void OnGet()
-        {
-
         }
 
         public void OnPostBlastNecHex(string necHex, string rawHex)

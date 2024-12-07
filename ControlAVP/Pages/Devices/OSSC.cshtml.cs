@@ -12,12 +12,12 @@ using ControllableDeviceTypes.OSSCTypes;
 
 namespace ControlAVP.Pages.Devices
 {
-    public class OSSCDeviceInfo
+    internal sealed class OSSCDeviceInfo
     {
         public bool Available { get; set; }
     }
 
-    public class OSSCModel : PageModel
+    internal sealed class OSSCModel : PageModel
     {
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _environment;

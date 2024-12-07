@@ -17,7 +17,7 @@ using System.Linq;
 
 namespace ControlAVP.Pages
 {
-    public class CommandInfo
+    internal sealed class CommandInfo
     {
         public string Name { get; set; }
         public string JsonPath { get; set; }
@@ -25,14 +25,14 @@ namespace ControlAVP.Pages
         public string DisplayName { get; set; }
     }
 
-    public enum Scaler
+    internal enum Scaler
     {
         RetroTink4K,
         OSSC,
         ExtronDSC301HD
     }
 
-    public class IndexModel : PageModel
+    internal sealed class IndexModel : PageModel
     {
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _environment;

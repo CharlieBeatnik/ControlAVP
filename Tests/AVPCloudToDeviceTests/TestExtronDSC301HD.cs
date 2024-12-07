@@ -12,7 +12,7 @@ using System.Numerics;
 
 namespace Tests
 {
-    public class TestExtronDSC301HD
+    internal sealed class TestExtronDSC301HD
     {
         private readonly dynamic _settings;
         private const string _settingsFile = "settings.json";

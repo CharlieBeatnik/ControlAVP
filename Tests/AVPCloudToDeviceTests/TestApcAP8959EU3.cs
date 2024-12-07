@@ -11,7 +11,7 @@ using System.Collections.Generic;
 
 namespace Tests
 {
-    public class TestApcAP8959EU3
+    internal sealed class TestApcAP8959EU3
     {
         private readonly dynamic _settings;
         private const string _settingsFile = "settings.json";

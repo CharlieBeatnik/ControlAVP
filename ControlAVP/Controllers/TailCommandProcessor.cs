@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace ControlAVP
 {
-    public class TailCommandProcessorModel
+    internal sealed class TailCommandProcessorModel
     {
         public IList<CommandResult> CommandResults { get; } = new List<CommandResult>();
         public bool Completed { get; set; }
@@ -22,7 +22,7 @@ namespace ControlAVP
 
     [Route("api/[controller]")]
     [ApiController]
-    public class TailCommandProcessor : Controller
+    internal sealed class TailCommandProcessor : Controller
     {
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _environment;

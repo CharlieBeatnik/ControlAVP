@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ControlAVP
 {
-    public static class ControllerExtensions
+    internal static class ControllerExtensions
     {
         //From https://stackoverflow.com/questions/40912375/return-view-as-string-in-net-core
         public static async Task<string> RenderViewAsync<TModel>(this Controller controller, string viewName, TModel model, bool partial = false)

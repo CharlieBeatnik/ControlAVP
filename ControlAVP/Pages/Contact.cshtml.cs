@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace ControlAVP.Pages
 {
-    public class ContactModel : PageModel
+    internal sealed class ContactModel : PageModel
     {
         public string Message { get; set; }
 

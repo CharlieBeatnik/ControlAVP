@@ -12,13 +12,13 @@ using ControllableDeviceTypes.SonySimpleIPTypes;
 
 namespace ControlAVP.Pages.Devices
 {
-    public class SonySimpleIPDeviceInfo
+    internal sealed class SonySimpleIPDeviceInfo
     {
         public PowerStatus? PowerStatus { get; set; }
         public InputPort? InputPort { get; set; }
     }
 
-    public class SonySimpleIPModel : PageModel
+    internal sealed class SonySimpleIPModel : PageModel
     {
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _environment;

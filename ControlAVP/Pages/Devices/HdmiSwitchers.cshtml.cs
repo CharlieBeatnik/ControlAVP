@@ -15,19 +15,19 @@ using System.Diagnostics;
 
 namespace ControlAVP.Pages.Devices
 {
-    public class AtenVS0801HDeviceInfo
+    internal sealed class AtenVS0801HDeviceInfo
     {
         public bool Available { get; set; }
         public ControllableDeviceTypes.AtenVS0801HTypes.State State { get; set; }
     }
 
-    public class AtenVS0801HBDeviceInfo
+    internal sealed class AtenVS0801HBDeviceInfo
     {
         public bool Available { get; set; }
         public ControllableDeviceTypes.AtenVS0801HBTypes.State State { get; set; }
     }
 
-    public class HdmiSwitchersModel : PageModel
+    internal sealed class HdmiSwitchersModel : PageModel
     {
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _environment;

@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace Tests
 {
-    public class TestSonySimpleIP
+    internal sealed class TestSonySimpleIP
     {
         private readonly dynamic _settings;
         private const string _settingsFile = "settings.json";

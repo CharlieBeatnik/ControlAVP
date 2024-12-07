@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace ControlAVP.ViewComponents
 {
-    public class OsscButtonParameters
+    internal sealed class OsscButtonParameters
     {
         public CommandName CommandName { get; set; }
         public string ButtonLabel { get; set; }
         public string CssClass { get; set; }
     }
 
-    public class OsscButtonViewComponent : ViewComponent
+    internal sealed class OsscButtonViewComponent : ViewComponent
     {
         public async Task<IViewComponentResult> InvokeAsync(CommandName commandName, string buttonLabel, string cssClass)
         {

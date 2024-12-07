@@ -13,7 +13,7 @@ using System.Numerics;
 
 namespace ControlAVP.Pages.Devices
 {
-    public class ExtronDSC301HDDeviceInfo
+    internal sealed class ExtronDSC301HDDeviceInfo
     {
         public bool Available { get; set; }
         public Version Firmware { get; set; }
@@ -27,7 +27,7 @@ namespace ControlAVP.Pages.Devices
         public Vector2? InputResolution { get; set; }
     }
 
-    public class ExtronDSC301HDModel : PageModel
+    internal sealed class ExtronDSC301HDModel : PageModel
     {
         private readonly IConfiguration _configuration;
 

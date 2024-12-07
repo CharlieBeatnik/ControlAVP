@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace ControlAVP.Pages
 {
-    public class TailCommandProcessorModel : PageModel
+    internal sealed class TailCommandProcessorModel : PageModel
     {
         public Guid Id { get; private set; }
         public string DisplayName { get; private set; }

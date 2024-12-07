@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ControlAVP.ViewComponents
 {
-    public class RetroTink4KButtonParameters
+    internal sealed class RetroTink4KButtonParameters
     {
         public CommandName CommandName { get; set; }
         public string ButtonLabel { get; set; }
@@ -15,7 +15,7 @@ namespace ControlAVP.ViewComponents
         public string CssFaIcon { get; set; }
     }
 
-    public class RetroTink4KButtonViewComponent : ViewComponent
+    internal sealed class RetroTink4KButtonViewComponent : ViewComponent
     {
         public async Task<IViewComponentResult> InvokeAsync(CommandName commandName, string buttonLabel, string cssClass, string cssFaIcon)
         {

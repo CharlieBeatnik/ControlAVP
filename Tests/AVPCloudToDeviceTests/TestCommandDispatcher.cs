@@ -16,7 +16,7 @@ using ControllableDeviceTypes.SonySimpleIPTypes;
 
 namespace Tests
 {
-    public class TestCommandDispatcher : System.IDisposable
+    internal sealed class TestCommandDispatcher : System.IDisposable
     {
         private readonly dynamic _commandExecuterSettings;
         private readonly dynamic _eventHubSettings;
@@ -278,7 +278,7 @@ namespace Tests
             GC.SuppressFinalize(this);
         }
 
-        protected virtual void Dispose(bool disposing)
+        private void Dispose(bool disposing)
         {
             if (disposing)
             {
