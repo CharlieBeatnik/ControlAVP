@@ -12,6 +12,11 @@
       }
     },
     {
+      "Description": "RetroTink 4K On",
+      "DeviceType": "RetroTink4KSerial",
+      "Function": "TurnOn"
+    },
+    {
       "Description": "TV On",
       "DeviceType": "SonySimpleIP",
       "Function": "TurnOn",
@@ -51,6 +56,14 @@
       "Function": "SetInputPort",
       "Parameters": {
         "inputPort": "Hdmi2"
+      }
+    },
+    {
+      "Description": "Load RetroTink 4K Profile for Commodore 64",
+      "DeviceType": "RetroTink4KSerial",
+      "Function": "LoadProfile",
+      "Parameters": {
+        "profileIndex": 200
       }
     }
   ]

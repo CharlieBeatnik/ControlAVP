@@ -12,6 +12,11 @@
       }
     },
     {
+      "Description": "RetroTink 4K On",
+      "DeviceType": "RetroTink4KSerial",
+      "Function": "TurnOn"
+    },
+    {
       "Description": "TV On",
       "DeviceType": "SonySimpleIP",
       "Function": "TurnOn",

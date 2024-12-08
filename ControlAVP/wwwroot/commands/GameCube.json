@@ -12,6 +12,11 @@
       }
     },
     {
+      "Description": "RetroTink 4K On",
+      "DeviceType": "RetroTink4KSerial",
+      "Function": "TurnOn"
+    },
+    {
       "Description": "TV On",
       "DeviceType": "SonySimpleIP",
       "Function": "TurnOn",
@@ -29,7 +34,7 @@
     },
     {
       "ExecuteAfter": 15.0,
-      "Description": "1080p HDMI Switch to Game Cube",
+      "Description": "1080p HDMI Switch to GameCube",
       "DeviceType": "AtenVS0801H",
       "Function": "SetInputPort",
       "Parameters": {
@@ -42,6 +47,14 @@
       "Function": "SetInputPort",
       "Parameters": {
         "inputPort": "Hdmi2"
+      }
+    },
+    {
+      "Description": "Load RetroTink 4K Profile for GameCube",
+      "DeviceType": "RetroTink4KSerial",
+      "Function": "LoadProfile",
+      "Parameters": {
+        "profileIndex": 160
       }
     }
   ]
