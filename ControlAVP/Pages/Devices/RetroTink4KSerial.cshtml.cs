@@ -49,5 +49,20 @@ namespace ControlAVP.Pages.Devices
             _device.SendCommand(commandName);
             return RedirectToPage();
         }
+        public IActionResult OnPostTurnOn()
+        {
+            _device.TurnOn();
+            return RedirectToPage();
+        }
+        public IActionResult OnPostTurnOff()
+        {
+            _device.TurnOff();
+            return RedirectToPage();
+        }
+        public IActionResult OnPostLoadProfile(uint profileIndex)
+        {
+            _device.LoadProfile(profileIndex);
+            return RedirectToPage();
+        }
     }
 }

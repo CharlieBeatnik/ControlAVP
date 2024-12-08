@@ -37,5 +37,47 @@ namespace AVPCloudToDevice
                 return false;
             }
         }
+
+        public bool LoadProfile(uint profileIndex)
+        {
+            try
+            {
+                var payload = new { profileIndex };
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "RetroTink4KSerialLoadProfile", payload);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public bool TurnOn()
+        {
+            try
+            {
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "RetroTink4KSerialTurnOn", null);
+                string json = response.GetPayloadAsJson();
+                return JsonConvert.DeserializeObject<bool>(json);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public bool TurnOff()
+        {
+            try
+            {
+                var response = Utilities.InvokeMethodWithObjectPayload(_serviceClient, _deviceId, "RetroTink4KSerialTurnOff", null);
+                string json = response.GetPayloadAsJson();
+                return JsonConvert.DeserializeObject<bool>(json);
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }

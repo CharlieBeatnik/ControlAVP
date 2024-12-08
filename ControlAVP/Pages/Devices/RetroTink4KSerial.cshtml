@@ -20,6 +20,18 @@
                 <div class="col-sm-6 pl-0 pr-0">
                     <table class="table table-sm table-borderless text-nowrap">
                         <tr>
+                            <td class="align-middle text-right" width="1%">Power</td>
+                            <td>
+                                <div class="btn-toolbar" role="toolbar">
+                                    <div class="btn-group" role="group">
+                                        <button type="submit" asp-page-handler="TurnOn" class="btn border btn-success "><i class="fas fa-power-off"></i></button>
+                                        <button type="submit" asp-page-handler="SendCommand" asp-route-commandname=@CommandName.Power class="btn border btn-warning"><i class="fas fa-power-off"></i></button>
+                                        <button type="submit" asp-page-handler="TurnOff" class="btn border btn-danger "><i class="fas fa-power-off"></i></button>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
                             <td class="align-middle text-right" width="1%">Picture</td>
                             <td>
                                 <div class="btn-group-vertical">
@@ -33,21 +45,21 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="align-middle text-right" width="1%">Load</td>
+                            <td class="align-middle text-right" width="1%">Profile</td>
                             <td>
                                 <div class="btn-group btn-matrix m-0">
-                                    <vc:retro-tink4K-button command-name=@CommandName.LoadProfile1 button-label="Profile 1" css-class=@defaultButtonCss css-fa-icon="" />
-                                    <vc:retro-tink4K-button command-name=@CommandName.LoadProfile2 button-label="Profile 2" css-class=@defaultButtonCss css-fa-icon="" />
-                                    <vc:retro-tink4K-button command-name=@CommandName.LoadProfile3 button-label="Profile 3" css-class=@defaultButtonCss css-fa-icon="" />
-                                    <vc:retro-tink4K-button command-name=@CommandName.LoadProfile4 button-label="Profile 4" css-class=@defaultButtonCss css-fa-icon="" />
-                                    <vc:retro-tink4K-button command-name=@CommandName.LoadProfile5 button-label="Profile 5" css-class=@defaultButtonCss css-fa-icon="" />
-                                    <vc:retro-tink4K-button command-name=@CommandName.LoadProfile6 button-label="Profile 6" css-class=@defaultButtonCss css-fa-icon="" />
-                                    <vc:retro-tink4K-button command-name=@CommandName.LoadProfile7 button-label="Profile 7" css-class=@defaultButtonCss css-fa-icon="" />
-                                    <vc:retro-tink4K-button command-name=@CommandName.LoadProfile8 button-label="Profile 8" css-class=@defaultButtonCss css-fa-icon="" />
-                                    <vc:retro-tink4K-button command-name=@CommandName.LoadProfile9 button-label="Profile 9" css-class=@defaultButtonCss css-fa-icon="" />
-                                    <vc:retro-tink4K-button command-name=@CommandName.LoadProfile10 button-label="Profile 10" css-class=@defaultButtonCss css-fa-icon="" />
-                                    <vc:retro-tink4K-button command-name=@CommandName.LoadProfile11 button-label="Profile 11" css-class=@defaultButtonCss css-fa-icon="" />
-                                    <vc:retro-tink4K-button command-name=@CommandName.LoadProfile12 button-label="Profile 12" css-class=@defaultButtonCss css-fa-icon="" />
+                                    <vc:retro-tink4K-button command-name=@CommandName.LoadProfile1 button-label="1" css-class=@defaultButtonCss css-fa-icon="" />
+                                    <vc:retro-tink4K-button command-name=@CommandName.LoadProfile2 button-label="2" css-class=@defaultButtonCss css-fa-icon="" />
+                                    <vc:retro-tink4K-button command-name=@CommandName.LoadProfile3 button-label="3" css-class=@defaultButtonCss css-fa-icon="" />
+                                    <vc:retro-tink4K-button command-name=@CommandName.LoadProfile4 button-label="4" css-class=@defaultButtonCss css-fa-icon="" />
+                                    <vc:retro-tink4K-button command-name=@CommandName.LoadProfile5 button-label="5" css-class=@defaultButtonCss css-fa-icon="" />
+                                    <vc:retro-tink4K-button command-name=@CommandName.LoadProfile6 button-label="6" css-class=@defaultButtonCss css-fa-icon="" />
+                                    <vc:retro-tink4K-button command-name=@CommandName.LoadProfile7 button-label="7" css-class=@defaultButtonCss css-fa-icon="" />
+                                    <vc:retro-tink4K-button command-name=@CommandName.LoadProfile8 button-label="8" css-class=@defaultButtonCss css-fa-icon="" />
+                                    <vc:retro-tink4K-button command-name=@CommandName.LoadProfile9 button-label="9" css-class=@defaultButtonCss css-fa-icon="" />
+                                    <vc:retro-tink4K-button command-name=@CommandName.LoadProfile10 button-label="10" css-class=@defaultButtonCss css-fa-icon="" />
+                                    <vc:retro-tink4K-button command-name=@CommandName.LoadProfile11 button-label="11" css-class=@defaultButtonCss css-fa-icon="" />
+                                    <vc:retro-tink4K-button command-name=@CommandName.LoadProfile12 button-label="12" css-class=@defaultButtonCss css-fa-icon="" />
                                 </div>
                             </td>
                         </tr>
@@ -103,19 +115,12 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="align-middle text-right" width="1%">Power</td>
-                            <td>
-                                <div class="btn-group-vertical">
-                                    <button type="submit" asp-page-handler="TogglePower" class="btn border btn-danger "><i class="fas fa-power-off"></i></button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
                             <td class="align-middle text-right" width="1%">Profile Full</td>
                             <td>
                                 <div class="btn-group-vertical">
-                                    <button type="submit" asp-page-handler="LoadProfile" asp-route-directoryIndex=9 asp-route-profileIndex=0 class="btn btn-light border">Amiga 600</button>
-                                    <button type="submit" asp-page-handler="LoadProfile" asp-route-directoryIndex=20 asp-route-profileIndex=0 class="btn btn-light border">Commodore 64</button>
+                                    <button type="submit" asp-page-handler="LoadProfile" asp-route-profileIndex=0 class="btn btn-light border">Profile Index 0</button>
+                                    <button type="submit" asp-page-handler="LoadProfile" asp-route-profileIndex=10 class="btn btn-light border">Profile Index 10</button>
+                                    <button type="submit" asp-page-handler="LoadProfile" asp-route-profileIndex=128 class="btn btn-light border">Profile Index 128</button>
                                 </div>
                             </td>
                         </tr>
