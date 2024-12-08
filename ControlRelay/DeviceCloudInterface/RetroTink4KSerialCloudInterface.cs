@@ -23,7 +23,8 @@ namespace ControlRelay
             yield return new MethodHandlerInfo("RetroTink4KSerialGetAvailable", GetAvailable);
             yield return new MethodHandlerInfo("RetroTink4KSerialSendCommand", SendCommand);
             yield return new MethodHandlerInfo("RetroTink4KSerialLoadProfile", LoadProfile);
-            yield return new MethodHandlerInfo("RetroTink4KSerialTogglePower", TogglePower);
+            yield return new MethodHandlerInfo("RetroTink4KSerialTurnOn", TurnOn);
+            yield return new MethodHandlerInfo("RetroTink4KSerialTurnOn", TurnOff);
         }
 
         private Task<MethodResponse> GetAvailable(MethodRequest methodRequest, object userContext)
@@ -61,13 +62,20 @@ namespace ControlRelay
             };
 
             var payload = JsonConvert.DeserializeAnonymousType(methodRequest.DataAsJson, payloadDefinition);
+            success = _device.LoadProfile(payload.profileIndex);
 
             return methodRequest.GetMethodResponse(success);
         }
 
-        private Task<MethodResponse> TogglePower(MethodRequest methodRequest, object userContext)
+        private Task<MethodResponse> TurnOn(MethodRequest methodRequest, object userContext)
         {
-            bool success = false;
+            var success = _device.TurnOn();
+            return methodRequest.GetMethodResponse(success);
+        }
+
+        private Task<MethodResponse> TurnOff(MethodRequest methodRequest, object userContext)
+        {
+            var success = _device.TurnOff();
             return methodRequest.GetMethodResponse(success);
         }
     }

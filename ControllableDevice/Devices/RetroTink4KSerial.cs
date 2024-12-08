@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ControllableDeviceTypes.RetroTink4KTypes;
+using Newtonsoft.Json.Linq;
+using Windows.UI.Xaml.Media.Animation;
 
 namespace ControllableDevice
 {
@@ -164,7 +166,7 @@ namespace ControllableDevice
                 throw new ArgumentException("Unknown command name.", nameof(genericCommandName));
             }
 
-            _rs232Device.Write($"remote {value}\n");
+            _rs232Device.Write($"remote {value}");
             return true;
         }
 
@@ -183,6 +185,27 @@ namespace ControllableDevice
             }
 
             return value;
+        }
+
+        public bool TurnOn()
+        {
+            if (!_rs232Device.Enabled) return false;
+            _rs232Device.Write("pwr on");
+            return true;
+        }
+
+        public bool TurnOff()
+        {
+            if (!_rs232Device.Enabled) return false;
+            _rs232Device.Write("pwr off");
+            return true;
+        }
+
+        public bool LoadProfile(uint profileIndex)
+        {
+            if (!_rs232Device.Enabled) return false;
+            _rs232Device.Write($"SVS input {profileIndex}");
+            return true;
         }
     }
 }

@@ -107,5 +107,32 @@ namespace Tests
                 Assert.IsFalse(device.SendCommand(CommandName.Aux8));
             }
         }
+
+        [TestMethod]
+        public void GivenInvalidDevice_WhenTurnOn_ThenResultIsFalse()
+        {
+            using (var device = CreateInvalidDevice())
+            {
+                Assert.IsFalse(device.TurnOn());
+            }
+        }
+
+        [TestMethod]
+        public void GivenInvalidDevice_WhenTurnOff_ThenResultIsFalse()
+        {
+            using (var device = CreateInvalidDevice())
+            {
+                Assert.IsFalse(device.TurnOff());
+            }
+        }
+
+        [TestMethod]
+        public void GivenInvalidDevice_WhenLoadProfile_ThenResultIsFalse()
+        {
+            using (var device = CreateInvalidDevice())
+            {
+                Assert.IsFalse(device.LoadProfile(0));
+            }
+        }
     }
 }
