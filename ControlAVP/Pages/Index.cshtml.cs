@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using ControllableDeviceTypes.ExtronDSC301HDTypes;
 using ControllableDeviceTypes.OSSCTypes;
 using ControllableDeviceTypes.ApcAP8959EU3Types;
+using ControllableDeviceTypes.RetroTink4KTypes;
 using Newtonsoft.Json;
 using System.Numerics;
 using System;
@@ -46,6 +47,7 @@ namespace ControlAVP.Pages
         private readonly SonySimpleIP _sonySimpleIP;
         private readonly OSSC _ossc;
         private readonly AtenVS0801HB _atenVS0801HB;
+        private readonly RetroTink4KSerial _retroTink4KSerial;
 
         private readonly string _commandDirectory;
         private readonly IEnumerable<Outlet> _outlets;
@@ -75,6 +77,7 @@ namespace ControlAVP.Pages
             _sonySimpleIP = new SonySimpleIP(_serviceClient, _deviceId);
             _ossc = new OSSC(_serviceClient, _deviceId);
             _atenVS0801HB = new AtenVS0801HB(_serviceClient, _deviceId, 0);
+            _retroTink4KSerial = new RetroTink4KSerial(_serviceClient, _deviceId);
 
             _outlets = _apcAP8959EU3.GetOutlets();
             _outletConfirmation = _configuration.GetSection("OutletConfirmation").Get<string[]>();
@@ -191,6 +194,7 @@ namespace ControlAVP.Pages
                 }
             }
 
+            _retroTink4KSerial.TurnOff();
             _sonySimpleIP.TurnOff();
 
             return RedirectToPage();
@@ -211,10 +215,12 @@ namespace ControlAVP.Pages
                 }
             }
 
+            _retroTink4KSerial.TurnOff();
+
             return RedirectToPage();
         }
 
-        public IActionResult OnPostOSSCSendCommand(CommandName commandName)
+        public IActionResult OnPostOSSCSendCommand(ControllableDeviceTypes.OSSCTypes.CommandName commandName)
         {
             _ossc.SendCommand(commandName);
             return RedirectToPage();

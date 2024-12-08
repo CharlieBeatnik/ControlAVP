@@ -25,7 +25,6 @@
                                 <div class="btn-toolbar" role="toolbar">
                                     <div class="btn-group" role="group">
                                         <button type="submit" asp-page-handler="TurnOn" class="btn border btn-success "><i class="fas fa-power-off"></i></button>
-                                        <button type="submit" asp-page-handler="SendCommand" asp-route-commandname=@CommandName.Power class="btn border btn-warning"><i class="fas fa-power-off"></i></button>
                                         <button type="submit" asp-page-handler="TurnOff" class="btn border btn-danger "><i class="fas fa-power-off"></i></button>
                                     </div>
                                 </div>
@@ -111,16 +110,6 @@
                                 </div>
                                 <div class="btn-group mt-2">
                                     <vc:retro-tink4K-button command-name=@CommandName.Back button-label="Back" css-class=@defaultButtonCss css-fa-icon="undo-alt" />
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle text-right" width="1%">Profile Full</td>
-                            <td>
-                                <div class="btn-group-vertical">
-                                    <button type="submit" asp-page-handler="LoadProfile" asp-route-profileIndex=0 class="btn btn-light border">Profile Index 0</button>
-                                    <button type="submit" asp-page-handler="LoadProfile" asp-route-profileIndex=10 class="btn btn-light border">Profile Index 10</button>
-                                    <button type="submit" asp-page-handler="LoadProfile" asp-route-profileIndex=128 class="btn btn-light border">Profile Index 128</button>
                                 </div>
                             </td>
                         </tr>

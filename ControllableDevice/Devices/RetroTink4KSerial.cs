@@ -197,7 +197,7 @@ namespace ControllableDevice
         public bool TurnOff()
         {
             if (!_rs232Device.Enabled) return false;
-            _rs232Device.Write("pwr off");
+            _rs232Device.Write("remote pwr");
             return true;
         }
 

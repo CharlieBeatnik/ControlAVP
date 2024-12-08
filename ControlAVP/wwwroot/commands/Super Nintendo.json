@@ -12,6 +12,11 @@
       }
     },
     {
+      "Description": "RetroTink 4K On",
+      "DeviceType": "RetroTink4KSerial",
+      "Function": "TurnOn"
+    },
+    {
       "Description": "TV On",
       "DeviceType": "SonySimpleIP",
       "Function": "TurnOn",
@@ -38,10 +43,10 @@
     },
     {
       "Description": "Load RetroTink 4K Profile for Super Nintendo",
-      "DeviceType": "RetroTink4K",
-      "Function": "LoadProfileQuick",
+      "DeviceType": "RetroTink4KSerial",
+      "Function": "LoadProfile",
       "Parameters": {
-        "profileName": "Profile5"
+        "profileIndex": 50
       }
     }
   ]

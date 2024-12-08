@@ -12,6 +12,11 @@
       }
     },
     {
+      "Description": "RetroTink 4K On",
+      "DeviceType": "RetroTink4KSerial",
+      "Function": "TurnOn"
+    },
+    {
       "Description": "TV On",
       "DeviceType": "SonySimpleIP",
       "Function": "TurnOn",
@@ -47,10 +52,10 @@
     },
     {
       "Description": "Load RetroTink 4K Profile for Dreamcast",
-      "DeviceType": "RetroTink4K",
-      "Function": "LoadProfileQuick",
+      "DeviceType": "RetroTink4KSerial",
+      "Function": "LoadProfile",
       "Parameters": {
-        "profileName": "Profile3"
+        "profileIndex": 30
       }
     }
   ]

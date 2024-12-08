@@ -24,7 +24,7 @@ namespace ControlRelay
             yield return new MethodHandlerInfo("RetroTink4KSerialSendCommand", SendCommand);
             yield return new MethodHandlerInfo("RetroTink4KSerialLoadProfile", LoadProfile);
             yield return new MethodHandlerInfo("RetroTink4KSerialTurnOn", TurnOn);
-            yield return new MethodHandlerInfo("RetroTink4KSerialTurnOn", TurnOff);
+            yield return new MethodHandlerInfo("RetroTink4KSerialTurnOff", TurnOff);
         }
 
         private Task<MethodResponse> GetAvailable(MethodRequest methodRequest, object userContext)
