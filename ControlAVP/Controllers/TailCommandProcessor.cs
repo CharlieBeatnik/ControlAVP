@@ -22,7 +22,9 @@ namespace ControlAVP
 
     [Route("api/[controller]")]
     [ApiController]
-    internal sealed class TailCommandProcessor : Controller
+#pragma warning disable CA1515 // Consider making public types internal
+    public class TailCommandProcessor : Controller
+#pragma warning restore CA1515 // Consider making public types internal
     {
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _environment;
