@@ -204,7 +204,7 @@ namespace ControllableDevice
         public bool LoadProfile(uint profileIndex)
         {
             if (!_rs232Device.Enabled) return false;
-            _rs232Device.Write($"SVS input {profileIndex}");
+            _rs232Device.Write($"SVS NEW INPUT={profileIndex}");
             return true;
         }
     }
