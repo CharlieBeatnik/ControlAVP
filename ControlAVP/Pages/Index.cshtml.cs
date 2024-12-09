@@ -231,6 +231,7 @@ namespace ControlAVP.Pages
             switch(scaler)
             {
                 case Scaler.RetroTink4K:
+                    _retroTink4KSerial.TurnOn();
                     _sonySimpleIP.SetInputPort(ControllableDeviceTypes.SonySimpleIPTypes.InputPort.Hdmi2);
                     break;
                 case Scaler.OSSC:
