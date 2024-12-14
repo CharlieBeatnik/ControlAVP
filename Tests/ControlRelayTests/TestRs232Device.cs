@@ -30,7 +30,7 @@ namespace Tests
 
         private static Rs232Device CreateDevice()
         {
-            var device = new Rs232Device(_settings["Devices"]["SerialBlaster"][0]["deviceIndex"].ToObject<uint>());
+            var device = new Rs232Device(_settings["Devices"]["SerialBlaster"][0]["portId"].ToString());
             device.BaudRate = 115200;
             device.PreWrite = (x) =>
             {
