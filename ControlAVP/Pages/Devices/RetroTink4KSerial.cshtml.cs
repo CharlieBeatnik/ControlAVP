@@ -26,7 +26,7 @@ namespace ControlAVP.Pages.Devices
         private readonly ServiceClient _serviceClient;
         private readonly RetroTink4KSerial _device;
 
-        public RetroTink4KDeviceInfo DeviceInfoCache { get; private set; } = new RetroTink4KDeviceInfo();
+        public RetroTink4KSerialDeviceInfo DeviceInfoCache { get; private set; } = new RetroTink4KSerialDeviceInfo();
 
         public RetroTink4KSerialModel(IConfiguration configuration)
         {

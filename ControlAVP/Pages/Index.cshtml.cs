@@ -58,6 +58,8 @@ namespace ControlAVP.Pages
         public bool RackDevicesAvailable { get; private set; }
         public bool ScalerCardVisible { get; private set; }
         public bool OsscCardVisible { get; private set; }
+        public bool RetroTink4KCardVisible { get; private set; }
+        public dynamic DeviceProfiles { get; private set; }
 
         public IndexModel(IConfiguration configuration, IWebHostEnvironment environment)
         {
@@ -85,7 +87,7 @@ namespace ControlAVP.Pages
             _commandDirectory = Path.Combine(_environment.WebRootPath, "commands");
         }
 
-        public void OnGet(bool scalerCardVisible, bool osscCardVisible)
+        public void OnGet(bool scalerCardVisible, bool osscCardVisible, bool retroTink4KCardVisible)
         {
             DirectoryInfo directoryInfo = new(_commandDirectory);
 
@@ -128,6 +130,10 @@ namespace ControlAVP.Pages
 
             ScalerCardVisible = scalerCardVisible;
             OsscCardVisible = osscCardVisible;
+            RetroTink4KCardVisible = retroTink4KCardVisible;
+
+            var deviceProfilesStr = System.IO.File.ReadAllText(Path.Combine(_environment.WebRootPath, "profiles", "Profiles.json" ));
+            DeviceProfiles = JsonConvert.DeserializeObject<dynamic>(deviceProfilesStr);
         }
 
         //Override redirect to page to deal with common parameters
@@ -135,6 +141,7 @@ namespace ControlAVP.Pages
         {
             bool scalerCardVisible = false;
             bool osscCardVisible = false;
+            bool retroTink4KCardVisible = false;
 
             if (Request.Query.TryGetValue("scalerCardVisible", out var scalerCardVisibleStr))
             {
@@ -146,7 +153,12 @@ namespace ControlAVP.Pages
                 osscCardVisible = bool.Parse(osscCardVisibleStr);
             }
 
-            return base.RedirectToPage(new { scalerCardVisible, osscCardVisible });
+            if (Request.Query.TryGetValue("retroTink4KCardVisible", out var retroTink4KCardVisibleStr))
+            {
+                retroTink4KCardVisible = bool.Parse(retroTink4KCardVisibleStr);
+            }
+
+            return base.RedirectToPage(new { scalerCardVisible, osscCardVisible, retroTink4KCardVisible });
         }
 
         public IActionResult OnPostCommandProcessorExecute(string fileFullName, string displayName, string imagePath)
@@ -244,6 +256,12 @@ namespace ControlAVP.Pages
                     break;
             }
 
+            return RedirectToPage();
+        }
+
+        public IActionResult OnPostRetroTink4KLoadProfile(uint profileIndex)
+        {
+            _retroTink4KSerial.LoadProfile(profileIndex);
             return RedirectToPage();
         }
     }

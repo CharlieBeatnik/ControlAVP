@@ -1,0 +1,197 @@
+{
+  "Devices": [
+    {
+      "Name": "PC",
+      "Profiles": [
+        {
+          "Name": "720x400",
+          "Index": 100
+        },
+        {
+          "Name": "640x400",
+          "Index": 101
+        }
+      ]
+    },
+    {
+      "Name": "Mega Drive",
+      "Profiles": [
+        {
+          "Name": "Default",
+          "Index": 10
+        }
+      ]
+    },
+    {
+      "Name": "Saturn",
+      "Profiles": [
+        {
+          "Name": "Default",
+          "Index": 20
+        }
+      ]
+    },
+    {
+      "Name": "Dreamcast",
+      "Profiles": [
+        {
+          "Name": "Default",
+          "Index": 30
+        }
+      ]
+    },
+    {
+      "Name": "PlayStation",
+      "Profiles": [
+        {
+          "Name": "Default",
+          "Index": 40
+        }
+      ]
+    },
+    {
+      "Name": "Super Nintendo",
+      "Profiles": [
+        {
+          "Name": "Default",
+          "Index": 50
+        }
+      ]
+    },
+    {
+      "Name": "Nintendo 64",
+      "Profiles": [
+        {
+          "Name": "Default",
+          "Index": 60
+        }
+      ]
+    },
+    {
+      "Name": "PlayStation 2",
+      "Profiles": [
+        {
+          "Name": "Default",
+          "Index": 70
+        }
+      ]
+    },
+    {
+      "Name": "Wii",
+      "Profiles": [
+        {
+          "Name": "Default",
+          "Index": 80
+        }
+      ]
+    },
+    {
+      "Name": "Amiga 600",
+      "Profiles": [
+        {
+          "Name": "Default",
+          "Index": 90
+        }
+      ]
+    },
+    {
+      "Name": "Xbox",
+      "Profiles": [
+        {
+          "Name": "Default",
+          "Index": 110
+        }
+      ]
+    },
+    {
+      "Name": "Neo Geo AES",
+      "Profiles": [
+        {
+          "Name": "Default",
+          "Index": 120
+        }
+      ]
+    },
+    {
+      "Name": "Nt mini Noir",
+      "Profiles": [
+        {
+          "Name": "Default",
+          "Index": 130
+        }
+      ]
+    },
+    {
+      "Name": "Xbox 360",
+      "Profiles": [
+        {
+          "Name": "Default",
+          "Index": 140
+        }
+      ]
+    },
+    {
+      "Name": "PlayStation 3",
+      "Profiles": [
+        {
+          "Name": "Default",
+          "Index": 150
+        }
+      ]
+    },
+    {
+      "Name": "Game Cube",
+      "Profiles": [
+        {
+          "Name": "Default",
+          "Index": 160
+        }
+      ]
+    },
+    {
+      "Name": "Wii U",
+      "Profiles": [
+        {
+          "Name": "Default",
+          "Index": 170
+        }
+      ]
+    },
+    {
+      "Name": "Pocket Dock",
+      "Profiles": [
+        {
+          "Name": "Default",
+          "Index": 180
+        }
+      ]
+    },
+    {
+      "Name": "Switch",
+      "Profiles": [
+        {
+          "Name": "Default",
+          "Index": 190
+        }
+      ]
+    },
+    {
+      "Name": "Commodore 64",
+      "Profiles": [
+        {
+          "Name": "Default",
+          "Index": 200
+        }
+      ]
+    },
+    {
+      "Name": "Spectrum Next",
+      "Profiles": [
+        {
+          "Name": "Default",
+          "Index": 210
+        }
+      ]
+    }
+  ]
+}

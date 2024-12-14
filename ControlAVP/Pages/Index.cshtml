@@ -1,10 +1,12 @@
 ﻿@page
 @model IndexModel
-@using ControllableDeviceTypes.ExtronDSC301HDTypes;
-@using ControllableDeviceTypes.OSSCTypes;
-@using ControllableDeviceTypes.SonySimpleIPTypes;
-@using ControllableDeviceTypes.AtenVS0801HBTypes;
-@using System.Numerics;
+@using Newtonsoft.Json
+@using System.IO
+@using ControllableDeviceTypes.ExtronDSC301HDTypes
+@using ControllableDeviceTypes.OSSCTypes
+@using ControllableDeviceTypes.SonySimpleIPTypes
+@using ControllableDeviceTypes.AtenVS0801HBTypes
+@using System.Numerics
 @{
     ViewData["Title"] = "ControlAVP";
 }
@@ -36,6 +38,7 @@
             //Update URLs on page load
             updateParameterInURLAttributeOfButtons('formaction', 'scalerCardVisible', '@Model.ScalerCardVisible');
             updateParameterInURLAttributeOfButtons('formaction', 'osscCardVisible', '@Model.OsscCardVisible');
+            updateParameterInURLAttributeOfButtons('formaction', 'retroTink4KCardVisible', '@Model.RetroTink4KCardVisible');
 
             //Update URLs when cards are either collapsed or expanded
             $('#scalerCollapse').on('show.bs.collapse', function () {
@@ -52,6 +55,14 @@
 
             $('#osscCollapse').on('hide.bs.collapse', function () {
                 updateParameterInURLAttributeOfButtons('formaction', 'osscCardVisible', 'false');
+            })
+
+            $('#retroTink4KCollapse').on('show.bs.collapse', function () {
+                updateParameterInURLAttributeOfButtons('formaction', 'retroTink4KCardVisible', 'true');
+            })
+
+            $('#retroTink4KCollapse').on('hide.bs.collapse', function () {
+                updateParameterInURLAttributeOfButtons('formaction', 'retroTink4KCardVisible', 'false');
             })
         });
     </script>
@@ -71,13 +82,15 @@
                     }
                     </div>
                 </div>
-            @if (Model.RackDevicesAvailable)
-            {
+
                 <div class="btn-group" role="group">
+                    <button type="button" data-toggle="collapse" data-target="#retroTink4KCollapse" class="btn border btn-secondary">RetroTink4K</button>
+                @if (Model.RackDevicesAvailable)
+                {
                     <button type="button" data-toggle="collapse" data-target="#scalerCollapse" class="btn border btn-secondary">Extron</button>
                     <button type="button" data-toggle="collapse" data-target="#osscCollapse" class="btn border btn-secondary">OSSC</button>
+                }
                 </div>
-            }
             <div class="btn-group" role="group">
                 <button type="submit" asp-page-handler="PowerOff" class="btn border btn-danger"><i class="fas fa-power-off"></i></button>
                 <button type="submit" asp-page-handler="PowerOffExcludingTV" class="btn border btn-danger"><i class="fas fa-tv"></i></button>
@@ -87,6 +100,27 @@
 </div>
 
 <form method="post">
+    <div class="@(Model.RetroTink4KCardVisible ? "collapse show" : "collapse") p-1 m-0" id="retroTink4KCollapse">
+        <div class="card card-body p-2">
+            <table class="table table-sm table-responsive table-borderless mb-0">
+                @foreach (var device in Model.DeviceProfiles.Devices)
+                {
+                    <tr>
+                        <td class="align-middle text-right">@device.Name</td>
+                        <td>
+                            <div class="btn-group">
+                                @foreach (var profile in device.Profiles)
+                                {
+                                    <button type="submit" asp-page-handler="RetroTink4KLoadProfile" asp-route-profileindex=@profile.Index class="btn border btn-light">@profile.Name</button>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+
     @if (Model.RackDevicesAvailable)
     {
         <div class="@(Model.ScalerCardVisible ? "collapse show" : "collapse") p-1 m-0" id="scalerCollapse">
