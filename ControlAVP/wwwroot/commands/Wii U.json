@@ -48,6 +48,14 @@
       "Parameters": {
         "inputPort": "Hdmi2"
       }
+    },
+    {
+      "Description": "Load RetroTink 4K Profile for Wii U",
+      "DeviceType": "RetroTink4KSerial",
+      "Function": "LoadProfile",
+      "Parameters": {
+        "profileIndex": 170
+      }
     }
   ]
 }
