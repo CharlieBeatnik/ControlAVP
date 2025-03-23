@@ -33,6 +33,28 @@ namespace Tests
             _deviceSettings = jsonParsed["Devices"]["ExtronDSC301HD"][0];
         }
 
+        [ClassCleanup]
+        public static void ClassCleanup()
+        {
+        }
+
+        [TestInitialize()]
+        public void TestInitialize()
+        {
+            using (var device = CreateDevice())
+            {
+                // Set the Extron to use the HDMI input port.
+                // This is because the tests needs a input signal.
+                // In this case, the OSSC will be providing a valid HDMI input.
+                Assert.IsTrue(device.SetInputPort(InputPort.HDMI));
+            }
+        }
+
+        [TestCleanup()]
+        public void TestCleanup()
+        {
+        }
+
         public static ExtronDSC301HD CreateDevice()
         {
             return new ExtronDSC301HD(_deviceSettings["portId"].ToString());
